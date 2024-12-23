@@ -27,12 +27,22 @@ void main() async {
       Provider<AuthRepository>(
         create: (_) => authRepository,
       ),
+      ChangeNotifierProvider(create: (context) => CurrentUserProvider()),
+      ChangeNotifierProvider(create: (context) => CurrentAppVersionProvider()),
     ],
     child: MainApp(
       databaseRepository: databaseRepository,
       authRepository: authRepository,
     ),
   ));
+}
+
+class CurrentUserProvider extends ChangeNotifier {
+  String currentUser = "Josef";
+}
+
+class CurrentAppVersionProvider extends ChangeNotifier {
+  String currentAppVersion = "0.003";
 }
 
 /*--------------------------------- *** ---*/
