@@ -38,7 +38,7 @@ void main() async {
 }
 
 class CurrentUserProvider extends ChangeNotifier {
-  String currentUser = "Josef";
+  String currentUser = "Peter";
 }
 
 class CurrentAppVersionProvider extends ChangeNotifier {
