@@ -1,0 +1,119 @@
+PODS:
+  - audioplayers_darwin (0.0.1):
+    - FlutterMacOS
+  - Firebase/Auth (11.4.2):
+    - Firebase/CoreOnly
+    - FirebaseAuth (~> 11.4.0)
+  - Firebase/CoreOnly (11.4.2):
+    - FirebaseCore (= 11.4.2)
+  - firebase_auth (5.3.4):
+    - Firebase/Auth (~> 11.4.0)
+    - Firebase/CoreOnly (~> 11.4.0)
+    - firebase_core
+    - FlutterMacOS
+  - firebase_core (3.9.0):
+    - Firebase/CoreOnly (~> 11.4.0)
+    - FlutterMacOS
+  - FirebaseAppCheckInterop (11.6.0)
+  - FirebaseAuth (11.4.0):
+    - FirebaseAppCheckInterop (~> 11.0)
+    - FirebaseAuthInterop (~> 11.0)
+    - FirebaseCore (~> 11.4)
+    - FirebaseCoreExtension (~> 11.4)
+    - GoogleUtilities/AppDelegateSwizzler (~> 8.0)
+    - GoogleUtilities/Environment (~> 8.0)
+    - GTMSessionFetcher/Core (< 5.0, >= 3.4)
+    - RecaptchaInterop (~> 100.0)
+  - FirebaseAuthInterop (11.6.0)
+  - FirebaseCore (11.4.2):
+    - FirebaseCoreInternal (< 12.0, >= 11.4.2)
+    - GoogleUtilities/Environment (~> 8.0)
+    - GoogleUtilities/Logger (~> 8.0)
+  - FirebaseCoreExtension (11.4.1):
+    - FirebaseCore (~> 11.0)
+  - FirebaseCoreInternal (11.6.0):
+    - "GoogleUtilities/NSData+zlib (~> 8.0)"
+  - FlutterMacOS (1.0.0)
+  - GoogleUtilities/AppDelegateSwizzler (8.0.2):
+    - GoogleUtilities/Environment
+    - GoogleUtilities/Logger
+    - GoogleUtilities/Network
+    - GoogleUtilities/Privacy
+  - GoogleUtilities/Environment (8.0.2):
+    - GoogleUtilities/Privacy
+  - GoogleUtilities/Logger (8.0.2):
+    - GoogleUtilities/Environment
+    - GoogleUtilities/Privacy
+  - GoogleUtilities/Network (8.0.2):
+    - GoogleUtilities/Logger
+    - "GoogleUtilities/NSData+zlib"
+    - GoogleUtilities/Privacy
+    - GoogleUtilities/Reachability
+  - "GoogleUtilities/NSData+zlib (8.0.2)":
+    - GoogleUtilities/Privacy
+  - GoogleUtilities/Privacy (8.0.2)
+  - GoogleUtilities/Reachability (8.0.2):
+    - GoogleUtilities/Logger
+    - GoogleUtilities/Privacy
+  - GTMSessionFetcher/Core (4.1.0)
+  - path_provider_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - sqflite_darwin (0.0.4):
+    - Flutter
+    - FlutterMacOS
+
+DEPENDENCIES:
+  - audioplayers_darwin (from `Flutter/ephemeral/.symlinks/plugins/audioplayers_darwin/macos`)
+  - firebase_auth (from `Flutter/ephemeral/.symlinks/plugins/firebase_auth/macos`)
+  - firebase_core (from `Flutter/ephemeral/.symlinks/plugins/firebase_core/macos`)
+  - FlutterMacOS (from `Flutter/ephemeral`)
+  - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
+  - sqflite_darwin (from `Flutter/ephemeral/.symlinks/plugins/sqflite_darwin/darwin`)
+
+SPEC REPOS:
+  trunk:
+    - Firebase
+    - FirebaseAppCheckInterop
+    - FirebaseAuth
+    - FirebaseAuthInterop
+    - FirebaseCore
+    - FirebaseCoreExtension
+    - FirebaseCoreInternal
+    - GoogleUtilities
+    - GTMSessionFetcher
+
+EXTERNAL SOURCES:
+  audioplayers_darwin:
+    :path: Flutter/ephemeral/.symlinks/plugins/audioplayers_darwin/macos
+  firebase_auth:
+    :path: Flutter/ephemeral/.symlinks/plugins/firebase_auth/macos
+  firebase_core:
+    :path: Flutter/ephemeral/.symlinks/plugins/firebase_core/macos
+  FlutterMacOS:
+    :path: Flutter/ephemeral
+  path_provider_foundation:
+    :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin
+  sqflite_darwin:
+    :path: Flutter/ephemeral/.symlinks/plugins/sqflite_darwin/darwin
+
+SPEC CHECKSUMS:
+  audioplayers_darwin: dcad41de4fbd0099cb3749f7ab3b0cb8f70b810c
+  Firebase: 7fd5466678d964be78fbf536d8a3385da19c4828
+  firebase_auth: cda334a14540e3c1be90eb2cd82682f9409bea37
+  firebase_core: 1dfe1f4d02ad78be0277e320aa3d8384cf46231f
+  FirebaseAppCheckInterop: 347aa09a805219a31249b58fc956888e9fcb314b
+  FirebaseAuth: c359af98bd703cbf4293eec107a40de08ede6ce6
+  FirebaseAuthInterop: a919d415797d23b7bfe195a04f322b86c65020ef
+  FirebaseCore: 6b32c57269bd999aab34354c3923d92a6e5f3f84
+  FirebaseCoreExtension: f1bc67a4702931a7caa097d8e4ac0a1b0d16720e
+  FirebaseCoreInternal: d98ab91e2d80a56d7b246856a8885443b302c0c2
+  FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
+  GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
+  GTMSessionFetcher: 923b710231ad3d6f3f0495ac1ced35421e07d9a6
+  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
+
+PODFILE CHECKSUM: 7cc970ecf432f9ce80c0aa4a065606422689d6a4
+
+COCOAPODS: 1.15.2
