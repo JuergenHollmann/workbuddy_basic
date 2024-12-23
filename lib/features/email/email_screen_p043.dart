@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
 import 'package:workbuddy/config/wb_text_form_field.dart';
 import 'package:workbuddy/features/email/email_user_selection.dart';
+import 'package:workbuddy/main.dart';
 import 'package:workbuddy/shared/widgets/wb_info_container.dart';
 
 import 'mock_email_users_data.dart';
@@ -110,12 +112,27 @@ class _EMailScreenP043State extends State<EMailScreenP043> {
           ],
         ),
       ),
-      /*--------------------------------- WbInfoContainer ---*/
-      bottomSheet: WbInfoContainer(
-        infoText:
-            'E-Mail 1 (von $searchFieldCounter043) senden an $emailUserModelEMail\nAngemeldet zur Bearbeitung: JH-01\nWorkBuddy • Free-BASIC-Version 0.003',
-        wbColors: Colors.yellow,
-      ),
+    /*--------------------------------- WbInfoContainer ---*/
+    // bottomSheet: Consumer<CurrentUserProvider>(
+    //   builder: (context, data, child) {
+    //     return WbInfoContainer(
+    //       infoText:
+    //           'E-Mail 1 (von $searchFieldCounter043) senden an $emailUserModelEMail\nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}\nWorkBuddy • Free-BASIC-Version 0.003',
+    //       wbColors: Colors.yellow,
+    //     );
+    //   },
+    // ),
+
+      bottomSheet: 
+      // Consumer<CurrentUserProvider>(
+      //   builder: (context, data, child) {
+          WbInfoContainer(
+            infoText:
+                'E-Mail 1 (von $searchFieldCounter043) senden an $emailUserModelEMail\nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}\nWorkBuddy • Free-BASIC-Version ${context.watch<CurrentAppVersionProvider>().currentAppVersion}',
+            wbColors: Colors.yellow,
+          ),
+      //   },
+      // ),
       /*--------------------------------- *** ---*/
     );
   }
