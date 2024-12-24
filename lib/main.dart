@@ -29,8 +29,8 @@ void main() async {
       Provider<AuthRepository>(
         create: (_) => authRepository,
       ),
-      ChangeNotifierProvider(create: (context) => CurrentUserProvider()),
       ChangeNotifierProvider(create: (context) => CurrentAppVersionProvider()),
+      ChangeNotifierProvider(create: (context) => CurrentUserProvider()),
       ChangeNotifierProvider(create: (context) => CurrentDateProvider()),
       ChangeNotifierProvider(create: (context) => CurrentTimeProvider()),
     ],
@@ -41,14 +41,14 @@ void main() async {
   ));
 }
 
+/*--------------------------------- CurrentAppVersionProvider ---*/
+class CurrentAppVersionProvider extends ChangeNotifier {
+  String currentAppVersion = "WorkBuddy • Free-BASIC-Version 0.004";
+}
+
 /*--------------------------------- CurrentUserProvider ---*/
 class CurrentUserProvider extends ChangeNotifier {
   String currentUser = "Peter";
-}
-
-/*--------------------------------- CurrentAppVersionProvider ---*/
-class CurrentAppVersionProvider extends ChangeNotifier {
-  String currentAppVersion = "WorkBuddy • Free-BASIC-Version 0.003";
 }
 
 /*--------------------------------- CurrentDateProvider ---*/

@@ -1,10 +1,12 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:workbuddy/config/wb_button_universal_2.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
 import 'package:workbuddy/features/email/email_screen_p043.dart';
+import 'package:workbuddy/main.dart';
 import 'package:workbuddy/shared/widgets/wb_buttons_uni_with_image_button.dart';
 import 'package:workbuddy/shared/widgets/wb_dialog_alert_update_coming_soon.dart';
 import 'package:workbuddy/shared/widgets/wb_divider_with_text_in_center.dart';
@@ -16,9 +18,6 @@ class CommunicationMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     log("0016 - CommunicationMenu - wird benutzt");
-
-    DateTime dateTime = DateTime.now();
-    String dateTimeText = '${dateTime.day}.${dateTime.month}.${dateTime.year} • ${dateTime.hour}:${dateTime.minute} Uhr';
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 250, 242, 242),
@@ -258,7 +257,8 @@ class CommunicationMenu extends StatelessWidget {
       ),
       /*--------------------------------- WbInfoContainer ---*/
       bottomSheet: WbInfoContainer(
-        infoText: '$dateTimeText • Angemeldet ist JH-01',
+        infoText:
+            'Heute ist ${context.watch<CurrentDateProvider>().currentDate} • Es ist ${context.watch<CurrentTimeProvider>().currentTime}.\n${context.watch<CurrentAppVersionProvider>().currentAppVersion}',
         wbColors: Colors.yellow,
       ),
       /*--------------------------------- WbInfoContainer ENDE ---*/

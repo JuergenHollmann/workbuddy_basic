@@ -1,9 +1,11 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
 import 'package:workbuddy/features/authentication/screens/p01_login_screen.dart';
+import 'package:workbuddy/main.dart';
 import 'package:workbuddy/shared/widgets/wb_info_container.dart';
 
 class WbHomePage extends StatefulWidget {
@@ -98,7 +100,8 @@ class _WbHomePageState extends State<WbHomePage> {
             Expanded(child: const P01LoginScreen()),
             /*--------------------------------- WbInfoContainer ---*/
             WbInfoContainer(
-              infoText: 'WorkBuddy • Free-BASIC-Version 0.002',
+              infoText:
+                  'Heute ist ${context.watch<CurrentDateProvider>().currentDate} • Es ist ${context.watch<CurrentTimeProvider>().currentTime}.\n${context.watch<CurrentAppVersionProvider>().currentAppVersion}',
               wbColors: Colors.yellow,
             ),
             /*--------------------------------- WbInfoContainer ENDE ---*/
