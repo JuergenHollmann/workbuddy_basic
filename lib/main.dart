@@ -9,6 +9,7 @@ import 'package:workbuddy/shared/repositories/auth_repository.dart';
 import 'package:workbuddy/shared/repositories/database_repository.dart';
 import 'package:workbuddy/shared/repositories/firebase_auth_repository.dart';
 import 'package:workbuddy/shared/repositories/mock_database.dart';
+import 'package:intl/intl.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +30,8 @@ void main() async {
       ),
       ChangeNotifierProvider(create: (context) => CurrentUserProvider()),
       ChangeNotifierProvider(create: (context) => CurrentAppVersionProvider()),
+      ChangeNotifierProvider(create: (context) => CurrentDateProvider()),
+      ChangeNotifierProvider(create: (context) => CurrentTimeProvider()),
     ],
     child: MainApp(
       databaseRepository: databaseRepository,
@@ -42,7 +45,28 @@ class CurrentUserProvider extends ChangeNotifier {
 }
 
 class CurrentAppVersionProvider extends ChangeNotifier {
-  String currentAppVersion = "0.003";
+  String currentAppVersion = "WorkBuddy • Free-BASIC-Version 0.003";
+}
+
+class CurrentDateProvider extends ChangeNotifier {
+  DateTime date = DateTime.now();
+  late String currentDate;
+  CurrentDateProvider() {
+    currentDate = '${date.day}.${date.month}.${date.year}';
+  }
+}
+
+class CurrentTimeProvider extends ChangeNotifier {
+  DateTime time = DateTime.now();
+
+
+String formatHour = NumberFormat("00").format(time.hour);
+
+  late String currentTime;
+  //String.format("%02d", myNumber)
+  CurrentTimeProvider() {
+    currentTime = '${time.hour}:${time.minute} Uhr';
+  }
 }
 
 /*--------------------------------- *** ---*/
@@ -57,7 +81,7 @@ class MainApp extends StatelessWidget {
   final AuthRepository authRepository;
 
   /*--------------------------------- *** ---*/
-  static const appTitle = 'WorkBuddy • save time and money!';
+  final String appTitle = 'WorkBuddy • save time and money!';
   /*--------------------------------- *** ---*/
   @override
   Widget build(BuildContext context) {

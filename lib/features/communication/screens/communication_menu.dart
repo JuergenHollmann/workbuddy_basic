@@ -253,18 +253,15 @@ class CommunicationMenu extends StatelessWidget {
                 ],
               ),
             ),
-            // /*--------------------------------- WbInfoContainer ---*/
-            // WbInfoContainer(
-            //   infoText: "WorkBuddy • Free-BASIC-Version 0.003",
-            // )
-            // /*--------------------------------- WbInfoContainer ENDE ---*/
           ],
         ),
       ),
+      /*--------------------------------- WbInfoContainer ---*/
       bottomSheet: WbInfoContainer(
         infoText: '$dateTimeText • Angemeldet ist JH-01',
         wbColors: Colors.yellow,
       ),
+      /*--------------------------------- WbInfoContainer ENDE ---*/
     );
   }
 }

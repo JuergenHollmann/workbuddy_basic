@@ -112,27 +112,15 @@ class _EMailScreenP043State extends State<EMailScreenP043> {
           ],
         ),
       ),
-    /*--------------------------------- WbInfoContainer ---*/
-    // bottomSheet: Consumer<CurrentUserProvider>(
-    //   builder: (context, data, child) {
-    //     return WbInfoContainer(
-    //       infoText:
-    //           'E-Mail 1 (von $searchFieldCounter043) senden an $emailUserModelEMail\nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}\nWorkBuddy • Free-BASIC-Version 0.003',
-    //       wbColors: Colors.yellow,
-    //     );
-    //   },
-    // ),
+      /*--------------------------------- WbInfoContainer ---*/
+      bottomSheet: WbInfoContainer(
+        infoText:
+            // 'E-Mail 1 (von $searchFieldCounter043) senden an $emailUserModelEMail\nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}\n${context.watch<CurrentAppVersionProvider>().currentAppVersion}',
 
-      bottomSheet: 
-      // Consumer<CurrentUserProvider>(
-      //   builder: (context, data, child) {
-          WbInfoContainer(
-            infoText:
-                'E-Mail 1 (von $searchFieldCounter043) senden an $emailUserModelEMail\nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}\nWorkBuddy • Free-BASIC-Version ${context.watch<CurrentAppVersionProvider>().currentAppVersion}',
-            wbColors: Colors.yellow,
-          ),
-      //   },
-      // ),
+                        'E-Mail 1 (von $searchFieldCounter043) senden an $emailUserModelEMail\nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}\n${context.watch<CurrentAppVersionProvider>().currentAppVersion}\n${context.watch<CurrentDateProvider>().currentDate} • ${context.watch<CurrentTimeProvider>().currentTime}',
+
+        wbColors: Colors.yellow,
+      ),
       /*--------------------------------- *** ---*/
     );
   }

@@ -51,3 +51,10 @@ class WbInfoContainer extends StatelessWidget {
 /* \nAngemeldet zur Bearbeitung: JH-01\nLetzte Änderung: Am 18.12.2024 um 22:51 Uhr' */
 /* WorkBuddy • Free-BASIC-Version 0.003 */
 /* WorkBuddy • save time and money • V0.003 */
+
+/* 
+infoText:
+            E-Mail 1 (von $searchFieldCounter043) senden an $emailUserModelEMail
+            \nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}
+            \n${context.watch<CurrentAppVersionProvider>().currentAppVersion}
+*/
