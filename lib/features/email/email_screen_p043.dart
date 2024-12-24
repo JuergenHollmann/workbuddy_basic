@@ -115,10 +115,7 @@ class _EMailScreenP043State extends State<EMailScreenP043> {
       /*--------------------------------- WbInfoContainer ---*/
       bottomSheet: WbInfoContainer(
         infoText:
-            // 'E-Mail 1 (von $searchFieldCounter043) senden an $emailUserModelEMail\nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}\n${context.watch<CurrentAppVersionProvider>().currentAppVersion}',
-
-                        'E-Mail 1 (von $searchFieldCounter043) senden an $emailUserModelEMail\nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}\n${context.watch<CurrentAppVersionProvider>().currentAppVersion}\n${context.watch<CurrentDateProvider>().currentDate} • ${context.watch<CurrentTimeProvider>().currentTime}',
-
+            'Am ${context.watch<CurrentDateProvider>().currentDate} um ${context.watch<CurrentTimeProvider>().currentTime} eine E-Mail an $emailUserModelEMail versenden.\nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}\n${context.watch<CurrentAppVersionProvider>().currentAppVersion}',
         wbColors: Colors.yellow,
       ),
       /*--------------------------------- *** ---*/
