@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:workbuddy/features/home/screens/home_screen.dart';
 import 'package:workbuddy/firebase_options.dart';
@@ -9,7 +11,6 @@ import 'package:workbuddy/shared/repositories/auth_repository.dart';
 import 'package:workbuddy/shared/repositories/database_repository.dart';
 import 'package:workbuddy/shared/repositories/firebase_auth_repository.dart';
 import 'package:workbuddy/shared/repositories/mock_database.dart';
-import 'package:intl/intl.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,36 +41,49 @@ void main() async {
   ));
 }
 
+/*--------------------------------- CurrentUserProvider ---*/
 class CurrentUserProvider extends ChangeNotifier {
   String currentUser = "Peter";
 }
 
+/*--------------------------------- CurrentAppVersionProvider ---*/
 class CurrentAppVersionProvider extends ChangeNotifier {
   String currentAppVersion = "WorkBuddy • Free-BASIC-Version 0.003";
 }
 
+/*--------------------------------- CurrentDateProvider ---*/
 class CurrentDateProvider extends ChangeNotifier {
   DateTime date = DateTime.now();
+  late String formatWeekday;
+  late String formatDay;
+  late String formatMonth;
+  late String formatYear;
   late String currentDate;
   CurrentDateProvider() {
-    currentDate = '${date.day}.${date.month}.${date.year}';
+    formatWeekday = DateFormat('EEEE', 'de_DE').format(date);
+    formatDay = NumberFormat("00").format(date.day);
+    formatMonth = NumberFormat("00").format(date.month);
+    formatYear = NumberFormat("0000").format(date.year);
+    currentDate = '$formatWeekday, $formatDay.$formatMonth.$formatYear';
+    log('0071 - main - CurrentDateProvider ---> Heute ist $currentDate');
   }
 }
 
+/*--------------------------------- CurrentTimeProvider ---*/
 class CurrentTimeProvider extends ChangeNotifier {
   DateTime time = DateTime.now();
-
-
-String formatHour = NumberFormat("00").format(time.hour);
-
+  late String formatHour;
+  late String formatMinute;
   late String currentTime;
-  //String.format("%02d", myNumber)
   CurrentTimeProvider() {
-    currentTime = '${time.hour}:${time.minute} Uhr';
+    formatHour = NumberFormat("00").format(time.hour);
+    formatMinute = NumberFormat("00").format(time.minute);
+    currentTime = '$formatHour:$formatMinute Uhr';
+    log('0067 - main - CurrentTimeProvider ---> Es ist jetzt $currentTime');
   }
 }
 
-/*--------------------------------- *** ---*/
+/*--------------------------------- MainApp ---*/
 class MainApp extends StatelessWidget {
   const MainApp({
     super.key,
@@ -86,6 +100,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     log("0015 - MainApp - wird gestartet");
+    initializeDateFormatting('de', null);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -137,7 +152,7 @@ class MainApp extends StatelessWidget {
   √ für macOS muss im macos/Podfile ---> platform :osx, '10.15' eingestellt werden √ 
 
   /*--------------------------------- TODO's ---
-  - Die Variable fürden "DarkMode" setzen - WbHomePage - 0173
+  - Die Variable für den "DarkMode" setzen - WbHomePage - 0173
   - Wie kann ich hier nach mehreren Kriterien suchen oder filtern? - EmailUserSelection - 0158
   - Die GEFUNDENE Anzahl aller User mit der gesuchten Zeichenfolge in der Liste zeigen - EMailScreenP043 - 0030
   - Anzeigen auf dem "WbInfoContainer", welcher Benutzer gerade angemeldet ist.
@@ -153,6 +168,7 @@ class MainApp extends StatelessWidget {
   - auf GridView umbauen - MainSelectionScreen - 0043
   - "WbInfoContainer" auf ein BottomSheet legen?
   - Die grüne Neon-Linie "neon_green_line" wieder einbauen - wurde vorübergehend ausgeblendet - 0047 - NavigationBarGreenNeon
+  √ Mit "$formatWeekday" gibt es eine Fehlermeldung - main - CurrentDateProvider - 0071 √
   √ WbHomePage: WbInfoContainer als "Footer" programmieren √
   √ Icons sollen beim Aussuchen sichtbar sein (Einstellungen in VSCode) √
   √ CompanyScreen: Logo und Bild oben sind noch zu groß für SamsungA05 √
