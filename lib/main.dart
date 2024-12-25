@@ -69,7 +69,8 @@ class CurrentWeekdayShortProvider extends ChangeNotifier {
   DateTime date = DateTime.now();
   late String currentWeekdayShort;
   CurrentWeekdayShortProvider() {
-    currentWeekdayShort = DateFormat('EE', 'de_DE').format(date);
+    currentWeekdayShort =
+        DateFormat('EE', 'de_DE').format(date).replaceAll('.', '');
     log('0063 - main - CurrentWeekdayLongProvider ---> Heute ist $currentWeekdayShort');
   }
 }

@@ -243,11 +243,14 @@ class CommunicationMenu extends StatelessWidget {
                       );
                     },
                   ),
-                  /*--------------------------------- *** ---*/
-                  const SizedBox(height: 8),
+                  /*--------------------------------- Abstand ---*/
+                  wbSizedBoxHeight8,
                   /*--------------------------------- Divider ---*/
                   const Divider(
                       thickness: 3, height: 32, color: wbColorLogoBlue),
+                  /*--------------------------------- Abstand ---*/
+                  wbSizedBoxHeight32,
+                  wbSizedBoxHeight32,
                   /*--------------------------------- *** ---*/
                 ],
               ),
@@ -258,7 +261,7 @@ class CommunicationMenu extends StatelessWidget {
       /*--------------------------------- WbInfoContainer ---*/
       bottomSheet: WbInfoContainer(
         infoText:
-            'Heute ist ${context.watch<CurrentDateProvider>().currentDate} • Es ist ${context.watch<CurrentTimeProvider>().currentTime}.\nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}\n${context.watch<CurrentAppVersionProvider>().currentAppVersion}',
+            'Heute ist ${context.watch<CurrentWeekdayLongProvider>().currentWeekdayLong}, ${context.watch<CurrentDateProvider>().currentDate}\nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}\n${context.watch<CurrentAppVersionProvider>().currentAppVersion}',
         wbColors: Colors.yellow,
       ),
       /*--------------------------------- WbInfoContainer ENDE ---*/

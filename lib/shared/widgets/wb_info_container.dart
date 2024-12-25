@@ -40,11 +40,9 @@ class WbInfoContainer extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
         child: Text(
           maxLines: null,
-
-
-
-
-          infoText, // "WorkBuddy • Free-BASIC-Version 0.003",
+          /*--------------------------------- infoText ---*/
+          infoText,
+          /*--------------------------------- *** ---*/
           textAlign: TextAlign.center,
         ),
       ),
@@ -52,15 +50,41 @@ class WbInfoContainer extends StatelessWidget {
   }
 }
 
+void bottomSheet(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return Container(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text('Bottom Sheet Title', style: TextStyle(fontSize: 24.0)),
+            SizedBox(height: 10.0),
+            Text('This is the content of the bottom sheet.'),
+            SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Close'),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+/* 
+infoText-Beispiele:
+  E-Mail 1 (von $searchFieldCounter043) senden an $emailUserModelEMail
+  Heute ist ${context.watch<CurrentWeekdayLongProvider>().currentWeekdayLong}
+  Heute ist ${context.watch<CurrentWeekdayShortProvider>().currentWeekdayShort}
+  Datum ${context.watch<CurrentDateProvider>().currentDate}
+  \nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}
+  \n${context.watch<CurrentAppVersionProvider>().currentAppVersion}
+*/
+
 /* \nAngemeldet zur Bearbeitung: JH-01\nLetzte Änderung: Am 18.12.2024 um 22:51 Uhr' */
 /* WorkBuddy • Free-BASIC-Version 0.003 */
 /* WorkBuddy • save time and money • V0.003 */
-
-/* 
-infoText:
-  E-Mail 1 (von $searchFieldCounter043) senden an $emailUserModelEMail
-  \nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}
-  \n${context.watch<CurrentAppVersionProvider>().currentAppVersion}
-
-  'Heute ist ${context.watch<CurrentDateProvider>().currentDate} • Es ist ${context.watch<CurrentTimeProvider>().currentTime}.
-*/

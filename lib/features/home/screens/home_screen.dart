@@ -101,7 +101,7 @@ class _WbHomePageState extends State<WbHomePage> {
             /*--------------------------------- WbInfoContainer ---*/
             WbInfoContainer(
               infoText:
-                  'Heute ist ${context.watch<CurrentDateProvider>().currentDate} • Es ist ${context.watch<CurrentTimeProvider>().currentTime}.\n${context.watch<CurrentAppVersionProvider>().currentAppVersion}',
+                  'Heute ist ${context.watch<CurrentWeekdayLongProvider>().currentWeekdayLong}, ${context.watch<CurrentDateProvider>().currentDate}\n${context.watch<CurrentAppVersionProvider>().currentAppVersion}',
               wbColors: Colors.yellow,
             ),
             /*--------------------------------- WbInfoContainer ENDE ---*/
