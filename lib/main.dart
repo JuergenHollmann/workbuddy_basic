@@ -31,6 +31,9 @@ void main() async {
       ),
       ChangeNotifierProvider(create: (context) => CurrentAppVersionProvider()),
       ChangeNotifierProvider(create: (context) => CurrentUserProvider()),
+      ChangeNotifierProvider(create: (context) => CurrentWeekdayLongProvider()),
+      ChangeNotifierProvider(
+          create: (context) => CurrentWeekdayShortProvider()),
       ChangeNotifierProvider(create: (context) => CurrentDateProvider()),
       ChangeNotifierProvider(create: (context) => CurrentTimeProvider()),
     ],
@@ -51,20 +54,38 @@ class CurrentUserProvider extends ChangeNotifier {
   String currentUser = "Peter";
 }
 
+/*--------------------------------- CurrentWeekdayLongProvider ---*/
+class CurrentWeekdayLongProvider extends ChangeNotifier {
+  DateTime date = DateTime.now();
+  late String currentWeekdayLong;
+  CurrentWeekdayLongProvider() {
+    currentWeekdayLong = DateFormat('EEEE', 'de_DE').format(date);
+    log('0063 - main - CurrentWeekdayLongProvider ---> Heute ist $currentWeekdayLong');
+  }
+}
+
+/*--------------------------------- CurrentTimeWeekdayShortProvider ---*/
+class CurrentWeekdayShortProvider extends ChangeNotifier {
+  DateTime date = DateTime.now();
+  late String currentWeekdayShort;
+  CurrentWeekdayShortProvider() {
+    currentWeekdayShort = DateFormat('EE', 'de_DE').format(date);
+    log('0063 - main - CurrentWeekdayLongProvider ---> Heute ist $currentWeekdayShort');
+  }
+}
+
 /*--------------------------------- CurrentDateProvider ---*/
 class CurrentDateProvider extends ChangeNotifier {
   DateTime date = DateTime.now();
-  late String formatWeekday;
   late String formatDay;
   late String formatMonth;
   late String formatYear;
   late String currentDate;
   CurrentDateProvider() {
-    formatWeekday = DateFormat('EEEE', 'de_DE').format(date);
     formatDay = NumberFormat("00").format(date.day);
     formatMonth = NumberFormat("00").format(date.month);
     formatYear = NumberFormat("0000").format(date.year);
-    currentDate = '$formatWeekday, $formatDay.$formatMonth.$formatYear';
+    currentDate = '$formatDay.$formatMonth.$formatYear';
     log('0071 - main - CurrentDateProvider ---> Heute ist $currentDate');
   }
 }

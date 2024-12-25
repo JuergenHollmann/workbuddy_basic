@@ -40,6 +40,10 @@ class WbInfoContainer extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
         child: Text(
           maxLines: null,
+
+
+
+
           infoText, // "WorkBuddy • Free-BASIC-Version 0.003",
           textAlign: TextAlign.center,
         ),
@@ -54,7 +58,9 @@ class WbInfoContainer extends StatelessWidget {
 
 /* 
 infoText:
-            E-Mail 1 (von $searchFieldCounter043) senden an $emailUserModelEMail
-            \nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}
-            \n${context.watch<CurrentAppVersionProvider>().currentAppVersion}
+  E-Mail 1 (von $searchFieldCounter043) senden an $emailUserModelEMail
+  \nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}
+  \n${context.watch<CurrentAppVersionProvider>().currentAppVersion}
+
+  'Heute ist ${context.watch<CurrentDateProvider>().currentDate} • Es ist ${context.watch<CurrentTimeProvider>().currentTime}.
 */

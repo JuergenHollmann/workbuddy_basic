@@ -656,7 +656,9 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
               },
             ),
           ),
-          wbSizedBoxHeight24,
+          wbSizedBoxHeight16,
+          /*--------------------------------- Divider ---*/
+          const Divider(thickness: 4, color: wbColorButtonGreen),
           /*--------------------------------- ENDE ---*/
         ],
       ),
