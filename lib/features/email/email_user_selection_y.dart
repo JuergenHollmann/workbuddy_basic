@@ -10,8 +10,8 @@ import 'package:workbuddy/features/email/email_user_model.dart';
 
 import 'mock_email_users_data.dart';
 
-class EmailUserSelection extends StatefulWidget {
-  const EmailUserSelection({
+class EmailUserSelectionX extends StatefulWidget {
+  const EmailUserSelectionX({
     super.key,
     required this.emailUserModel,
   });
@@ -19,10 +19,10 @@ class EmailUserSelection extends StatefulWidget {
   final String emailUserModel;
 
   @override
-  State<EmailUserSelection> createState() => _EmailUserSelectionState();
+  State<EmailUserSelectionX> createState() => _EmailUserSelectionXState();
 }
 
-class _EmailUserSelectionState extends State<EmailUserSelection> {
+class _EmailUserSelectionXState extends State<EmailUserSelectionX> {
   final List<EmailUserModel> emailUser = [];
   /*--------------------------------- neu ---*/
   List<String> allUsers = ['Peter', 'Paul', 'Mary', 'John', 'Jane'];
@@ -47,15 +47,15 @@ class _EmailUserSelectionState extends State<EmailUserSelection> {
     /*--------------------------------- *** ---*/
     // die Gesamt-Anzahl der User in der Liste zeigen (NACH Iterierung NUR EINE Zahl zeigen):
     int searchFieldCounter = emailUser.length;
-    log("0038 - EmailUserSelection - custom Counter: $searchFieldCounter");
+    log("0038 - EmailUserSelectionX - custom Counter: $searchFieldCounter");
     /*--------------------------------- *** ---*/
     // die gefundene Anzahl der User in der Liste zeigen:
     int? searchFieldFoundCounter = emailUsersData.length;
-    log("0245 - EmailUserSelection - Counter: $searchFieldFoundCounter");
+    log("0245 - EmailUserSelectionX - Counter: $searchFieldFoundCounter");
 
     /*--------------------------------- neu ---*/
     List<String> allUsers = emailUser.map((e) => e.email).toList();
-    log("0056 - EmailUserSelection ---> $allUsers");
+    log("0056 - EmailUserSelectionX ---> $allUsers");
     filteredUsers = allUsers;
     foundUsersCount = filteredUsers.length;
     /*--------------------------------- neu ---*/
@@ -69,15 +69,15 @@ class _EmailUserSelectionState extends State<EmailUserSelection> {
           .where((user) => user.toLowerCase().contains(query.toLowerCase()))
           .toList();
       foundUsersCount = filteredUsers.length;
-      log('0069 - EmailUserSelection ---> foundUsersCount: $foundUsersCount - erwartet: "0"');
-      log('0072 - EmailUserSelection - query: $query');
+      log('0069 - EmailUserSelectionX ---> foundUsersCount: $foundUsersCount - erwartet: "0"');
+      log('0072 - EmailUserSelectionX - query: $query');
     });
     /*--------------------------------- neu ---*/
   }
 
   void onSuggestionTap(String user) {
     // Hier können Sie den Inhalt des angetippten Vorschlags verarbeiten
-    log('0079 - EmailUserSelection ---> Angetippter Benutzer: $user');
+    log('0079 - EmailUserSelectionX ---> Angetippter Benutzer: $user');
     // Weitere Verarbeitung, z.B. den Benutzer auswählen oder eine Aktion ausführen
   }
 
@@ -162,7 +162,7 @@ class _EmailUserSelectionState extends State<EmailUserSelection> {
                     ),
                   ),
                   onTap: () {
-                    log("0173 - EmailUserSelection - searchFieldController.clear");
+                    log("0173 - EmailUserSelectionX - searchFieldController.clear");
                     setState(() {
                       /*--------------------------------- *** ---*/
                       // diesen Text kann man auf 3 Arten löschen:
@@ -213,7 +213,7 @@ class _EmailUserSelectionState extends State<EmailUserSelection> {
               suggestions: emailUser
                   .map(
                     (emailUserModel) => SearchFieldListItem<EmailUserModel>(
-                      // Wie kann ich hier nach mehreren Kriterien suchen oder filtern? - EmailUserSelection - 0158
+                      // Wie kann ich hier nach mehreren Kriterien suchen oder filtern? - EmailUserSelectionX - 0158
                       /* Diese Daten werden in das "SearchFieldListItem" beim Anklicken übergeben */
                       emailUserModel.email,
                       /*--------------------------------- *** ---*/
@@ -259,6 +259,55 @@ class _EmailUserSelectionState extends State<EmailUserSelection> {
   }
 }
 /*--------------------------------- *** ---*/
+
+// /*--------------------------------- ListView.builder ---*/
+// child: ListView.builder(
+//   itemCount: filteredUsers.length,
+//   itemBuilder: (context, index) {
+//     return ListTile(
+//       title: Text(filteredUsers[index]),
+//     );
+//   },
+// ),
+// /*--------------------------------- ListView.builder xxx ---*/
+
+// @override
+// Widget build(BuildContext context) {
+//   return Scaffold(
+//     appBar: AppBar(
+//       title: Text('Email User Selection'),
+//     ),
+//     body: Column(
+//       children: <Widget>[
+//         Padding(
+//           padding: const EdgeInsets.all(8.0),
+//           child: TextField(
+//             onChanged: (value) => filterUsers(value),
+//             decoration: InputDecoration(
+//               labelText: 'Search',
+//               border: OutlineInputBorder(),
+//             ),
+//           ),
+//         ),
+//         Padding(
+//           padding: const EdgeInsets.all(8.0),
+//           child: Text('Gefundene Benutzer: $foundUsersCount'),
+//         ),
+//         Expanded(
+//           child: ListView.builder(
+//             itemCount: filteredUsers.length,
+//             itemBuilder: (context, index) {
+//               return ListTile(
+//                 title: Text(filteredUsers[index]),
+//               );
+//             },
+//           ),
+//         ),
+//       ],
+//     ),
+//   );
+// }
+
 class UserTile extends StatelessWidget {
   final EmailUserModel user;
 

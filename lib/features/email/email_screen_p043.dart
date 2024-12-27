@@ -11,7 +11,11 @@ import 'mock_email_users_data.dart';
 
 /*--------------------------------- *** ---*/
 class EMailScreenP043 extends StatefulWidget {
-  const EMailScreenP043({super.key, required String emailUserModel});
+  final String emailUserModel;
+  const EMailScreenP043({
+    super.key,
+    required this.emailUserModel,
+  });
 /*--------------------------------- *** ---*/
   @override
   State<EMailScreenP043> createState() => _EMailScreenP043State();
@@ -77,7 +81,7 @@ class _EMailScreenP043State extends State<EMailScreenP043> {
                     ),
                   ),
                   /*--------------------------------- *** ---*/
-                  const EmailUserSelection(),
+                  EmailUserSelection(emailUserModel: widget.emailUserModel),
                   /*--------------------------------- Abstand ---*/
                   wbSizedBoxHeight16,
                   /*--------------------------------- E-Mail Betreff ---*/
@@ -122,4 +126,3 @@ class _EMailScreenP043State extends State<EMailScreenP043> {
     );
   }
 }
-/* WorkBuddy • save time and money • Version 0.003 */

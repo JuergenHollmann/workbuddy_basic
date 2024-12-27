@@ -51,13 +51,14 @@ class _WbNavigationbarState extends State<WbNavigationbar> {
         // width: 398,
         // height: 190,
         decoration: BoxDecoration(
-            gradient: LinearGradient(
-          colors: [Colors.blue, Colors.black], //wbColorAppBarBlue
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          stops: [0.0, 0.6],
-          // tileMode: TileMode.mirror,
-        )),
+          gradient: LinearGradient(
+            colors: [Colors.blue, Colors.black], //wbColorAppBarBlue
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            stops: [0.0, 0.6],
+            // tileMode: TileMode.mirror,
+          ),
+        ),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(4, 0, 4, 16),
           /*--------------------------------- *** ---*/
