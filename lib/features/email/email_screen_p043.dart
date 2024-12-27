@@ -10,7 +10,8 @@ import 'package:workbuddy/shared/widgets/wb_info_container.dart';
 import 'mock_email_users_data.dart';
 
 /*--------------------------------- *** ---*/
-class EMailScreenP043 extends StatefulWidget {
+class EMailScreenP043 extends StatefulWidget implements EmailUserSelection{
+  @override
   final String emailUserModel;
   const EMailScreenP043({
     super.key,
@@ -23,19 +24,35 @@ class EMailScreenP043 extends StatefulWidget {
 
 /*--------------------------------- *** ---*/
 class _EMailScreenP043State extends State<EMailScreenP043> {
-/*--------------------------------- *** ---*/
-  @override
-  void initState() {
-    super.initState();
-  }
-
   /*--------------------------------- *** ---*/
   final TextEditingController searchController = TextEditingController();
   var suggestions = <String>[];
   int counter = 0;
   var selected = '';
 
-  String emailUserModelEMail = "KlausMueller@test.de";
+  // String emailUserModelEMail = "KlausMueller@test.de";
+  String selectedEMail = 'jemanden';
+  late String emailUserModelEMail;
+
+  @override
+  void initState() {
+    super.initState();
+    emailUserModelEMail = selectedEMail;
+  }
+  /*--------------------------------- filteredUsers ---*/
+  // filteredUsers.isNotEmpty
+  //     ? const Text('Keine Benutzer gefunden')
+  //     : Expanded(
+  //         child: ListView.builder(
+  //           itemCount: filteredUsers.length,
+  //           itemBuilder: (context, index) {
+  //             log('0218 - EmailUserSelection - filteredUsers: ---> $filteredUsers');
+  //             return ListTile(
+  //               title: Text(filteredUsers[index]),
+  //             );
+  //           },
+  //         ),
+  //       ),
 
   /*--------------------------------- *** ---*/
   // die Gesamt-Anzahl aller User in der Liste zeigen:
@@ -80,8 +97,18 @@ class _EMailScreenP043State extends State<EMailScreenP043> {
                       ),
                     ),
                   ),
-                  /*--------------------------------- *** ---*/
+                  /*------------------------------------------------------------------------------------------- *** ---*/
                   EmailUserSelection(emailUserModel: widget.emailUserModel),
+
+
+
+
+
+
+
+    //               setState(() {
+      
+    // });
                   /*--------------------------------- Abstand ---*/
                   wbSizedBoxHeight16,
                   /*--------------------------------- E-Mail Betreff ---*/
@@ -119,10 +146,35 @@ class _EMailScreenP043State extends State<EMailScreenP043> {
       /*--------------------------------- WbInfoContainer ---*/
       bottomSheet: WbInfoContainer(
         infoText:
-            'Am ${context.watch<CurrentWeekdayLongProvider>().currentWeekdayLong}, ${context.watch<CurrentDateProvider>().currentDate} um ${context.watch<CurrentTimeProvider>().currentTime} eine Mail an $emailUserModelEMail versenden.\nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}\n${context.watch<CurrentAppVersionProvider>().currentAppVersion}',
+        //     'Am ${context.watch<CurrentWeekdayLongProvider>().currentWeekdayLong}, ${context.watch<CurrentDateProvider>().currentDate} um ${context.watch<CurrentTimeProvider>().currentTime} eine Mail an\n$selectedEMail versenden.\nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}\n${context.watch<CurrentAppVersionProvider>().currentAppVersion}',
+        // wbColors: Colors.yellow,
+                    'Am ${context.watch<CurrentWeekdayLongProvider>().currentWeekdayLong}, ${context.watch<CurrentDateProvider>().currentDate} um ${context.watch<CurrentTimeProvider>().currentTime} eine Mail versenden.\nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}\n${context.watch<CurrentAppVersionProvider>().currentAppVersion}',
         wbColors: Colors.yellow,
+
       ),
+
+/// emailUserModelEMail wurde ersetzt mit selectedEMail
+
+          // if (selectedEMail.isEmpty) {
+          //   return const WbInfoContainer(
+          //     infoText:
+          //         'Keine E-Mail-Adresse ausgewählt.\nBitte wählen Sie eine E-Mail-Adresse aus der Liste aus.',
+          //     wbColors: Colors.red,
+          //   );
+          // } else {
+          //   return WbInfoContainer(
+          //     infoText:
+          //         'Am ${context.watch<CurrentWeekdayLongProvider>().currentWeekdayLong}, ${context.watch<CurrentDateProvider>().currentDate} um ${context.watch<CurrentTimeProvider>().currentTime} eine Mail an\n$selectedEMail versenden.\nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}\n${context.watch<CurrentAppVersionProvider>().currentAppVersion}',
+          //     wbColors: Colors.yellow,
+          //   );
+          // }
+  
+
+
+
       /*--------------------------------- *** ---*/
     );
   }
 }
+
+

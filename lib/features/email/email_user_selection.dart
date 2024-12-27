@@ -5,7 +5,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:searchfield/searchfield.dart';
 import 'package:workbuddy/config/wb_colors.dart';
-import 'package:workbuddy/features/authentication/screens/p01_login_screen.dart';
+import 'package:workbuddy/config/wb_sizes.dart';
 import 'package:workbuddy/features/email/email_user_model.dart';
 
 import 'mock_email_users_data.dart';
@@ -25,10 +25,10 @@ class EmailUserSelection extends StatefulWidget {
 class _EmailUserSelectionState extends State<EmailUserSelection> {
   final List<EmailUserModel> emailUser = [];
   /*--------------------------------- neu ---*/
-  List<String> allUsers = ['Peter', 'Paul', 'Mary', 'John', 'Jane'];
+  List<String> allUsers = [];
   List<String> filteredUsers = [];
   int foundUsersCount = 0;
-  String currentEMail = '';
+  String selectedEMail = '';
   /*--------------------------------- neu ---*/
   @override
   void initState() {
@@ -75,53 +75,36 @@ class _EmailUserSelectionState extends State<EmailUserSelection> {
     /*--------------------------------- neu ---*/
   }
 
+  /*--------------------------------- onSuggestionTap ---*/
   void onSuggestionTap(String user) {
-    // Hier können Sie den Inhalt des angetippten Vorschlags verarbeiten
+    /* Hier wird der Inhalt des in der Liste angetippten Items verarbeitet */
+    setState(() {
+      selectedEMail = user;
+    });
     log('0079 - EmailUserSelection ---> Angetippter Benutzer: $user');
-    // Weitere Verarbeitung, z.B. den Benutzer auswählen oder eine Aktion ausführen
+    log('0081 - EmailUserSelection ---> foundUsersCount: $foundUsersCount - erwartet: "21"');
   }
 
+  /*--------------------------------- searchFieldController ---*/
   final TextEditingController searchFieldController = TextEditingController();
   void clearSearchField() {
     searchFieldController.clear();
   }
-  /*--------------------------------- searchFieldItems generieren ---*/
-  /* Welche Felder sollen in die Suche miteinbezogen  werden (Daten aus "emailUsersData")?
-  1) Vorname = firstName 
-  2) Nachname = lastName
-  3) E-Mail-Adresse = email */
 
-  // void searchFieldItems(String searchFieldItems) {
-  //   String searchFieldItems = "$firstName $lastName $email";
-  //   log("0056 $searchFieldItems");
-  // }
   /*--------------------------------- *** ---*/
   @override
   Widget build(BuildContext context) {
     /*--------------------------------- E-Mail-Adresse ---*/
-
     try {
       return Column(
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
             child: SearchField<EmailUserModel>(
-              /*--------------------------------- onSearchTextChanged ---*/
-              // onSearchTextChanged: (value) => filterUsers(value),//O
-              // onSearchTextChanged: (value) {
-              //   filterUsers(value);
-              //   return null;
-              // },
               /*--------------------------------- onSuggestionTap ---*/
-              // onSuggestionTap: (value) => onSuggestionTap(value.item?.email ?? ''), // passiert nichts
-
-              // onSuggestionTap: (value) => onSuggestionTap(value.item?.email ?? ''), // passiert nichts
-              // onSuggestionTap: (value) => filterUsers(value
-              //     .searchKey), // findet 0072 - aber friert ein ohne Fehlermeldung
-              // onSuggestionTap: (value) =>
-              //     filterUsers(value.item?.email?.runes.string ?? ''), // findet 0072 - aber friert ein ohne Fehlermeldung
-              onSuggestionTap: (value) => filterUsers(
-                  userName), // findet 0072 - aber friert ein ohne Fehlermeldung
+              onSuggestionTap: (SearchFieldListItem<EmailUserModel> value) {
+                onSuggestionTap(value.searchKey);
+              },
               /*--------------------------------- xxx ---*/
               // maxLength: 10, // maximale Anzahl der Ziffern für die Suche
               dynamicHeight:
@@ -226,30 +209,27 @@ class _EmailUserSelectionState extends State<EmailUserSelection> {
                   .toList(),
             ),
           ),
-          /*--------------------------------- filteredUsers ---*/
-          filteredUsers.isNotEmpty
-              ? const Text('Keine Benutzer gefunden')
-              : Expanded(
-                  child: ListView.builder(
-                    itemCount: filteredUsers.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(filteredUsers[index]),
-                      );
-                    },
-                  ),
-                ),
           /*--------------------------------- filteredUsers xxx ---*/
-
-          Text('Erste E_Mail: ${emailUser.first.email}'),
-          Text('Vorname: ${emailUser.nonNulls.first.firstName}'),
-          Text('xxx: ${widget.emailUserModel.characters}'),
-          // Text('List of instances: $emailUser,'),
-          Text('Anzahl ${widget.emailUserModel.length}'),
-          Text('E-Mail-Adresse: ${widget.emailUserModel}'),
-          Text('Gefundene E-Mails: $foundUsersCount\n$filteredUsers'),
-          // Text('filteredUsers: ${filteredUsers.first}'),
-          Text('Gefundene: $foundUsersCount'),
+          // Text('Erste E_Mail: ${emailUser.first.email}'), // funzt
+          // Text('Vorname: ${emailUser.nonNulls.first.firstName}'), // funzt
+          // Text('xxx: ${widget.emailUserModel.characters}'), // funzt
+          // Text('List of instances: $emailUser,'), // funzt
+          // Text('Anzahl ${widget.emailUserModel.length}'), // falsch: 8 ???
+          // Text('E-Mail-Adresse: ${widget.emailUserModel}'), // komischer Wert
+          // Text('Anzahl aller gefundenen E-Mails: $foundUsersCount\n$filteredUsers'), // funzt
+          // Text('filteredUsers: ${filteredUsers.first}'), // funzt
+          // Text('Anzahl aller Gefundenen E-Mails: $foundUsersCount'), // funzt
+          /*--------------------------------- Abstand ---*/
+          wbSizedBoxHeight8,
+          /*--------------------------------- E-Mail versenden an ---*/
+          Text('E-Mail versenden an:'),
+          Text(
+            selectedEMail,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ],
       );
     } catch (e) {
@@ -258,6 +238,7 @@ class _EmailUserSelectionState extends State<EmailUserSelection> {
     }
   }
 }
+
 /*--------------------------------- *** ---*/
 class UserTile extends StatelessWidget {
   final EmailUserModel user;
