@@ -11,6 +11,7 @@ import 'package:workbuddy/shared/repositories/auth_repository.dart';
 import 'package:workbuddy/shared/repositories/database_repository.dart';
 import 'package:workbuddy/shared/repositories/firebase_auth_repository.dart';
 import 'package:workbuddy/shared/repositories/mock_database.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,8 +52,7 @@ class CurrentAppVersionProvider extends ChangeNotifier {
 
 /*--------------------------------- CurrentUserProvider ---*/
 class CurrentUserProvider extends ChangeNotifier {
-  final TextEditingController _currentUserController =
-      TextEditingController();
+  final TextEditingController _currentUserController = TextEditingController();
   late String currentUser;
   CurrentUserProvider() : currentUser = '---> Nix drin <---' {
     currentUser = _currentUserController.text;
@@ -74,11 +74,16 @@ class CurrentUserProvider extends ChangeNotifier {
   //     _currentUserController.text = currentUser;
   //   });
   // }
-  //String get getCurrentUser => currentUser;
+  String get getCurrentUser => currentUser;
 
   // void setCurrentUser(String value) {
   //   currentUser = value;
   //   notifyListeners();
+  // }
+
+  // Future<void> _saveCurrentUser(String currentUser) async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   await prefs.setString('currentUser', currentUser);
   // }
 }
 
