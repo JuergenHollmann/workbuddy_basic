@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:provider/provider.dart';
 import 'package:workbuddy/config/wb_button_universal_2.dart';
 import 'package:workbuddy/config/wb_colors.dart';
@@ -39,6 +40,36 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
   // ACHTUNG: Beim player den sound OHNE "assets/...", sondern gleich mit "sound/..." eintragen (siehe unten):
   late AudioPlayer player = AudioPlayer();
 
+  /*--------------------------------- Controller ---*/
+  final TextEditingController userNameTEC = TextEditingController();
+  final TextEditingController userPasswordTEC = TextEditingController();
+  final TextEditingController _currentUserController = TextEditingController();
+
+  Future<void> _saveCurrentUser(String currentUser) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('currentUser', currentUser);
+    log('0051- P01LoginScreen - Benutzername gespeichert: $currentUser');
+  }
+
+  Future<void> _loadCurrentUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    final currentUser = prefs.getString('currentUser') ?? '';
+    setState(() {
+      _currentUserController.text = currentUser;
+      log('0058- P01LoginScreen - Benutzername geladen: ${currentUser.characters}');
+    });
+  }
+
+  void _onLogin() {
+    final currentUser = _currentUserController.text;
+    if (currentUser.isNotEmpty) {
+      _saveCurrentUser(currentUser);
+      // Weitere Aktionen nach erfolgreichem Login
+      log('0055 - P01LoginScreen - Benutzername gespeichert: $currentUser');
+    } else {
+      log('0057 - P01LoginScreen - Benutzername darf NICHT leer sein');
+    }
+  }
   /*--------------------------------- GlobalKey ---*/
   // Brauchen wir, damit wir alle TextFormFields validieren können
   // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -116,9 +147,9 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
   // }
   // /*--------------------------------- MockUserRepository ENDE ---*/
 
-  /*--------------------------------- Controller ---*/
-  final TextEditingController userNameTEC = TextEditingController();
-  final TextEditingController userPasswordTEC = TextEditingController();
+  // /*--------------------------------- Controller ---*/
+  // final TextEditingController userNameTEC = TextEditingController();
+  // final TextEditingController userPasswordTEC = TextEditingController();
 
   /*--------------------------------- onChanged-Funktion ---*/
   bool visibilityPassword = true;
@@ -432,6 +463,16 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
           /*--------------------------------- Login-Button ---*/
           WBGreenButton(
             onTap: () {
+              setState(() {
+                _currentUserController.text = userNameTEC.text;
+              });
+              log('0435 - P01LoginScreen - Speichere den Benutzernamen ---> ${_currentUserController.text} <--- in den SharedPreferences');
+
+              // ${_saveCurrentUser(_currentUserController.toString())}
+              // _saveCurrentUser(_currentUserController.text);
+              // ${_currentUserController.toString()}
+              _onLogin;
+              _loadCurrentUser();
               /*--------------------------------- checkUserAndPassword ---*/
               log("0440 - P01LoginScreen - überprüfe Benutzer UND Passwort");
               if (userName == "Jürgen" && userPassword == "Pass") {

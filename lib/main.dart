@@ -51,7 +51,35 @@ class CurrentAppVersionProvider extends ChangeNotifier {
 
 /*--------------------------------- CurrentUserProvider ---*/
 class CurrentUserProvider extends ChangeNotifier {
-  String currentUser = "Niemand";
+  final TextEditingController _currentUserController =
+      TextEditingController();
+  late String currentUser;
+  CurrentUserProvider() : currentUser = '---> Nix drin <---' {
+    currentUser = _currentUserController.text;
+    //_currentUserController.text = currentUser; // Hier kommt ---> Nix drin <--- raus
+    // CurrentUserProvider() {
+    //   currentUser = _currentUserController.text;
+    //   _currentUserController.addListener(() {
+    //     currentUser = _currentUserController.text;
+    //     notifyListeners(); // gibt nichts zurück
+    //   });
+
+    log('0063 - main - CurrentUserProvider ---> Der aktuelle Benutzer ist ${currentUser}');
+  }
+
+  // Future<void> _loadCurrentUser() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final currentUser = prefs.getString('currentUser') ?? '';
+  //   setState(() {
+  //     _currentUserController.text = currentUser;
+  //   });
+  // }
+  //String get getCurrentUser => currentUser;
+
+  // void setCurrentUser(String value) {
+  //   currentUser = value;
+  //   notifyListeners();
+  // }
 }
 
 /*--------------------------------- CurrentWeekdayLongProvider ---*/

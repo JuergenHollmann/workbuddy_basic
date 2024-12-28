@@ -26,7 +26,7 @@ class WbHomePage extends StatefulWidget {
 class _WbHomePageState extends State<WbHomePage> {
   /*--------------------------------- SharedPreferences ---*/
   final SharedPreferencesAsync prefs = SharedPreferencesAsync();
-  String currentUser = 'Niemand';
+  String currentUser = 'Doch Oiner';
 
   /* Lokale Variable wegen DarkMode die in der initState() gesetzt wird */
   bool isDarkMode = false;
@@ -50,10 +50,10 @@ class _WbHomePageState extends State<WbHomePage> {
     });
   }
 
-  void _saveCurrentUser() async {
-    /* Der Datensatz wird wie bei einer Map Mit einem Key/Value gespeichert */
-    await prefs.setString("currentUser", currentUser);
-  }
+  // void _saveCurrentUser() async {
+  //   /* Der Datensatz wird wie bei einer Map mit einem Key/Value gespeichert */
+  //   await prefs.setString("currentUser", currentUser);
+  // }
   /*--------------------------------- currentUser ENDE ---*/
 
   /*--------------------------------- Drawer Vorbereitung ---*/
@@ -91,14 +91,13 @@ class _WbHomePageState extends State<WbHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: wbColorBackgroundBlue,
-
       /*--------------------------------- AppBar ---*/
       appBar: AppBar(
         backgroundColor: wbColorAppBarBlue,
         title: Text(
           widget.title,
           style: const TextStyle(
-            fontSize: 16,
+            fontSize: 20,
             fontWeight: FontWeight.w900,
             color: Colors.white, // Schriftfarbe
           ),
