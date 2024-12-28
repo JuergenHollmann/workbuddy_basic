@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
 import 'package:workbuddy/features/authentication/screens/p01_login_screen.dart';
@@ -23,15 +24,37 @@ class WbHomePage extends StatefulWidget {
 }
 
 class _WbHomePageState extends State<WbHomePage> {
+  /*--------------------------------- SharedPreferences ---*/
+  final SharedPreferencesAsync prefs = SharedPreferencesAsync();
+  String currentUser = 'Niemand';
+
   /* Lokale Variable wegen DarkMode die in der initState() gesetzt wird */
   bool isDarkMode = false;
 
   @override
   void initState() {
-    // /* Aufruf der lokalen "DarkMode-Variable" die auf dem Smartphone gespeichert ist */
-    // isDarkMode = widget.preferencesRepository.getThemeMode();
     super.initState();
+    /* Aufruf der lokalen "DarkMode-Variable" die auf dem Smartphone gespeichert ist */
+    // isDarkMode = widget.preferencesRepository.getThemeMode();
+
+    /*--------------------------------- currentUser in SharedPreferences ---*/
+    /* Aufruf von "currentUser" */
+    // prefs.getCurrentUser();
+    _loadCurrentUser;
   }
+
+  void _loadCurrentUser() async {
+    final rememberedCurrentUser = await prefs.getString("currentUser") ?? 0;
+    setState(() {
+      currentUser = rememberedCurrentUser as String;
+    });
+  }
+
+  void _saveCurrentUser() async {
+    /* Der Datensatz wird wie bei einer Map Mit einem Key/Value gespeichert */
+    await prefs.setString("currentUser", currentUser);
+  }
+  /*--------------------------------- currentUser ENDE ---*/
 
   /*--------------------------------- Drawer Vorbereitung ---*/
   int _selectedDrawerIndex = 0;
@@ -168,7 +191,6 @@ class _WbHomePageState extends State<WbHomePage> {
               title: Row(
                 children: [
                   Expanded(child: const Text('Sound an/aus')),
-
                   Switch(
                       value: isDarkMode,
                       onChanged: (value) {
@@ -177,7 +199,7 @@ class _WbHomePageState extends State<WbHomePage> {
                         setState(() {
                           /* Damit der Schalter korrekt umgelegt wird, rufen wir die "DarkMode-Variable" nochmal ab */
                           // isDarkMode =
-                              // widget.preferencesRepository.getThemeMode();
+                          // widget.preferencesRepository.getThemeMode();
                         });
                       }),
                 ],

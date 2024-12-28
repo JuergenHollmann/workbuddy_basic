@@ -51,7 +51,7 @@ class CurrentAppVersionProvider extends ChangeNotifier {
 
 /*--------------------------------- CurrentUserProvider ---*/
 class CurrentUserProvider extends ChangeNotifier {
-  String currentUser = "Peter";
+  String currentUser = "Niemand";
 }
 
 /*--------------------------------- CurrentWeekdayLongProvider ---*/
@@ -187,9 +187,9 @@ class MainApp extends StatelessWidget {
   - "wbImageAssetImage"   hat keine Auswirkung!          - MainSelectionScreen - 0124
   
   - Es sollen alle Kontakte angezeigt werden - ContactListP051 - 0010 */
-  - auf GridView umbauen - MainSelectionScreen - 0043
   - "WbInfoContainer" auf ein BottomSheet legen?
   - Die grüne Neon-Linie "neon_green_line" wieder einbauen - wurde vorübergehend ausgeblendet - 0047 - NavigationBarGreenNeon
+  √ Buttons auf GridView umbauen - MainSelectionScreen - 0048 √
   √ Mit "$formatWeekday" gibt es eine Fehlermeldung - main - CurrentDateProvider - 0071 √
   √ WbHomePage: WbInfoContainer als "Footer" programmieren √
   √ Icons sollen beim Aussuchen sichtbar sein (Einstellungen in VSCode) √

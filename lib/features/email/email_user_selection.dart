@@ -159,10 +159,11 @@ class _EmailUserSelectionState extends State<EmailUserSelection> {
                 ),
                 /*--------------------------------- *** ---*/
                 searchStyle: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue[900],
-                    overflow: TextOverflow.visible),
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue[900],
+                  // overflow: TextOverflow.visible,
+                ),
               ),
               hint: 'Suche nach E-Mails',
               /*--------------------------------- SuggestionDecoration - Suchliste ---*/
@@ -200,7 +201,6 @@ class _EmailUserSelectionState extends State<EmailUserSelection> {
                       /* Diese Daten werden in das "SearchFieldListItem" beim Anklicken übergeben */
                       emailUserModel.email,
                       /*--------------------------------- *** ---*/
-
                       child: UserTile(
                         user: emailUserModel,
                       ),
@@ -226,7 +226,7 @@ class _EmailUserSelectionState extends State<EmailUserSelection> {
           Text(
             selectedEMail,
             style: TextStyle(
-              fontSize: 20,
+              fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
           ),

@@ -32,6 +32,7 @@ class SharedPreferencesRepository {
     }
   }
 
+/*--------------------------------- DarkMode oder LightMode ---*/
   /* Die "DarkMode-Variable" setzen */
   void setThemeMode(bool isDarkMode) async {
     /* Überprüfen, ob wir bereits initialisiert haben */
