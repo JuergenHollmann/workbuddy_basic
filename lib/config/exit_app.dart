@@ -54,17 +54,17 @@ class _ExitAppState extends State<ExitApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('Plugin für das Beenden der App'),
         ),
         body: Center(
           child: Column(
             children: [
-              Text('Running on: $_platformVersion\n'),
+              Text('Läuft auf: $_platformVersion\n'),
               TextButton(
                 onPressed: () {
                   FlutterExitApp.exitApp(iosForceExit: true);
                 },
-                child: const Text('Exit'),
+                child: const Text('Beenden'),
               ),
             ],
           ),

@@ -7,17 +7,18 @@ import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
 import 'package:workbuddy/features/authentication/screens/p01_login_screen.dart';
 import 'package:workbuddy/main.dart';
+import 'package:workbuddy/shared/repositories/shared_preferences_repository.dart';
 import 'package:workbuddy/shared/widgets/wb_info_container.dart';
 
 class WbHomePage extends StatefulWidget {
   const WbHomePage({
     super.key,
-    required this.title,
+    required this.title, required this.preferencesRepository,
     // required this.preferencesRepository,
   });
 
   final String title;
-  // final SharedPreferencesRepository preferencesRepository; //SH
+  final SharedPreferencesRepository preferencesRepository; //SH
 
   @override
   State<WbHomePage> createState() => _WbHomePageState();
@@ -46,7 +47,9 @@ class _WbHomePageState extends State<WbHomePage> {
   void _loadCurrentUser() async {
     final rememberedCurrentUser = await prefs.getString("currentUser") ?? 0;
     setState(() {
-      currentUser = rememberedCurrentUser as String;
+      // currentUser = rememberedCurrentUser as String;
+            currentUser = rememberedCurrentUser as String;
+
     });
   }
 
@@ -122,7 +125,7 @@ class _WbHomePageState extends State<WbHomePage> {
             Expanded(child: const P01LoginScreen()),
             /*--------------------------------- WbInfoContainer ---*/
             WbInfoContainer(
-              infoText:
+              infoText: // Zuvor angemeldeter Benutzer: ${context.watch<CurrentUserProvider>().currentUser}\n
                   'Heute ist ${context.watch<CurrentWeekdayLongProvider>().currentWeekdayLong}, ${context.watch<CurrentDateProvider>().currentDate}\n${context.watch<CurrentAppVersionProvider>().currentAppVersion}',
               wbColors: Colors.yellow,
             ),

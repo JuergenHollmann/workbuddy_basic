@@ -5,13 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workbuddy/features/home/screens/home_screen.dart';
 import 'package:workbuddy/firebase_options.dart';
 import 'package:workbuddy/shared/repositories/auth_repository.dart';
 import 'package:workbuddy/shared/repositories/database_repository.dart';
 import 'package:workbuddy/shared/repositories/firebase_auth_repository.dart';
 import 'package:workbuddy/shared/repositories/mock_database.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:workbuddy/shared/repositories/shared_preferences_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,44 +48,22 @@ void main() async {
 
 /*--------------------------------- CurrentAppVersionProvider ---*/
 class CurrentAppVersionProvider extends ChangeNotifier {
-  String currentAppVersion = "WorkBuddy • Free-BASIC-Version 0.004";
+  String currentAppVersion = "WorkBuddy • Free-BASIC-Version 0.005";
 }
 
 /*--------------------------------- CurrentUserProvider ---*/
 class CurrentUserProvider extends ChangeNotifier {
-  final TextEditingController _currentUserController = TextEditingController();
+  final TextEditingController currentUserController = TextEditingController();
   late String currentUser;
-  CurrentUserProvider() : currentUser = '---> Nix drin <---' {
-    currentUser = _currentUserController.text;
-    //_currentUserController.text = currentUser; // Hier kommt ---> Nix drin <--- raus
-    // CurrentUserProvider() {
-    //   currentUser = _currentUserController.text;
-    //   _currentUserController.addListener(() {
-    //     currentUser = _currentUserController.text;
-    //     notifyListeners(); // gibt nichts zurück
-    //   });
-
-    log('0063 - main - CurrentUserProvider ---> Der aktuelle Benutzer ist ${currentUser}');
+  CurrentUserProvider() {
+    currentUser = currentUserController.text;
+    log('0061 - MainApp - CurrentUserProvider ---> $currentUser <---');
+    currentUserController.addListener(() {
+      currentUser = currentUserController.text;
+      notifyListeners(); // gibt nichts zurück?
+    });
+    log('0069 - MainApp - CurrentUserProvider - Der aktuelle Benutzer ist --> ${currentUserController.text.characters} <---');
   }
-
-  // Future<void> _loadCurrentUser() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   final currentUser = prefs.getString('currentUser') ?? '';
-  //   setState(() {
-  //     _currentUserController.text = currentUser;
-  //   });
-  // }
-  String get getCurrentUser => currentUser;
-
-  // void setCurrentUser(String value) {
-  //   currentUser = value;
-  //   notifyListeners();
-  // }
-
-  // Future<void> _saveCurrentUser(String currentUser) async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   await prefs.setString('currentUser', currentUser);
-  // }
 }
 
 /*--------------------------------- CurrentWeekdayLongProvider ---*/
@@ -152,16 +131,35 @@ class MainApp extends StatelessWidget {
   /*--------------------------------- *** ---*/
   final String appTitle = 'WorkBuddy • save time and money!';
   /*--------------------------------- *** ---*/
+
   @override
   Widget build(BuildContext context) {
     log("0015 - MainApp - wird gestartet");
     initializeDateFormatting('de', null);
+
+    final currentUserController =
+        Provider.of<CurrentUserProvider>(context, listen: true)
+            .currentUserController;
+
+    Future<void> loadCurrentUser(
+        TextEditingController currentUserController) async {
+      final prefs = await SharedPreferences.getInstance();
+      final currentUser = prefs.getString('currentUser') ?? '';
+      currentUserController.text = currentUser;
+      log('0059 - P01LoginScreen - Benutzername geladen: ---> ${currentUserController.text.characters} <--- funzt');
+      log('0060 - P01LoginScreen - Benutzername geladen: ---> $currentUser <--- funzt');
+      log('0061 - P01LoginScreen - Benutzername geladen: ---> ${currentUserController.text} <--- funzt');
+      log('0062 - P01LoginScreen - Benutzername geladen: ---> $currentUserController <--- liefert nur die Instanz');
+    }
+
+    loadCurrentUser(currentUserController);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: appTitle,
       home: WbHomePage(
         title: appTitle,
+        preferencesRepository: SharedPreferencesRepository(),
       ),
     );
   }

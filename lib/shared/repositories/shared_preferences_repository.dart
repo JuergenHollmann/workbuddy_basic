@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+// import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workbuddy/shared/repositories/shared_preferences_keys.dart';
 
@@ -31,6 +32,45 @@ class SharedPreferencesRepository {
           "[SharedPreferencesRepository]: Bitte die init() Methode vorher ausführen");
     }
   }
+
+  /*--------------------------------- Controller ---*/
+  // final TextEditingController _currentUserController = TextEditingController();
+
+/*--------------------------------- currentUser ---*/
+  // Future<void> _saveCurrentUser(String currentUser) async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   await prefs.setString('currentUser', currentUser);
+  //   log('0044- SharedPreferencesRepository - Benutzername gespeichert: $currentUser');
+  // }
+
+  // Future<void> _loadCurrentUser() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final currentUser = prefs.getString('currentUser') ?? '';
+  //   setState(() {
+  //     currentUserController.text = currentUser;
+  //     log('0059 - P01LoginScreen - Benutzername geladen: ---> ${currentUserController.text.characters} <---');
+  //   });
+  // }
+
+  // Future<void> _loadCurrentUser() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final currentUser = prefs.getString('currentUser') ?? '';
+  //   // setState(() {
+  //     _currentUserController.text = currentUser;
+  //     log('0052- SharedPreferencesRepository - Benutzername geladen: ${currentUser.characters}');
+  //   // });
+  // }
+
+  // void _onLogin() {
+  //   final currentUser = _currentUserController.text;
+  //   if (currentUser.isNotEmpty) {
+  //     _saveCurrentUser(currentUser);
+  //     // Weitere Aktionen nach erfolgreichem Login
+  //     log('0061 - SharedPreferencesRepository - Benutzername gespeichert: $currentUser');
+  //   } else {
+  //     log('0063 - SharedPreferencesRepository - Benutzername darf NICHT leer sein');
+  //   }
+  // }
 
 /*--------------------------------- DarkMode oder LightMode ---*/
   /* Die "DarkMode-Variable" setzen */

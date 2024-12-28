@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:provider/provider.dart';
 import 'package:workbuddy/config/wb_button_universal_2.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_dialog_2buttons.dart';
@@ -11,7 +11,8 @@ import 'package:workbuddy/config/wb_imagebutton_no_text.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
 import 'package:workbuddy/features/authentication/screens/p00_registration_screen.dart';
 import 'package:workbuddy/features/home/screens/main_selection_screen.dart';
-// import 'package:workbuddy/shared/repositories/auth_repository.dart';
+import 'package:workbuddy/main.dart';
+import 'package:workbuddy/shared/repositories/shared_preferences_keys.dart';
 import 'package:workbuddy/shared/widgets/wb_dialog_alert_update_coming_soon.dart';
 import 'package:workbuddy/shared/widgets/wb_divider_with_text_in_center.dart';
 import 'package:workbuddy/shared/widgets/wb_green_button.dart';
@@ -43,31 +44,36 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
   /*--------------------------------- Controller ---*/
   final TextEditingController userNameTEC = TextEditingController();
   final TextEditingController userPasswordTEC = TextEditingController();
-  final TextEditingController _currentUserController = TextEditingController();
+  final TextEditingController currentUserController = TextEditingController();
 
   Future<void> _saveCurrentUser(String currentUser) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('currentUser', currentUser);
-    log('0051- P01LoginScreen - Benutzername gespeichert: $currentUser');
+    log('0051 - P01LoginScreen - Benutzername gespeichert: ---> $currentUser <---');
+    if (currentUser.isEmpty) {
+      currentUser = "Gast-User";
+      await prefs.setString('currentUser', currentUser);
+      log('0055 - P01LoginScreen - Benutzername wurde als ---> $currentUser <--- gespeichert');
+    }
   }
 
   Future<void> _loadCurrentUser() async {
     final prefs = await SharedPreferences.getInstance();
     final currentUser = prefs.getString('currentUser') ?? '';
     setState(() {
-      _currentUserController.text = currentUser;
-      log('0058- P01LoginScreen - Benutzername geladen: ${currentUser.characters}');
+      currentUserController.text = currentUser;
+      log('0059 - P01LoginScreen - Benutzername geladen: ---> ${currentUserController.text.characters} <---');
     });
   }
 
   void _onLogin() {
-    final currentUser = _currentUserController.text;
+    final currentUser = currentUserController.text;
     if (currentUser.isNotEmpty) {
       _saveCurrentUser(currentUser);
       // Weitere Aktionen nach erfolgreichem Login
-      log('0055 - P01LoginScreen - Benutzername gespeichert: $currentUser');
+      log('0068 - P01LoginScreen - Benutzername gespeichert: $currentUser');
     } else {
-      log('0057 - P01LoginScreen - Benutzername darf NICHT leer sein');
+      log('0070 - P01LoginScreen - Benutzername darf NICHT leer sein');
     }
   }
   /*--------------------------------- GlobalKey ---*/
@@ -146,10 +152,6 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
   //       MaterialPageRoute(builder: (context) => UserScreen(user: user)));
   // }
   // /*--------------------------------- MockUserRepository ENDE ---*/
-
-  // /*--------------------------------- Controller ---*/
-  // final TextEditingController userNameTEC = TextEditingController();
-  // final TextEditingController userPasswordTEC = TextEditingController();
 
   /*--------------------------------- onChanged-Funktion ---*/
   bool visibilityPassword = true;
@@ -242,19 +244,19 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                 ),
                 textAlign: TextAlign.left,
                 textInputAction: TextInputAction.next,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
-                  contentPadding: EdgeInsets.all(16),
+                  contentPadding: const EdgeInsets.all(16),
                   /*--------------------------------- labelStyle ---*/
                   labelText: 'Benutzername',
-                  labelStyle: TextStyle(
+                  labelStyle: const TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                     backgroundColor: Colors.white,
                   ),
                   /*--------------------------------- prefixIcon ---*/
-                  prefixIcon: Padding(
+                  prefixIcon: const Padding(
                     padding: EdgeInsets.all(16),
                     child: Icon(
                       size: 40,
@@ -262,14 +264,15 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                     ),
                   ),
                   /*--------------------------------- hintText ---*/
-                  hintText: "Benutzername eingeben",
-                  hintStyle: TextStyle(
+                  hintText:
+                      '${context.watch<CurrentUserProvider>().currentUser} war angemeldet', //"Benutzername eingeben",
+                  hintStyle: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
                     color: Colors.black38,
                   ),
                   /*--------------------------------- border ---*/
-                  border: OutlineInputBorder(
+                  border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(16)),
                   ),
                 ),
@@ -305,6 +308,13 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                 },
               ),
             ),
+          ),
+          /*--------------------------------- Abstand ---*/
+          wbSizedBoxHeight8,
+          /*--------------------------------- Text ---*/
+          Text(
+            "Zuvor angemeldeter Benutzer: ${context.watch<CurrentUserProvider>().currentUser} ",
+            textAlign: TextAlign.center,
           ),
           /*--------------------------------- Abstand ---*/
           wbSizedBoxHeight16,
@@ -417,7 +427,9 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                     // } else if (userName == "Jürgen" && userPassword == "Pass") {
                     //   // userPasswordTEC
                     log("0435 - P01LoginScreen - nach erfolgreicher Prüfung wechsle zur MainSelectionScreen");
-                    Navigator.push(
+                    /* Den Zustand vom MainSelectionScreen aktualisieren */
+                    // Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const MainSelectionScreen(),
@@ -463,21 +475,28 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
           /*--------------------------------- Login-Button ---*/
           WBGreenButton(
             onTap: () {
-              setState(() {
-                _currentUserController.text = userNameTEC.text;
-              });
-              log('0435 - P01LoginScreen - Speichere den Benutzernamen ---> ${_currentUserController.text} <--- in den SharedPreferences');
+/* Den Zustand des CurrentUserProvider aktualisieren */
+              context.read<CurrentUserProvider>().currentUser =
+                  currentUser;
 
-              // ${_saveCurrentUser(_currentUserController.toString())}
-              // _saveCurrentUser(_currentUserController.text);
-              // ${_currentUserController.toString()}
-              _onLogin;
-              _loadCurrentUser();
+              setState(() {
+                _loadCurrentUser();
+                _onLogin;
+
+                currentUserController.text = userNameTEC.text;
+
+                _saveCurrentUser(currentUserController.text);
+                log('0475 - P01LoginScreen - Speichere den Benutzernamen ---> ${currentUserController.text} <--- in den SharedPreferences');
+                // _loadCurrentUser();
+                // _onLogin;
+              });
               /*--------------------------------- checkUserAndPassword ---*/
               log("0440 - P01LoginScreen - überprüfe Benutzer UND Passwort");
               if (userName == "Jürgen" && userPassword == "Pass") {
                 log("0489 - P01LoginScreen - nach erfolgreicher Prüfung wechsle zur MainSelectionScreen");
-                Navigator.push(
+                /* Den Zustand vom MainSelectionScreen aktualisieren */
+                // Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => const MainSelectionScreen(),
