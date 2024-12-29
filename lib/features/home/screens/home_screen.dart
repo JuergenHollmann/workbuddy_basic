@@ -14,12 +14,12 @@ import '../../authentication/screens/p01_login_screen.dart';
 class WbHomePage extends StatefulWidget {
   const WbHomePage({
     super.key,
-    required this.title, required this.preferencesRepository,
-    // required this.preferencesRepository,
+    required this.title,
+    required this.preferencesRepository,
   });
 
   final String title;
-  final SharedPreferencesRepository preferencesRepository; //SH
+  final SharedPreferencesRepository preferencesRepository;
 
   @override
   State<WbHomePage> createState() => _WbHomePageState();
@@ -49,8 +49,7 @@ class _WbHomePageState extends State<WbHomePage> {
     final rememberedCurrentUser = await prefs.getString("currentUser") ?? 0;
     setState(() {
       // currentUser = rememberedCurrentUser as String;
-            currentUser = rememberedCurrentUser as String;
-
+      currentUser = rememberedCurrentUser as String;
     });
   }
 
@@ -123,6 +122,7 @@ class _WbHomePageState extends State<WbHomePage> {
         child: Column(
           children: [
             wbSizedBoxHeight8,
+            /*--------------------------------- P01LoginScreen ---*/
             Expanded(child: const P01LoginScreen()),
             /*--------------------------------- WbInfoContainer ---*/
             WbInfoContainer(

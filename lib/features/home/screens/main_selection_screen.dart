@@ -1,17 +1,12 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:workbuddy/config/wb_colors.dart';
-import 'package:workbuddy/config/wb_sizes.dart';
-import 'package:workbuddy/main.dart';
 import 'package:workbuddy/shared/widgets/button_accounting.dart';
 import 'package:workbuddy/shared/widgets/button_communication.dart';
 import 'package:workbuddy/shared/widgets/button_companies.dart';
 import 'package:workbuddy/shared/widgets/button_customer.dart';
 import 'package:workbuddy/shared/widgets/wb_navigationbar.dart';
 
-import '../../authentication/screens/p01_login_screen.dart';
 
 class MainSelectionScreen extends StatefulWidget {
   const MainSelectionScreen({super.key});

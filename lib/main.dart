@@ -48,7 +48,7 @@ void main() async {
 
 /*--------------------------------- CurrentAppVersionProvider ---*/
 class CurrentAppVersionProvider extends ChangeNotifier {
-  String currentAppVersion = "WorkBuddy • Free-BASIC-Version 0.005";
+  String currentAppVersion = "WorkBuddy • Free-BASIC-Version 0.006";
 }
 
 /*--------------------------------- CurrentUserProvider ---*/
@@ -146,10 +146,10 @@ class MainApp extends StatelessWidget {
       final prefs = await SharedPreferences.getInstance();
       final currentUser = prefs.getString('currentUser') ?? '';
       currentUserController.text = currentUser;
-      log('0059 - P01LoginScreen - Benutzername geladen: ---> ${currentUserController.text.characters} <--- funzt');
-      log('0060 - P01LoginScreen - Benutzername geladen: ---> $currentUser <--- funzt');
-      log('0061 - P01LoginScreen - Benutzername geladen: ---> ${currentUserController.text} <--- funzt');
-      log('0062 - P01LoginScreen - Benutzername geladen: ---> $currentUserController <--- liefert nur die Instanz');
+      log('0149 - MainApp - Benutzername geladen: ---> ${currentUserController.text.characters} <--- funzt');
+      log('0150 - MainApp - Benutzername geladen: ---> $currentUser <--- funzt');
+      log('0151 - MainApp - Benutzername geladen: ---> ${currentUserController.text} <--- funzt');
+      log('0152 - MainApp - Benutzername geladen: ---> $currentUserController <--- liefert nur die Instanz');
     }
 
     loadCurrentUser(currentUserController);

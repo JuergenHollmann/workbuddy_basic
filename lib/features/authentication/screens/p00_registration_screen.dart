@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:workbuddy/config/wb_button_universal_2.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
-import 'package:workbuddy/features/authentication/screens/p01_login_screen_x.dart';
 import 'package:workbuddy/shared/widgets/validator.dart';
 import 'package:workbuddy/shared/widgets/wb_dialog_alert_update_coming_soon.dart';
 
@@ -17,8 +16,8 @@ class P00RegistrationScreen extends StatefulWidget {
 }
 
 /*--------------------------------- User + Passwort ---*/
-// const String userName = "Jürgen";
-// const String userPassword = "pass";
+const String userName = "Jürgen";
+const String userPassword = "pass";
 bool visibilityPassword = false;
 // bool loginButtonIsEnabled = false;
 
