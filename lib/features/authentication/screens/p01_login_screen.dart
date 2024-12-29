@@ -21,7 +21,7 @@ class P01LoginScreen extends StatefulWidget {
   const P01LoginScreen({super.key});
 
   @override
-  State<P01LoginScreen> createState() => _P01LoginScreenState();
+  State<P01LoginScreen> createState() => _P01LoginScreenXState();
 }
 
 /*--------------------------------- User + Passwort ---*/
@@ -36,7 +36,7 @@ const String userPassword = "Pass";
 // bool visibilityPassword = false;
 // bool loginButtonIsEnabled = false;
 
-class _P01LoginScreenState extends State<P01LoginScreen> {
+class _P01LoginScreenXState extends State<P01LoginScreen> {
   /*--------------------------------- AudioPlayer ---*/
   // ACHTUNG: Beim player den sound OHNE "assets/...", sondern gleich mit "sound/..." eintragen (siehe unten):
   late AudioPlayer player = AudioPlayer();
@@ -476,8 +476,7 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
           WBGreenButton(
             onTap: () {
 /* Den Zustand des CurrentUserProvider aktualisieren */
-              context.read<CurrentUserProvider>().currentUser =
-                  currentUser;
+              context.read<CurrentUserProvider>().currentUser = currentUser;
 
               setState(() {
                 _loadCurrentUser();

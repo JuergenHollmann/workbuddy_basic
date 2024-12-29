@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workbuddy/config/wb_colors.dart';
@@ -8,7 +10,8 @@ import 'package:workbuddy/shared/widgets/button_communication.dart';
 import 'package:workbuddy/shared/widgets/button_companies.dart';
 import 'package:workbuddy/shared/widgets/button_customer.dart';
 import 'package:workbuddy/shared/widgets/wb_navigationbar.dart';
-//import 'current_user_provider.dart';
+
+import '../../authentication/screens/p01_login_screen.dart';
 
 class MainSelectionScreen extends StatefulWidget {
   const MainSelectionScreen({super.key});
@@ -19,32 +22,41 @@ class MainSelectionScreen extends StatefulWidget {
 
 class _MainSelectionScreenState extends State<MainSelectionScreen> {
   @override
-  Widget build(BuildContext context) {
-    final currentUser = context.watch<CurrentUserProvider>().currentUser;
+  void initState() {
+    super.initState();
+    // final currentUser = context.watch<CurrentUserProvider>().currentUser;
 
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   _reloadScreen();
+    // });
+  }
+
+  // void _reloadScreen() {
+  //   setState(() {
+  //     // final currentUserMain = context.watch<CurrentUserProvider>().currentUser;
+  //   });
+  // }
+
+  @override
+  Widget build(BuildContext context) {
+    //String currentUser = context.watch<CurrentUserProvider>().currentUser;
+    //_reloadScreen();
+    //currentUserMain = context.watch<CurrentUserProvider>().currentUser;
     return Scaffold(
       backgroundColor: Colors.blue,
       /*--------------------------------- AppBar ---*/
       appBar: AppBar(
-        title: Row(
-          children: [
-            SizedBox(height: 60,
-              child: Image(
-              image: AssetImage("assets/button_close.png")),
-            ),
-            wbSizedBoxWidth8,
-            Text(
-              '$currentUser ist angemeldet',
-              // '${context.watch<CurrentUserProvider>().currentUser} ist angemeldet', // funzt auch
+        title:
+            Text('Was möchtest Du tun?',
+              // '$currentUser ist angemeldet',
+              //'${context.watch<CurrentUserProvider>().currentUser} ist angemeldet', // funzt auch
+            
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 20,
                 fontWeight: FontWeight.w900,
                 color: Colors.white,
               ), // Schriftfarbe
             ),
-            
-          ],
-        ),
 
         /* das sogt für den Abstand zum "Chevron" am Anfang */
         // leadingWidth: 24,
@@ -100,7 +112,7 @@ class _MainSelectionScreenState extends State<MainSelectionScreen> {
       /*--------------------------------- NavigationBar ---*/
       bottomNavigationBar: WbNavigationbar(
         wbImageAssetImage: AssetImage(
-            "assets/button_settings.png"), // hat keine Auswirkung! - 0124 - MainSelectionScreen
+            "assets/iconbuttons/icon_button_einstellungen_rund_3d_neon_viel_breiter.png"), // hat keine Auswirkung! - 0124 - MainSelectionScreen
       ),
       /*--------------------------------- *** ---*/
     );

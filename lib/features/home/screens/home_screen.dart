@@ -5,10 +5,11 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
-import 'package:workbuddy/features/authentication/screens/p01_login_screen.dart';
 import 'package:workbuddy/main.dart';
 import 'package:workbuddy/shared/repositories/shared_preferences_repository.dart';
 import 'package:workbuddy/shared/widgets/wb_info_container.dart';
+
+import '../../authentication/screens/p01_login_screen.dart';
 
 class WbHomePage extends StatefulWidget {
   const WbHomePage({
