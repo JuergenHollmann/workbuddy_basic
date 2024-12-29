@@ -31,10 +31,20 @@ class _WbNavigationbarState extends State<WbNavigationbar> {
   //     Image(image: AssetImage("assets/button_info.png")); //OK
 
   get wbImageAssetImage => Image(
-      image: AssetImage(
-          "assets/iconbuttons/icon_button_einstellungen_rund_3d_neon.png")); //OK
+        image: AssetImage(
+          "assets/iconbuttons/icon_button_einstellungen_rund_3d_neon.png",
+        ),
+      );
 
-  final preferencesRepository = SharedPreferencesRepository();
+  //final preferencesRepository = SharedPreferencesRepository();
+    final prefs = SharedPreferencesRepository();
+      late String currentUser;
+    
+      @override
+      void initState() {
+        super.initState();
+      }
+
 
   @override
   Widget build(BuildContext context) {
@@ -89,12 +99,14 @@ class _WbNavigationbarState extends State<WbNavigationbar> {
                 /*--- Navigiere zur WbHomePage wenn der Home-Button in der NavigationBar angeklickt wird
                 ----> von dort geht es automatisch weiter zum P01LoginScreen,  ---*/
                 log('0084 - WbNavigationbar - Navigiere zur WbHomePage'); // anstatt direkt zum P01LoginScreen
+                /*--------------------------------- *** ---*/
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => WbHomePage(
                       title: 'WorkBuddy • save time and money!!',
-                      preferencesRepository: preferencesRepository,
+                      // preferencesRepository: preferencesRepository,
+                      preferencesRepository: prefs,
                     ),
                   ),
                 );
@@ -103,8 +115,8 @@ class _WbNavigationbarState extends State<WbNavigationbar> {
                 //   context,
                 //   MaterialPageRoute(
                 //     builder: (context) => P01LoginScreen(
-                //         title: 'WorkBuddy • save time and money!',
-                //         preferencesRepository: preferencesRepository,
+                //         // title: 'WorkBuddy • save time and money!',
+                //         // preferencesRepository: preferencesRepository,
                 //         ),
                 //   ),
                 // );
