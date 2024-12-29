@@ -157,6 +157,13 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 198, 231, 254),
+
+      // appBar: AppBar(
+      //   title: const Text("WorkBuddy - Login"),
+      //   backgroundColor: wbColorButtonGreen,
+      // ),
+
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: ListView(
