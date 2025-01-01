@@ -5,6 +5,8 @@ import 'package:workbuddy/config/wb_sizes.dart';
 import 'package:workbuddy/config/wb_text_form_field.dart';
 import 'package:workbuddy/features/email/email_user_selection.dart';
 import 'package:workbuddy/main.dart';
+import 'package:workbuddy/shared/providers/current_app_version_provider.dart';
+import 'package:workbuddy/shared/providers/current_user_provider.dart';
 import 'package:workbuddy/shared/widgets/wb_info_container.dart';
 
 import 'mock_email_users_data.dart';

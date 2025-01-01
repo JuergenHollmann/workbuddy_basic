@@ -1,3 +1,5 @@
+/* SH */
+
 import 'package:flutter/material.dart';
 import 'package:workbuddy/features/authentication/repositories/mock_user_repository.dart';
 import 'package:workbuddy/features/authentication/schema/server_user_response.dart';

@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workbuddy/features/home/screens/home_screen.dart';
 import 'package:workbuddy/firebase_options.dart';
+import 'package:workbuddy/shared/providers/current_app_version_provider.dart';
+import 'package:workbuddy/shared/providers/current_user_provider.dart';
 import 'package:workbuddy/shared/repositories/auth_repository.dart';
 import 'package:workbuddy/shared/repositories/database_repository.dart';
 import 'package:workbuddy/shared/repositories/firebase_auth_repository.dart';
@@ -22,15 +23,11 @@ void main() async {
   /*--------------------------------- *** ---*/
   final DatabaseRepository databaseRepository = MockDatabase();
   final AuthRepository authRepository = FirebaseAuthRepository();
-  /*--------------------------------- *** ---*/
+  /*--------------------------------- Alle Providers sind im Ordner "lib/shared/providers" ---*/
   runApp(MultiProvider(
     providers: [
-      Provider<DatabaseRepository>(
-        create: (_) => databaseRepository,
-      ),
-      Provider<AuthRepository>(
-        create: (_) => authRepository,
-      ),
+      Provider<DatabaseRepository>(create: (_) => databaseRepository),
+      Provider<AuthRepository>(create: (_) => authRepository),
       ChangeNotifierProvider(create: (context) => CurrentAppVersionProvider()),
       ChangeNotifierProvider(create: (context) => CurrentUserProvider()),
       ChangeNotifierProvider(create: (context) => CurrentWeekdayLongProvider()),
@@ -44,26 +41,6 @@ void main() async {
       authRepository: authRepository,
     ),
   ));
-}
-
-/*--------------------------------- CurrentAppVersionProvider ---*/
-class CurrentAppVersionProvider extends ChangeNotifier {
-  String currentAppVersion = "WorkBuddy • Free-BASIC-Version 0.006";
-}
-
-/*--------------------------------- CurrentUserProvider ---*/
-class CurrentUserProvider extends ChangeNotifier {
-  final TextEditingController currentUserController = TextEditingController();
-  late String currentUser;
-  CurrentUserProvider() {
-    currentUser = currentUserController.text;
-    log('0061 - MainApp - CurrentUserProvider ---> $currentUser <---');
-    currentUserController.addListener(() {
-      currentUser = currentUserController.text;
-      notifyListeners(); // gibt nichts zurück?
-    });
-    log('0069 - MainApp - CurrentUserProvider - Der aktuelle Benutzer ist --> ${currentUserController.text.characters} <---');
-  }
 }
 
 /*--------------------------------- CurrentWeekdayLongProvider ---*/
@@ -137,22 +114,22 @@ class MainApp extends StatelessWidget {
     log("0015 - MainApp - wird gestartet");
     initializeDateFormatting('de', null);
 
-    final currentUserController =
-        Provider.of<CurrentUserProvider>(context, listen: true)
-            .currentUserController;
+    // final currentUserController =
+    //     Provider.of<CurrentUserProvider>(context, listen: true)
+    //         .currentUserName;
 
-    Future<void> loadCurrentUser(
-        TextEditingController currentUserController) async {
-      final prefs = await SharedPreferences.getInstance();
-      final currentUser = prefs.getString('currentUser') ?? '';
-      currentUserController.text = currentUser;
-      log('0149 - MainApp - Benutzername geladen: ---> ${currentUserController.text.characters} <--- funzt');
-      log('0150 - MainApp - Benutzername geladen: ---> $currentUser <--- funzt');
-      log('0151 - MainApp - Benutzername geladen: ---> ${currentUserController.text} <--- funzt');
-      log('0152 - MainApp - Benutzername geladen: ---> $currentUserController <--- liefert nur die Instanz');
-    }
+    // Future<void> loadCurrentUser(
+    //     TextEditingController currentUserController) async {
+    //   final prefs = await SharedPreferences.getInstance();
+    //   final currentUser = prefs.getString('currentUser') ?? '';
+    //   currentUserController.text = currentUser;
+    //   log('0149 - MainApp - Benutzername geladen: ---> ${currentUserController.text.characters} <--- funzt');
+    //   log('0150 - MainApp - Benutzername geladen: ---> $currentUser <--- funzt');
+    //   log('0151 - MainApp - Benutzername geladen: ---> ${currentUserController.text} <--- funzt');
+    //   log('0152 - MainApp - Benutzername geladen: ---> $currentUserController <--- liefert nur die Instanz');
+    // }
 
-    loadCurrentUser(currentUserController);
+    // loadCurrentUser(currentUser);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,

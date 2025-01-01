@@ -1,3 +1,5 @@
+/* SH */
+
 import 'package:flutter/material.dart';
 
 import '../schema/user.dart';
@@ -5,7 +7,10 @@ import '../schema/user.dart';
 // Der User-Screen der den User erhält und die Daten auf dem Screen anzeigt:
 class UserScreen extends StatelessWidget {
   final User user;
-  const UserScreen({super.key, required this.user});
+  const UserScreen({
+    super.key,
+    required this.user,
+  });
 
   @override
   Widget build(BuildContext context) {

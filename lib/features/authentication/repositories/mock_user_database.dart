@@ -1,3 +1,4 @@
+/* SH */
 import '../schema/user.dart';
 
 // Normaler User in unserer "fiktiven Datenbank"

@@ -11,8 +11,7 @@ import 'package:workbuddy/config/wb_imagebutton_no_text.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
 import 'package:workbuddy/features/authentication/screens/p00_registration_screen.dart';
 import 'package:workbuddy/features/home/screens/main_selection_screen.dart';
-import 'package:workbuddy/main.dart';
-import 'package:workbuddy/shared/repositories/shared_preferences_keys.dart';
+import 'package:workbuddy/shared/providers/current_user_provider.dart';
 import 'package:workbuddy/shared/widgets/wb_dialog_alert_update_coming_soon.dart';
 import 'package:workbuddy/shared/widgets/wb_divider_with_text_in_center.dart';
 import 'package:workbuddy/shared/widgets/wb_green_button.dart';
@@ -317,9 +316,13 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
             /*--------------------------------- Abstand ---*/
             wbSizedBoxHeight8,
             /*--------------------------------- Text ---*/
-            Text(
-              "Zuvor angemeldeter Benutzer: ${context.watch<CurrentUserProvider>().currentUser} ",
-              textAlign: TextAlign.center,
+            Consumer<CurrentUserProvider>(
+              builder: (context, value, child) {
+                return Text(
+                  'Zuvor angemeldeter Benutzer: ${value.currentUser.currentUserName}',
+                  textAlign: TextAlign.center,
+                );
+              },
             ),
             /*--------------------------------- Abstand ---*/
             wbSizedBoxHeight16,
@@ -481,7 +484,7 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
             WBGreenButton(
               onTap: () {
                 /* Den Zustand des CurrentUserProvider aktualisieren */
-                context.read<CurrentUserProvider>().currentUser = currentUser;
+                ///context.read<CurrentUserProvider>().currentUserName = currentUser;
 
                 setState(() {
                   _loadCurrentUser();

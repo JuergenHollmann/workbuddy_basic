@@ -1,3 +1,4 @@
+/* SH */
 import 'package:workbuddy/features/authentication/schema/server_user_response.dart';
 
 // Vorlage/Template User Repository
