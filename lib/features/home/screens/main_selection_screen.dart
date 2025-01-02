@@ -34,10 +34,9 @@ class _MainSelectionScreenState extends State<MainSelectionScreen> {
       appBar: AppBar(
         title: Text(
           //'Was möchtest Du tun?',
-          
           '${context.watch<CurrentUserProvider>().currentUser} ist angemeldet',
           style: TextStyle(
-            fontSize: 24,
+            fontSize: 20,
             fontWeight: FontWeight.w900,
             color: Colors.white,
           ),

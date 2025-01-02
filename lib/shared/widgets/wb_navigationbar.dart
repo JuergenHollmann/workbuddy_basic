@@ -179,9 +179,6 @@ class _WbNavigationbarState extends State<WbNavigationbar> {
                     );
                     /*--------------------------------- AlertDialog ENDE ---*/
                   }
-                  // setState(() {
-                  //   //currentIndex = index;
-                  // });
                 },
                 destinations: [
                   /*--------------------------------- Button X ---*/

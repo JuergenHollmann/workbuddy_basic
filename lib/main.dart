@@ -119,6 +119,7 @@ class MainApp extends StatelessWidget {
   √ für macOS muss im macos/Podfile ---> platform :osx, '10.15' eingestellt werden √ 
 
   /*--------------------------------- TODO's ---
+  - In Chrome gibt es keine SharedPreferences, deshalb muss ich das auf "null" setzen? oder woanders (SQL) speichern?
   - Die Variable für den "DarkMode" setzen - WbHomePage - 0173
   - Wie kann ich hier nach mehreren Kriterien suchen oder filtern? - EmailUserSelection - 0158
   - Die GEFUNDENE Anzahl aller User mit der gesuchten Zeichenfolge in der Liste zeigen - EMailScreenP043 - 0030
