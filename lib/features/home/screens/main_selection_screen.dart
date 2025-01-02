@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workbuddy/config/wb_colors.dart';
@@ -17,29 +18,29 @@ class MainSelectionScreen extends StatefulWidget {
 }
 
 class _MainSelectionScreenState extends State<MainSelectionScreen> {
+ 
   @override
-  // void initState() {
-  //   super.initState();
-  // }
+  void initState(){
+    // Eine Methode einmalig ausführen
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.blue,
       /*--------------------------------- AppBar ---*/
       appBar: AppBar(
-        title: Consumer(
-          builder: (context, value, child) {
-            return Text(
-              'Was möchtest Du tun?',
-              // '${context.watch<CurrentUserProvider>().currentUser.currentUserName} ist angemeldet',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w900,
-                color: Colors.white,
-              ),
-            );
-          },
+        title: Text(
+          //'Was möchtest Du tun?',
+          
+          '${context.watch<CurrentUserProvider>().currentUser} ist angemeldet',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w900,
+            color: Colors.white,
+          ),
         ),
         /* das sogt für den Abstand zum "Chevron" am Anfang */
         // leadingWidth: 24,
@@ -93,13 +94,15 @@ class _MainSelectionScreenState extends State<MainSelectionScreen> {
           /*--------------------------------- Wer ist angemeldet? ---*/
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Text(
-              '${context.watch<CurrentUserProvider>().currentUser.currentUserName} ist angemeldet',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w900,
-                color: Colors.white,
+            child: Consumer<CurrentUserProvider>(
+              builder: (context, value, child) => Text(
+                '${value.currentUser} ist angemeldet',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),

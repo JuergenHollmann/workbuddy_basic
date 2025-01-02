@@ -50,27 +50,26 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
     }
   }
 
-  Future<void> _loadCurrentUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    final currentUser = prefs.getString('currentUser') ?? '';
-    setState(() {
-      currentUserController.text = currentUser;
-      log('0059 - P01LoginScreen - Benutzername geladen: ---> ${currentUserController.text.characters} <---');
-      log('0060 - P01LoginScreen - Benutzername geladen: ---> $currentUser <---');
-    });
-  }
+  // Future<void> _loadCurrentUser() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final currentUser = prefs.getString('currentUser') ?? '';
+  //   setState(() {
+  //     currentUserController.text = currentUser;
+  //     log('0059 - P01LoginScreen - Benutzername geladen: ---> ${currentUserController.text.characters} <---');
+  //     log('0060 - P01LoginScreen - Benutzername geladen: ---> $currentUser <---');
+  //   });
+  // }
   // loadCurrentUser(currentUserController);
 
-  void _onLogin() {
-    final currentUser = currentUserController.text;
-    if (currentUser.isNotEmpty) {
-      _saveCurrentUser(currentUser);
-      // Weitere Aktionen nach erfolgreichem Login
-      log('0068 - P01LoginScreen - Benutzername gespeichert: $currentUser');
-    } else {
-      log('0070 - P01LoginScreen - Benutzername darf NICHT leer sein');
-    }
-  }
+  // void _onLogin() {
+  //   final currentUser = currentUserController.text;
+  //   if (currentUser.isNotEmpty) {
+  //     _saveCurrentUser(currentUser);
+  //     log('0068 - P01LoginScreen - Benutzername gespeichert: $currentUser');
+  //   } else {
+  //     log('0070 - P01LoginScreen - Benutzername darf NICHT leer sein');
+  //   }
+  // }
   /*--------------------------------- GlobalKey ---*/
   // Brauchen wir, damit wir alle TextFormFields validieren können
   // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -157,12 +156,6 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 198, 231, 254),
-
-      // appBar: AppBar(
-      //   title: const Text("WorkBuddy - Login"),
-      //   backgroundColor: wbColorButtonGreen,
-      // ),
-
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: ListView(
@@ -269,7 +262,7 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                     ),
                     /*--------------------------------- hintText ---*/
                     hintText:
-                        '${context.watch<CurrentUserProvider>().currentUser} war angemeldet', //"Benutzername eingeben",
+                        '${context.watch<CurrentUserProvider>().currentUser} war angemeldet',
                     hintStyle: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w900,
@@ -319,7 +312,7 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
             Consumer<CurrentUserProvider>(
               builder: (context, value, child) {
                 return Text(
-                  'Zuvor angemeldeter Benutzer: ${value.currentUser.currentUserName}',
+                  'Zuvor angemeldeter Benutzer: ${value.currentUser}',
                   textAlign: TextAlign.center,
                 );
               },
@@ -436,8 +429,8 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                       //   // userPasswordTEC
                       log("0435 - P01LoginScreen - nach erfolgreicher Prüfung wechsle zur MainSelectionScreen");
                       /* Den Zustand vom MainSelectionScreen aktualisieren */
-                      // Navigator.push(
-                      Navigator.pushReplacement(
+                      // Navigator.pushReplacement( // nicht mit "Navigator.pushReplacement", sondern mit "Navigator.push" da sonst der "Zurück-Button" nicht mehr funktioniert!
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const MainSelectionScreen(),
@@ -484,26 +477,24 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
             WBGreenButton(
               onTap: () {
                 /* Den Zustand des CurrentUserProvider aktualisieren */
-                ///context.read<CurrentUserProvider>().currentUserName = currentUser;
+                context.read<CurrentUserProvider>().currentUser;
 
-                setState(() {
-                  _loadCurrentUser();
-                  _onLogin;
+                /* Den eingetragenen Benutzer in den SharedPreferences speichern */
+                currentUserController.text = userNameTEC.text;
+                _saveCurrentUser(currentUserController.text);
+                log('0486 - P01LoginScreen - Speichere den Benutzernamen ---> ${currentUserController.text} <--- in den SharedPreferences');
 
-                  currentUserController.text = userNameTEC.text;
+                /* Den currentUser nach Anklicken auf den "Login-Button" laden */
+                context.read<CurrentUserProvider>().loadCurrentUser();
 
-                  _saveCurrentUser(currentUserController.text);
-                  log('0475 - P01LoginScreen - Speichere den Benutzernamen ---> ${currentUserController.text} <--- in den SharedPreferences');
-                  // _loadCurrentUser();
-                  // _onLogin;
-                });
                 /*--------------------------------- checkUserAndPassword ---*/
                 log("0440 - P01LoginScreen - überprüfe Benutzer UND Passwort");
                 if (userName == "Jürgen" && userPassword == "Pass") {
                   log("0489 - P01LoginScreen - nach erfolgreicher Prüfung wechsle zur MainSelectionScreen");
+
                   /* Den Zustand vom MainSelectionScreen aktualisieren */
-                  // Navigator.push(
-                  Navigator.pushReplacement(
+                  // Navigator.pushReplacement( // nicht mit Navigator.pushReplacement, da sonst der "Zurück-Button" nicht mehr funktioniert!
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const MainSelectionScreen(),
@@ -644,7 +635,7 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                     wbBorderRadius16: 16,
                     hasShadow: true,
                     wbOnTap: () {
-                      log("0574 - P01LoginScreen - Workbuddy angeklickt");
+                      log("0574 - P01LoginScreen - WorkBuddy angeklickt");
                       // /*--- StreamBuilder auslesen ---*/
                       //                     StreamBuilder(
                       //                       stream: context.read<AuthRepository>().authStateChanges(),

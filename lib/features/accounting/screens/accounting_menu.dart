@@ -271,7 +271,8 @@ class AccountingMenu extends StatelessWidget {
             (context, currentUserProvider, currentAppVersionProvider, child) =>
                 WbInfoContainer(
           infoText:
-              'Angemeldet zur Bearbeitung: ${currentUserProvider.currentUser.currentUserName}\n${currentAppVersionProvider.currentAppVersion}',
+              'Angemeldet zur Bearbeitung: ${currentUserProvider.currentUser}\n${currentAppVersionProvider.currentAppVersion}',
+          // 'Angemeldet zur Bearbeitung: ${currentUserProvider.currentUser.currentUserName}\n${currentAppVersionProvider.currentAppVersion}',
           wbColors: Colors.yellow,
         ),
       ),

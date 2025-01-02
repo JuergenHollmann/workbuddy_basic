@@ -62,10 +62,7 @@ class WBGreenButton extends StatelessWidget {
                       ],
                     ),
                   ),
-
-                  // Expanded(flex: 1, child:SizedBox.shrink( //todo (siehe 434/F4)
                   Expanded(
-                    //flex: 1,
                     child: Center(
                       child: Padding(
                         padding: EdgeInsets.only(
@@ -84,7 +81,6 @@ class WBGreenButton extends StatelessWidget {
                               )
                             ],
                             fontSize: 32,
-                            // fontFamily: 'Roboto' oder 'SF Pro Display', soll ich die verwenden? todo?
                             fontWeight: FontWeight.w900,
                             // height: 1, // nur wenn der Text innerhalb des Buttons verschoben werden soll
                             letterSpacing: 2, // Zwischenraum der Buchtstaben

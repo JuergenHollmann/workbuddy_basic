@@ -23,7 +23,8 @@ void main() async {
   /*--------------------------------- *** ---*/
   final DatabaseRepository databaseRepository = MockDatabase();
   final AuthRepository authRepository = FirebaseAuthRepository();
-  /*--------------------------------- Alle Providers sind im Ordner "lib/shared/providers" ---*/
+
+  /*--- Alle Providers sind vorläufig im Ordner "lib/shared/providers" oder werden später dahin kopiert ---*/
   runApp(MultiProvider(
     providers: [
       Provider<DatabaseRepository>(create: (_) => databaseRepository),
@@ -206,7 +207,7 @@ class MainApp extends StatelessWidget {
   √ WBGreenButton - Beispiel: Login-Button √
   √ WbButtonsUniWithImageButton √
   √ WbDialogAlertUpdateComingSoon √
-  √ WbButtonUniversal2 - Beispiel: Workbuddy beenden √
+  √ WbButtonUniversal2 - Beispiel: WorkBuddy beenden √
   √ "Spacer(flex: 1)" waren das Problem, warum ich nicht mehr die Seite öffnen konnte! √
   
 - kann später evtl. gelöscht werden: lib/shared/data/user.dart
