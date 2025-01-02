@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -14,5 +16,6 @@ class CurrentAppVersionProvider extends ChangeNotifier {
     final packageInfo = await PackageInfo.fromPlatform();
     currentAppVersion = 'WorkBuddy • Free-BASIC-Version ${packageInfo.version}';
     notifyListeners();
+    log('0017 - CurrentAppVersionProvider - Die aktuelle App-Version ist --> $currentAppVersion <---');
   }
 }

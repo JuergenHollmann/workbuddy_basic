@@ -1,12 +1,13 @@
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:workbuddy/config/wb_colors.dart';
+import 'package:workbuddy/config/wb_sizes.dart';
+import 'package:workbuddy/shared/providers/current_user_provider.dart';
 import 'package:workbuddy/shared/widgets/button_accounting.dart';
 import 'package:workbuddy/shared/widgets/button_communication.dart';
 import 'package:workbuddy/shared/widgets/button_companies.dart';
 import 'package:workbuddy/shared/widgets/button_customer.dart';
 import 'package:workbuddy/shared/widgets/wb_navigationbar.dart';
-
 
 class MainSelectionScreen extends StatefulWidget {
   const MainSelectionScreen({super.key});
@@ -17,42 +18,29 @@ class MainSelectionScreen extends StatefulWidget {
 
 class _MainSelectionScreenState extends State<MainSelectionScreen> {
   @override
-  void initState() {
-    super.initState();
-    // final currentUser = context.watch<CurrentUserProvider>().currentUser;
-
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _reloadScreen();
-    // });
-  }
-
-  // void _reloadScreen() {
-  //   setState(() {
-  //     // final currentUserMain = context.watch<CurrentUserProvider>().currentUser;
-  //   });
+  // void initState() {
+  //   super.initState();
   // }
 
   @override
   Widget build(BuildContext context) {
-    //String currentUser = context.watch<CurrentUserProvider>().currentUser;
-    //_reloadScreen();
-    //currentUserMain = context.watch<CurrentUserProvider>().currentUser;
     return Scaffold(
       backgroundColor: Colors.blue,
       /*--------------------------------- AppBar ---*/
       appBar: AppBar(
-        title:
-            Text('Was möchtest Du tun?',
-              // '$currentUser ist angemeldet',
-              //'${context.watch<CurrentUserProvider>().currentUser} ist angemeldet', // funzt auch
-            
+        title: Consumer(
+          builder: (context, value, child) {
+            return Text(
+              'Was möchtest Du tun?',
+              // '${context.watch<CurrentUserProvider>().currentUser.currentUserName} ist angemeldet',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 24,
                 fontWeight: FontWeight.w900,
                 color: Colors.white,
-              ), // Schriftfarbe
-            ),
-
+              ),
+            );
+          },
+        ),
         /* das sogt für den Abstand zum "Chevron" am Anfang */
         // leadingWidth: 24,
         foregroundColor: Colors.white,
@@ -70,7 +58,7 @@ class _MainSelectionScreenState extends State<MainSelectionScreen> {
           /*--------------------------------- GridView ---*/
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(32, 24, 32, 32),
+              padding: const EdgeInsets.fromLTRB(32, 24, 32, 16),
               child: GridView.count(
                 crossAxisCount: 2, // Anzahl der Spalten
                 crossAxisSpacing: 1, // Platz zwischen den Spalten
@@ -102,6 +90,22 @@ class _MainSelectionScreenState extends State<MainSelectionScreen> {
               ),
             ),
           ),
+          /*--------------------------------- Wer ist angemeldet? ---*/
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Text(
+              '${context.watch<CurrentUserProvider>().currentUser.currentUserName} ist angemeldet',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w900,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          /*--------------------------------- Abstand ---*/
+          wbSizedBoxHeight8,
+          /*--------------------------------- *** ---*/
         ],
       ),
       /*--------------------------------- NavigationBar ---*/

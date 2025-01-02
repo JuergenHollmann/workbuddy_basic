@@ -315,7 +315,7 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
             ),
             /*--------------------------------- Abstand ---*/
             wbSizedBoxHeight8,
-            /*--------------------------------- Text ---*/
+            /*--------------------------------- Text in Consumer<CurrentUserProvider> ---*/
             Consumer<CurrentUserProvider>(
               builder: (context, value, child) {
                 return Text(

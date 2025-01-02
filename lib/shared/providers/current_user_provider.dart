@@ -6,7 +6,7 @@ import 'package:workbuddy/shared/models/current_user_model.dart';
 
 class CurrentUserProvider extends ChangeNotifier {
   final CurrentUserModel _currentUser = CurrentUserModel(
-    currentUserName: 'Josef',
+    currentUserName: 'Josef der Platzhalter mit dem langen Namen zum Testen',
   );
 
   CurrentUserModel get currentUser => _currentUser;
@@ -26,6 +26,7 @@ class CurrentUserProvider extends ChangeNotifier {
     log('0150 - CurrentUserProvider - Benutzername geladen: ---> $currentUser <--- funzt');
     log('0151 - CurrentUserProvider - Benutzername geladen: ---> ${currentUserController.text} <--- funzt');
     log('0152 - CurrentUserProvider - Benutzername geladen: ---> $currentUserController <--- liefert nur die Instanz');
+    notifyListeners();
   }
 }
 
