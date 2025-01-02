@@ -5,8 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
-import 'package:workbuddy/main.dart';
 import 'package:workbuddy/shared/providers/current_app_version_provider.dart';
+import 'package:workbuddy/shared/providers/current_date_provider.dart';
+import 'package:workbuddy/shared/providers/current_day_long_provider.dart';
 import 'package:workbuddy/shared/repositories/shared_preferences_repository.dart';
 import 'package:workbuddy/shared/widgets/wb_info_container.dart';
 
@@ -128,7 +129,7 @@ class _WbHomePageState extends State<WbHomePage> {
             /*--------------------------------- WbInfoContainer ---*/
             WbInfoContainer(
               infoText: // Zuvor angemeldeter Benutzer: ${context.watch<CurrentUserProvider>().currentUser}\n
-                  'Heute ist ${context.watch<CurrentWeekdayLongProvider>().currentWeekdayLong}, ${context.watch<CurrentDateProvider>().currentDate}\n${context.watch<CurrentAppVersionProvider>().currentAppVersion}',
+                  'Heute ist ${context.watch<CurrentDayLongProvider>().currentDayLong}, ${context.watch<CurrentDateProvider>().currentDate}\n${context.watch<CurrentAppVersionProvider>().currentAppVersion}',
               wbColors: Colors.yellow,
             ),
             /*--------------------------------- WbInfoContainer ENDE ---*/

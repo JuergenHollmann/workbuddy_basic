@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 
 import 'package:audioplayers/audioplayers.dart';
@@ -475,7 +477,7 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
             wbSizedBoxHeight8,
             /*--------------------------------- Login-Button ---*/
             WBGreenButton(
-              onTap: () {
+              onTap: () async {
                 /* Den Zustand des CurrentUserProvider aktualisieren */
                 context.read<CurrentUserProvider>().currentUser;
 
@@ -483,6 +485,15 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                 currentUserController.text = userNameTEC.text;
                 _saveCurrentUser(currentUserController.text);
                 log('0486 - P01LoginScreen - Speichere den Benutzernamen ---> ${currentUserController.text} <--- in den SharedPreferences');
+
+                /* Wenn kein Benutzer eingetragern ist, soll ein "Gast-User" in den SharedPreferences gespeichert werden */
+                if (currentUserController.text.isEmpty) {
+                  final prefs = await SharedPreferences.getInstance();
+                  currentUserController.text = "Gast-User";
+                  await prefs.setString(
+                      'currentUser', currentUserController.text);
+                  log('0489 - P01LoginScreen - KEIN Benutzername eingetragen, deswegen wurde ein ---> ${currentUserController.text} <--- gespeichert.');
+                }
 
                 /* Den currentUser nach Anklicken auf den "Login-Button" laden */
                 context.read<CurrentUserProvider>().loadCurrentUser();

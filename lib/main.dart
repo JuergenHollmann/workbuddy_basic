@@ -3,11 +3,14 @@ import 'dart:developer';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:workbuddy/features/home/screens/home_screen.dart';
 import 'package:workbuddy/firebase_options.dart';
 import 'package:workbuddy/shared/providers/current_app_version_provider.dart';
+import 'package:workbuddy/shared/providers/current_date_provider.dart';
+import 'package:workbuddy/shared/providers/current_day_long_provider.dart';
+import 'package:workbuddy/shared/providers/current_day_short_provider.dart';
+import 'package:workbuddy/shared/providers/current_time_provider.dart';
 import 'package:workbuddy/shared/providers/current_user_provider.dart';
 import 'package:workbuddy/shared/repositories/auth_repository.dart';
 import 'package:workbuddy/shared/repositories/database_repository.dart';
@@ -31,9 +34,8 @@ void main() async {
       Provider<AuthRepository>(create: (_) => authRepository),
       ChangeNotifierProvider(create: (context) => CurrentAppVersionProvider()),
       ChangeNotifierProvider(create: (context) => CurrentUserProvider()),
-      ChangeNotifierProvider(create: (context) => CurrentWeekdayLongProvider()),
-      ChangeNotifierProvider(
-          create: (context) => CurrentWeekdayShortProvider()),
+      ChangeNotifierProvider(create: (context) => CurrentDayLongProvider()),
+      ChangeNotifierProvider(create: (context) => CurrentDayShortProvider()),
       ChangeNotifierProvider(create: (context) => CurrentDateProvider()),
       ChangeNotifierProvider(create: (context) => CurrentTimeProvider()),
     ],
@@ -42,57 +44,6 @@ void main() async {
       authRepository: authRepository,
     ),
   ));
-}
-
-/*--------------------------------- CurrentWeekdayLongProvider ---*/
-class CurrentWeekdayLongProvider extends ChangeNotifier {
-  DateTime date = DateTime.now();
-  late String currentWeekdayLong;
-  CurrentWeekdayLongProvider() {
-    currentWeekdayLong = DateFormat('EEEE', 'de_DE').format(date);
-    log('0063 - main - CurrentWeekdayLongProvider ---> Heute ist $currentWeekdayLong');
-  }
-}
-
-/*--------------------------------- CurrentTimeWeekdayShortProvider ---*/
-class CurrentWeekdayShortProvider extends ChangeNotifier {
-  DateTime date = DateTime.now();
-  late String currentWeekdayShort;
-  CurrentWeekdayShortProvider() {
-    currentWeekdayShort =
-        DateFormat('EE', 'de_DE').format(date).replaceAll('.', '');
-    log('0063 - main - CurrentWeekdayLongProvider ---> Heute ist $currentWeekdayShort');
-  }
-}
-
-/*--------------------------------- CurrentDateProvider ---*/
-class CurrentDateProvider extends ChangeNotifier {
-  DateTime date = DateTime.now();
-  late String formatDay;
-  late String formatMonth;
-  late String formatYear;
-  late String currentDate;
-  CurrentDateProvider() {
-    formatDay = NumberFormat("00").format(date.day);
-    formatMonth = NumberFormat("00").format(date.month);
-    formatYear = NumberFormat("0000").format(date.year);
-    currentDate = '$formatDay.$formatMonth.$formatYear';
-    log('0071 - main - CurrentDateProvider ---> Heute ist $currentDate');
-  }
-}
-
-/*--------------------------------- CurrentTimeProvider ---*/
-class CurrentTimeProvider extends ChangeNotifier {
-  DateTime time = DateTime.now();
-  late String formatHour;
-  late String formatMinute;
-  late String currentTime;
-  CurrentTimeProvider() {
-    formatHour = NumberFormat("00").format(time.hour);
-    formatMinute = NumberFormat("00").format(time.minute);
-    currentTime = '$formatHour:$formatMinute Uhr';
-    log('0067 - main - CurrentTimeProvider ---> Es ist jetzt $currentTime');
-  }
 }
 
 /*--------------------------------- MainApp ---*/
@@ -113,24 +64,9 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     log("0015 - MainApp - wird gestartet");
+
+    /*--- Datum formatieren auf DE = Deutschland ---*/
     initializeDateFormatting('de', null);
-
-    // final currentUserController =
-    //     Provider.of<CurrentUserProvider>(context, listen: true)
-    //         .currentUserName;
-
-    // Future<void> loadCurrentUser(
-    //     TextEditingController currentUserController) async {
-    //   final prefs = await SharedPreferences.getInstance();
-    //   final currentUser = prefs.getString('currentUser') ?? '';
-    //   currentUserController.text = currentUser;
-    //   log('0149 - MainApp - Benutzername geladen: ---> ${currentUserController.text.characters} <--- funzt');
-    //   log('0150 - MainApp - Benutzername geladen: ---> $currentUser <--- funzt');
-    //   log('0151 - MainApp - Benutzername geladen: ---> ${currentUserController.text} <--- funzt');
-    //   log('0152 - MainApp - Benutzername geladen: ---> $currentUserController <--- liefert nur die Instanz');
-    // }
-
-    // loadCurrentUser(currentUser);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -307,8 +243,6 @@ class MainApp extends StatelessWidget {
   - CompanyScreen: Telefonanruf starten - 0513 - company_screen - Anruf starten
   - autofillHints: autofillHints, // wie funzt das?
   - PRODUCT_BUNDLE_IDENTIFIER = com.example.widgetsIntroductionLiveCoding umbenennen
-
-
 
   *---------------------------------- Was habe ich dazugelernt? ---* 
   - Da in der App möglichst alles groß und kontrastreich dargestellt werden soll, habe ich viel über Styles und "overflows", etc. gelernt.

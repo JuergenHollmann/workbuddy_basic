@@ -17,8 +17,6 @@ class WbInfoContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return
 
-    
-
         // BottomSheet(
         //   onClosing: (){},
         //   builder: (BuildContext context) {},
@@ -80,8 +78,8 @@ void bottomSheet(BuildContext context) {
 /* 
 infoText-Beispiele:
   E-Mail 1 (von $searchFieldCounter043) senden an $emailUserModelEMail
-  Heute ist ${context.watch<CurrentWeekdayLongProvider>().currentWeekdayLong}
-  Heute ist ${context.watch<CurrentWeekdayShortProvider>().currentWeekdayShort}
+  Heute ist ${context.watch<CurrentDayLongProvider>().currentDayLong}
+  Heute ist ${context.watch<CurrentDayShortProvider>().currentDayShort}
   Datum ${context.watch<CurrentDateProvider>().currentDate}
   \nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}
   \n${context.watch<CurrentAppVersionProvider>().currentAppVersion}
