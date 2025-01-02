@@ -721,7 +721,8 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                         builder: (BuildContext context) =>
                             const WBDialog2Buttons(
                               headLineText:
-                                  "Möchtest Du jetzt wirklich diese tolle WorkBuddy-App beenden?",
+                                  //"Hey ${value.currentUser.currentUserName},\n
+                                  'Möchtest Du jetzt wirklich diese tolle WorkBuddy-App beenden?',
                               descriptionText:
                                   "Bevor Du diese tolle WorkBuddy-App beendest, denke bitte daran:\n\n Bei aller Aufregung sollten wir aber nicht vergessen, dass Al Bundy im Jahr 1966 vier Touchdowns in einem Spiel gemacht hat und damit den den Polk High School Panthers zur Stadtmeisterschaft verholfen hat!\n\nAußerdem sollte man auf gesunde Ernährung achten, deshalb empfehle ich täglich ein gutes Käsebrot (für Vegetarier und Veganer natürlich auch gerne mit veganer Butter).\n\nWenn du keinen Käse magst, dann kannst du natürlich auch ein Wurstbrot essen, aber dann ist das logischerweise wiederum nicht vegan (aber es gibt ja auch vegane Wurst) und in diesem Falle kannst du eben auch die Wurst weglassen, wenn Du eine vegane Butter auf dem Brot hast. \n\nWarum schreibe ich das alles hier hin?\n\nGanz einfach:\nWeil ich zeigen wollte, dass diese Textzeilen SCROLLBAR sind.",
                             ));

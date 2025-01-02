@@ -6,7 +6,7 @@ import 'package:workbuddy/shared/models/current_user_model.dart';
 
 class CurrentUserProvider extends ChangeNotifier {
   final CurrentUserModel _currentUser = CurrentUserModel(
-    currentUserName: 'Xaver',
+    currentUserName: 'Josef',
   );
 
   CurrentUserModel get currentUser => _currentUser;
@@ -16,18 +16,21 @@ class CurrentUserProvider extends ChangeNotifier {
   }) {
     _currentUser.currentUserName = newCurrentUserName;
   }
+
+  Future<void> loadCurrentUser(
+      TextEditingController currentUserController) async {
+    final prefs = await SharedPreferences.getInstance();
+    final currentUser = prefs.getString('currentUser') ?? '';
+    currentUserController.text = currentUser;
+    log('0149 - CurrentUserProvider - Benutzername geladen: ---> ${currentUserController.text.characters} <--- funzt');
+    log('0150 - CurrentUserProvider - Benutzername geladen: ---> $currentUser <--- funzt');
+    log('0151 - CurrentUserProvider - Benutzername geladen: ---> ${currentUserController.text} <--- funzt');
+    log('0152 - CurrentUserProvider - Benutzername geladen: ---> $currentUserController <--- liefert nur die Instanz');
+  }
 }
 
-Future<void> loadCurrentUser(
-    TextEditingController currentUserController) async {
-  final prefs = await SharedPreferences.getInstance();
-  final currentUser = prefs.getString('currentUser') ?? '';
-  currentUserController.text = currentUser;
-  log('0149 - CurrentUserProvider - Benutzername geladen: ---> ${currentUserController.text.characters} <--- funzt');
-  log('0150 - CurrentUserProvider - Benutzername geladen: ---> $currentUser <--- funzt');
-  log('0151 - CurrentUserProvider - Benutzername geladen: ---> ${currentUserController.text} <--- funzt');
-  log('0152 - CurrentUserProvider - Benutzername geladen: ---> $currentUserController <--- liefert nur die Instanz');
-}
+
+
 
 // log('0069 - CurrentUserProvider - Der aktuelle Benutzer ist --> $currentUserName <---');
 

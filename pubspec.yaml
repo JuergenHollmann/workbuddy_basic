@@ -1,7 +1,7 @@
 name: workbuddy
 description: "save time and money"
 publish_to: 'none'
-version: 0.1.1
+version: 0.00.9+1
 
 environment:
   sdk: '>=3.4.3 <4.0.0'
@@ -25,6 +25,7 @@ dependencies:
   emojis: ^0.9.9
   shared_preferences: ^2.3.4
   intl: ^0.19.0
+  package_info_plus: ^8.1.2
 
 cupertino_icons: ^1.0.6
 

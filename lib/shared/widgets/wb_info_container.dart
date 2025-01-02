@@ -17,6 +17,8 @@ class WbInfoContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return
 
+    
+
         // BottomSheet(
         //   onClosing: (){},
         //   builder: (BuildContext context) {},
@@ -88,3 +90,15 @@ infoText-Beispiele:
 /* \nAngemeldet zur Bearbeitung: JH-01\nLetzte Änderung: Am 18.12.2024 um 22:51 Uhr' */
 /* WorkBuddy • Free-BASIC-Version 0.003 */
 /* WorkBuddy • save time and money • V0.003 */
+
+        // /*--------------------------------- WbInfoContainer ---*/
+        // bottomSheet: Consumer<CurrentUserProvider>(
+        //   builder: (context, value, child) => WbInfoContainer(
+        //     infoText:
+        //     'Angemeldet zur Bearbeitung: ${value.currentUser.currentUserName}\n${context.watch<CurrentAppVersionProvider>().currentAppVersion}',
+        //         // 'Angemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}\n${context.watch<CurrentAppVersionProvider>().currentAppVersion}',
+        //     wbColors: Colors.yellow,
+        //   ),
+        // )
+        // /*--------------------------------- WbInfoContainer ENDE ---*/
+
