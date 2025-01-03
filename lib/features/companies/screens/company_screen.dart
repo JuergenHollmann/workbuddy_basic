@@ -48,9 +48,9 @@ class _CompanyScreenState extends State<CompanyScreen> {
         /*--- "toolbarHeight" wird hier nicht mehr benötigt, weil jetzt "WbInfoContainer" die Daten anzeigt */
         // toolbarHeight: 100,
         title: Text(
-          'Firma bearbeiten',
+          'Eine Firma NEU anlegen',
           style: TextStyle(
-            fontSize: 28,
+            fontSize: 24,
             fontWeight: FontWeight.w900,
             color: Colors.yellow,
           ),

@@ -5,19 +5,19 @@ import 'package:provider/provider.dart';
 import 'package:workbuddy/config/wb_button_universal_2.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
-import 'package:workbuddy/features/contacts/screens/contact_screen.dart';
+import 'package:workbuddy/features/companies/screens/company_screen.dart';
 import 'package:workbuddy/shared/providers/current_app_version_provider.dart';
 import 'package:workbuddy/shared/providers/current_user_provider.dart';
 import 'package:workbuddy/shared/widgets/wb_dialog_alert_update_coming_soon.dart';
 import 'package:workbuddy/shared/widgets/wb_divider_with_text_in_center.dart';
 import 'package:workbuddy/shared/widgets/wb_info_container.dart';
 
-class ContactMenu extends StatelessWidget {
-  const ContactMenu({super.key});
+class CompanyMenu extends StatelessWidget {
+  const CompanyMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
-    log("0017 - ContactMenu - wird benutzt");
+    log("0020 - CompanyMenu - wird benutzt");
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 250, 242, 242),
@@ -41,10 +41,10 @@ class ContactMenu extends StatelessWidget {
               const Image(
                 image: AssetImage("assets/workbuddy_glow_schriftzug.png"),
               ),
-              /*--------------------------------- Kontakte-Menü ---*/
+              /*--------------------------------- Firmen-Menü ---*/
               const WbDividerWithTextInCenter(
                 wbColor: wbColorLogoBlue,
-                wbText: "Kontakte",
+                wbText: "Firmen",
                 wbTextColor: wbColorLogoBlue,
                 wbFontSize12: 28,
                 wbHeight3: 3,
@@ -59,17 +59,17 @@ class ContactMenu extends StatelessWidget {
                       wbColor: wbColorButtonGreen,
                       wbIcon: Icons.person_add_alt_1_outlined,
                       wbIconSize40: 40,
-                      wbText: 'Einen Kontakt \nNEU anlegen',
+                      wbText: 'Eine Firma \nNEU anlegen',
                       wbFontSize24: 22,
                       wbWidth155: 398,
                       wbHeight60: 80,
                       wbOnTap: () {
                         /*--------------------------------- Navigator.push ---*/
-                        log("0090 - ContactMenu - Einen Kontakt NEU anlegen - angeklickt");
+                        log("0090 - CompanyMenu - Eine Firma NEU anlegen - angeklickt");
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const ContactScreen(),
+                            builder: (context) => const CompanyScreen(),
                           ),
                         );
                       },
@@ -84,19 +84,19 @@ class ContactMenu extends StatelessWidget {
                       wbColor: wbColorAppBarBlue,
                       wbIcon: Icons.person_search_outlined,
                       wbIconSize40: 40,
-                      wbText: 'In allen Kontakten\nsuchen und finden',
+                      wbText: 'In allen Firmen\nsuchen und finden',
                       wbFontSize24: 20,
                       wbWidth155: 398,
                       wbHeight60: 80,
                       wbOnTap: () {
-                        log("0085 - ContactMenu - Einen Kontakt suchen - Update-Hinweis - CM108 - angeklickt");
+                        log("0092 - CompanyMenu - Eine Firma suchen - Update-Hinweis - CM092 - angeklickt");
                         showDialog(
                           context: context,
                           builder: (context) =>
-                              const WbDialogAlertUpdateComingSoon(
-                            headlineText: 'Update-Hinweis - CM108',
+                               WbDialogAlertUpdateComingSoon(
+                            headlineText: 'Hey ${context.watch<CurrentUserProvider>().currentUser},\nDu willst jetzt eine Firma aus deinen Kontakten heraussuchen?',
                             contentText:
-                                'Diese Funktion kommt bald in einem kostenlosen Update!',
+                                'Diese Funktion kommt bald in einem kostenlosen Update!\n\nHinweis: CM-0092',
                             actionsText: "OK 👍",
                           ),
                         );
@@ -112,19 +112,20 @@ class ContactMenu extends StatelessWidget {
                       wbIcon: Icons.forward_to_inbox_outlined,
                       wbIconSize40: 40,
                       wbText:
-                          "Möchtest Du\nMEHR Funktionen?\nSchreibe einfach eine\nE-Mail an den Entwickler.",
+                          "Möchtest Du noch\nMEHR Funktionen?\nSchreibe einfach eine\nE-Mail an den Entwickler.",
                       wbFontSize24: 15,
                       wbWidth155: 300, // hat keine Auswirkung
                       wbHeight60: 110,
                       wbOnTap: () {
-                        log("0109 - ContactMenu - Mehr Info? - Update-Hinweis - CM109 - angeklickt");
+                        log("0121 - CompanyMenu - Mehr Info? - Update-Hinweis wird angezeigt");
                         showDialog(
                           context: context,
                           builder: (context) =>
-                              const WbDialogAlertUpdateComingSoon(
-                            headlineText: 'Update-Hinweis - CM0109',
+                               WbDialogAlertUpdateComingSoon(
+                            headlineText:
+                                'Hey ${context.watch<CurrentUserProvider>().currentUser},\nmöchtest Du noch mehr Funktionen in dieser App?',
                             contentText:
-                                'Diese Funktion kommt bald in einem kostenlosen Update!',
+                                'Diese App wird ständig weiterentwickelt.\n\nWenn Du eine nützliche Funktion vorschlagen möchtest, kannst Du gerne eine E-Mail DIREKT an den Entwickler senden.\n\nSchreibe dazu einfach an XXXXXXXXXXXX oder klicke unten auf den E-Mail-Button.\n\nHinweis: CM-0121',
                             actionsText: "OK 👍",
                           ),
                         );
