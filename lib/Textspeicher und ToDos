@@ -26,10 +26,10 @@ Step 1: "dart run flutter_launcher_icons:generate -o"
 --> ACHTUNG: dabei werden die Einträge mit "path = 'assets/icon/icon.png'" überschrieben !!!
 Step 2: "flutter pub run flutter_launcher_icons"
 
-Step 3: "flutter pub get
-          dart run flutter_launcher_icons -f pubspec.yaml"
-Wenn Sie Ihrer Konfigurationsdatei einen anderen Namen als "flutter_launcher_icons.yaml" oder "pubspec.yaml" geben, müssen Sie beim Ausführen des Pakets den Namen der Datei angeben: "flutter pub get
-          dart run flutter_launcher_icons -f pubspec.yaml"
+Step 3: "flutter pub get"
+          "dart run flutter_launcher_icons -f pubspec.yaml"
+Wenn Sie Ihrer Konfigurationsdatei einen anderen Namen als "flutter_launcher_icons.yaml" oder "pubspec.yaml" geben, müssen Sie beim Ausführen des Pakets den Namen der Datei angeben:
+"flutter pub get dart run flutter_launcher_icons -f pubspec.yaml"
 
 
 

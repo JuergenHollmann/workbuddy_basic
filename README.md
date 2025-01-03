@@ -6,11 +6,11 @@ Im ersten Schritt richtet sich die App in erster Linie an Kleinunternehmer, die 
 
 Das MVP wird folgende Funktionen umfassen:
 
-Login
+Login:
 Die App soll durch ein Passwort geschützt werden, da sie sensible Daten enthalten können.
 Es soll möglich sein, die App auch offline zu benutzen, falls vorübergehend kein Internet zur Verfügung steht.
 
-Registrierung
+Registrierung:
 Der User kann die App auch registrieren, dadurch erhält er Bonus-Module als Motivation für die Registrierung und er hat natürlich auch dann den Vorteil, dass er Datensätze synchronisieren kann.
 
 Modul 1: Die eigene Firma anlegen und verwalten
@@ -34,7 +34,7 @@ Endpreis
 Erstellung eines Fotos von einer Quittung oder Rechnung
 Automatische Erstellung der aufbereiteten Daten als Excel-Tabelle, PDF oder CSV-Datei.
 
-E-Mail-Versand
+E-Mail-Versand:
 Der User soll seine Buchhaltungsdaten (und später auch andere) per E-Mail an seine Mitarbeiter/innen oder an den Steuerberater  direkt aus der App senden können.
 
 Die App soll später mehrsprachig sein und gleich von Anfang an darauf vorbereitet werden.
