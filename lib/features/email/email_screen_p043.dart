@@ -144,12 +144,10 @@ class _EMailScreenP043State extends State<EMailScreenP043> {
       /*--------------------------------- WbInfoContainer ---*/
       bottomSheet: WbInfoContainer(
         infoText:
-            //     'Am ${context.watch<CurrentDayLongProvider>().currentDayLong}, ${context.watch<CurrentDateProvider>().currentDate} um ${context.watch<CurrentTimeProvider>().currentTime} eine Mail an\n$selectedEMail versenden.\nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}\n${context.watch<CurrentAppVersionProvider>().currentAppVersion}',
-            // wbColors: Colors.yellow,
             'Am ${context.watch<CurrentDayLongProvider>().currentDayLong}, ${context.watch<CurrentDateProvider>().currentDate} ab ${context.watch<CurrentTimeProvider>().currentTime} eine Mail versenden.\nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}\n${context.watch<CurrentAppVersionProvider>().currentAppVersion}',
         wbColors: Colors.yellow,
       ),
-
+      /*--------------------------------- *** ---*/
       /// emailUserModelEMail wurde ersetzt mit selectedEMail
 
       // if (selectedEMail.isEmpty) {

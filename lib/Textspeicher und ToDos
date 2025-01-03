@@ -4,17 +4,11 @@ stream: context.read<AuthRepository>().authStateChanges(),
 builder: (context, snapshot) {
 return Container ();
 }, );
-
-
-
-
-
-
+/*----------------------------------------------------------------------------------*/
 - Der SplashScreen wurde installiert mit "flutter_native_splash".
 /*----------------------------------------------------------------------------------*/
 /* App-Icon generieren und installieren mit"flutter_launcher_icons":
 /*----------------------------------------------------------------------------------*/
-
 assets/splash/workbuddy_splashscreen_transparent.png
 
 Dart Package: flutter_launcher_icons unter https://pub.dev/packages/flutter_launcher_icons laden.
@@ -30,13 +24,7 @@ Step 3: "flutter pub get"
           "dart run flutter_launcher_icons -f pubspec.yaml"
 Wenn Sie Ihrer Konfigurationsdatei einen anderen Namen als "flutter_launcher_icons.yaml" oder "pubspec.yaml" geben, müssen Sie beim Ausführen des Pakets den Namen der Datei angeben:
 "flutter pub get dart run flutter_launcher_icons -f pubspec.yaml"
-
-
-
-
-
-
-
+/*----------------------------------------------------------------------------------*/
 "Neuer Benutzer? Hier registrieren ...",
 /* ----------------------------------------------------------------------------------
 Aufgaben:        5.2.5 - Projekt

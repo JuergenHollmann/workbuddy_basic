@@ -119,6 +119,7 @@ class MainApp extends StatelessWidget {
   √ für macOS muss im macos/Podfile ---> platform :osx, '10.15' eingestellt werden √ 
 
   /*--------------------------------- TODO's ---
+  - "WbInfoContainer" im CompanyScreen ist teilweise noch festverdrahtet - 1030
   - In Chrome gibt es keine SharedPreferences, deshalb muss ich das auf "null" setzen? oder woanders (SQL) speichern?
   - Die Variable für den "DarkMode" setzen - WbHomePage - 0173
   - Wie kann ich hier nach mehreren Kriterien suchen oder filtern? - EmailUserSelection - 0158

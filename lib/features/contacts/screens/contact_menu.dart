@@ -1,12 +1,16 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:workbuddy/config/wb_button_universal_2.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
 import 'package:workbuddy/features/contacts/screens/contact_screen.dart';
+import 'package:workbuddy/shared/providers/current_app_version_provider.dart';
+import 'package:workbuddy/shared/providers/current_user_provider.dart';
 import 'package:workbuddy/shared/widgets/wb_dialog_alert_update_coming_soon.dart';
 import 'package:workbuddy/shared/widgets/wb_divider_with_text_in_center.dart';
+import 'package:workbuddy/shared/widgets/wb_info_container.dart';
 
 class ContactMenu extends StatelessWidget {
   const ContactMenu({super.key});
@@ -138,6 +142,14 @@ class ContactMenu extends StatelessWidget {
           ),
         ),
       ),
+            /*--------------------------------- WbInfoContainer ---*/
+      bottomSheet: WbInfoContainer(
+        infoText:
+            'Angemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}\n${context.watch<CurrentAppVersionProvider>().currentAppVersion}',
+        wbColors: Colors.yellow,
+      ),
+      /*--------------------------------- *** ---*/
+
     );
   }
 }
