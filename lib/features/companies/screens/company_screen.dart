@@ -29,7 +29,7 @@ class CompanyScreen extends StatefulWidget {
 final TextEditingController inputCompanyNameTEC = TextEditingController();
 final TextEditingController iinputCompanyVNContactPersonTEC =
     TextEditingController();
-final TextEditingController iinputCompanyNNContactPersonTEC =
+final TextEditingController inputCompanyNNContactPersonTEC =
     TextEditingController();
 final TextEditingController compPersonAge = TextEditingController();
 
@@ -44,6 +44,8 @@ class _CompanyScreenState extends State<CompanyScreen> {
 
   /* für die Berechnung des Alters und der Zeitspanne bis zum nächsten Geburtstag */
   int ageY = 0, ageM = 0, ageD = 0, nextY = 0, nextM = 0, nextD = 0;
+  DateTime initTime = DateTime.now();
+  DateTime selectedTime = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +59,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
         title: Text(
           'Eine Firma NEU anlegen',
           style: TextStyle(
-            fontSize: 28,
+            fontSize: 24,
             fontWeight: FontWeight.w900,
             color: Colors.yellow,
           ),
@@ -143,20 +145,11 @@ class _CompanyScreenState extends State<CompanyScreen> {
                           child: CircleAvatar(
                             backgroundColor: wbColorButtonBlue,
                             backgroundImage:
-                                // AssetImage(
-                                //   "assets/company_logos/obi.png",
-                                // ),
-                                // AssetImage("assets/dummy_person_portrait.png",),
-                                // AssetImage("assets/dummy_no_logo.png",),
-                                // AssetImage("assets/workbuddy_logo.png",),
-                                //   AssetImage(
-                                // "assets/workbuddy_logo_neon_green_512x512.png",
-                                //   ),
                                 AssetImage(
                               "assets/company_logos/enpower_expert_logo_4_x_4.png",
                             ),
                             /*--------------------------------- *** ---*/
-                            // Bild aus dem Internet:
+                            // Alternativ-Bild aus dem Internet:
                             // NetworkImage('https://picsum.photos/200'),
                             /*--------------------------------- *** ---*/
                             radius: 68,
@@ -348,7 +341,6 @@ class _CompanyScreenState extends State<CompanyScreen> {
                       fillColor: wbColorLightYellowGreen,
                       textInputTypeOnKeyboard: TextInputType.streetAddress,
                     ),
-
                     /*--------------------------------- Zusatzinformation ---*/
                     wbSizedBoxHeight16,
                     WbTextFormField(
@@ -384,7 +376,6 @@ class _CompanyScreenState extends State<CompanyScreen> {
                             ),
                           ),
                         ),
-
                         /*--------------------------------- Firmensitz | Ort ---*/
                         wbSizedBoxWidth8,
                         Expanded(
@@ -400,7 +391,6 @@ class _CompanyScreenState extends State<CompanyScreen> {
                         ),
                       ],
                     ),
-
                     /*--------------------------------- WbDividerWithTextInCenter ---*/
                     wbSizedBoxHeight8,
                     WbDividerWithTextInCenter(
@@ -478,250 +468,166 @@ class _CompanyScreenState extends State<CompanyScreen> {
                       inputFontColor: wbColorLogoBlue,
                       fillColor: wbColorLightYellowGreen,
                       /*--------------------------------- onChanged ---*/
-                      controller: iinputCompanyNNContactPersonTEC,
-                      onChanged: (String iinputCompanyNNContactPersonTEC) {
-                        log("0504 - CompanyScreen - Eingabe: $iinputCompanyNNContactPersonTEC");
+                      controller: inputCompanyNNContactPersonTEC,
+                      onChanged: (String inputCompanyNNContactPersonTEC) {
+                        log("0504 - CompanyScreen - Eingabe: $inputCompanyNNContactPersonTEC");
 
                         inputCompanyNNContactPerson =
-                            iinputCompanyNNContactPersonTEC;
+                            inputCompanyNNContactPersonTEC;
 
                         setState(() => inputCompanyNNContactPerson =
-                            iinputCompanyNNContactPersonTEC);
+                            inputCompanyNNContactPersonTEC);
                       },
                     ),
                     /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight16,
-                    // /*--------------------------------- Geburtstag ---*/
-                    // Row(
-                    //   children: [
-                    //     SizedBox(
-                    //         width: 200,
-
-                    //         /*--- TimePickerSpinnerPopUp wegen Geburtstag ---*/
-
-                    //         child: TimePickerSpinnerPopUp(
-                    //           locale: Locale('de', 'DE'),
-                    //           iconSize: 20,
-                    //           textStyle: TextStyle(
-                    //               backgroundColor: wbColorLightYellowGreen,
-                    //               fontSize: 22,
-                    //               fontWeight: FontWeight.bold),
-                    //           isCancelTextLeft: true,
-                    //           paddingHorizontalOverlay: 50,
-                    //           mode: CupertinoDatePickerMode.date,
-                    //           radius: 16,
-                    //           initTime: DateTime.now(),
-                    //           minTime: DateTime.now()
-                    //               .subtract(const Duration(days: 36500)),
-                    //           /*--------------------------------- *** ---*/
-                    //           /* das Geburtsdatum kann nicht in der Zukunft liegen */
-                    //           maxTime:
-                    //               DateTime.now().add(const Duration(days: 0)),
-                    //           /*--------------------------------- *** ---*/
-                    //           use24hFormat: true,
-                    //           barrierColor: Colors
-                    //               .black12, //Barrier Color when pop up show
-                    //           minuteInterval: 1,
-                    //           padding: const EdgeInsets.fromLTRB(12, 8, 8, 8),
-                    //           cancelText: 'Abbruch',
-                    //           confirmText: 'OK',
-                    //           pressType: PressType.singlePress,
-                    //           timeFormat: 'dd.MM.yyyy',
-                    //           /*--- das angeklickte Datum im Design der Seite darstellen ---*/
-                    //           // timeWidgetBuilder: (dateTime) {
-                    //           // WbTextFormFieldOnlyDATE(
-                    //           //   labelText: 'Geburtstag',
-                    //           //   labelFontSize20: 20,
-                    //           //   hintText: '$dateTime',
-                    //           //   inputTextFontSize22: 22,
-                    //           //   prefixIcon: Icons.card_giftcard_outlined,
-                    //           //   prefixIconSize28: 24,
-                    //           //   inputFontWeightW900: FontWeight.w900,
-                    //           //   inputFontColor: wbColorLogoBlue,
-                    //           //   fillColor: wbColorLightYellowGreen,
-                    //           //   textInputTypeOnKeyboard: TextInputType.number,
-                    //           // );
-                    //           // },
-                    //           onChange: (dateTime) {
-                    //             log('0539 - CompanyScreen - Geburtsdatum eingegeben: $dateTime');
-
-                    //             // WbTextFormFieldOnlyDATE(
-                    //             //   labelText: 'Geburtstag',
-                    //             //   labelFontSize20: 20,
-                    //             //   hintText: '$dateTime',
-                    //             //   inputTextFontSize22: 22,
-                    //             //   prefixIcon: Icons.card_giftcard_outlined,
-                    //             //   prefixIconSize28: 24,
-                    //             //   inputFontWeightW900: FontWeight.w900,
-                    //             //   inputFontColor: wbColorLogoBlue,
-                    //             //   fillColor: wbColorLightYellowGreen,
-                    //             //   textInputTypeOnKeyboard: TextInputType.number,
-                    //             // );
-
-                    //             /*--- automatisch das Alter berechnen mit package "age_calculator" ---*/
-                    //             AgeCalculator();
-                    //             DateTime birthday = dateTime;
-                    //             var age = AgeCalculator.age(birthday);
-                    //             log('0561 - CompanyScreen - Berechnetes Alter = ${age.years} Jahre + ${age.months} Monate + ${age.days} Tage');
-
-                    //             /*--- automatisch die Zeit bis zum nächsten Geburtstag berechnen mit package "age_calculator" ---*/
-                    //             DateTime nextBirthday = dateTime;
-                    //             var timeToNextBirthday =
-                    //                 AgeCalculator.timeToNextBirthday(
-                    //               DateTime(
-                    //                 nextBirthday.year,
-                    //                 nextBirthday.month,
-                    //                 nextBirthday.day,
-                    //               ),
-                    //               fromDate: DateTime.now(),
-                    //             );
-                    //             log('0574 - CompanyScreen - Zeit bis zum nächsten Geburtstag = ${timeToNextBirthday.years} Jahre + ${timeToNextBirthday.months} Monate + ${timeToNextBirthday.days} Tage');
-                    //           },
-                    //         )
-
-                    //         // /*--- WbTextFormFieldCheckDate wegen Geburtstag ---*/
-                    //         // child: WbTextFormFieldOnlyDATE(
-                    //         //   labelText: 'Geburtstag',
-                    //         //   labelFontSize20: 20,
-                    //         //   hintText: '29.02.1964',
-                    //         //   inputTextFontSize22: 22,
-                    //         //   prefixIcon: Icons.card_giftcard_outlined,
-                    //         //   prefixIconSize28: 24,
-                    //         //   inputFontWeightW900: FontWeight.w900,
-                    //         //   inputFontColor: wbColorLogoBlue,
-                    //         //   fillColor: wbColorLightYellowGreen,
-                    //         //   textInputTypeOnKeyboard: TextInputType.number,
-                    //         // ),
-
-                    //         // child: WbTextFormField(
-                    //         //   labelText: "Geburtstag",
-                    //         //   labelFontSize20: 20,
-                    //         //   hintText: "Geburtstag",
-                    //         //   hintTextFontSize16: 15,
-                    //         //   inputTextFontSize22: 22,
-                    //         //   prefixIcon: Icons.card_giftcard_outlined,
-                    //         //   prefixIconSize28: 24,
-                    //         //   inputFontWeightW900: FontWeight.w900,
-                    //         //   inputFontColor: wbColorLogoBlue,
-                    //         //   fillColor: wbColorLightYellowGreen,
-                    //         //   textInputTypeOnKeyboard: TextInputType.number,
-                    //         // ),
-                    //         ),
-                    //     /*--------------------------------- Abstand ---*/
-                    // wbSizedBoxHeight8,
-                    /*--------------------------------- Geburtstag ---*/
-                    // Row(
-                    //   children: [
-                    // SizedBox(
-                    //   width: 200,
                     /*--- TimePickerSpinnerPopUp wegen Geburtstag ---*/
-                    // child:
-                    TimePickerSpinnerPopUp(
-                        locale: Locale('de', 'DE'),
-                        iconSize: 20,
-                        textStyle: TextStyle(
-                            backgroundColor: wbColorLightYellowGreen,
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold),
-                        isCancelTextLeft: true,
-                        paddingHorizontalOverlay: 50,
-                        mode: CupertinoDatePickerMode.date,
-                        radius: 16,
-                        initTime: DateTime.now(),
-                        minTime: DateTime.now()
-                            .subtract(const Duration(days: 36500)),
-                        /*--------------------------------- *** ---*/
-                        /* das Geburtsdatum kann nicht in der Zukunft liegen */
-                        maxTime: DateTime.now().add(const Duration(days: 0)),
-                        /*--------------------------------- *** ---*/
-                        use24hFormat: true,
-                        barrierColor:
-                            Colors.black12, //Barrier Color when pop up show
-                        minuteInterval: 1,
-                        padding: const EdgeInsets.fromLTRB(12, 8, 8, 8),
-                        cancelText: 'Abbruch',
-                        confirmText: 'OK',
-                        pressType: PressType.singlePress,
-                        timeFormat: 'dd.MM.yyyy',
-                        onChange: (dateTime) {
-                          log('0539 - CompanyScreen - Geburtsdatum eingegeben: $dateTime');
-
-                          /*--- automatisch das Alter berechnen mit package "age_calculator" ---*/
-                          AgeCalculator();
-                          DateTime birthday = dateTime;
-                          var age = AgeCalculator.age(birthday);
-                          log('0561 - CompanyScreen - Berechnetes Alter = ${age.years} Jahre + ${age.months} Monate + ${age.days} Tage');
-
-                          /*--- automatisch die Zeit bis zum nächsten Geburtstag berechnen mit package "age_calculator" ---*/
-                          DateTime nextBirthday = dateTime;
-                          var timeToNextBirthday =
-                              AgeCalculator.timeToNextBirthday(
-                            DateTime(
-                              nextBirthday.year,
-                              nextBirthday.month,
-                              nextBirthday.day,
-                            ),
-                            fromDate: DateTime.now(),
-                          );
-                          setState(() {
-                            ageY = age.years;
-                            ageM = age.months;
-                            ageD = age.days;
-
-                            nextY = timeToNextBirthday.years;
-                            nextM = timeToNextBirthday.months;
-                            nextD = timeToNextBirthday.days;
-                          });
-                        }),
-                    /*--------------------------------- Abstand ---*/
-                    wbSizedBoxHeight8,
-                    /*--------------------------------- Berechnetes Alter anzeigen ---*/
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Row(
+                    Container(
+                      width: 400,
+                      decoration: ShapeDecoration(
+                        color: wbColorLightYellowGreen,
+                        shape: RoundedRectangleBorder(
+                          side: const BorderSide(
+                            width: 1,
+                            color: Colors.black,
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                      child: Column(
                         children: [
-                          Text(
-                            'Berechnetes Alter:',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
+                          /*--------------------------------- TimePickerSpinnerPopUp ---*/
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                            child: Row(
+                              children: [
+                                Text(
+                                  'Geburtstag',
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                /*--------------------------------- Abstand ---*/
+                                wbSizedBoxWidth16,
+                                /*--------------------------------- *** ---*/
+                                TimePickerSpinnerPopUp(
+                                    locale: Locale('de', 'DE'),
+                                    iconSize: 20,
+                                    textStyle: TextStyle(
+                                        backgroundColor:
+                                            wbColorLightYellowGreen,
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold),
+                                    isCancelTextLeft: true,
+                                    paddingHorizontalOverlay: 80,
+                                    mode: CupertinoDatePickerMode.date,
+                                    radius: 16,
+                                    initTime: selectedTime,
+                                    minTime: DateTime.now()
+                                        .subtract(const Duration(days: 36500)),
+                                    /*--------------------------------- *** ---*/
+                                    /* das Geburtsdatum kann nicht in der Zukunft liegen */
+                                    maxTime: DateTime.now()
+                                        .add(const Duration(days: 0)),
+                                    /*--------------------------------- *** ---*/
+                                    use24hFormat: true,
+                                    barrierColor: Colors.black12,
+                                    minuteInterval: 1,
+                                    padding:
+                                        const EdgeInsets.fromLTRB(12, 8, 8, 8),
+                                    cancelText: 'Abbruch',
+                                    confirmText: 'OK',
+                                    pressType: PressType.singlePress,
+                                    timeFormat: 'dd.MM.yyyy',
+                                    onChange: (dateTime) {
+                                      log('0539 - CompanyScreen - Geburtsdatum eingegeben: $dateTime');
+                                      /*--- automatisch das Alter berechnen mit "age_calculator" ---*/
+                                      AgeCalculator();
+                                      DateTime birthday = dateTime;
+                                      var age = AgeCalculator.age(birthday);
+                                      log('0561 - CompanyScreen - Berechnetes Alter = ${age.years} Jahre + ${age.months} Monate + ${age.days} Tage');
+                                      /*--- automatisch die Zeit bis zum nächsten Geburtstag berechnen mit "age_calculator" ---*/
+                                      DateTime nextBirthday = dateTime;
+                                      var timeToNextBirthday =
+                                          AgeCalculator.timeToNextBirthday(
+                                        DateTime(
+                                          nextBirthday.year,
+                                          nextBirthday.month,
+                                          nextBirthday.day,
+                                        ),
+                                        fromDate: DateTime.now(),
+                                      );
+                                      /*--- den Text aktualisieren ---*/
+                                      setState(() {
+                                        ageY = age.years;
+                                        ageM = age.months;
+                                        ageD = age.days;
+
+                                        nextY = timeToNextBirthday.years;
+                                        nextM = timeToNextBirthday.months;
+                                        nextD = timeToNextBirthday.days;
+
+                                        /*--- Das angeklickte Geburtsdatum im "TimePickerSpinnerPopUp" soll behalten werden ---*/
+                                        selectedTime = birthday;
+                                        log('$selectedTime = $birthday');
+                                      });
+
+                                      // /*--- Das angeklickte Geburtsdatum im "TimePickerSpinnerPopUp" soll behalten werden ---*/
+                                      // initTime = birthday;
+                                      // log('$initTime = $birthday');
+                                    }),
+                              ],
                             ),
                           ),
-                          Expanded(
-                            child: Text(
-                              '$ageY Jahre + $ageM Monate + $ageD Tage',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlign: TextAlign.right,
+                          /*--------------------------------- Aktuelles Alter anzeigen ---*/
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Row(
+                              children: [
+                                Text(
+                                  'Aktuelles Alter:',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    '$ageY Jahre + $ageM Monate + $ageD Tage',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.right,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                            child: Row(
+                              children: [
+                                Text(
+                                  'Nächster B-Day:',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    '$nextY Jahre + $nextM Monate + $nextD Tage',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.right,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Row(
-                        children: [
-                          Text(
-                            'Nächster Geburtstag:',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Expanded(
-                            child: Text(
-                              '$nextY Jahre + $nextM Monate + $nextD Tage',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlign: TextAlign.right,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // ),
                     // /*--------------------------------- Abstand ---*/
                     // wbSizedBoxWidth8,
                     /*--------------------------------- Alter (berechnet) ---*/

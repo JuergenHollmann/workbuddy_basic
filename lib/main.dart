@@ -128,6 +128,10 @@ class MainApp extends StatelessWidget {
   √ für macOS muss im macos/Podfile ---> platform :osx, '10.15' eingestellt werden √ 
 
   /*--------------------------------- TODO's ---
+  - Zustimmung zu Datenschutz + Textvorlage einpflegen
+  - Zustimmung zu Nutzungsbedingungen + Textvorlage einpflegen
+  - Impressum + Textvorlage einpflegen
+
   - Nützliche Funktion vorschlagen - E-Mail DIREKT an den Entwickler senden - "Support-E-Mail" eintragen - CM-0121
   - "WbInfoContainer" im CompanyScreen ist teilweise noch festverdrahtet - 1030
   - In Chrome gibt es keine SharedPreferences, deshalb muss ich das auf "null" setzen? oder woanders (SQL) speichern?
