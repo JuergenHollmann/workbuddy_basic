@@ -1,14 +1,18 @@
 import 'dart:developer';
 
+import 'package:age_calculator/age_calculator.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:time_picker_spinner_pop_up/time_picker_spinner_pop_up.dart';
 import 'package:workbuddy/config/wb_button_universal_2.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
 import 'package:workbuddy/config/wb_text_form_field.dart';
-import 'package:workbuddy/config/wb_text_form_field_only_date.dart';
 import 'package:workbuddy/config/wb_text_form_field_text_only.dart';
 import 'package:workbuddy/features/home/screens/main_selection_screen.dart';
+import 'package:workbuddy/shared/providers/current_user_provider.dart';
 import 'package:workbuddy/shared/widgets/wb_dialog_alert_update_coming_soon.dart';
 import 'package:workbuddy/shared/widgets/wb_divider_with_text_in_center.dart';
 import 'package:workbuddy/shared/widgets/wb_drop_down_menu.dart';
@@ -22,21 +26,27 @@ class ContactScreen extends StatefulWidget {
 }
 
 /*--------------------------------- Controller ---*/
-final TextEditingController inputCompanyNameTEC = TextEditingController();
-final TextEditingController iinputCompanyVNContactPersonTEC =
+final TextEditingController inputCompanyNameController =
     TextEditingController();
-final TextEditingController iinputCompanyNNContactPersonTEC =
+final TextEditingController inputVNContactPersonController =
+    TextEditingController();
+final TextEditingController inputNNContactPersonController =
     TextEditingController();
 
 /*--------------------------------- onChanged-Funktion ---*/
 String inputCompanyName =
     "evtl. Firmenlogo?"; // nur für die "onChanged-Funktion"
-String inputCompanyVNContactPerson =
+String inputVNContactPerson =
     "Kontaktperson"; // nur für die "onChanged-Funktion"
-String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
+String inputNNContactPerson = ""; // nur für die "onChanged-Funktion"
 
 class _ContactScreenState extends State<ContactScreen> {
   late AudioPlayer player = AudioPlayer();
+
+  /* für die Berechnung des Alters und der Zeitspanne bis zum nächsten Geburtstag */
+  int ageY = 0, ageM = 0, ageD = 0, nextY = 0, nextM = 0, nextD = 0;
+  DateTime initTime = DateTime.now();
+  DateTime selectedTime = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -44,37 +54,16 @@ class _ContactScreenState extends State<ContactScreen> {
     return Scaffold(
       backgroundColor: wbColorBackgroundBlue,
       appBar: AppBar(
-        toolbarHeight: 100,
         centerTitle: true,
         backgroundColor: wbColorLogoBlue, // Hintergrundfarbe
         foregroundColor: Colors.white, // Icon-/Button-/Chevron-Farbe
         shadowColor: Colors.black,
-        title: RichText(
-          textAlign: TextAlign.center,
-          text: TextSpan(
-            text: "Kontakt bearbeiten\n",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w900,
-              color: Colors.yellow,
-            ),
-            children: <TextSpan>[
-              // children: [
-              TextSpan(
-                text:
-                    "• $inputCompanyVNContactPerson $inputCompanyNNContactPerson\n• $inputCompanyName",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w900,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-        ),
-        shape: Border.symmetric(
-          horizontal: BorderSide(
-            width: 3,
+        title: Text(
+          'Einen Kontakt NEU anlegen',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w900,
+            color: Colors.yellow,
           ),
         ),
       ),
@@ -132,7 +121,7 @@ class _ContactScreenState extends State<ContactScreen> {
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
-                            ("$inputCompanyVNContactPerson $inputCompanyNNContactPerson"),
+                            ("$inputVNContactPerson $inputNNContactPerson"),
                           ),
                         ),
                       ],
@@ -280,13 +269,12 @@ class _ContactScreenState extends State<ContactScreen> {
                       inputFontColor: wbColorLogoBlue,
                       fillColor: wbColorLightYellowGreen,
                       /*--------------------------------- onChanged ---*/
-                      controller: iinputCompanyVNContactPersonTEC,
-                      onChanged: (String iinputCompanyVNContactPersonTEC) {
-                        log("0478 - ContactSreen - Eingabe: $iinputCompanyVNContactPersonTEC");
-                        inputCompanyVNContactPerson =
-                            iinputCompanyVNContactPersonTEC;
-                        setState(() => inputCompanyVNContactPerson =
-                            iinputCompanyVNContactPersonTEC);
+                      controller: inputVNContactPersonController,
+                      onChanged: (String inputVNContactPersonController) {
+                        log("0478 - ContactSreen - Eingabe: $inputVNContactPersonController");
+                        inputVNContactPerson = inputVNContactPersonController;
+                        setState(() => inputVNContactPerson =
+                            inputVNContactPersonController);
                       },
                     ),
                     /*--------------------------------- Abstand ---*/
@@ -304,70 +292,159 @@ class _ContactScreenState extends State<ContactScreen> {
                       inputFontColor: wbColorLogoBlue,
                       fillColor: wbColorLightYellowGreen,
                       /*--------------------------------- onChanged ---*/
-                      controller: iinputCompanyNNContactPersonTEC,
-                      onChanged: (String iinputCompanyNNContactPersonTEC) {
-                        log("0504 - company_screen - Eingabe: $iinputCompanyNNContactPersonTEC");
-                        inputCompanyNNContactPerson =
-                            iinputCompanyNNContactPersonTEC;
-                        setState(() => inputCompanyNNContactPerson =
-                            iinputCompanyNNContactPersonTEC);
+                      controller: inputNNContactPersonController,
+                      onChanged: (String inputNNContactPersonController) {
+                        log("0504 - company_screen - Eingabe: $inputNNContactPersonController");
+                        inputNNContactPerson = inputNNContactPersonController;
+                        setState(() => inputNNContactPerson =
+                            inputNNContactPersonController);
                       },
                     ),
-                    /*--------------------------------- Geburtstag ---*/
+                    /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight16,
-                    const Row(
-                      children: [
-                        SizedBox(
-                          width: 185,
-
-                          /*--- WbTextFormFieldCheckDate wegen Geburtstag ---*/
-                          child: WbTextFormFieldOnlyDATE(
-                            labelText: 'Geburtstag',
-                            labelFontSize20: 20,
-                            hintText: 'Geburtstag',
-                            inputTextFontSize22: 22,
-                            inputFontWeightW900: FontWeight.w900,
-                            inputFontColor: wbColorLogoBlue,
-                            fillColor: wbColorLightYellowGreen,
-                            textInputTypeOnKeyboard: TextInputType.number,
+                    /*--- TimePickerSpinnerPopUp wegen Geburtstag ---*/
+                    Container(
+                      width: 400,
+                      decoration: ShapeDecoration(
+                        color: wbColorLightYellowGreen,
+                        shape: RoundedRectangleBorder(
+                          side: const BorderSide(
+                            width: 1,
+                            color: Colors.black,
                           ),
-
-// child: WbTextFormFieldCheckDate(labelText: labelText, labelFontSize20: labelFontSize20, hintText: hintText, inputTextFontSize22: inputTextFontSize22, inputFontWeightW900: inputFontWeightW900, inputFontColor: inputFontColor, fillColor: fillColor)
-
-                          // child: WbTextFormField(
-                          //   labelText: "Geburtstag",
-                          //   labelFontSize20: 20,
-                          //   hintText: "Geburtstag",
-                          //   hintTextFontSize16: 15,
-                          //   inputTextFontSize22: 22,
-                          //   prefixIcon: Icons.card_giftcard_outlined,
-                          //   prefixIconSize28: 24,
-                          //   inputFontWeightW900: FontWeight.w900,
-                          //   inputFontColor: wbColorLogoBlue,
-                          //   fillColor: wbColorLightYellowGreen,
-                          //   textInputTypeOnKeyboard: TextInputType.number,
-                          // ),
+                          borderRadius: BorderRadius.circular(16),
                         ),
-                        /*--------------------------------- Abstand ---*/
-                        wbSizedBoxWidth8,
-                        /*--------------------------------- Alter (berechnet) ---*/
-                        /* Alter anhand vom Geburtstag automatisch berechnen und im Feld eintragen - 0491 - ContactScreen */
-                        Expanded(
-                          child: WbTextFormField(
-                            labelText: "Alter",
-                            labelFontSize20: 20,
-                            hintText: "Alter",
-                            hintTextFontSize16: 15,
-                            inputTextFontSize22: 22,
-                            prefixIcon: Icons.calendar_today_outlined,
-                            prefixIconSize28: 24,
-                            inputFontWeightW900: FontWeight.w900,
-                            inputFontColor: wbColorLogoBlue,
-                            fillColor: wbColorLightYellowGreen,
-                            textInputTypeOnKeyboard: TextInputType.number,
+                      ),
+                      child: Column(
+                        children: [
+                          /*--------------------------------- TimePickerSpinnerPopUp ---*/
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                            child: Row(
+                              children: [
+                                Text(
+                                  'Geburtstag',
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                /*--------------------------------- Abstand ---*/
+                                wbSizedBoxWidth16,
+                                /*--------------------------------- *** ---*/
+                                TimePickerSpinnerPopUp(
+                                    locale: Locale('de', 'DE'),
+                                    iconSize: 20,
+                                    textStyle: TextStyle(
+                                        backgroundColor:
+                                            wbColorLightYellowGreen,
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold),
+                                    isCancelTextLeft: true,
+                                    paddingHorizontalOverlay: 80,
+                                    mode: CupertinoDatePickerMode.date,
+                                    radius: 16,
+                                    initTime: selectedTime,
+                                    minTime: DateTime.now()
+                                        .subtract(const Duration(days: 36500)),
+                                    /*--------------------------------- *** ---*/
+                                    /* das Geburtsdatum kann nicht in der Zukunft liegen */
+                                    maxTime: DateTime.now()
+                                        .add(const Duration(days: 0)),
+                                    /*--------------------------------- *** ---*/
+                                    use24hFormat: true,
+                                    barrierColor: Colors.black12,
+                                    minuteInterval: 1,
+                                    padding:
+                                        const EdgeInsets.fromLTRB(12, 8, 8, 8),
+                                    cancelText: 'Abbruch',
+                                    confirmText: 'OK',
+                                    pressType: PressType.singlePress,
+                                    timeFormat: 'dd.MM.yyyy',
+                                    onChange: (dateTime) {
+                                      log('0539 - CompanyScreen - Geburtsdatum eingegeben: $dateTime');
+                                      /*--- automatisch das Alter berechnen mit "age_calculator" ---*/
+                                      AgeCalculator();
+                                      DateTime birthday = dateTime;
+                                      var age = AgeCalculator.age(birthday);
+                                      log('0561 - CompanyScreen - Berechnetes Alter = ${age.years} Jahre + ${age.months} Monate + ${age.days} Tage');
+                                      /*--- automatisch die Zeit bis zum nächsten Geburtstag berechnen mit "age_calculator" ---*/
+                                      DateTime nextBirthday = dateTime;
+                                      var timeToNextBirthday =
+                                          AgeCalculator.timeToNextBirthday(
+                                        DateTime(
+                                          nextBirthday.year,
+                                          nextBirthday.month,
+                                          nextBirthday.day,
+                                        ),
+                                        fromDate: DateTime.now(),
+                                      );
+                                      /*--- die Daten aktualisieren ---*/
+                                      setState(() {
+                                        /*--- das Alter berechnen aktualisieren ---*/
+                                        ageY = age.years;
+                                        ageM = age.months;
+                                        ageD = age.days;
+                                        /*--- die Zeit bis zum nächsten Geburtstag aktualisieren ---*/
+                                        nextY = timeToNextBirthday.years;
+                                        nextM = timeToNextBirthday.months;
+                                        nextD = timeToNextBirthday.days;
+                                        /*--- Das angeklickte Geburtsdatum im "TimePickerSpinnerPopUp" soll behalten werden ---*/
+                                        selectedTime = birthday;
+                                        log('0573 - CompanyScreen - selectedTime: $selectedTime = birthday: $birthday');
+                                      });
+                                    }),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                          /*--------------------------------- Alter anzeigen ---*/
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Row(
+                              children: [
+                                Text(
+                                  'Alter:',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    '$ageY Jahre + $ageM Monate + $ageD Tage',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.right,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          /*--------------------------------- nächster Geburtstag ---*/
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                            child: Row(
+                              children: [
+                                Text(
+                                  'Nächster ...',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    '$nextY Jahre + $nextM Monate + $nextD Tage',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.right,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight16,
@@ -834,11 +911,12 @@ class _ContactScreenState extends State<ContactScreen> {
                       // suffixIconSize48: 28,
                       //textInputAction: textInputAction,
                       /*--------------------------------- onChanged ---*/
-                      controller: inputCompanyNameTEC,
-                      onChanged: (String inputCompanyNameTEC) {
-                        log("0189 - company_screen - Eingabe: $inputCompanyNameTEC");
-                        inputCompanyName = inputCompanyNameTEC;
-                        setState(() => inputCompanyName = inputCompanyNameTEC);
+                      controller: inputCompanyNameController,
+                      onChanged: (String inputCompanyNameController) {
+                        log("0189 - company_screen - Eingabe: $inputCompanyNameController");
+                        inputCompanyName = inputCompanyNameController;
+                        setState(() =>
+                            inputCompanyName = inputCompanyNameController);
                       },
                     ),
                     /*--------------------------------- Branchenzuordnung ---*/
@@ -986,24 +1064,24 @@ class _ContactScreenState extends State<ContactScreen> {
                     wbSizedBoxHeight16,
                     const Divider(thickness: 3, color: wbColorLogoBlue),
                     wbSizedBoxHeight16,
-                    /*--------------------------------- ENDE ---*/
+                    /*--------------------------------- *** ---*/
                   ],
                 ),
               ),
-              /*--------------------------------- WbInfoContainer ---*/
-              // Der "WbInfoContainer" soll außerhalb der Scrollview am Bottom fixiert sein - 0927 todo
-              WbInfoContainer(
-                infoText:
-                    "$inputCompanyVNContactPerson $inputCompanyNNContactPerson • $inputCompanyName",
-                wbColors: Colors.yellow,
-              ),
               /*--------------------------------- Abstand ---*/
               wbSizedBoxHeight16,
-              /*--------------------------------- ENDE ---*/
+              /*--------------------------------- *** ---*/
             ],
           ),
         ),
       ),
+      /*--------------------------------- WbInfoContainer ---*/
+      bottomSheet: WbInfoContainer(
+        infoText:
+            '$inputVNContactPerson $inputNNContactPerson • $inputCompanyName\nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}\nLetzte Änderung: Am 18.12.2024 um 22:51 Uhr', // todo 1030
+        wbColors: Colors.yellow,
+      ),
+      /*--------------------------------- ENDE ---*/
     );
   }
 }

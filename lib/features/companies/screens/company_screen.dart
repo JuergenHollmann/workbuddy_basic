@@ -27,7 +27,7 @@ class CompanyScreen extends StatefulWidget {
 
 /*--------------------------------- Controller ---*/
 final TextEditingController inputCompanyNameTEC = TextEditingController();
-final TextEditingController iinputCompanyVNContactPersonTEC =
+final TextEditingController inputCompanyVNContactPersonTEC =
     TextEditingController();
 final TextEditingController inputCompanyNNContactPersonTEC =
     TextEditingController();
@@ -441,15 +441,15 @@ class _CompanyScreenState extends State<CompanyScreen> {
                       fillColor: wbColorLightYellowGreen,
 
                       /*--------------------------------- onChanged ---*/
-                      controller: iinputCompanyVNContactPersonTEC,
-                      onChanged: (String iinputCompanyVNContactPersonTEC) {
-                        log("0478 - company_screen - Eingabe: $iinputCompanyVNContactPersonTEC");
+                      controller: inputCompanyVNContactPersonTEC,
+                      onChanged: (String inputCompanyVNContactPersonTEC) {
+                        log("0478 - company_screen - Eingabe: $inputCompanyVNContactPersonTEC");
 
                         inputCompanyVNContactPerson =
-                            iinputCompanyVNContactPersonTEC;
+                            inputCompanyVNContactPersonTEC;
 
                         setState(() => inputCompanyVNContactPerson =
-                            iinputCompanyVNContactPersonTEC);
+                            inputCompanyVNContactPersonTEC);
                       },
                     ),
                     /*--------------------------------- Abstand ---*/

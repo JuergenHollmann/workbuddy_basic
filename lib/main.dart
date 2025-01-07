@@ -134,6 +134,8 @@ class MainApp extends StatelessWidget {
 
   - Nützliche Funktion vorschlagen - E-Mail DIREKT an den Entwickler senden - "Support-E-Mail" eintragen - CM-0121
   - "WbInfoContainer" im CompanyScreen ist teilweise noch festverdrahtet - 1030
+  - "WbInfoContainer" im ContactScreen ist teilweise noch festverdrahtet - 1030
+
   - In Chrome gibt es keine SharedPreferences, deshalb muss ich das auf "null" setzen? oder woanders (SQL) speichern?
   - Die Variable für den "DarkMode" setzen - WbHomePage - 0173
   - Wie kann ich hier nach mehreren Kriterien suchen oder filtern? - EmailUserSelection - 0158
@@ -205,9 +207,9 @@ class MainApp extends StatelessWidget {
 
 
   √ Datums-Picker (Geburtstage, etc.) installiert: time_picker_spinner_pop_up: ^2.0.0 √
-    x - flutter_rounded_date_picker: ^3.0.4 (nicht installiert)
-    x - flutter_holo_date_picker: ^2.0.0    (für Datumseinstellungen installiert)
-    x - progressive_time_picker: ^1.0.1     (nur Zeitspanne, aber gut aussehend)
+    x - flutter_rounded_date_picker: ^3.0.4 (nicht installiert, ist aber umfangreicher)
+    x - flutter_holo_date_picker: ^2.0.0    (nur für Datumseinstellungen - nicht installiert)
+    x - progressive_time_picker: ^1.0.1     (nur Zeitspanne, aber gut aussehend - nicht installiert)
   √ Alter anhand vom Geburtstag automatisch berechnen und im Feld eintragen - 0491 - CompanyScreen √ 
   - Checklisten-App in WorkBuddy einbauen - ToDo-Liste (Aufgaben)
   - Im Validator "Die Paßwörter sind NICHT gleich!" funzt so nicht! 0050 - Validator
