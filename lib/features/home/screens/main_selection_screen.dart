@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workbuddy/config/wb_colors.dart';
@@ -18,16 +17,14 @@ class MainSelectionScreen extends StatefulWidget {
 }
 
 class _MainSelectionScreenState extends State<MainSelectionScreen> {
- 
   @override
-  void initState(){
+  void initState() {
     // Eine Methode einmalig ausführen
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.blue,
       /*--------------------------------- AppBar ---*/
@@ -56,40 +53,41 @@ class _MainSelectionScreenState extends State<MainSelectionScreen> {
             "assets/workbuddy_patch_and_slogan.png",
           )),
           /*--------------------------------- GridView ---*/
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(32, 24, 32, 16),
-              child: GridView.count(
-                crossAxisCount: 2, // Anzahl der Spalten
-                crossAxisSpacing: 1, // Platz zwischen den Spalten
-                mainAxisSpacing: 20, // Platz zwischen den Reihen
-                childAspectRatio: 1.2, // Verhältnis Höhe zu Breite
-                // /*--------------------------------- GridView children ---*/
-                children: [
-                  ButtonAccounting(),
-                  ButtonCommunication(),
-                  ButtonCustomer(),
-                  ButtonCompanies(),
-                ],
-                /*--------------------------------- Alternative zur GridView ---*/
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     ButtonAccounting(),
-                //     ButtonCommunication(),
-                //   ],
-                // ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     ButtonCustomer(),
-                //     ButtonCompanies(),
-                //   ],
-                // ),
-                /*--------------------------------- *** ---*/
-              ),
-            ),
+          // Expanded(
+          // child: Padding(
+          //   padding: const EdgeInsets.fromLTRB(32, 24, 32, 16),
+          // child: GridView.count(
+          //   crossAxisCount: 2, // Anzahl der Spalten
+          //   crossAxisSpacing: 1, // Platz zwischen den Spalten
+          //   mainAxisSpacing: 20, // Platz zwischen den Reihen
+          //   childAspectRatio: 1.2, // Verhältnis Höhe zu Breite
+          //   // /*--------------------------------- GridView children ---*/
+          //   children: [
+          //     ButtonAccounting(),
+          //     ButtonCommunication(),
+          //     ButtonCustomer(),
+          //     ButtonCompanies(),
+          //   ],
+          // ),
+          // ),
+          //  ),
+          /*--------------------------------- Alternative zur GridView ---*/
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ButtonAccounting(),
+              ButtonCommunication(),
+            ],
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ButtonCustomer(),
+              ButtonCompanies(),
+            ],
+          ),
+          /*--------------------------------- Abstand ---*/
+          wbSizedBoxHeight8,
           /*--------------------------------- Wer ist angemeldet? ---*/
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -106,7 +104,7 @@ class _MainSelectionScreenState extends State<MainSelectionScreen> {
             ),
           ),
           /*--------------------------------- Abstand ---*/
-          wbSizedBoxHeight8,
+          wbSizedBoxHeight16,
           /*--------------------------------- *** ---*/
         ],
       ),

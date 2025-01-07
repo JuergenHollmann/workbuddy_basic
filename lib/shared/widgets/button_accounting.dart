@@ -9,8 +9,8 @@ class ButtonAccounting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 180,
-      height: 180,
+      width: 160,
+      height: 160,
       child: GestureDetector(
         onTap: () {
           log("0018 - ButtonAccounting - Wechsle zur Seite AccountingMenu");
