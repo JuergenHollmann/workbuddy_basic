@@ -5,8 +5,8 @@
 // import 'package:dropdown_button2/dropdown_button2.dart';
 // import 'package:flutter/material.dart';
 
-// class WbDropDownMenu2 extends StatelessWidget {
-//   const WbDropDownMenu2({
+// class WbDropDownMenuWithIcon2 extends StatelessWidget {
+//   const WbDropDownMenuWithIcon2({
 //     required this.hint,
 //     required this.value,
 //     required this.dropdownItems,
@@ -64,7 +64,7 @@
 
 //   @override
 //   Widget build(BuildContext context) {
-//     log("0067 - WbDropDownMenu2 - aktiviert");
+//     log("0067 - WbDropDownMenuWithIcon2 - aktiviert");
 
 //     return DropdownButtonHideUnderline(
 //       child: DropdownButton2<String>(

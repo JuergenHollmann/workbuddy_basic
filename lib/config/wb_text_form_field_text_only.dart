@@ -62,7 +62,7 @@ class WbTextFormFieldTEXTOnly extends StatelessWidget {
         floatingLabelAlignment: FloatingLabelAlignment.start,
         filled: true,
         fillColor: fillColor, //wbColorBackgroundBlue
-        contentPadding: const EdgeInsets.fromLTRB(16, 8,16, 0),
+        contentPadding: const EdgeInsets.fromLTRB(16, 16,16, 8),
 
         /*--- errorStyle ---*/
         errorStyle: const TextStyle(

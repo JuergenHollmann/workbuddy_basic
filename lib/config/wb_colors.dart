@@ -18,6 +18,8 @@ const Color wbColorButtonGreen = Color.fromARGB(255, 0, 130, 0); // sattes grün
 
 // ----------------------------- Parbpalette rot ---
 const Color wbColorButtonDarkRed = Color.fromRGBO(190, 13, 0, 1); // dunkles rot
+const Color wbColorBackgroundRed =
+    Color.fromRGBO(255, 221, 218, 1); // helles rot
 
 // ----------------------------- Parbpalette orange ---
 const Color wbColorDrawerOrangeLight =

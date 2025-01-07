@@ -164,6 +164,7 @@ class MainApp extends StatelessWidget {
   √ WbButtonUniversal2 - Beispiel: WorkBuddy beenden √
   √ "Spacer(flex: 1)" waren das Problem, warum ich nicht mehr die Seite öffnen konnte! √
   
+- kann gelöscht werden: lib/config/wb_dropdownmenu.dart 
 - kann später evtl. gelöscht werden: lib/shared/data/user.dart
 - kann später evtl. gelöscht werden: lib/features/authentication/repositories/mock_user_database.dart
 - kann später evtl. gelöscht werden: lib/features/authentication/repositories/mock_user_repository.dart
@@ -179,7 +180,7 @@ class MainApp extends StatelessWidget {
   - kann gelöscht werden: "WBTextfieldNotice"
   - kann gelöscht werden: "WbDividerWithSmallTextCenter"
   - kann gelöscht werden: "WbDropdownButtonFormfield" 
-  - kann gelöscht werden: "WbDropDownMenu2"
+  - kann gelöscht werden: "WbDropDownMenuWithIcon2"
   - kann gelöscht werden: "SplashScreen"
   √ wurde gelöscht: "WbButtonUniversal" √
   √ wurde gelöscht: "WBRedButton" √
@@ -187,6 +188,7 @@ class MainApp extends StatelessWidget {
   √ wurde gelöscht: "ContactScreenX" √
   √ wurde gelöscht: "WbButtonUniShadow" √
 
+  - Hier besser eine Map erstellen - ExpenseWidget - 0033
   - CompanyScreen: leadingIconsInMenu hat hier keine Auswikung // todo 0233 + 0406
 
 * Updates:
@@ -195,6 +197,7 @@ class MainApp extends StatelessWidget {
   - mehr Funktionen - E-Mail an den Entwickler    - Update CM-0249
   - mehr Funktionen - E-Mail an den Entwickler    - Update CM-0132
   - mehr Funktionen - E-Mail an den Entwickler    - Update AM-0249
+  - mehr Funktionen - E-Mail an den Entwickler    - Update SM-0263
   - Alle Kontakte zeigen                          - Update CM-0098
   - Mit Google-Account einloggen                  - Update LS-0495
   - Mit Apple-Account einloggen                   - Update LS-0573

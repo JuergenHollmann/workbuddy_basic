@@ -15,7 +15,7 @@ import 'package:workbuddy/features/home/screens/main_selection_screen.dart';
 import 'package:workbuddy/shared/providers/current_user_provider.dart';
 import 'package:workbuddy/shared/widgets/wb_dialog_alert_update_coming_soon.dart';
 import 'package:workbuddy/shared/widgets/wb_divider_with_text_in_center.dart';
-import 'package:workbuddy/shared/widgets/wb_drop_down_menu.dart';
+import 'package:workbuddy/shared/widgets/wb_drop_down_menu_with_icon.dart';
 import 'package:workbuddy/shared/widgets/wb_info_container.dart';
 
 class ContactScreen extends StatefulWidget {
@@ -208,15 +208,15 @@ class _ContactScreenState extends State<ContactScreen> {
                         // "Lieferant und Kunde",
                         // "möglicher Lieferant",
                       ],
-                      leadingIconsInMenu: [
-                        // hat hier keine Auswikung // todo 0233 + 0406
-                        Icons.access_time,
-                        Icons.airline_seat_legroom_normal,
-                        Icons.access_time,
-                        Icons.dangerous,
-                        Icons.access_time,
-                        Icons.face,
-                      ],
+                      // leadingIconsInMenu: [
+                      //   // hat hier keine Auswikung // todo 0233 + 0406
+                      //   Icons.access_time,
+                      //   Icons.airline_seat_legroom_normal,
+                      //   Icons.access_time,
+                      //   Icons.dangerous,
+                      //   Icons.access_time,
+                      //   Icons.face,
+                      // ],
                     ),
                     /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight16,
@@ -244,15 +244,15 @@ class _ContactScreenState extends State<ContactScreen> {
                         "Frau Prof.",
                         "Prof.",
                       ],
-                      leadingIconsInMenu: [
-                        // hat hier keine Auswikung // todo 0233 + 0406
-                        Icons.access_time,
-                        Icons.airline_seat_legroom_normal,
-                        Icons.access_time,
-                        Icons.dangerous,
-                        Icons.access_time,
-                        Icons.face,
-                      ],
+                      // leadingIconsInMenu: [
+                      //   // hat hier keine Auswikung // todo 0233 + 0406
+                      //   Icons.access_time,
+                      //   Icons.airline_seat_legroom_normal,
+                      //   Icons.access_time,
+                      //   Icons.dangerous,
+                      //   Icons.access_time,
+                      //   Icons.face,
+                      // ],
                     ),
                     /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight16,
@@ -1069,7 +1069,8 @@ class _ContactScreenState extends State<ContactScreen> {
                 ),
               ),
               /*--------------------------------- Abstand ---*/
-              wbSizedBoxHeight16,
+              wbSizedBoxHeight32,
+              wbSizedBoxHeight32,
               /*--------------------------------- *** ---*/
             ],
           ),

@@ -3,12 +3,13 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:workbuddy/config/wb_button_universal_2.dart';
 import 'package:workbuddy/config/wb_colors.dart';
-import 'package:workbuddy/config/wb_dropdownmenu.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
+import 'package:workbuddy/config/wb_text_form_field_text_only.dart';
 import 'package:workbuddy/config/wb_textfield_currency.dart';
 import 'package:workbuddy/config/wb_textfield_notice.dart';
-import 'package:workbuddy/config/wb_textfield_quantity.dart';
 import 'package:workbuddy/features/accounting/screens/accounting_menu.dart';
+import 'package:workbuddy/shared/widgets/wb_drop_down_menu_with_icon.dart';
+import 'package:workbuddy/shared/widgets/wb_drop_down_menu_without_icon.dart';
 import 'package:workbuddy/shared/widgets/wb_text_fixed_not_writable.dart';
 
 class ExpenseWidget extends StatefulWidget {
@@ -25,67 +26,98 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
 
     return Column(
       children: [
-        // ------ Wo wurde eingekauft? ------
-        const WBDropdownMenu(
-          headlineText: "Wo wurde eingekauft?",
-          hintText: "Welches Geschäft oder Lieferant?",
+        /*--------------------------------- Abstand ---*/
+        // wbSizedBoxHeight8,
+        /*--------------------------------- Wo eingekauft? ---*/
+        WbDropDownMenu(
+          /* Hier besser eine Map erstellen - ExpenseWidget - 0033 - todo */
+          label: "Wo wurde eingekauft?",
+          dropdownItems: [
+            "OBI",
+            "Kaufland",
+            "Toom",
+            "ACTION",
+            "WOOLWORTH",
+            "Tankstelle",
+          ],
+          // leadingIconsInMenu: [
+          //   Icons.access_time,
+          //   Icons.house_outlined,
+          //   Icons.handyman_outlined,
+          //   Icons.cable_outlined,
+          //   Icons.pending_actions_outlined,
+          //   Icons.car_repair_outlined,
+          // ],
         ),
-
+        /*--------------------------------- Abstand ---*/
         wbSizedBoxHeight16,
-
-        // ------ Was wurde eingekauft? ------
-        const WBDropdownMenu(
-          headlineText: "Was wurde eingekauft?",
-          hintText: "Welches Produkt?",
-        ),
-
+        /*--------------------------------- Was eingekauft? ---*/
+        WbDropDownMenu(
+            label: "Was wurde eingekauft?",
+            dropdownItems: [
+              "Dachlatten",
+              "Spax-Schrauben",
+              "Werkzeug",
+              "Kabel",
+              "Zubehör",
+              "Tanken",
+            ],
+            backgroundColor: wbColorBackgroundRed
+            // leadingIconsInMenu: [
+            //   Icons.access_time,
+            //   Icons.house_outlined,
+            //   Icons.handyman_outlined,
+            //   Icons.cable_outlined,
+            //   Icons.pending_actions_outlined,
+            //   Icons.car_repair_outlined,
+            // ],
+            ),
+        /*--------------------------------- Abstand ---*/
         wbSizedBoxHeight16,
-
-        const Row(
+        /*--------------------------------- Anzahl ---*/
+        Row(
           children: [
-            Expanded(
-              // ------ Anzahl ------
-              child: WBTextfieldQuantity(
-                headlineText: "Anzahl",
+            SizedBox(
+              width: 120,
+              child: WbTextFormFieldTEXTOnly(
+                labelText: "Anzahl",
+                labelFontSize20: 18,
                 hintText: "Anzahl",
+                inputTextFontSize22: 22,
+                inputFontWeightW900: FontWeight.w900,
+                inputFontColor: wbColorLogoBlue,
+                fillColor: wbColorBackgroundRed,
+                textInputTypeOnKeyboard: TextInputType.numberWithOptions(
+                  decimal: true,
+                  signed: true, // erlaubt ein "+" oder "-" Zeichen vor der Zahl
+                ),
               ),
             ),
-            wbSizedBoxWidth16,
+            /*--------------------------------- Abstand ---*/
+            wbSizedBoxWidth8,
+            /*--------------------------------- Units/Einheit ---*/
             Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // ------ Einheit ------
-                  WBDropdownMenu(
-                    headlineText: "Einheit(en)",
-                    hintText: "? ? ? ? ? ?",
-                  ),
-                ],
+              child: WbDropDownMenuWithoutIcon(
+                label: 'Units',
+                dropdownItems: ["Stk", "kg", "gr", "Pkg", "ltr", "mtr"],
               ),
             ),
-            wbSizedBoxWidth16,
+            /*--------------------------------- Abstand ---*/
+            wbSizedBoxWidth8,
+            /*--------------------------------- MwSt ---*/
             Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // ------ MwSt. % ------
-                  WBDropdownMenu(
-                    headlineText: "MwSt. %",
-                    hintText: "? ? ? ? ? ?",
-                  ),
-                ],
+              child: WbDropDownMenuWithoutIcon(
+                label: "MwSt %",
+                dropdownItems: ["0 %", "7 %", "19 %"],
               ),
             ),
           ],
         ),
-
+        /*--------------------------------- Abstand ---*/
         wbSizedBoxHeight16,
-
+        /*--------------------------------- MWSt. berechnet ---*/
         const Row(
           children: [
-            // ------ MwSt berechnet: ------
             Expanded(
               child: WbTextFixedNotWritable(
                 headlineText: "MwSt. berechnet:",
@@ -93,7 +125,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                 wbTextFieldWidth: 200,
               ),
             ),
-
+            /*--------------------------------- Abstand ---*/
             wbSizedBoxWidth16,
 
             // ------ Endpreis € ------
@@ -106,21 +138,21 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
           ],
         ),
 
-        wbSizedBoxHeight16,
+        // wbSizedBoxHeight16,
 
-        // ------ Warengruppe ------
-        const WBDropdownMenu(
-          headlineText: "Warengruppe",
-          hintText: "Bitte die Warengruppe zuordnen",
-        ),
+        // // ------ Warengruppe ------
+        // const WBDropdownMenu(
+        //   headlineText: "Warengruppe",
+        //   hintText: "Bitte die Warengruppe zuordnen",
+        // ),
 
-        wbSizedBoxHeight16,
+        // wbSizedBoxHeight16,
 
-        // ------ Wer hat eingekauft? ------
-        const WBDropdownMenu(
-          headlineText: "Wer hat eingekauft?",
-          hintText: "Bitte Einkäufer*in zuordnen",
-        ),
+        // // ------ Wer hat eingekauft? ------
+        // const WBDropdownMenu(
+        //   headlineText: "Wer hat eingekauft?",
+        //   hintText: "Bitte Einkäufer*in zuordnen",
+        // ),
 
         wbSizedBoxHeight16,
 

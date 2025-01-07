@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workbuddy/config/wb_dialog_2buttons.dart';
 import 'package:workbuddy/features/home/screens/home_screen.dart';
+import 'package:workbuddy/features/settings_menu.dart';
 import 'package:workbuddy/shared/providers/current_app_version_provider.dart';
 import 'package:workbuddy/shared/providers/current_user_provider.dart';
 import 'package:workbuddy/shared/repositories/shared_preferences_repository.dart';
@@ -96,7 +97,7 @@ class _WbNavigationbarState extends State<WbNavigationbar> {
                   /*--------------------------------- Button (index 0) in der WbNavigationbar---*/
                   if (index == 0) {
                     /*--- Navigiere zur WbHomePage wenn der Home-Button in der NavigationBar angeklickt wird
-                  ----> von dort geht es automatisch weiter zum P01LoginScreen,  ---*/
+                    ----> von dort geht es automatisch weiter zum P01LoginScreen,  ---*/
                     log('0084 - WbNavigationbar - Navigiere zur WbHomePage'); // anstatt direkt zum P01LoginScreen
                     /*--------------------------------- *** ---*/
                     Navigator.push(
@@ -121,26 +122,18 @@ class _WbNavigationbarState extends State<WbNavigationbar> {
                     // );
                     /*--------------------------------- Button (index 1) in der WbNavigationbar---*/
                   } else if (index == 1) {
-                    showDialog(
-                        context: context,
-                        builder: (context) =>
-                            const WbDialogAlertUpdateComingSoon(
-                              headlineText: 'Zu den Einstellungen',
-                              contentText:
-                                  'Diese Funktion kommt bald in einem KOSTENLOSEN Update!\n\nHinweis: NB-0282',
-                              actionsText: 'OK 👍',
-                            ));
+                    log('00125 - WbNavigationbar - Navigiere zur SettingsScreen');
                     /*--------------------------------- *** ---*/
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => WbSettingsPage(
-                    //       title: 'WorkBuddy • Einstellungen',
-                    //       preferencesRepository: preferencesRepository,
-                    //     ),
-                    //   ),
-                    // );
-                    log('0143 - WbNavigationbar - Navigiere zur WbSettingsPage');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SettingsMenu(
+                            //title: 'WorkBuddy • save time and money!!',
+                            //preferencesRepository: preferencesRepository,
+                            //preferencesRepository: prefs,
+                            ),
+                      ),
+                    );
                     /*--------------------------------- Button (index 2) in der WbNavigationbar---*/
                   } else if (index == 2) {
                     showDialog(

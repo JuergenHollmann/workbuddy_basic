@@ -4,10 +4,11 @@ import 'package:workbuddy/config/wb_sizes.dart';
 
 class WbDividerWithSmallTextCenter extends StatelessWidget {
   const WbDividerWithSmallTextCenter({
-    super.key, required this.wbDividerText,
+    super.key,
+    required this.wbDividerText,
   });
 
- final String wbDividerText;
+  final String wbDividerText;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class WbDividerWithSmallTextCenter extends StatelessWidget {
           ),
         ),
         wbSizedBoxWidth8,
-         Text(
+        Text(
           wbDividerText,
           style: const TextStyle(
             fontSize: 12,

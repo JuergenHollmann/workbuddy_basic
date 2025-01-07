@@ -3,49 +3,41 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 
-class WbDropDownMenu extends StatelessWidget {
-  const WbDropDownMenu({
+class WbDropDownMenuWithoutIcon extends StatelessWidget {
+  const WbDropDownMenuWithoutIcon({
     super.key,
     required this.label,
     required this.dropdownItems,
-    required this.leadingIconsInMenu,
+    this.backgroundColor,
   });
 
   final String label;
   final List<String> dropdownItems;
-  // final IconData leadingIconsInMenu;
-    final List<IconData> leadingIconsInMenu;
-
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
-    log("0020 - WbDropDownMenu - aktiviert");
+    log("0020 - WbDropDownMenuWithoutIcon - aktiviert");
 
     return DropdownMenu(
       width: 400,
       textStyle: TextStyle(
-          fontSize: 22, fontWeight: FontWeight.w900, color: wbColorLogoBlue
-          //backgroundColor: Colors.white,
-          ),
+          fontSize: 22, fontWeight: FontWeight.w900, color: wbColorLogoBlue),
       label: Text(
         label,
         style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
           color: wbColorButtonBlue,
-          backgroundColor: wbColorLightYellowGreen,
+          backgroundColor: backgroundColor,
         ),
-      ),
-      leadingIcon: Icon( // sichtbar im Statusfeld
-        Icons.folder_shared_outlined,
-        size: 30,
       ),
       menuHeight: 320, // ausklappbare Maximalhöhe
       hintText: "Bitte auswählen", // funzt nicht?
       inputDecorationTheme: InputDecorationTheme(
         contentPadding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
         filled: true,
-        fillColor: wbColorLightYellowGreen,
+        fillColor: backgroundColor,
 
         /*--- border ---*/
         border: const OutlineInputBorder(
@@ -67,12 +59,6 @@ class WbDropDownMenu extends StatelessWidget {
               ),
             ),
           ),
-          leadingIcon: 
-          // leadingIconsInMenu[index],
-              Icon( // sichtbar im ausgeklappten Auswahlmenü
-            Icons.folder_shared_outlined,
-            size: 30,
-          ),
           value: index,
           label: dropdownItems[index],
         ),
@@ -81,4 +67,3 @@ class WbDropDownMenu extends StatelessWidget {
     );
   }
 }
-// \nWorkBuddy • Free-BASIC-Version 0.002
