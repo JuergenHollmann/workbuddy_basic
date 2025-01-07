@@ -2,10 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 
-class WbTextFormField extends StatelessWidget {
-  const WbTextFormField({
+class WbTextFormFieldOnlyDATE extends StatelessWidget {
+  const WbTextFormFieldOnlyDATE({
     super.key,
     required this.labelText,
     required this.labelFontSize20,
@@ -21,12 +22,6 @@ class WbTextFormField extends StatelessWidget {
     this.textInputAction, // default: Enter | TextInputAction.done
     this.controller,
     this.onChanged,
-    this.initialValue,
-
-    // required Null Function(String userNameTEC) onChanged,
-    // this.suffixIcon,
-    // this.suffixIconSize48,
-    // this.autofillHints,
   });
 
   final String labelText;
@@ -34,7 +29,6 @@ class WbTextFormField extends StatelessWidget {
   final String hintText;
   final double? hintTextFontSize16;
   final double inputTextFontSize22;
-  final String? initialValue;
   final IconData? prefixIcon;
   final double? prefixIconSize28;
   final FontWeight inputFontWeightW900;
@@ -44,18 +38,18 @@ class WbTextFormField extends StatelessWidget {
   final TextEditingController? controller;
   final TextInputAction? textInputAction;
   final Function(String inputInWbTextFormField)? onChanged;
-  // final IconData? suffixIcon;
-  // final double? suffixIconSize48;
-  // final List<String>? autofillHints;
 
   @override
   Widget build(BuildContext context) {
-    log("0051 - WbTextFormField - aktiviert");
+    log("0043 - WbTextFormFieldOnlyDATE - aktiviert");
+
+    /*--- TextEditingController ---*/
+    final TextEditingController dateController = TextEditingController();
 
     return SizedBox(
       width: 400,
       child: TextFormField(
-        //expands: false,
+        controller: dateController,
         maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
         keyboardType: textInputTypeOnKeyboard,
         textAlignVertical: TextAlignVertical.center,
@@ -69,13 +63,12 @@ class WbTextFormField extends StatelessWidget {
         ),
         textAlign: TextAlign.left,
         textInputAction: textInputAction,
-        //obscureText: visibilityPassword, //Passwort sichtbar?
-        /*--------------------------------- InputDecoration ---*/
+
+        /*--- InputDecoration ---*/
         decoration: InputDecoration(
           floatingLabelAlignment: FloatingLabelAlignment.start,
           filled: true,
           fillColor: fillColor, //wbColorBackgroundBlue
-          //contentPadding: const EdgeInsets.fromLTRB(48, 16, 16, 16),
           contentPadding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
 
           /*--- errorStyle ---*/
@@ -112,28 +105,54 @@ class WbTextFormField extends StatelessWidget {
             color: Colors.black45,
           ),
 
-          // /*--- SuffixIcon ---*/
-          // suffixIcon: Padding(
-          //   padding: const EdgeInsets.all(8),
-          //   child: Icon(
-          //     size: suffixIconSize48, //28
-          //     suffixIcon, //Icons.email_rounded,
-          //   ),
-          // ),
-
           /*--- border ---*/
           border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(16)),
           ),
         ),
 
-        /*--- autofillHints ---*/
-        // autofillHints: autofillHints, // wie funzt das?
-
         /*--- onChanged ---*/
-        controller: controller,
+        //controller: controller,
         onChanged: onChanged,
+
+        /*--- inputFormatters ---*/
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(r'\d+|\.+')),
+          DateInputFormatter(),
+        ],
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            log('Bitte ein Datum eingeben');
+            return 'Bitte ein Datum eingeben';
+          }
+          if (!RegExp(r'^\d{2}\.\d{2}\.\d{4}$').hasMatch(value)) {
+            log('Ungültiges Datum: $value');
+            return 'Ungültiges Datum';
+          }
+          try {
+            DateFormat('dd.MM.yyyy').parseStrict(value);
+          } catch (e) {
+            log('Ungültiges Datum: $e');
+            return 'Ungültiges Datum';
+          }
+          return null;
+        },
       ),
     );
+  }
+}
+
+class DateInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    final text = newValue.text;
+    if (text.length == 2 || text.length == 5) {
+      return TextEditingValue(
+        text: '$text.',
+        selection: TextSelection.collapsed(offset: text.length + 1),
+      );
+    }
+    return newValue;
   }
 }

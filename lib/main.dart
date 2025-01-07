@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:workbuddy/features/home/screens/home_screen.dart';
@@ -23,7 +24,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  /*--------------------------------- *** ---*/
+  /*--------------------------------- Repositories ---*/
   final DatabaseRepository databaseRepository = MockDatabase();
   final AuthRepository authRepository = FirebaseAuthRepository();
 
@@ -69,6 +70,14 @@ class MainApp extends StatelessWidget {
     initializeDateFormatting('de', null);
 
     return MaterialApp(
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      // supportedLocales: <Locale>[
+      //   Locale('de', 'DE'),
+      // ],
       debugShowCheckedModeBanner: false,
       title: appTitle,
       home: WbHomePage(
@@ -193,7 +202,7 @@ class MainApp extends StatelessWidget {
 
   √ Datums-Picker (Geburtstage, etc.) installiert: time_picker_spinner_pop_up: ^2.0.0 √
     x - flutter_rounded_date_picker: ^3.0.4 (nicht installiert)
-    x - flutter_holo_date_picker: ^2.0.0    (nicht installiert)
+    x - flutter_holo_date_picker: ^2.0.0    (für Datumseinstellungen installiert)
     x - progressive_time_picker: ^1.0.1     (nur Zeitspanne, aber gut aussehend)
   - Alter anhand vom Geburtstag automatisch berechnen und im Feld eintragen - 0491 - CompanyScreen  
   - Checklisten-App in WorkBuddy einbauen - ToDo-Liste (Aufgaben)

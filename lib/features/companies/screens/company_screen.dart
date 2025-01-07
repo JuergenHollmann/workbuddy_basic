@@ -1,8 +1,11 @@
 import 'dart:developer';
 
+import 'package:age_calculator/age_calculator.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:time_picker_spinner_pop_up/time_picker_spinner_pop_up.dart';
 import 'package:workbuddy/config/wb_button_universal_2.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
@@ -28,6 +31,7 @@ final TextEditingController iinputCompanyVNContactPersonTEC =
     TextEditingController();
 final TextEditingController iinputCompanyNNContactPersonTEC =
     TextEditingController();
+final TextEditingController compPersonAge = TextEditingController();
 
 /*--------------------------------- onChanged-Funktion ---*/
 String inputCompanyName = "Firmenlogo"; // nur für die "onChanged-Funktion"
@@ -37,6 +41,9 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
 
 class _CompanyScreenState extends State<CompanyScreen> {
   late AudioPlayer player = AudioPlayer();
+
+  /* für die Berechnung des Alters und der Zeitspanne bis zum nächsten Geburtstag */
+  int ageY = 0, ageM = 0, ageD = 0, nextY = 0, nextM = 0, nextD = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +57,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
         title: Text(
           'Eine Firma NEU anlegen',
           style: TextStyle(
-            fontSize: 24,
+            fontSize: 28,
             fontWeight: FontWeight.w900,
             color: Colors.yellow,
           ),
@@ -473,7 +480,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
                       /*--------------------------------- onChanged ---*/
                       controller: iinputCompanyNNContactPersonTEC,
                       onChanged: (String iinputCompanyNNContactPersonTEC) {
-                        log("0504 - company_screen - Eingabe: $iinputCompanyNNContactPersonTEC");
+                        log("0504 - CompanyScreen - Eingabe: $iinputCompanyNNContactPersonTEC");
 
                         inputCompanyNNContactPerson =
                             iinputCompanyNNContactPersonTEC;
@@ -482,47 +489,272 @@ class _CompanyScreenState extends State<CompanyScreen> {
                             iinputCompanyNNContactPersonTEC);
                       },
                     ),
-                    /*--------------------------------- Geburtstag ---*/
+                    /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight16,
-                    const Row(
-                      children: [
-                        SizedBox(
-                          width: 185,
-                          child: WbTextFormField(
-                            labelText: "Geburtstag",
-                            labelFontSize20: 20,
-                            hintText: "Geburtstag",
-                            hintTextFontSize16: 15,
-                            inputTextFontSize22: 22,
-                            prefixIcon: Icons.card_giftcard_outlined,
-                            prefixIconSize28: 24,
-                            inputFontWeightW900: FontWeight.w900,
-                            inputFontColor: wbColorLogoBlue,
-                            fillColor: wbColorLightYellowGreen,
-                            textInputTypeOnKeyboard: TextInputType.number,
+                    // /*--------------------------------- Geburtstag ---*/
+                    // Row(
+                    //   children: [
+                    //     SizedBox(
+                    //         width: 200,
+
+                    //         /*--- TimePickerSpinnerPopUp wegen Geburtstag ---*/
+
+                    //         child: TimePickerSpinnerPopUp(
+                    //           locale: Locale('de', 'DE'),
+                    //           iconSize: 20,
+                    //           textStyle: TextStyle(
+                    //               backgroundColor: wbColorLightYellowGreen,
+                    //               fontSize: 22,
+                    //               fontWeight: FontWeight.bold),
+                    //           isCancelTextLeft: true,
+                    //           paddingHorizontalOverlay: 50,
+                    //           mode: CupertinoDatePickerMode.date,
+                    //           radius: 16,
+                    //           initTime: DateTime.now(),
+                    //           minTime: DateTime.now()
+                    //               .subtract(const Duration(days: 36500)),
+                    //           /*--------------------------------- *** ---*/
+                    //           /* das Geburtsdatum kann nicht in der Zukunft liegen */
+                    //           maxTime:
+                    //               DateTime.now().add(const Duration(days: 0)),
+                    //           /*--------------------------------- *** ---*/
+                    //           use24hFormat: true,
+                    //           barrierColor: Colors
+                    //               .black12, //Barrier Color when pop up show
+                    //           minuteInterval: 1,
+                    //           padding: const EdgeInsets.fromLTRB(12, 8, 8, 8),
+                    //           cancelText: 'Abbruch',
+                    //           confirmText: 'OK',
+                    //           pressType: PressType.singlePress,
+                    //           timeFormat: 'dd.MM.yyyy',
+                    //           /*--- das angeklickte Datum im Design der Seite darstellen ---*/
+                    //           // timeWidgetBuilder: (dateTime) {
+                    //           // WbTextFormFieldOnlyDATE(
+                    //           //   labelText: 'Geburtstag',
+                    //           //   labelFontSize20: 20,
+                    //           //   hintText: '$dateTime',
+                    //           //   inputTextFontSize22: 22,
+                    //           //   prefixIcon: Icons.card_giftcard_outlined,
+                    //           //   prefixIconSize28: 24,
+                    //           //   inputFontWeightW900: FontWeight.w900,
+                    //           //   inputFontColor: wbColorLogoBlue,
+                    //           //   fillColor: wbColorLightYellowGreen,
+                    //           //   textInputTypeOnKeyboard: TextInputType.number,
+                    //           // );
+                    //           // },
+                    //           onChange: (dateTime) {
+                    //             log('0539 - CompanyScreen - Geburtsdatum eingegeben: $dateTime');
+
+                    //             // WbTextFormFieldOnlyDATE(
+                    //             //   labelText: 'Geburtstag',
+                    //             //   labelFontSize20: 20,
+                    //             //   hintText: '$dateTime',
+                    //             //   inputTextFontSize22: 22,
+                    //             //   prefixIcon: Icons.card_giftcard_outlined,
+                    //             //   prefixIconSize28: 24,
+                    //             //   inputFontWeightW900: FontWeight.w900,
+                    //             //   inputFontColor: wbColorLogoBlue,
+                    //             //   fillColor: wbColorLightYellowGreen,
+                    //             //   textInputTypeOnKeyboard: TextInputType.number,
+                    //             // );
+
+                    //             /*--- automatisch das Alter berechnen mit package "age_calculator" ---*/
+                    //             AgeCalculator();
+                    //             DateTime birthday = dateTime;
+                    //             var age = AgeCalculator.age(birthday);
+                    //             log('0561 - CompanyScreen - Berechnetes Alter = ${age.years} Jahre + ${age.months} Monate + ${age.days} Tage');
+
+                    //             /*--- automatisch die Zeit bis zum nächsten Geburtstag berechnen mit package "age_calculator" ---*/
+                    //             DateTime nextBirthday = dateTime;
+                    //             var timeToNextBirthday =
+                    //                 AgeCalculator.timeToNextBirthday(
+                    //               DateTime(
+                    //                 nextBirthday.year,
+                    //                 nextBirthday.month,
+                    //                 nextBirthday.day,
+                    //               ),
+                    //               fromDate: DateTime.now(),
+                    //             );
+                    //             log('0574 - CompanyScreen - Zeit bis zum nächsten Geburtstag = ${timeToNextBirthday.years} Jahre + ${timeToNextBirthday.months} Monate + ${timeToNextBirthday.days} Tage');
+                    //           },
+                    //         )
+
+                    //         // /*--- WbTextFormFieldCheckDate wegen Geburtstag ---*/
+                    //         // child: WbTextFormFieldOnlyDATE(
+                    //         //   labelText: 'Geburtstag',
+                    //         //   labelFontSize20: 20,
+                    //         //   hintText: '29.02.1964',
+                    //         //   inputTextFontSize22: 22,
+                    //         //   prefixIcon: Icons.card_giftcard_outlined,
+                    //         //   prefixIconSize28: 24,
+                    //         //   inputFontWeightW900: FontWeight.w900,
+                    //         //   inputFontColor: wbColorLogoBlue,
+                    //         //   fillColor: wbColorLightYellowGreen,
+                    //         //   textInputTypeOnKeyboard: TextInputType.number,
+                    //         // ),
+
+                    //         // child: WbTextFormField(
+                    //         //   labelText: "Geburtstag",
+                    //         //   labelFontSize20: 20,
+                    //         //   hintText: "Geburtstag",
+                    //         //   hintTextFontSize16: 15,
+                    //         //   inputTextFontSize22: 22,
+                    //         //   prefixIcon: Icons.card_giftcard_outlined,
+                    //         //   prefixIconSize28: 24,
+                    //         //   inputFontWeightW900: FontWeight.w900,
+                    //         //   inputFontColor: wbColorLogoBlue,
+                    //         //   fillColor: wbColorLightYellowGreen,
+                    //         //   textInputTypeOnKeyboard: TextInputType.number,
+                    //         // ),
+                    //         ),
+                    //     /*--------------------------------- Abstand ---*/
+                    // wbSizedBoxHeight8,
+                    /*--------------------------------- Geburtstag ---*/
+                    // Row(
+                    //   children: [
+                    // SizedBox(
+                    //   width: 200,
+                    /*--- TimePickerSpinnerPopUp wegen Geburtstag ---*/
+                    // child:
+                    TimePickerSpinnerPopUp(
+                        locale: Locale('de', 'DE'),
+                        iconSize: 20,
+                        textStyle: TextStyle(
+                            backgroundColor: wbColorLightYellowGreen,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold),
+                        isCancelTextLeft: true,
+                        paddingHorizontalOverlay: 50,
+                        mode: CupertinoDatePickerMode.date,
+                        radius: 16,
+                        initTime: DateTime.now(),
+                        minTime: DateTime.now()
+                            .subtract(const Duration(days: 36500)),
+                        /*--------------------------------- *** ---*/
+                        /* das Geburtsdatum kann nicht in der Zukunft liegen */
+                        maxTime: DateTime.now().add(const Duration(days: 0)),
+                        /*--------------------------------- *** ---*/
+                        use24hFormat: true,
+                        barrierColor:
+                            Colors.black12, //Barrier Color when pop up show
+                        minuteInterval: 1,
+                        padding: const EdgeInsets.fromLTRB(12, 8, 8, 8),
+                        cancelText: 'Abbruch',
+                        confirmText: 'OK',
+                        pressType: PressType.singlePress,
+                        timeFormat: 'dd.MM.yyyy',
+                        onChange: (dateTime) {
+                          log('0539 - CompanyScreen - Geburtsdatum eingegeben: $dateTime');
+
+                          /*--- automatisch das Alter berechnen mit package "age_calculator" ---*/
+                          AgeCalculator();
+                          DateTime birthday = dateTime;
+                          var age = AgeCalculator.age(birthday);
+                          log('0561 - CompanyScreen - Berechnetes Alter = ${age.years} Jahre + ${age.months} Monate + ${age.days} Tage');
+
+                          /*--- automatisch die Zeit bis zum nächsten Geburtstag berechnen mit package "age_calculator" ---*/
+                          DateTime nextBirthday = dateTime;
+                          var timeToNextBirthday =
+                              AgeCalculator.timeToNextBirthday(
+                            DateTime(
+                              nextBirthday.year,
+                              nextBirthday.month,
+                              nextBirthday.day,
+                            ),
+                            fromDate: DateTime.now(),
+                          );
+                          setState(() {
+                            ageY = age.years;
+                            ageM = age.months;
+                            ageD = age.days;
+
+                            nextY = timeToNextBirthday.years;
+                            nextM = timeToNextBirthday.months;
+                            nextD = timeToNextBirthday.days;
+                          });
+                        }),
+                    /*--------------------------------- Abstand ---*/
+                    wbSizedBoxHeight8,
+                    /*--------------------------------- Berechnetes Alter anzeigen ---*/
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Row(
+                        children: [
+                          Text(
+                            'Berechnetes Alter:',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        /*--------------------------------- Abstand ---*/
-                        wbSizedBoxWidth8,
-                        /*--------------------------------- Alter (berechnet) ---*/
-                        /* Alter anhand vom Geburtstag automatisch berechnen und im Feld eintragen - 0491 - CompanyScreen */
-                        Expanded(
-                          child: WbTextFormField(
-                            labelText: "Alter",
-                            labelFontSize20: 20,
-                            hintText: "Alter",
-                            hintTextFontSize16: 15,
-                            inputTextFontSize22: 22,
-                            prefixIcon: Icons.calendar_today_outlined,
-                            prefixIconSize28: 24,
-                            inputFontWeightW900: FontWeight.w900,
-                            inputFontColor: wbColorLogoBlue,
-                            fillColor: wbColorLightYellowGreen,
-                            textInputTypeOnKeyboard: TextInputType.number,
+                          Expanded(
+                            child: Text(
+                              '$ageY Jahre + $ageM Monate + $ageD Tage',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.right,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Row(
+                        children: [
+                          Text(
+                            'Nächster Geburtstag:',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              '$nextY Jahre + $nextM Monate + $nextD Tage',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.right,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // ),
+                    // /*--------------------------------- Abstand ---*/
+                    // wbSizedBoxWidth8,
+                    /*--------------------------------- Alter (berechnet) ---*/
+                    /* Alter anhand vom Geburtstag automatisch berechnen und im Feld eintragen - 0491 - CompanyScreen */
+                    //     Expanded(
+                    //       // child: Text('${AgeCalculator.dateDifference(
+                    //       //   fromDate: DateTime(1964, 2, 29),
+                    //       //   toDate: DateTime.now(),
+                    //       // )}'),
+
+                    //       // child: Text('${AgeCalculator.timeToNextBirthday(
+                    //       //   DateTime(1964, 2, 29),
+                    //       //   fromDate: DateTime.now(),
+                    //       // )}'),
+
+                    //       child: WbTextFormField(
+                    //         labelText: "Alter",
+                    //         labelFontSize20: 20,
+                    //         hintText: "Alter",
+                    //         hintTextFontSize16: 15,
+                    //         inputTextFontSize22: 22,
+                    //         initialValue: '60 Jahre',
+                    //         // textInputAction:'60',
+                    //         prefixIcon: Icons.calendar_today_outlined,
+                    //         prefixIconSize28: 24,
+                    //         inputFontWeightW900: FontWeight.w900,
+                    //         inputFontColor: wbColorLogoBlue,
+                    //         fillColor: wbColorLightYellowGreen,
+                    //         textInputTypeOnKeyboard: TextInputType.number,
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                     /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight16,
                     /*--------------------------------- Notizen zum Ansprechpartner ---*/
@@ -1029,7 +1261,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
       /*--------------------------------- WbInfoContainer ---*/
       bottomSheet: WbInfoContainer(
         infoText:
-            '$inputCompanyName • $inputCompanyVNContactPerson $inputCompanyNNContactPerson\nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}\nLetzte Änderung: Am 18.12.2024 um 22:51 Uhr',  // todo 1030
+            '$inputCompanyName • $inputCompanyVNContactPerson $inputCompanyNNContactPerson\nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}\nLetzte Änderung: Am 18.12.2024 um 22:51 Uhr', // todo 1030
         wbColors: Colors.yellow,
       ),
       /*--------------------------------- ENDE ---*/

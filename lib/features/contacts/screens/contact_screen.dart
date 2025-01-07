@@ -2,12 +2,13 @@ import 'dart:developer';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:workbuddy/features/home/screens/main_selection_screen.dart';
 import 'package:workbuddy/config/wb_button_universal_2.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
 import 'package:workbuddy/config/wb_text_form_field.dart';
+import 'package:workbuddy/config/wb_text_form_field_only_date.dart';
 import 'package:workbuddy/config/wb_text_form_field_text_only.dart';
+import 'package:workbuddy/features/home/screens/main_selection_screen.dart';
 import 'package:workbuddy/shared/widgets/wb_dialog_alert_update_coming_soon.dart';
 import 'package:workbuddy/shared/widgets/wb_divider_with_text_in_center.dart';
 import 'package:workbuddy/shared/widgets/wb_drop_down_menu.dart';
@@ -318,19 +319,34 @@ class _ContactScreenState extends State<ContactScreen> {
                       children: [
                         SizedBox(
                           width: 185,
-                          child: WbTextFormField(
-                            labelText: "Geburtstag",
+
+                          /*--- WbTextFormFieldCheckDate wegen Geburtstag ---*/
+                          child: WbTextFormFieldOnlyDATE(
+                            labelText: 'Geburtstag',
                             labelFontSize20: 20,
-                            hintText: "Geburtstag",
-                            hintTextFontSize16: 15,
+                            hintText: 'Geburtstag',
                             inputTextFontSize22: 22,
-                            prefixIcon: Icons.card_giftcard_outlined,
-                            prefixIconSize28: 24,
                             inputFontWeightW900: FontWeight.w900,
                             inputFontColor: wbColorLogoBlue,
                             fillColor: wbColorLightYellowGreen,
                             textInputTypeOnKeyboard: TextInputType.number,
                           ),
+
+// child: WbTextFormFieldCheckDate(labelText: labelText, labelFontSize20: labelFontSize20, hintText: hintText, inputTextFontSize22: inputTextFontSize22, inputFontWeightW900: inputFontWeightW900, inputFontColor: inputFontColor, fillColor: fillColor)
+
+                          // child: WbTextFormField(
+                          //   labelText: "Geburtstag",
+                          //   labelFontSize20: 20,
+                          //   hintText: "Geburtstag",
+                          //   hintTextFontSize16: 15,
+                          //   inputTextFontSize22: 22,
+                          //   prefixIcon: Icons.card_giftcard_outlined,
+                          //   prefixIconSize28: 24,
+                          //   inputFontWeightW900: FontWeight.w900,
+                          //   inputFontColor: wbColorLogoBlue,
+                          //   fillColor: wbColorLightYellowGreen,
+                          //   textInputTypeOnKeyboard: TextInputType.number,
+                          // ),
                         ),
                         /*--------------------------------- Abstand ---*/
                         wbSizedBoxWidth8,
