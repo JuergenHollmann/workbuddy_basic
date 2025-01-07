@@ -45,7 +45,7 @@ class _P00RegistrationScreenState extends State<P00RegistrationScreen> {
         title: const Text(
           'Registrierung',
           style: TextStyle(
-            fontSize: 30,
+            fontSize: 20,
             fontWeight: FontWeight.w900,
             color: Colors.black, // Schriftfarbe
           ),

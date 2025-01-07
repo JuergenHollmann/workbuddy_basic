@@ -74,7 +74,7 @@ class _EMailScreenP043State extends State<EMailScreenP043> {
         title: const Text(
           'E-Mail versenden',
           style: TextStyle(
-            fontSize: 30,
+            fontSize: 20,
             fontWeight: FontWeight.w900,
             color: Colors.black, // Schriftfarbe
           ),

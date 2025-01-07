@@ -24,7 +24,7 @@ class AccountingMenu extends StatelessWidget {
         title: const Text(
           'Was möchtest Du tun?',
           style: TextStyle(
-            fontSize: 24,
+            fontSize: 20,
             fontWeight: FontWeight.w900,
             color: Colors.black, // Schriftfarbe
           ),

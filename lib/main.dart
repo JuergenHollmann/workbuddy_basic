@@ -208,7 +208,7 @@ class MainApp extends StatelessWidget {
     x - flutter_rounded_date_picker: ^3.0.4 (nicht installiert)
     x - flutter_holo_date_picker: ^2.0.0    (für Datumseinstellungen installiert)
     x - progressive_time_picker: ^1.0.1     (nur Zeitspanne, aber gut aussehend)
-  - Alter anhand vom Geburtstag automatisch berechnen und im Feld eintragen - 0491 - CompanyScreen  
+  √ Alter anhand vom Geburtstag automatisch berechnen und im Feld eintragen - 0491 - CompanyScreen √ 
   - Checklisten-App in WorkBuddy einbauen - ToDo-Liste (Aufgaben)
   - Im Validator "Die Paßwörter sind NICHT gleich!" funzt so nicht! 0050 - Validator
   - App-Icon neu erstellen (Android-Bug? - in Android nur schwarz)

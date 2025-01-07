@@ -54,7 +54,7 @@ class _ContactScreenState extends State<ContactScreen> {
           text: TextSpan(
             text: "Kontakt bearbeiten\n",
             style: TextStyle(
-              fontSize: 28,
+              fontSize: 20,
               fontWeight: FontWeight.w900,
               color: Colors.yellow,
             ),

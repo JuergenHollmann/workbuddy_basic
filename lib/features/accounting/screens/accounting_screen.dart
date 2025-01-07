@@ -41,7 +41,7 @@ class _AccountingScreenState extends State<AccountingScreen> {
         title: const Text(
           'Beleg erfassen',
           style: TextStyle(
-            fontSize: 30,
+            fontSize: 20,
             fontWeight: FontWeight.w900,
             color: Colors.black, // Schriftfarbe
           ),

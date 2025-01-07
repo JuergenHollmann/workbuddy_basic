@@ -59,7 +59,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
         title: Text(
           'Eine Firma NEU anlegen',
           style: TextStyle(
-            fontSize: 24,
+            fontSize: 20,
             fontWeight: FontWeight.w900,
             color: Colors.yellow,
           ),
@@ -144,8 +144,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
                           ),
                           child: CircleAvatar(
                             backgroundColor: wbColorButtonBlue,
-                            backgroundImage:
-                                AssetImage(
+                            backgroundImage: AssetImage(
                               "assets/company_logos/enpower_expert_logo_4_x_4.png",
                             ),
                             /*--------------------------------- *** ---*/
@@ -558,35 +557,31 @@ class _CompanyScreenState extends State<CompanyScreen> {
                                         ),
                                         fromDate: DateTime.now(),
                                       );
-                                      /*--- den Text aktualisieren ---*/
+                                      /*--- die Daten aktualisieren ---*/
                                       setState(() {
+                                        /*--- das Alter berechnen aktualisieren ---*/
                                         ageY = age.years;
                                         ageM = age.months;
                                         ageD = age.days;
-
+                                        /*--- die Zeit bis zum nächsten Geburtstag aktualisieren ---*/
                                         nextY = timeToNextBirthday.years;
                                         nextM = timeToNextBirthday.months;
                                         nextD = timeToNextBirthday.days;
-
                                         /*--- Das angeklickte Geburtsdatum im "TimePickerSpinnerPopUp" soll behalten werden ---*/
                                         selectedTime = birthday;
-                                        log('$selectedTime = $birthday');
+                                        log('0573 - CompanyScreen - selectedTime: $selectedTime = birthday: $birthday');
                                       });
-
-                                      // /*--- Das angeklickte Geburtsdatum im "TimePickerSpinnerPopUp" soll behalten werden ---*/
-                                      // initTime = birthday;
-                                      // log('$initTime = $birthday');
                                     }),
                               ],
                             ),
                           ),
-                          /*--------------------------------- Aktuelles Alter anzeigen ---*/
+                          /*--------------------------------- Alter anzeigen ---*/
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: Row(
                               children: [
                                 Text(
-                                  'Aktuelles Alter:',
+                                  'Alter:',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -603,12 +598,13 @@ class _CompanyScreenState extends State<CompanyScreen> {
                               ],
                             ),
                           ),
+                                                    /*--------------------------------- nächster Geburtstag ---*/
                           Padding(
                             padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
                             child: Row(
                               children: [
                                 Text(
-                                  'Nächster B-Day:',
+                                  'Nächster ...',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
