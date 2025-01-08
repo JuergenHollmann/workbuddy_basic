@@ -7,7 +7,6 @@ import 'package:workbuddy/features/accounting/widgets/expense_widget.dart';
 import 'package:workbuddy/features/accounting/widgets/income_widget.dart';
 import 'package:workbuddy/features/accounting/widgets/radio_button_accounting.dart';
 
-
 class AccountingScreen extends StatefulWidget {
   const AccountingScreen({
     super.key,
@@ -21,10 +20,10 @@ class AccountingScreen extends StatefulWidget {
 }
 
 class _AccountingScreenState extends State<AccountingScreen> {
-  // mit "late" wird eine Variable initialisiert ohne ihr sofort einen Wert zuzuweisen:
+  /* mit "late" wird eine Variable initialisiert ohne ihr sofort einen Wert zuzuweisen */
   late String groupValue;
 
-  // mit "initState" wird der State aufgerufen wenn ein StatefulWidget erstellt wird:
+  /* mit "initState" wird der State aufgerufen wenn ein StatefulWidget erstellt wird */
   @override
   void initState() {
     super.initState();
@@ -37,6 +36,7 @@ class _AccountingScreenState extends State<AccountingScreen> {
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 250, 242, 242),
+      /*--------------------------------- AppBar ---*/
       appBar: AppBar(
         title: const Text(
           'Beleg erfassen',
@@ -46,9 +46,10 @@ class _AccountingScreenState extends State<AccountingScreen> {
             color: Colors.black, // Schriftfarbe
           ),
         ),
-        backgroundColor: wbColorBackgroundBlue, // Hintergrundfarbe
+        backgroundColor: wbColorButtonBlue, // Hintergrundfarbe
         foregroundColor: Colors.black, // Icon-/Button-/Chevron-Farbe
       ),
+      /*--------------------------------- *** ---*/
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -57,9 +58,10 @@ class _AccountingScreenState extends State<AccountingScreen> {
               const Image(
                 image: AssetImage("assets/workbuddy_glow_schriftzug.png"),
               ),
-
-              const Divider(thickness: 3, height: 32, color: wbColorLogoBlue),
-
+              /*--------------------------------- Divider ---*/
+              const Divider(
+                  thickness: 3, height: 32, color: wbColorButtonDarkRed),
+              /*--------------------------------- *** ---*/
               Row(
                 children: [
                   RadioButtonAccounting(
@@ -72,17 +74,20 @@ class _AccountingScreenState extends State<AccountingScreen> {
                   )
                 ],
               ),
-
-              // -- Divider ---------------------------------------------
-              const Divider(thickness: 3, height: 32, color: wbColorLogoBlue),
+              /*--------------------------------- Divider ---*/
+              const Divider(
+                  thickness: 3, height: 32, color: wbColorButtonDarkRed),
+              /*--------------------------------- *** ---*/
               if (groupValue == "Einnahme")
                 const IncomeWidget()
               else
                 const ExpenseWidget(),
               // const RadioButtonAccounting(),
               wbSizedBoxHeight8,
-              // -- Divider ---------------------------------------------
-              const Divider(thickness: 3, height: 32, color: wbColorLogoBlue),
+              /*--------------------------------- Divider ---*/
+              const Divider(
+                  thickness: 3, height: 32, color: wbColorButtonDarkRed),
+              /*--------------------------------- *** ---*/
             ],
           ),
         ),

@@ -15,7 +15,7 @@ import 'package:workbuddy/features/home/screens/main_selection_screen.dart';
 import 'package:workbuddy/shared/providers/current_user_provider.dart';
 import 'package:workbuddy/shared/widgets/wb_dialog_alert_update_coming_soon.dart';
 import 'package:workbuddy/shared/widgets/wb_divider_with_text_in_center.dart';
-import 'package:workbuddy/shared/widgets/wb_drop_down_menu_with_icon.dart';
+import 'package:workbuddy/shared/widgets/wb_drop_downmenu_with_1_icon.dart';
 import 'package:workbuddy/shared/widgets/wb_info_container.dart';
 
 class ContactScreen extends StatefulWidget {
@@ -217,6 +217,8 @@ class _ContactScreenState extends State<ContactScreen> {
                       //   Icons.access_time,
                       //   Icons.face,
                       // ],
+                                leadingIconInTextField: Icons.create_new_folder_outlined,
+
                     ),
                     /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight16,
@@ -253,6 +255,8 @@ class _ContactScreenState extends State<ContactScreen> {
                       //   Icons.access_time,
                       //   Icons.face,
                       // ],
+                                leadingIconInTextField: Icons.person_2_outlined,
+
                     ),
                     /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight16,

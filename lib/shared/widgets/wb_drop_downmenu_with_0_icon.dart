@@ -3,25 +3,23 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 
-class WbDropDownMenu extends StatelessWidget {
-  const WbDropDownMenu({
+class WbDropDownMenuWithoutIcon extends StatelessWidget {
+  const WbDropDownMenuWithoutIcon({
     super.key,
     required this.label,
     required this.dropdownItems,
-    this.leadingIconInTextField,
-    this.leadingIconsInMenu,
     this.backgroundColor,
+    this.labelBackgroundColor,
   });
 
   final String label;
   final List<String> dropdownItems;
-  final IconData? leadingIconInTextField;
-  final List<IconData>? leadingIconsInMenu;
   final Color? backgroundColor;
+  final Color? labelBackgroundColor;
 
   @override
   Widget build(BuildContext context) {
-    log("0020 - WbDropDownMenu - aktiviert");
+    log("0020 - WbDropDownMenuWithoutIcon - aktiviert");
 
     return DropdownMenu(
       width: 400,
@@ -33,14 +31,8 @@ class WbDropDownMenu extends StatelessWidget {
           fontSize: 18,
           fontWeight: FontWeight.bold,
           color: wbColorButtonBlue,
-          backgroundColor: backgroundColor,
+          backgroundColor: labelBackgroundColor,
         ),
-      ),
-      leadingIcon: Icon(
-        // sichtbar im Statusfeld
-        //Icons.folder_shared_outlined,
-        leadingIconInTextField,
-        size: 30,
       ),
       menuHeight: 320, // ausklappbare Maximalhöhe
       hintText: "Bitte auswählen", // funzt nicht?
@@ -68,11 +60,6 @@ class WbDropDownMenu extends StatelessWidget {
                 fontSize: 22,
               ),
             ),
-          ),
-          leadingIcon: Icon(
-            // Icons.pending_actions_outlined,
-            leadingIconsInMenu?[index],
-            size: 30,
           ),
           value: index,
           label: dropdownItems[index],

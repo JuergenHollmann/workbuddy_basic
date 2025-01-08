@@ -164,7 +164,7 @@ class MainApp extends StatelessWidget {
   √ WbButtonUniversal2 - Beispiel: WorkBuddy beenden √
   √ "Spacer(flex: 1)" waren das Problem, warum ich nicht mehr die Seite öffnen konnte! √
   
-- kann gelöscht werden: lib/config/wb_dropdownmenu.dart 
+- kann gelöscht werden: lib/config/wb_dropdownmenu.dart
 - kann später evtl. gelöscht werden: lib/shared/data/user.dart
 - kann später evtl. gelöscht werden: lib/features/authentication/repositories/mock_user_database.dart
 - kann später evtl. gelöscht werden: lib/features/authentication/repositories/mock_user_repository.dart
@@ -180,7 +180,7 @@ class MainApp extends StatelessWidget {
   - kann gelöscht werden: "WBTextfieldNotice"
   - kann gelöscht werden: "WbDividerWithSmallTextCenter"
   - kann gelöscht werden: "WbDropdownButtonFormfield" 
-  - kann gelöscht werden: "WbDropDownMenuWithIcon2"
+  - kann gelöscht werden: "WbDropDownMenuWithAnyIcon2"
   - kann gelöscht werden: "SplashScreen"
   √ wurde gelöscht: "WbButtonUniversal" √
   √ wurde gelöscht: "WBRedButton" √

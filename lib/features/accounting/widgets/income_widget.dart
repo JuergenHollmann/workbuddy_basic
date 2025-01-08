@@ -40,7 +40,7 @@ class _IncomeWidgetState extends State<IncomeWidget> {
 //         ),
 
         // ------ Wem wurde etwas verkauft (Kunde)? ------
-        const WbDropDownMenuWithIcon(
+        const WbDropDownMenuWithAnyIcon(
           headlineText: "Wem wurde etwas verkauft?",
           hintText: "Welchem Kunden?",
         ),
@@ -48,7 +48,7 @@ class _IncomeWidgetState extends State<IncomeWidget> {
         wbSizedBoxHeight16,
 
         // ------ Was wurde verkauft? ------
-        const WbDropDownMenuWithIcon(
+        const WbDropDownMenuWithAnyIcon(
           headlineText: "Was wurde verkauft?",
           hintText: "Welches Produkt oder Dienstleistung?",
         ),
@@ -71,7 +71,7 @@ class _IncomeWidgetState extends State<IncomeWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // ------ Einheit ------
-                  WbDropDownMenuWithIcon(
+                  WbDropDownMenuWithAnyIcon(
                     headlineText: "Einheit(en)",
                     hintText: "? ? ? ? ? ?",
                   ),
@@ -85,7 +85,7 @@ class _IncomeWidgetState extends State<IncomeWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // ------ MwSt. % ------
-                  WbDropDownMenuWithIcon(
+                  WbDropDownMenuWithAnyIcon(
                     headlineText: "MwSt. %",
                     hintText: "? ? ? ? ? ?",
                   ),
@@ -154,7 +154,7 @@ class _IncomeWidgetState extends State<IncomeWidget> {
         wbSizedBoxHeight16,
 
         // ------ Warengruppe ------
-        const WbDropDownMenuWithIcon(
+        const WbDropDownMenuWithAnyIcon(
           headlineText: "Warengruppe",
           hintText: "Bitte die Warengruppe zuordnen",
         ),
@@ -162,7 +162,7 @@ class _IncomeWidgetState extends State<IncomeWidget> {
         wbSizedBoxHeight16,
 
         // ------ Wer hat verkauft? ------
-        const WbDropDownMenuWithIcon(
+        const WbDropDownMenuWithAnyIcon(
           headlineText: "Wer hat den Verkauf gemacht?",
           hintText: "Bitte Verkäufer*in zuordnen",
         ),

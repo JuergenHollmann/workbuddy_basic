@@ -15,7 +15,7 @@ import 'package:workbuddy/features/home/screens/main_selection_screen.dart';
 import 'package:workbuddy/shared/providers/current_user_provider.dart';
 import 'package:workbuddy/shared/widgets/wb_dialog_alert_update_coming_soon.dart';
 import 'package:workbuddy/shared/widgets/wb_divider_with_text_in_center.dart';
-import 'package:workbuddy/shared/widgets/wb_drop_down_menu_with_icon.dart';
+import 'package:workbuddy/shared/widgets/wb_drop_downmenu_with_1_icon.dart';
 import 'package:workbuddy/shared/widgets/wb_info_container.dart';
 
 class CompanyScreen extends StatefulWidget {
@@ -255,6 +255,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
                       //   Icons.access_time,
                       //   Icons.face,
                       // ],
+                      leadingIconInTextField: Icons.create_new_folder_outlined,
                     ),
                     /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight8,
@@ -375,8 +376,9 @@ class _CompanyScreenState extends State<CompanyScreen> {
                             ),
                           ),
                         ),
-                        /*--------------------------------- Firmensitz | Ort ---*/
+                        /*--------------------------------- Abstand ---*/
                         wbSizedBoxWidth8,
+                        /*--------------------------------- Firmensitz | Ort ---*/
                         Expanded(
                           child: WbTextFormFieldTEXTOnly(
                             labelText: "Firmensitz | Ort",
@@ -390,8 +392,9 @@ class _CompanyScreenState extends State<CompanyScreen> {
                         ),
                       ],
                     ),
-                    /*--------------------------------- WbDividerWithTextInCenter ---*/
+                    /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight8,
+                    /*--------------------------------- Divider ---*/
                     WbDividerWithTextInCenter(
                       wbColor: wbColorLogoBlue,
                       wbText: 'Ansprechpartner',
@@ -399,7 +402,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
                       wbFontSize12: 18,
                       wbHeight3: 3,
                     ),
-
+                    /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight16,
                     /*--------------------------------- Anrede ---*/
                     WbDropDownMenu(
@@ -415,15 +418,19 @@ class _CompanyScreenState extends State<CompanyScreen> {
                         "Frau Prof.",
                         "Prof.",
                       ],
-                      // leadingIconsInMenu: [
-                      //   // hat hier keine Auswikung // todo 0233 + 0406
-                      //   Icons.access_time,
-                      //   Icons.airline_seat_legroom_normal,
-                      //   Icons.access_time,
-                      //   Icons.dangerous,
-                      //   Icons.access_time,
-                      //   Icons.face,
-                      // ],
+                      leadingIconsInMenu: [
+                        // als Map oder besser noch aus der Datenbank auslesen - todo 0233 + 0406
+                        Icons.person_2_outlined,
+                        Icons.person_2_outlined,
+                        Icons.person_2_outlined,
+                        Icons.person_2_outlined,
+                        Icons.person_2_outlined,
+                        Icons.person_2_outlined,
+                        Icons.person_2_outlined,
+                        Icons.person_2_outlined,
+                        Icons.person_2_outlined,
+                      ],
+                      leadingIconInTextField: Icons.person_2_outlined,
                     ),
                     /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight16,
@@ -661,7 +668,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
                     wbSizedBoxHeight16,
                     /*--------------------------------- Notizen zum Ansprechpartner ---*/
                     WbTextFormField(
-                      labelText: "Notizen Ansprechpartner",
+                      labelText: "Notizen zum Ansprechpartner",
                       labelFontSize20: 20,
                       hintText:
                           "Beispiele: Hobbys, Lieblingswein, Verein, etc.",

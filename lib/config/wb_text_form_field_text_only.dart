@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:workbuddy/config/wb_colors.dart';
 
 class WbTextFormFieldTEXTOnly extends StatelessWidget {
   const WbTextFormFieldTEXTOnly({
@@ -15,9 +14,10 @@ class WbTextFormFieldTEXTOnly extends StatelessWidget {
     // this.prefixIcon,
     // this.prefixIconSize28,
     required this.fillColor,
+    this.labelBackgroundColor,
     this.textInputTypeOnKeyboard,
     this.textInputAction, // default: Enter | TextInputAction.done
-    this.controller,
+    this.controller, 
     // this.suffixIcon,
     // this.suffixIconSize48,
     // this.autofillHints,
@@ -33,6 +33,7 @@ class WbTextFormFieldTEXTOnly extends StatelessWidget {
   final FontWeight inputFontWeightW900;
   final Color inputFontColor;
   final Color fillColor;
+  final Color? labelBackgroundColor;
   final TextInputType? textInputTypeOnKeyboard;
   final TextEditingController? controller;
   final TextInputAction? textInputAction;
@@ -62,7 +63,7 @@ class WbTextFormFieldTEXTOnly extends StatelessWidget {
         floatingLabelAlignment: FloatingLabelAlignment.start,
         filled: true,
         fillColor: fillColor, //wbColorBackgroundBlue
-        contentPadding: const EdgeInsets.fromLTRB(16, 16,16, 8),
+        contentPadding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
 
         /*--- errorStyle ---*/
         errorStyle: const TextStyle(
@@ -75,11 +76,10 @@ class WbTextFormFieldTEXTOnly extends StatelessWidget {
         /*--- labelStyle ---*/
         labelText: labelText,
         labelStyle: TextStyle(
-                    color: Colors.blue,
-
+          color: Colors.blue,
           fontSize: labelFontSize20,
           fontWeight: FontWeight.bold,
-          backgroundColor: wbColorLightYellowGreen,
+          backgroundColor: labelBackgroundColor,
         ),
 
         // /*--- prefixIcon ---*/

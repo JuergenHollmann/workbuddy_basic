@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:workbuddy/config/wb_colors.dart';
 
 class WbTextFormField extends StatelessWidget {
   const WbTextFormField({
@@ -22,6 +21,7 @@ class WbTextFormField extends StatelessWidget {
     this.controller,
     this.onChanged,
     this.initialValue,
+    this.labelBackgroundColor,
 
     // required Null Function(String userNameTEC) onChanged,
     // this.suffixIcon,
@@ -40,6 +40,7 @@ class WbTextFormField extends StatelessWidget {
   final FontWeight inputFontWeightW900;
   final Color inputFontColor;
   final Color fillColor;
+  final Color? labelBackgroundColor;
   final TextInputType? textInputTypeOnKeyboard;
   final TextEditingController? controller;
   final TextInputAction? textInputAction;
@@ -76,7 +77,8 @@ class WbTextFormField extends StatelessWidget {
           filled: true,
           fillColor: fillColor, //wbColorBackgroundBlue
           //contentPadding: const EdgeInsets.fromLTRB(48, 16, 16, 16),
-          contentPadding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
+          contentPadding: const EdgeInsets.fromLTRB(
+              16, 8, 8, 8), // für den Textinhalt im Textfeld
 
           /*--- errorStyle ---*/
           errorStyle: const TextStyle(
@@ -92,12 +94,12 @@ class WbTextFormField extends StatelessWidget {
             color: Colors.blue,
             fontSize: labelFontSize20,
             fontWeight: FontWeight.bold,
-            backgroundColor: wbColorLightYellowGreen,
+            backgroundColor: labelBackgroundColor,
           ),
 
           /*--- prefixIcon ---*/
           prefixIcon: Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
             child: Icon(
               size: prefixIconSize28, //28
               prefixIcon, //Icons.email_rounded,

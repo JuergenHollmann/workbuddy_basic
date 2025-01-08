@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 
-class WbDropDownMenuWithIcon extends StatefulWidget {
-  const WbDropDownMenuWithIcon({
+class WbDropDownMenuWithAnyIcon extends StatefulWidget {
+  const WbDropDownMenuWithAnyIcon({
     super.key,
     required this.headlineText,
     required this.hintText,
@@ -12,10 +12,11 @@ class WbDropDownMenuWithIcon extends StatefulWidget {
   final String hintText;
 
   @override
-  State<WbDropDownMenuWithIcon> createState() => _WbDropDownMenuWithIconState();
+  State<WbDropDownMenuWithAnyIcon> createState() =>
+      _WbDropDownMenuWithAnyIconState();
 }
 
-class _WbDropDownMenuWithIconState extends State<WbDropDownMenuWithIcon> {
+class _WbDropDownMenuWithAnyIconState extends State<WbDropDownMenuWithAnyIcon> {
   @override
   Widget build(BuildContext context) {
     return Column(
