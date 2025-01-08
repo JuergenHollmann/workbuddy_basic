@@ -17,7 +17,8 @@ class WbTextFormFieldTEXTOnly extends StatelessWidget {
     this.labelBackgroundColor,
     this.textInputTypeOnKeyboard,
     this.textInputAction, // default: Enter | TextInputAction.done
-    this.controller, 
+    this.controller,
+    this.onChanged,
     // this.suffixIcon,
     // this.suffixIconSize48,
     // this.autofillHints,
@@ -37,6 +38,7 @@ class WbTextFormFieldTEXTOnly extends StatelessWidget {
   final TextInputType? textInputTypeOnKeyboard;
   final TextEditingController? controller;
   final TextInputAction? textInputAction;
+  final Function(String inputInWbTextFormField)? onChanged;
   // final IconData? suffixIcon;
   // final double? suffixIconSize48;
   // final List<String>? autofillHints;
@@ -116,6 +118,10 @@ class WbTextFormFieldTEXTOnly extends StatelessWidget {
 
       /*--- autofillHints ---*/
       // autofillHints: autofillHints, // wie funzt das?
+
+      /*--- onChanged ---*/
+      controller: controller,
+      onChanged: onChanged,
 
       /*--- onChanged ---*/
       // onChanged: (String newInputPassword) {

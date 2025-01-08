@@ -1,19 +1,15 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:workbuddy/config/wb_button_universal_2.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
 import 'package:workbuddy/config/wb_text_form_field.dart';
 import 'package:workbuddy/config/wb_text_form_field_text_only.dart';
 import 'package:workbuddy/features/accounting/screens/accounting_menu.dart';
-import 'package:workbuddy/features/companies/screens/company_screen.dart';
-import 'package:workbuddy/shared/providers/current_user_provider.dart';
 import 'package:workbuddy/shared/widgets/wb_divider_with_text_in_center.dart';
 import 'package:workbuddy/shared/widgets/wb_drop_downmenu_with_0_icon.dart';
 import 'package:workbuddy/shared/widgets/wb_drop_downmenu_with_1_icon.dart';
-import 'package:workbuddy/shared/widgets/wb_info_container.dart';
 
 class ExpenseWidget extends StatefulWidget {
   const ExpenseWidget({super.key});
@@ -22,19 +18,30 @@ class ExpenseWidget extends StatefulWidget {
   State<ExpenseWidget> createState() => _ExpenseWidgetState();
 }
 
+/*--------------------------------- Controller ---*/
+final TextEditingController itemPriceController = TextEditingController();
+final TextEditingController quantityController = TextEditingController();
+final TextEditingController quantityPriceController = TextEditingController();
+final TextEditingController taxPercentController = TextEditingController();
+
 class _ExpenseWidgetState extends State<ExpenseWidget> {
+/* Variablen um die Preise zu berechnen - 0260 */
+  double itemPrice = 0;
+  double quantity = 0;
+  double quantityPrice = 0;
+  double taxPercent = 0;
+
   @override
   Widget build(BuildContext context) {
     log("0024 - ExpenseWidget - wird benutzt");
 
     return
-
-        // #Scaffold(
+        // Scaffold(
         //   backgroundColor: const Color.fromARGB(255, 250, 242, 242),
         //   /*--------------------------------- AppBar ---*/
         //   appBar:
 
-        // return AppBar(
+        //  AppBar(
         //   title: const Text(
         //     'Beleg erfassen',
         //     style: TextStyle(
@@ -46,7 +53,8 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
         //   backgroundColor: wbColorButtonDarkRed, // Hintergrundfarbe
         //   foregroundColor: Colors.white, // Icon-/Button-/Chevron-Farbe
         // ),
-        /*--------------------------------- *** ---*/
+        // /*--------------------------------- *** ---*/
+        // body:
         Column(
       children: [
         /*--------------------------------- Abstand ---*/
@@ -63,14 +71,14 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
             "WOOLWORTH",
             "Tankstelle",
           ],
-          // leadingIconsInMenu: [
-          //   Icons.access_time,
-          //   Icons.house_outlined,
-          //   Icons.handyman_outlined,
-          //   Icons.cable_outlined,
-          //   Icons.pending_actions_outlined,
-          //   Icons.car_repair_outlined,
-          // ],
+          leadingIconsInMenu: [
+            Icons.send_rounded,
+            Icons.cancel_outlined,
+            Icons.handyman_outlined,
+            Icons.cable_outlined,
+            Icons.pending_actions_outlined,
+            Icons.car_repair_outlined,
+          ],
           leadingIconInTextField: Icons.house_outlined,
           backgroundColor: wbColorBackgroundRed,
         ),
@@ -88,14 +96,14 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
             "Tanken",
           ],
           backgroundColor: wbColorBackgroundRed,
-          // leadingIconsInMenu: [
-          //   Icons.access_time,
-          //   Icons.house_outlined,
-          //   Icons.handyman_outlined,
-          //   Icons.cable_outlined,
-          //   Icons.pending_actions_outlined,
-          //   Icons.car_repair_outlined,
-          // ],
+          leadingIconsInMenu: [
+            Icons.toc_outlined,
+            Icons.token_outlined,
+            Icons.handyman_outlined,
+            Icons.cable_outlined,
+            Icons.pending_actions_outlined,
+            Icons.car_repair_outlined,
+          ],
           leadingIconInTextField: Icons.card_travel_outlined,
         ),
         /*--------------------------------- Abstand ---*/
@@ -126,6 +134,15 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                   decimal: true,
                   signed: true, // erlaubt ein "+" oder "-" Zeichen vor der Zahl
                 ),
+                /*--------------------------------- onChanged ---*/
+                controller: quantityController,
+                onChanged: (String quantityController) {
+                  log("0140 - ExpenseWidget - quantityController - Eingabe: $quantityController - als String");
+                  quantity = double.parse(quantityController);
+                  setState(() => quantity = double.parse(quantityController));
+                  log("0144 - ExpenseWidget - quantityController - Eingabe: $quantity - als double");
+                },
+                /*--------------------------------- *** ---*/
               ),
             ),
             /*--------------------------------- Abstand ---*/
@@ -168,6 +185,15 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                   decimal: true,
                   signed: true, // erlaubt ein "+" oder "-" Zeichen vor der Zahl
                 ),
+                /*--------------------------------- onChanged ---*/
+                controller: itemPriceController,
+                onChanged: (String itemPriceController) {
+                  log("0183 - ExpenseWidget - itemPriceController - Eingabe: $itemPriceController - als String");
+                  itemPrice = double.parse(itemPriceController);
+                  setState(() => itemPrice = double.parse(itemPriceController));
+                  log("0186 - ExpenseWidget - itemPriceController - Eingabe: $itemPrice - als double");
+                },
+                /*--------------------------------- *** ---*/
               ),
             ),
             /*--------------------------------- Abstand ---*/
@@ -188,13 +214,23 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                   decimal: true,
                   signed: true, // erlaubt ein "+" oder "-" Zeichen vor der Zahl
                 ),
+                /*--------------------------------- onChanged ---*/
+                controller: quantityPriceController,
+                onChanged: (String quantityPriceController) {
+                  log("0212 - ExpenseWidget - quantityPriceController - Eingabe: $quantityPriceController - als String");
+                  quantityPrice = double.parse(quantityPriceController);
+                  setState(() =>
+                      quantityPrice = double.parse(quantityPriceController));
+                  log("0215 - ExpenseWidget - quantityPriceController - Eingabe: $quantityPrice - als double");
+                },
+                /*--------------------------------- *** ---*/
               ),
             ),
           ],
         ),
         /*--------------------------------- Abstand ---*/
         wbSizedBoxHeight16,
-        /*--------------------------------- MWSt. berechnet ---*/
+        /*--------------------------------- Container für berechnete MWSt. anzeigen ---*/
         Container(
           width: 400,
           decoration: ShapeDecoration(
@@ -258,6 +294,27 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
             ],
           ),
         ),
+        ElevatedButton(
+            onPressed: () {
+              /* die einzelnen Positionen berechnen */
+              // double itemPrice = 0;
+              // double quantity = 0;
+              // double quantityPrice = 0;
+              // double taxPercent = 0;
+// itemPriceController
+// quantityController
+// quantityPriceController
+// taxPercentController
+
+              // quantityPriceController.text = itemPriceController.text * quantityController.text;
+              log('0260 - ExpenseWidget - String: ${itemPriceController.text} - double: $itemPrice €');
+              log('0261 - ExpenseWidget - String: ${quantityController.text} - double: $quantity');
+              log('0262 - ExpenseWidget - String: ${quantityPriceController.text} - double: $quantityPrice €');
+              log('0263 - ExpenseWidget - String: ${taxPercentController.text}');
+              quantityPrice = itemPrice * quantity;
+              log('0265 - ExpenseWidget - Gesamtpreis berechnet: $quantityPrice €');
+            },
+            child: Text('Berechnen')),
         /*--------------------------------- Divider ---*/
         const Divider(thickness: 3, height: 32, color: wbColorButtonDarkRed),
         /*--------------------------------- Abstand ---*/
@@ -273,6 +330,15 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
             'Versicherung'
           ],
           leadingIconInTextField: Icons.create_new_folder_outlined,
+          leadingIconsInMenu: [
+            Icons.radio_button_checked_outlined,
+            Icons.radio_button_checked_outlined,
+            Icons.radio_button_checked_outlined,
+            Icons.radio_button_checked_outlined,
+            Icons.radio_button_checked_outlined,
+            Icons.radio_button_checked_outlined,
+            Icons.radio_button_checked_outlined,
+          ],
           backgroundColor: wbColorBackgroundRed,
         ),
         /*--------------------------------- Abstand ---*/
@@ -280,8 +346,36 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
         /*--------------------------------- Wer hat eingekauft? ---*/
         WbDropDownMenu(
           label: 'Wer hat eingekauft?',
-          dropdownItems: ['Jürgen', 'Doris', 'Almir', 'Mario', 'Jochen'],
+          dropdownItems: [
+            'Jürgen',
+            'Doris',
+            'Almir',
+            'Mario',
+            'Jochen',
+            'Johanna',
+            'Maria',
+            'Josef',
+            'Gerhard',
+            'Klaus',
+          ],
           leadingIconInTextField: Icons.person_2_outlined,
+          leadingIconsInMenu: [
+            Icons.person_2_outlined,
+            Icons.person_2_outlined,
+            Icons.person_2_outlined,
+            Icons.person_2_outlined,
+            Icons.person_2_outlined,
+            Icons.person_2_outlined,
+            Icons.person_2_outlined,
+            Icons.person_2_outlined,
+            Icons.person_2_outlined,
+            Icons.person_2_outlined,
+            Icons.person_2_outlined,
+            Icons.person_2_outlined,
+            Icons.person_2_outlined,
+            Icons.person_2_outlined,
+            Icons.person_2_outlined,
+          ],
           backgroundColor: wbColorBackgroundRed,
         ),
         /*--------------------------------- Abstand ---*/
@@ -329,24 +423,8 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
               }),
         )
       ],
+      // ),
     );
-            //   /*--------------------------------- AppBar ---*/
-    //   appBar:
-
-    // return AppBar(
-    //   title: const Text(
-    //     'Beleg erfassen',
-    //     style: TextStyle(
-    //       fontSize: 20,
-    //       fontWeight: FontWeight.w900,
-    //       color: Colors.white, // Schriftfarbe
-    //     ),
-    //   ),
-    //   backgroundColor: wbColorButtonDarkRed, // Hintergrundfarbe
-    //   foregroundColor: Colors.white, // Icon-/Button-/Chevron-Farbe
-    // ),
-    /*--------------------------------- *** ---*/
-
     // /*--------------------------------- WbInfoContainer ---*/
     // bottomSheet: WbInfoContainer(
     //   infoText:
