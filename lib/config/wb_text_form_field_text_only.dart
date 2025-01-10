@@ -59,7 +59,7 @@ class WbTextFormFieldTEXTOnly extends StatelessWidget {
         color: inputFontColor,
         height: 1, // Höhe des Textfeldes
       ),
-      textAlign: TextAlign.left,
+      textAlign: TextAlign.right,
       textInputAction: textInputAction,
       //obscureText: visibilityPassword, // Passwort sichtbar?
       /*--------------------------------- InputDecoration ---*/
@@ -69,6 +69,7 @@ class WbTextFormFieldTEXTOnly extends StatelessWidget {
         fillColor: fillColor, //wbColorBackgroundBlue
         contentPadding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
         constraints: BoxConstraints.tightFor(height: 46),
+
         /*--- errorStyle ---*/
         errorStyle: const TextStyle(
           fontSize: 18,

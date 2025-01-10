@@ -10,7 +10,7 @@ class WbDropDownMenuWithoutIcon extends StatelessWidget {
     required this.dropdownItems,
     this.backgroundColor,
     this.labelBackgroundColor,
-    this.width,
+    this.width, this.textFieldWidth,
   });
 
   final String label;
@@ -18,13 +18,15 @@ class WbDropDownMenuWithoutIcon extends StatelessWidget {
   final Color? backgroundColor;
   final Color? labelBackgroundColor;
   final double? width;
+  final double? textFieldWidth;
 
   @override
   Widget build(BuildContext context) {
     log("0020 - WbDropDownMenuWithoutIcon - aktiviert");
 
     return DropdownMenu(
-      width: 400,
+      textAlign: TextAlign.start, // Textausrichtung im Textfeld
+      width: textFieldWidth, // Breite des Textfeldes
       textStyle: TextStyle(
           fontSize: 22, fontWeight: FontWeight.w900, color: wbColorLogoBlue),
       label: Text(
@@ -36,11 +38,14 @@ class WbDropDownMenuWithoutIcon extends StatelessWidget {
           backgroundColor: labelBackgroundColor,
         ),
       ),
-      menuHeight: 320, // ausklappbare Maximalhöhe
-      hintText: "Bitte auswählen", // funzt nicht?
+      menuHeight: 500, // ausklappbare Maximalhöhe
+      hintText: "Auswahl", // funzt nur mit "FloatingLabelBehavior.always"
       inputDecorationTheme: InputDecorationTheme(
         contentPadding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
-                constraints: BoxConstraints.tightFor(height: 46),
+        constraints: BoxConstraints.tightFor(height: 46),
+        floatingLabelAlignment:
+            FloatingLabelAlignment.start, // Position des Labels oben
+        floatingLabelBehavior: FloatingLabelBehavior.auto,
         filled: true,
         fillColor: backgroundColor,
 

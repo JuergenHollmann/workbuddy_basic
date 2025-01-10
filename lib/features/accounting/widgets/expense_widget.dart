@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:money2/money2.dart';
 import 'package:workbuddy/config/wb_button_universal_2.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
@@ -19,10 +20,20 @@ class ExpenseWidget extends StatefulWidget {
   State<ExpenseWidget> createState() => _ExpenseWidgetState();
 }
 
-/* Variablen um die Preise zu berechnen - 0260 */
-double quantity = 0.00; // Eingabe
-double quantityPrice = 0.00; // berechnet
+/*--------------------------------- Controller ---*/
+final TextEditingController quantityController =
+    TextEditingController(); // Eingabe
+final TextEditingController itemController = TextEditingController(); // Eingabe
+final TextEditingController taxPercentController =
+    TextEditingController(); // Eingabe
 
+final TextEditingController bruttoItemPriceController =
+    TextEditingController(); // Eingabe oder berechnet
+final TextEditingController bruttoQuantityPriceController =
+    TextEditingController(); // Eingabe oder berechnet
+
+/*--------------------------------- Variablen um die Preise zu berechnen ---*/
+double quantity = 0.00; // Eingabe
 String item = 'Stk'; // Eingabe
 
 double taxPercent = 19.00; // Eingabe
@@ -41,19 +52,8 @@ double bruttoQuantityPrice = 0.00; // Eingabe oder berechnet
 double taxSum = 0.00; // berechnet
 double totalSum = 0.00; // berechnet
 
-/*--------------------------------- Controller ---*/
-final TextEditingController quantityController =
-    TextEditingController(); // Eingabe
-final TextEditingController itemController = TextEditingController(); // Eingabe
-final TextEditingController taxPercentController =
-    TextEditingController(); // Eingabe
-
-final TextEditingController bruttoItemPriceController =
-    TextEditingController(); // Eingabe oder berechnet
-final TextEditingController bruttoQuantityPriceController =
-    TextEditingController(); // Eingabe oder berechnet
-
 void getCalculationResult() {
+  packageMoney2Test();
   /* die einzelnen Positionen berechnen */
   /* die Ergebnisse sind mit ".toStringAsFixed(2)" auf 2 Stellen nach dem Komma gekürzt */
   log("----------------------------------------------------------------------------------------------------------------");
@@ -79,7 +79,7 @@ void getCalculationResult() {
   log('0079 - getCalculationResult ---> bruttoItemPrice: $bruttoItemPrice - OHNE "NumberFormat"');
   /* Zahlenformat mit Tausender-Trennzeichen + 2 Dezimalstellen in deutsch-locale */
   NumberFormat formatter = NumberFormat('#,##0.00', 'de_DE');
-  String bruttoItemPriceX = formatter.format(bruttoItemPrice); // funzt nicht
+  String bruttoItemPriceX = formatter.format(bruttoItemPrice);
   log('0083 - getCalculationResult ---> bruttoItemPrice: $bruttoItemPriceX mit - "NumberFormat formatter = NumberFormat("#,##0.00", "de_DE")" - ');
   log('0084 - getCalculationResult ---> Netto-Einzelpreis aus dem Brutto-Einzelpreis berechnet: ${nettoItemPrice.toStringAsFixed(2)} €');
   log('0085 - getCalculationResult ---> Rundungsfehler wegen Rechnungszahl "nettoItemPrice": $nettoItemPrice');
@@ -114,9 +114,6 @@ void getCalculationResult() {
   log('0113 - getCalculationResult - Mwst. aus dem Brutto-Gesamtpreis berechnet: ${taxOnBruttoQuantityPrice.toStringAsFixed(2)} €');
   log("----------------------------------------------------------------------------------------------------------------");
 
-  // double getInvoiceResult(doublebruttoItemPrice, double quantity) {
-  // double taxPercent = 19;
-
   taxSum = bruttoItemPrice * quantity * (taxPercent / 100);
   totalSum = bruttoItemPrice * quantity + taxSum;
   nettoItemPrice = bruttoItemPrice / (1 + 0.19);
@@ -127,6 +124,41 @@ void getCalculationResult() {
   log("Mehrwertsteuer:       ${taxSum.toStringAsFixed(2)} €");
   log("Gesamtsumme           ${totalSum.toStringAsFixed(2)} €");
   log("----------------------------------------------------------------------------------------------------------------");
+}
+
+/*--------------------------------- package money2 ---*/
+void packageMoney2Test() {
+  log("----------------------------------------------------------------------------------------------------------------");
+  /* Eine Währung erstellen, in der 10,00 EUR gespeichert sind.
+   Hinweis: Wir verwenden die kleinere Einheit (z. B. Cent), wenn wir den Wert übergeben. Also sind 10,00 EUR = 1000 Cent. */
+  final moneyTest1 = Money.fromInt(10025090,
+      isoCode: 'EUR'); // // die Zahl ist ein Cent-Betrag!
+  log('0001 - moneyTest1: $moneyTest1'); // leider noch ohne Tausender-Separator und Leerzeichen beim Währungssymbol
+  log('0002 - moneyTest2: ${moneyTest1.format('###,###.#0 S')} ---> das ist der küzeste und BESTE Code √');
+
+  /* Definiere den Tausender-Separator und das Leerzeichen beim Währungssymbol EURO */
+  /* Benutze Kommas ',' für den integer/fractional Separator und Punkte '.' für den Tausender-Separator ---> 1.000,00 */
+  final euro = Currency.create('EUR', 2,
+      symbol: '€',
+      groupSeparator: '.',
+      decimalSeparator: ',',
+      pattern: '#,##0.00 S');
+  final moneyTest3 = Money.fromIntWithCurrency(
+      10025090, euro); // die Zahl ist ein Cent-Betrag!
+  log('0003 - moneyTest3: $moneyTest3'); // Ergebnis: 100.250,90 €
+
+  /* Eine [Money]-Instanz aus einem String mit [Currency.parse] erstellen - Währung: € - */
+  final moneyTest4 = CommonCurrencies().euro.parse(r'10,50');
+  log('0004 - moneyTest4: ${moneyTest4.format('0.00 S')}'); //  S = Währungszeichen
+
+  /* Die [Währung] von moneyTest3 ist USD. */
+  final moneyTest5 = CommonCurrencies().usd.parse(r'$10.51');
+  log('0003 - moneyTest3: ${moneyTest5.format('CCS 0.00')}'); // CC = Land / S = Währungszeichen
+
+  /* Zahlenformat mit Tausender-Trennzeichen + 2 Dezimalstellen in deutsch-locale */ // funzt HIER nicht
+  // NumberFormat formatter = NumberFormat('#,##0.00', 'de_DE');
+  // String moneyTest2formatiert = formatter.format(moneyTest2);
+  // log('0004 - moneyTest2 wurde formatiert: $moneyTest2formatiert');
 }
 
 class _ExpenseWidgetState extends State<ExpenseWidget> {
@@ -213,7 +245,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
         /*--------------------------------- Divider ---*/
         WbDividerWithTextInCenter(
             wbColor: wbColorButtonDarkRed,
-            wbText: 'Einkaufspreis',
+            wbText: 'Brutto-Einkaufspreis in €',
             wbTextColor: wbColorButtonDarkRed,
             wbFontSize12: 18,
             wbHeight3: 3),
@@ -338,85 +370,55 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
         /*--------------------------------- Anzahl ---*/
         Row(
           children: [
-            Text(
-              'Anzahl der Artikel?         ',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            /*--------------------------------- Abstand ---*/
-            wbSizedBoxWidth16,
-            /*--------------------------------- Anzahl der Artikel ---*/
-            Expanded(
-              child: SizedBox(
-                width: 180,
-                child: WbTextFormFieldTEXTOnly(
-                  labelText: "Anzahl",
-                  labelFontSize20: 18,
-                  hintText: "Anzahl",
-                  inputTextFontSize22: 22,
-                  inputFontWeightW900: FontWeight.w900,
-                  inputFontColor: wbColorLogoBlue,
-                  fillColor: wbColorBackgroundRed,
-                  textInputTypeOnKeyboard: TextInputType.numberWithOptions(
-                    decimal: true,
-                    signed:
-                        true, // erlaubt ein "+" oder "-" Zeichen vor der Zahl
-                  ),
-                  /*--------------------------------- onChanged ---*/
-                  controller: quantityController,
-                  onChanged: (String quantityController) {
-                    log("----------------------------------------------------------------------------------------------------------------");
-                    log("0367 - ExpenseWidget - quantityController - Eingabe: $quantityController - als String");
-                    /* wenn beim Löschen aus Versehen eine "null" entsehen sollte, muss die Ziffer "0" erscheinen */
-                    if (quantityController == "") {
-                      log('0370 - ExpenseWidget - quantityController - Eingabe gelöscht: "$quantityController" ---> als String');
-                      quantityController = "0.00";
-
-                      log('0372 - ExpenseWidget - quantityController - umgewandelt in "$quantityController" ---> als String');
-                      /* die Ziffern "0.00" sollen im TextFormField erscheinen */
-                      // Code todo
-                    }
-                    setState(() {
-                      quantity = double.parse(quantityController);
-                      log("0376 - ExpenseWidget - quantityController - setState ausgeführt: $quantity ---> als double");
-                      log('0379 - ExpenseWidget - quantityController - setState ausgeführt: "$quantityController" ---> im TextFormField eingetragen? ---> Ja');
-                    });
-                    getCalculationResult();
-                  },
-                  /*--------------------------------- *** ---*/
+            SizedBox(
+              width: 170,
+              child: WbTextFormFieldTEXTOnly(
+                labelText: "Anzahl",
+                labelFontSize20: 18,
+                hintText: "Anzahl",
+                inputTextFontSize22: 22,
+                inputFontWeightW900: FontWeight.w900,
+                inputFontColor: wbColorLogoBlue,
+                fillColor: wbColorBackgroundRed,
+                textInputTypeOnKeyboard: TextInputType.numberWithOptions(
+                  decimal: true,
+                  signed: true, // erlaubt ein "+" oder "-" Zeichen vor der Zahl
                 ),
+                /*--------------------------------- onChanged ---*/
+                controller: quantityController,
+                onChanged: (String quantityController) {
+                  log("----------------------------------------------------------------------------------------------------------------");
+                  log("0367 - ExpenseWidget - quantityController - Eingabe: $quantityController - als String");
+                  /* wenn beim Löschen aus Versehen eine "null" entsehen sollte, muss die Ziffer "0" erscheinen */
+                  if (quantityController == "") {
+                    log('0370 - ExpenseWidget - quantityController - Eingabe gelöscht: "$quantityController" ---> als String');
+                    quantityController = "0.00";
+
+                    log('0372 - ExpenseWidget - quantityController - umgewandelt in "$quantityController" ---> als String');
+                    /* die Ziffern "0.00" sollen im TextFormField erscheinen */
+                    // Code todo
+                  }
+                  setState(() {
+                    quantity = double.parse(quantityController);
+                    log("0376 - ExpenseWidget - quantityController - setState ausgeführt: $quantity ---> als double");
+                    log('0379 - ExpenseWidget - quantityController - setState ausgeführt: "$quantityController" ---> im TextFormField eingetragen? ---> Ja');
+                  });
+                  getCalculationResult();
+                },
+                /*--------------------------------- *** ---*/
               ),
             ),
-          ],
-        ),
-        /*--------------------------------- Abstand ---*/
-        wbSizedBoxHeight16,
-        /*--------------------------------- Units/Einheit ---*/
-        Row(
-          children: [
-            Text(
-              'Welche Einheiten?          ',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
             /*--------------------------------- Abstand ---*/
             wbSizedBoxWidth16,
+            // Spacer(flex: 1),
             /*--------------------------------- *** ---*/
             Expanded(
-              child: SizedBox(
-                width: 100,
-                child: WbDropDownMenuWithoutIcon(
-                  width: 20,
-                  label: 'Einheiten',
-                  dropdownItems: [
-                    "Stk",
-                    "kg",
-                    "gr",
-                    "Pkg",
-                    "Ltr",
-                    "Mtr",
-                    "???"
-                  ],
-                  backgroundColor: wbColorBackgroundRed,
-                ),
+              child: WbDropDownMenuWithoutIcon(
+                //width: 200, // hat hier keine Auswirkung!
+                label: 'Einheiten',
+                dropdownItems: ["Stk", "kg", "gr", "Pkg", "Ltr", "Mtr", "???"],
+                backgroundColor: wbColorBackgroundRed,
+                textFieldWidth: 210,
               ),
             ),
           ],
@@ -427,7 +429,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
         Row(
           children: [
             Text(
-              'Mehrwertsteuer in %:   ',
+              'Mehrwertsteuer %:',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             /*--------------------------------- Abstand ---*/
@@ -445,107 +447,85 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
         ),
         /*--------------------------------- Abstand ---*/
         wbSizedBoxHeight16,
-        /*--------------------------------- Einzelpreis Brutto € ---*/
-        Row(
-          children: [
-            Text(
-              'Einzelpreis Brutto:   ',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            /*--------------------------------- Abstand ---*/
-            wbSizedBoxWidth16,
-            /*--------------------------------- *** ---*/
-            Expanded(
-              child: WbTextFormFieldTEXTOnly(
-                labelText: "Einzelpreis €",
-                labelFontSize20: 18,
-                hintText: "Einzelpreis",
-                inputTextFontSize22: 22,
-                inputFontWeightW900: FontWeight.w900,
-                inputFontColor: wbColorLogoBlue,
-                fillColor: wbColorBackgroundRed,
-                textInputTypeOnKeyboard: TextInputType.numberWithOptions(
-                  decimal: true,
-                  signed: true, // erlaubt ein "+" oder "-" Zeichen vor der Zahl
-                ),
-                /*--------------------------------- onChanged ---*/
-                controller: bruttoItemPriceController,
-                onChanged: (String bruttoItemPriceController) {
-                  bruttoItemPrice = double.parse(bruttoItemPriceController);
-                  /* wenn beim Löschen aus Versehen eine "null" entsehen sollte, muss die Ziffer "0" erscheinen */
-                  if (bruttoItemPriceController == "") {
-                    log('0355 - ExpenseWidget - bruttoItemPriceController - Eingabe gelöscht: "$bruttoItemPriceController" ---> als String');
-                    bruttoItemPriceController = "0.00";
-                    //bruttoItemPrice = double.parse(bruttoItemPriceController);
-                    log('0357 - ExpenseWidget - bruttoItemPriceController - umgewandelt in "$bruttoItemPriceController" ---> als String');
-                  }
-                  //bruttoItemPrice = double.parse(bruttoItemPriceController);
-                  setState(() => bruttoItemPrice =
-                      double.parse(bruttoItemPriceController));
-                  log('0366 - ExpenseWidget - bruttoItemPriceController - setState ausgeführt: "$bruttoItemPriceController" ---> im TextFormField eingetragen? ---> Ja');
-                  log("0368 - ExpenseWidget - bruttoItemPriceController - setState ausgeführt: $bruttoItemPrice ---> als double");
-                  // setState(() {
-                  //   bruttoItemPrice = double.parse(bruttoItemPriceController);
-                  //   log('0366 - ExpenseWidget - bruttoItemPriceController - setState ausgeführt: "$bruttoItemPriceController" ---> im TextFormField eingetragen? ---> Ja');
-                  // });
-                  getCalculationResult();
-                },
-                /*--------------------------------- *** ---*/
-              ),
-            ),
-          ],
+        /*--------------------------------- *** ---*/
+        WbTextFormFieldTEXTOnly(
+          labelText: "Einzelpreis Brutto in €",
+          labelFontSize20: 18,
+          hintText: "Einzelpreis Brutto in €",
+          inputTextFontSize22: 22,
+          inputFontWeightW900: FontWeight.w900,
+          inputFontColor: wbColorLogoBlue,
+          fillColor: wbColorBackgroundRed,
+          textInputTypeOnKeyboard: TextInputType.numberWithOptions(
+            decimal: true,
+            signed: true, // erlaubt ein "+" oder "-" Zeichen vor der Zahl
+          ),
+          /*--------------------------------- onChanged ---*/
+          controller: bruttoItemPriceController,
+          onChanged: (String bruttoItemPriceController) {
+            log("----------------------------------------------------------------------------------------------------------------");
+            log("0506 - ExpenseWidget - bruttoItemPriceController - Eingabe: $bruttoItemPriceController - als String");
+            /* wenn beim Löschen aus Versehen eine "null" entsehen sollte, muss die Ziffer "0" erscheinen */
+            if (bruttoItemPriceController == "") {
+              log('0509 - ExpenseWidget - bruttoItemPriceController - Eingabe gelöscht: "$bruttoItemPriceController" ---> als String');
+              bruttoItemPriceController = "0.00";
+                
+              log('0512 - ExpenseWidget - bruttoItemPriceController - umgewandelt in "$bruttoItemPriceController" ---> als String');
+              /* die Ziffern "0.00" sollen im TextFormField erscheinen */
+              // Code todo
+            }
+            setState(() {
+              bruttoItemPrice = double.parse(bruttoItemPriceController);
+              log("0518 - ExpenseWidget - bruttoItemPriceController - setState ausgeführt: $bruttoItemPrice ---> als double");
+              log('0519 - ExpenseWidget - bruttoItemPriceController - setState ausgeführt: "$bruttoItemPriceController" ---> im TextFormField eingetragen? ---> Ja');
+            });
+            getCalculationResult();
+          },
+          /*--------------------------------- *** ---*/
         ),
         /*--------------------------------- Abstand ---*/
         wbSizedBoxHeight16,
         /*--------------------------------- Gesamtpreis Brutto € ---*/
-        Row(
-          children: [
-            Text(
-              'Gesamtpreis Brutto:',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            /*--------------------------------- Abstand ---*/
-            wbSizedBoxWidth16,
-            /*--------------------------------- *** ---*/
-            Expanded(
-              child: WbTextFormFieldTEXTOnly(
-                labelText: "Gesamtpreis €",
-                labelFontSize20: 18,
-                hintText: "Gesamtpreis",
-                inputTextFontSize22: 22,
-                inputFontWeightW900: FontWeight.w900,
-                inputFontColor: wbColorLogoBlue,
-                fillColor: wbColorBackgroundRed,
-                textInputTypeOnKeyboard: TextInputType.numberWithOptions(
-                  decimal: true,
-                  signed: true, // erlaubt ein "+" oder "-" Zeichen vor der Zahl
-                ),
-                /*--------------------------------- onChanged ---*/
-                controller: bruttoQuantityPriceController,
-                onChanged: (String bruttoQuantityPriceController) {
-                  log("0212 - ExpenseWidget - bruttoQuantityPriceController - Eingabe: $bruttoQuantityPriceController - als String");
-                  /* wenn beim Löschen aus Versehen eine "null" entsehen sollte, muss die Ziffer "0" erscheinen */
-                  if (bruttoQuantityPriceController == "") {
-                    log('0290 - ExpenseWidget - bruttoItemPriceController - Eingabe gelöscht: "$bruttoQuantityPriceController" ---> als String');
-                    bruttoQuantityPriceController = "0.00";
-                    log('0293 - ExpenseWidget - bruttoItemPriceController - umgewandelt in "$bruttoQuantityPriceController" ---> als String');
-                  }
-                  bruttoQuantityPrice =
-                      double.parse(bruttoQuantityPriceController);
-                  setState(() => bruttoQuantityPrice =
-                      double.parse(bruttoQuantityPriceController));
-                  log("0297 - ExpenseWidget - bruttoItemPriceController - setState ausgeführt: $bruttoQuantityPrice ---> als double");
-                  setState(() {
-                    bruttoQuantityPrice =
-                        double.parse(bruttoQuantityPriceController);
-                    log('0366 - ExpenseWidget - bruttoQuantityPriceController - setState ausgeführt: "$bruttoQuantityPriceController" ---> im TextFormField eingetragen? ---> NEIN !!! todo');
-                  });
-                  getCalculationResult();
-                },
-                /*--------------------------------- *** ---*/
-              ),
-            ),
-          ],
+        // Text(
+        //   'Gesamtpreis:',
+        //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        // ),
+        // /*--------------------------------- Abstand ---*/
+        // wbSizedBoxWidth16,
+        /*--------------------------------- *** ---*/
+        WbTextFormFieldTEXTOnly(
+          labelText: "Gesamtpreis Brutto in €",
+          labelFontSize20: 18,
+          hintText: "Gesamtpreis Brutto in €",
+          inputTextFontSize22: 22,
+          inputFontWeightW900: FontWeight.w900,
+          inputFontColor: wbColorLogoBlue,
+          fillColor: wbColorBackgroundRed,
+          textInputTypeOnKeyboard: TextInputType.numberWithOptions(
+            decimal: true,
+            signed: true, // erlaubt ein "+" oder "-" Zeichen vor der Zahl
+          ),
+          /*--------------------------------- onChanged ---*/
+          controller: bruttoQuantityPriceController,
+          onChanged: (String bruttoQuantityPriceController) {
+            log("0212 - ExpenseWidget - bruttoQuantityPriceController - Eingabe: $bruttoQuantityPriceController - als String");
+            /* wenn beim Löschen aus Versehen eine "null" entsehen sollte, muss die Ziffer "0" erscheinen */
+            if (bruttoQuantityPriceController == "") {
+              log('0290 - ExpenseWidget - bruttoItemPriceController - Eingabe gelöscht: "$bruttoQuantityPriceController" ---> als String');
+              bruttoQuantityPriceController = "0.00";
+              log('0293 - ExpenseWidget - bruttoItemPriceController - umgewandelt in "$bruttoQuantityPriceController" ---> als String');
+            }
+            bruttoQuantityPrice = double.parse(bruttoQuantityPriceController);
+            setState(() => bruttoQuantityPrice =
+                double.parse(bruttoQuantityPriceController));
+            log("0297 - ExpenseWidget - bruttoItemPriceController - setState ausgeführt: $bruttoQuantityPrice ---> als double");
+            setState(() {
+              bruttoQuantityPrice = double.parse(bruttoQuantityPriceController);
+              log('0366 - ExpenseWidget - bruttoQuantityPriceController - setState ausgeführt: "$bruttoQuantityPriceController" ---> im TextFormField eingetragen? ---> NEIN !!! todo');
+            });
+            getCalculationResult();
+          },
+          /*--------------------------------- *** ---*/
         ),
         /*--------------------------------- Abstand ---*/
         wbSizedBoxHeight16,
@@ -707,7 +687,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                 child: Row(
                   children: [
                     Text(
-                      'Brutto-Einzelpreis INCLUSIVE MwSt.:',
+                      'Brutto-Einzelpreis incl. MwSt.:',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
@@ -793,7 +773,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                 setState(() {});
               },
               child: Text(
-                'Zur Kontrolle nochmals neu berechnen?',
+                'Zur Kontrolle NEU berechnen?',
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
