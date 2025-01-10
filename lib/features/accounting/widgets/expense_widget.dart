@@ -56,11 +56,12 @@ final TextEditingController bruttoQuantityPriceController =
 void getCalculationResult() {
   /* die einzelnen Positionen berechnen */
   /* die Ergebnisse sind mit ".toStringAsFixed(2)" auf 2 Stellen nach dem Komma gekürzt */
-  log('0059 - getCalculationResult - String: ${quantityController.text} ==> double: $quantity'); // Anzahl
-  log('0060 - getCalculationResult - String: ${itemController.text} ==> double: $item'); // Einheiten
-  log('0061 - getCalculationResult - String: ${taxPercentController.text} ==> double: $taxPercent'); // Mehrwertsteuer
-  log('0062 - getCalculationResult - String: ${bruttoItemPriceController.text} ==> double: $bruttoItemPrice €'); // Brutto-Einzel
-  log('0064 - getCalculationResult - String: ${bruttoQuantityPriceController.text} ==> double: $bruttoQuantityPrice €');  // Brutto-Gesamt
+  log("----------------------------------------------------------------------------------------------------------------");
+  log('0059 - getCalculationResult - String: ${quantityController.text} ==> Anzahl als double: $quantity');
+  log('0060 - getCalculationResult - String: ${itemController.text} ==> Einheiten als Text: $item');
+  log('0061 - getCalculationResult - String: ${taxPercentController.text} ==> MwSt. als double: $taxPercent');
+  log('0062 - getCalculationResult - String: ${bruttoItemPriceController.text} ==> Brutto-Einzel als double: $bruttoItemPrice €');
+  log('0064 - getCalculationResult - String: ${bruttoQuantityPriceController.text} ==> Brutto-Gesamt als double: $bruttoQuantityPrice €');
 
   // Netto-Einzel im Update
   // Netto-Gesamt im Update
@@ -68,49 +69,50 @@ void getCalculationResult() {
   // Validator wegen Schreibweise der Zahlenformate
 
   //'${bruttoQuantityPrice.toStringAsFixed(2)} €',
-  log("--------------------------------------------------------------------------");
+  log("----------------------------------------------------------------------------------------------------------------");
 
   /* Anzahl * Brutto-Einzelpreis = Brutto-Gesamtpreis berechnen */
   bruttoQuantityPrice = bruttoItemPrice * quantity;
-  log('0684 - ExpenseWidget - Gesamtpreis berechnet: ${bruttoQuantityPrice.toStringAsFixed(2)} €');
+  log('0076 - getCalculationResult - Gesamtpreis berechnet: ${bruttoQuantityPrice.toStringAsFixed(2)} €');
   /* den Netto-Einzelpreis aus dem Brutto-Einzelpreis berechnen */
   // nettoItemPrice = bruttoItemPrice / 1.19;
-  log('$bruttoItemPrice');
+  log('0079 - getCalculationResult ---> bruttoItemPrice: $bruttoItemPrice - OHNE "NumberFormat"');
   /* Zahlenformat mit Tausender-Trennzeichen + 2 Dezimalstellen in deutsch-locale */
   NumberFormat formatter = NumberFormat('#,##0.00', 'de_DE');
   String bruttoItemPriceX = formatter.format(bruttoItemPrice); // funzt nicht
-  log(bruttoItemPriceX);
-  log('0688 - ExpenseWidget - Netto-Einzelpreis aus dem Brutto-Einzelpreis berechnet: ${nettoItemPrice.toStringAsFixed(2)} €');
-  log('---> Rundungsfehler wegen Rechnungszahl $nettoItemPrice');
-  log('---> Rechnungszahl $bruttoItemPriceX');
+  log('0083 - getCalculationResult ---> bruttoItemPrice: $bruttoItemPriceX mit - "NumberFormat formatter = NumberFormat("#,##0.00", "de_DE")" - ');
+  log('0084 - getCalculationResult ---> Netto-Einzelpreis aus dem Brutto-Einzelpreis berechnet: ${nettoItemPrice.toStringAsFixed(2)} €');
+  log('0085 - getCalculationResult ---> Rundungsfehler wegen Rechnungszahl "nettoItemPrice": $nettoItemPrice');
+  log('0086 - getCalculationResult ---> Rundungsfehler wegen Rechnungszahl "bruttoItemPrice": $bruttoItemPrice');
+  log('0087 - getCalculationResult ---> Rechnungszahl "bruttoItemPriceX": $bruttoItemPriceX');
   // nettoItemPrice = bruttoItemPriceX / 1.19;
   // nettoItemPrice = double.parse(nettoItemPrice as String);
   //nettoItemPrice = nettoQuantityPrice.toStringAsFixed(2);
-  log("--------------------------------------------------------------------------");
+  log("----------------------------------------------------------------------------------------------------------------");
   /* den Netto-Gesamtpreis berechnen */
   nettoQuantityPrice = nettoItemPrice * quantity;
-  log('0093 - ExpenseWidget - Netto-Gesamtpreis berechnet: ${nettoQuantityPrice.toStringAsFixed(2)} €');
+  log('0093 - getCalculationResult - Netto-Gesamtpreis berechnet: ${nettoQuantityPrice.toStringAsFixed(2)} €');
 
   /* die MwSt. aus dem Netto-Einzelpreis berechnen */
   taxOnNettoItemPrice = nettoItemPrice * (taxPercent / 100);
-  log('0097 - ExpenseWidget - Mwst. aus dem Netto-Einzelpreis berechnet: ${taxOnNettoItemPrice.toStringAsFixed(2)} €');
+  log('0097 - getCalculationResult - Mwst. aus dem Netto-Einzelpreis berechnet: ${taxOnNettoItemPrice.toStringAsFixed(2)} €');
 
   /* die MwSt. aus dem Netto-Einzelpreis * Anzahl, Gewicht, Stück?  berechnen */
   taxOnNettoQuantityPrice = nettoItemPrice * quantity * (taxPercent / 100);
-  log('0101 - ExpenseWidget - Mwst. aus dem Netto-Gesamtpreis berechnet: ${taxOnNettoQuantityPrice.toStringAsFixed(2)} €');
+  log('0101 - getCalculationResult - Mwst. aus dem Netto-Gesamtpreis berechnet: ${taxOnNettoQuantityPrice.toStringAsFixed(2)} €');
 
   /* die MwSt. aus dem Brutto-Einzelpreis berechnen */
   taxOnBruttoItemPrice = bruttoItemPrice * (taxPercent / 100);
-  log('0105 - ExpenseWidget - Mwst. aus dem Brutto-Einzelpreis berechnet: ${taxOnBruttoItemPrice.toStringAsFixed(2)} €');
+  log('0105 - getCalculationResult - Mwst. aus dem Brutto-Einzelpreis berechnet: ${taxOnBruttoItemPrice.toStringAsFixed(2)} €');
 
   /* die MwSt. aus dem Brutto-Einzelpreis berechnen */
   taxOnBruttoItemPrice = bruttoItemPrice * (taxPercent / 100);
-  log('0109 - ExpenseWidget - Mwst. aus dem Brutto-Einzelpreis berechnet: ${taxOnBruttoItemPrice.toStringAsFixed(2)} €');
+  log('0109 - getCalculationResult - Mwst. aus dem Brutto-Einzelpreis berechnet: ${taxOnBruttoItemPrice.toStringAsFixed(2)} €');
 
   /* die MwSt. aus dem Brutto-Gesamtpreis berechnen */
   taxOnBruttoQuantityPrice = bruttoQuantityPrice * (taxPercent / 100);
-  log('0113 - ExpenseWidget - Mwst. aus dem Brutto-Gesamtpreis berechnet: ${taxOnBruttoQuantityPrice.toStringAsFixed(2)} €');
-  log("--------------------------------------------------------------------------");
+  log('0113 - getCalculationResult - Mwst. aus dem Brutto-Gesamtpreis berechnet: ${taxOnBruttoQuantityPrice.toStringAsFixed(2)} €');
+  log("----------------------------------------------------------------------------------------------------------------");
 
   // double getInvoiceResult(doublebruttoItemPrice, double quantity) {
   // double taxPercent = 19;
@@ -118,13 +120,13 @@ void getCalculationResult() {
   taxSum = bruttoItemPrice * quantity * (taxPercent / 100);
   totalSum = bruttoItemPrice * quantity + taxSum;
   nettoItemPrice = bruttoItemPrice / (1 + 0.19);
-  log('0122 - ExpenseWidget - Netto-Einzelpreis berechnet: ${nettoItemPrice.toStringAsFixed(2)} €');
-  log("--------------------------------------------------------------------------");
+  log('0122 - getCalculationResult - Netto-Einzelpreis berechnet: ${nettoItemPrice.toStringAsFixed(2)} €');
+  log("----------------------------------------------------------------------------------------------------------------");
   log("Netto-Einzelpreis:    ${nettoItemPrice.toStringAsFixed(2)} € pro Einheit");
   log("Gekaufte Einheiten:   $quantity Stück");
   log("Mehrwertsteuer:       ${taxSum.toStringAsFixed(2)} €");
   log("Gesamtsumme           ${totalSum.toStringAsFixed(2)} €");
-  log("--------------------------------------------------------------------------");
+  log("----------------------------------------------------------------------------------------------------------------");
 }
 
 class _ExpenseWidgetState extends State<ExpenseWidget> {
@@ -362,20 +364,22 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                   /*--------------------------------- onChanged ---*/
                   controller: quantityController,
                   onChanged: (String quantityController) {
-                    log("0287 - ExpenseWidget - quantityController - Eingabe: $quantityController - als String");
+                    log("----------------------------------------------------------------------------------------------------------------");
+                    log("0367 - ExpenseWidget - quantityController - Eingabe: $quantityController - als String");
                     /* wenn beim Löschen aus Versehen eine "null" entsehen sollte, muss die Ziffer "0" erscheinen */
                     if (quantityController == "") {
-                      log('0290 - ExpenseWidget - bruttoItemPriceController - Eingabe gelöscht: "$quantityController" ---> als String');
+                      log('0370 - ExpenseWidget - quantityController - Eingabe gelöscht: "$quantityController" ---> als String');
                       quantityController = "0.00";
-                      log('0293 - ExpenseWidget - bruttoItemPriceController - umgewandelt in "$quantityController" ---> als String');
+
+                      log('0372 - ExpenseWidget - quantityController - umgewandelt in "$quantityController" ---> als String');
+                      /* die Ziffern "0.00" sollen im TextFormField erscheinen */
+                      // Code todo
                     }
-                    quantity = double.parse(quantityController);
-                    setState(() => quantity = double.parse(quantityController));
-                    log("0297 - ExpenseWidget - bruttoItemPriceController - setState ausgeführt: $quantity ---> als double");
-                    // setState(() {
-                    //  bruttoItemPrice = double.parse(bruttoItemPriceController);
-                    //   log('0366 - ExpenseWidget - bruttoItemPriceController - setState ausgeführt: "$bruttoItemPriceController" ---> im TextFormField eingetragen? ---> NEIN !!! todo');
-                    // });
+                    setState(() {
+                      quantity = double.parse(quantityController);
+                      log("0376 - ExpenseWidget - quantityController - setState ausgeführt: $quantity ---> als double");
+                      log('0379 - ExpenseWidget - quantityController - setState ausgeführt: "$quantityController" ---> im TextFormField eingetragen? ---> Ja');
+                    });
                     getCalculationResult();
                   },
                   /*--------------------------------- *** ---*/
@@ -467,21 +471,22 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                 /*--------------------------------- onChanged ---*/
                 controller: bruttoItemPriceController,
                 onChanged: (String bruttoItemPriceController) {
+                  bruttoItemPrice = double.parse(bruttoItemPriceController);
                   /* wenn beim Löschen aus Versehen eine "null" entsehen sollte, muss die Ziffer "0" erscheinen */
                   if (bruttoItemPriceController == "") {
                     log('0355 - ExpenseWidget - bruttoItemPriceController - Eingabe gelöscht: "$bruttoItemPriceController" ---> als String');
                     bruttoItemPriceController = "0.00";
-                    //bruttoItemPrice = double.parse(itemPriceController);
+                    //bruttoItemPrice = double.parse(bruttoItemPriceController);
                     log('0357 - ExpenseWidget - bruttoItemPriceController - umgewandelt in "$bruttoItemPriceController" ---> als String');
                   }
-                  bruttoItemPrice = double.parse(bruttoItemPriceController);
+                  //bruttoItemPrice = double.parse(bruttoItemPriceController);
                   setState(() => bruttoItemPrice =
                       double.parse(bruttoItemPriceController));
+                  log('0366 - ExpenseWidget - bruttoItemPriceController - setState ausgeführt: "$bruttoItemPriceController" ---> im TextFormField eingetragen? ---> Ja');
                   log("0368 - ExpenseWidget - bruttoItemPriceController - setState ausgeführt: $bruttoItemPrice ---> als double");
-                  //bruttoItemPrice = double.parse(itemPriceController);
                   // setState(() {
-                  //  bruttoItemPrice = double.parse(bruttoItemPriceController);
-                  //   log('0366 - ExpenseWidget - bruttoItemPriceController - setState ausgeführt: "$bruttoItemPriceController" ---> im TextFormField eingetragen? ---> NEIN !!! todo');
+                  //   bruttoItemPrice = double.parse(bruttoItemPriceController);
+                  //   log('0366 - ExpenseWidget - bruttoItemPriceController - setState ausgeführt: "$bruttoItemPriceController" ---> im TextFormField eingetragen? ---> Ja');
                   // });
                   getCalculationResult();
                 },
@@ -531,7 +536,8 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                       double.parse(bruttoQuantityPriceController));
                   log("0297 - ExpenseWidget - bruttoItemPriceController - setState ausgeführt: $bruttoQuantityPrice ---> als double");
                   setState(() {
-                   bruttoQuantityPrice = double.parse(bruttoQuantityPriceController);
+                    bruttoQuantityPrice =
+                        double.parse(bruttoQuantityPriceController);
                     log('0366 - ExpenseWidget - bruttoQuantityPriceController - setState ausgeführt: "$bruttoQuantityPriceController" ---> im TextFormField eingetragen? ---> NEIN !!! todo');
                   });
                   getCalculationResult();

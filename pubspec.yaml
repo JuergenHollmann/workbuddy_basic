@@ -28,6 +28,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   age_calculator: ^1.0.0
+  money2: ^5.4.6
 
 cupertino_icons: ^1.0.6
 
