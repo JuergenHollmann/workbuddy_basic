@@ -132,6 +132,7 @@ class MainApp extends StatelessWidget {
   - Zustimmung zu Nutzungsbedingungen + Textvorlage einpflegen
   - Impressum + Textvorlage einpflegen
 
+  - allgemein überall "TextEditingController.dispose" einbauen0
   - Nützliche Funktion vorschlagen - E-Mail DIREKT an den Entwickler senden - "Support-E-Mail" eintragen - CM-0121
   - "WbInfoContainer" im CompanyScreen ist teilweise noch festverdrahtet - 1030
   - "WbInfoContainer" im ContactScreen ist teilweise noch festverdrahtet - 1030

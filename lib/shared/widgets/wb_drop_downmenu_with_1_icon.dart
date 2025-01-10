@@ -10,7 +10,9 @@ class WbDropDownMenu extends StatelessWidget {
     required this.dropdownItems,
     required this.leadingIconInTextField,
     this.leadingIconsInMenu,
-    this.backgroundColor, this.labelBackgroundColor,
+    this.backgroundColor,
+    this.labelBackgroundColor,
+    this.width,
   });
 
   final String label;
@@ -19,18 +21,19 @@ class WbDropDownMenu extends StatelessWidget {
   final List<IconData>? leadingIconsInMenu;
   final Color? backgroundColor;
   final Color? labelBackgroundColor;
-
+  final double? width;
 
   @override
   Widget build(BuildContext context) {
     log("0020 - WbDropDownMenu - aktiviert");
 
     return DropdownMenu(
-      width: 400,
+      width: width,
       textStyle: TextStyle(
         fontSize: 22,
         fontWeight: FontWeight.w900,
         color: wbColorLogoBlue,
+        height: 0.1,
       ),
       label: Padding(
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 0), // nur für das Label
@@ -41,6 +44,8 @@ class WbDropDownMenu extends StatelessWidget {
             fontWeight: FontWeight.bold,
             color: wbColorButtonBlue,
             backgroundColor: labelBackgroundColor,
+            height:
+                -0, // Verschiebung des Textes innerhalb des Textfeldes nach oben oder unten
           ),
         ),
       ),
@@ -53,14 +58,14 @@ class WbDropDownMenu extends StatelessWidget {
           size: 30,
         ),
       ),
-      menuHeight: 320, // ausklappbare Maximalhöhe
+      menuHeight: 500, // ausklappbare Maximalhöhe
       hintText: "Bitte auswählen", // funzt nicht?
 
       //decoration: InputDecoration()
       inputDecorationTheme: InputDecorationTheme(
         //contentPadding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
         contentPadding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
-
+        constraints: BoxConstraints.tightFor(height: 46),
         filled: true,
         fillColor: backgroundColor,
 

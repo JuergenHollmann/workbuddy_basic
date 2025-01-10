@@ -50,23 +50,25 @@ class WbTextFormFieldTEXTOnly extends StatelessWidget {
       maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
       keyboardType: textInputTypeOnKeyboard,
       textAlignVertical: TextAlignVertical.top,
+      expands: true,
       maxLines: null,
       //validator: Validator.isValidEmail,
       style: TextStyle(
         fontSize: inputTextFontSize22,
         fontWeight: inputFontWeightW900,
         color: inputFontColor,
+        height: 1, // Höhe des Textfeldes
       ),
       textAlign: TextAlign.left,
       textInputAction: textInputAction,
-      //obscureText: visibilityPassword, //Passwort sichtbar?
+      //obscureText: visibilityPassword, // Passwort sichtbar?
       /*--------------------------------- InputDecoration ---*/
       decoration: InputDecoration(
         floatingLabelAlignment: FloatingLabelAlignment.start,
         filled: true,
         fillColor: fillColor, //wbColorBackgroundBlue
         contentPadding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-
+        constraints: BoxConstraints.tightFor(height: 46),
         /*--- errorStyle ---*/
         errorStyle: const TextStyle(
           fontSize: 18,

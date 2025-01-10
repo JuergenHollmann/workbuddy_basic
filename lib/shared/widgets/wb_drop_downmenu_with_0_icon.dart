@@ -10,12 +10,14 @@ class WbDropDownMenuWithoutIcon extends StatelessWidget {
     required this.dropdownItems,
     this.backgroundColor,
     this.labelBackgroundColor,
+    this.width,
   });
 
   final String label;
   final List<String> dropdownItems;
   final Color? backgroundColor;
   final Color? labelBackgroundColor;
+  final double? width;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +40,7 @@ class WbDropDownMenuWithoutIcon extends StatelessWidget {
       hintText: "Bitte auswählen", // funzt nicht?
       inputDecorationTheme: InputDecorationTheme(
         contentPadding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
+                constraints: BoxConstraints.tightFor(height: 46),
         filled: true,
         fillColor: backgroundColor,
 
