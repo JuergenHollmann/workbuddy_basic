@@ -58,7 +58,7 @@ class WbDropDownMenu extends StatelessWidget {
           size: 30,
         ),
       ),
-      menuHeight: 500, // ausklappbare Maximalhöhe
+      menuHeight: 320, // ausklappbare Maximalhöhe
       hintText: "Bitte auswählen", // funzt nicht?
 
       //decoration: InputDecoration()

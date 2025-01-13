@@ -9,6 +9,7 @@ class WbTextFormFieldTEXTOnly extends StatelessWidget {
     required this.hintText,
     this.hintTextFontSize16,
     required this.inputTextFontSize22,
+    this.inputTextAlign,
     required this.inputFontWeightW900,
     required this.inputFontColor,
     // this.prefixIcon,
@@ -18,7 +19,7 @@ class WbTextFormFieldTEXTOnly extends StatelessWidget {
     this.textInputTypeOnKeyboard,
     this.textInputAction, // default: Enter | TextInputAction.done
     this.controller,
-    this.onChanged,
+    this.onChanged, this.focusNode,
     // this.suffixIcon,
     // this.suffixIconSize48,
     // this.autofillHints,
@@ -29,6 +30,7 @@ class WbTextFormFieldTEXTOnly extends StatelessWidget {
   final String hintText;
   final double? hintTextFontSize16;
   final double inputTextFontSize22;
+  final TextAlign? inputTextAlign;
   // final IconData? prefixIcon;
   // final double? prefixIconSize28;
   final FontWeight inputFontWeightW900;
@@ -39,6 +41,7 @@ class WbTextFormFieldTEXTOnly extends StatelessWidget {
   final TextEditingController? controller;
   final TextInputAction? textInputAction;
   final Function(String inputInWbTextFormField)? onChanged;
+  final FocusNode? focusNode;
   // final IconData? suffixIcon;
   // final double? suffixIconSize48;
   // final List<String>? autofillHints;
@@ -49,9 +52,13 @@ class WbTextFormFieldTEXTOnly extends StatelessWidget {
       // expands: true,
       maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
       keyboardType: textInputTypeOnKeyboard,
-      textAlignVertical: TextAlignVertical.top,
+      textAlignVertical: TextAlignVertical.center, // vertikale Textausrichtung
+      /* horizontale Textausrichtung - wenn nichts expilzit angegeben wird, ist default = "TextAlign.right" */
+      textAlign: inputTextAlign ?? TextAlign.right,
+      textInputAction: textInputAction,
       expands: true,
       maxLines: null,
+      focusNode: focusNode,
       //validator: Validator.isValidEmail,
       style: TextStyle(
         fontSize: inputTextFontSize22,
@@ -59,8 +66,7 @@ class WbTextFormFieldTEXTOnly extends StatelessWidget {
         color: inputFontColor,
         height: 1, // Höhe des Textfeldes
       ),
-      textAlign: TextAlign.right,
-      textInputAction: textInputAction,
+
       //obscureText: visibilityPassword, // Passwort sichtbar?
       /*--------------------------------- InputDecoration ---*/
       decoration: InputDecoration(
