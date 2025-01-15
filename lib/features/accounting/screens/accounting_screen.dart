@@ -30,6 +30,9 @@ class _AccountingScreenState extends State<AccountingScreen> {
     groupValue = widget.startGroupValue;
   }
 
+  /*--------------------------------- Scroll-Controller ---*/
+  ScrollController scrollcontroller = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     log("0035 - AccountingScreen - wird angezeigt");
@@ -51,6 +54,7 @@ class _AccountingScreenState extends State<AccountingScreen> {
       ),
       /*--------------------------------- *** ---*/
       body: SingleChildScrollView(
+        controller: scrollcontroller,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(

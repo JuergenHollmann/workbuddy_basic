@@ -28,6 +28,9 @@ class WbDropDownMenu extends StatelessWidget {
     log("0020 - WbDropDownMenu - aktiviert");
 
     return DropdownMenu(
+      // onSelected: (int? value) {
+      //   log("Selected value: $value");
+      // },
       width: width,
       textStyle: TextStyle(
         fontSize: 22,

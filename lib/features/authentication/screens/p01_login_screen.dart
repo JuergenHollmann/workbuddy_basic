@@ -512,9 +512,10 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                     ),
                   );
                 } else {
-                  /*--------------------------------- Snackbar ---*/
+                  /*--------------------------------- Snackbar (Toast) ---*/
                   log("Das Passwort oder der Benutzername sind nicht korrekt ... 😉");
                   player.play(AssetSource("sound/sound03enterprise.wav"));
+                  /*--------------------------------- Snackbar / Toast ---*/
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     backgroundColor: wbColorButtonDarkRed,
                     content: Text(

@@ -19,7 +19,8 @@ class WbTextFormFieldTEXTOnly extends StatelessWidget {
     this.textInputTypeOnKeyboard,
     this.textInputAction, // default: Enter | TextInputAction.done
     this.controller,
-    this.onChanged, this.focusNode,
+    this.onChanged,
+    this.focusNode, this.inputFormatters,
     // this.suffixIcon,
     // this.suffixIconSize48,
     // this.autofillHints,
@@ -42,6 +43,7 @@ class WbTextFormFieldTEXTOnly extends StatelessWidget {
   final TextInputAction? textInputAction;
   final Function(String inputInWbTextFormField)? onChanged;
   final FocusNode? focusNode;
+  final List<TextInputFormatter>? inputFormatters;
   // final IconData? suffixIcon;
   // final double? suffixIconSize48;
   // final List<String>? autofillHints;
@@ -49,6 +51,7 @@ class WbTextFormFieldTEXTOnly extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      inputFormatters: inputFormatters,
       // expands: true,
       maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
       keyboardType: textInputTypeOnKeyboard,
