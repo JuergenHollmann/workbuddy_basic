@@ -1,4 +1,42 @@
 /*----------------------------------------------------------------------------------*/
+APK in VSCode erstellen:
+
+Terminal: flutter build apk --split-per-abi
+Terminal: cd build/app/outputs/flutter-apk/
+Terminal: open .
+
+—> es öffnet sich der Ordner ...
+-> am besten die Datei "app-armeabi-v7a-release.apk" dublizieren und dann neu benennen - Muster: "WorkBuddy - Version 0.1.xx.apk"
+—> "WorkBuddy - Version 0.1.xx.apk" in GoogleDrive kopieren (als Sicherung und zum herunterladen)
+—> "WorkBuddy - Version 0.1.xx.apk" auf das Smartphone herunterladen + installieren (oder direkt anklicken zum installieren)
+
+Hinweis: „arm64-v8a“ ist auf dem BlackView BV9300 nicht kompatibel.
+/*----------------------------------------------------------------------------------*/
+
+// '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// '-- Das sind die Formeln zur Berechnung eines Betrages mit Mehrwertsteuer (MwSt% = 19%):
+// '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// '-- A.1) Brutto aus dem NETTO berechnen: BRUTTO = Netto + (Netto * MwSt% / 100)
+// '-- A.2) Brutto-Zahlenbeispiel bei 100 Euro: BRUTTO = 100€ + (100€ * 19 / 100) = 119,00€ BRUTTO
+
+// '-- B.1) Netto aus dem BRUTTO berechnen: NETTO = Brutto / (1 + (MwSt%/100))
+// '-- B.2) Netto-Zahlenbeispiel bei 100 Euro: NETTO = 100€ / (1 + (19/100)) = 84,03€ NETTO
+
+// '-- C.1) MwSt. in Euro aus dem BRUTTO: MwSt€ = Brutto - (Brutto / (1 + (MwSt%/100)))
+// '-- C.2) MwSt. in Euro aus 100 EURO: MwSt€ = Brutto - (100€ / (1 + (19/100))) = 15,97€ MwSt€
+// '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+/*----------------------------------------------------------------------------------*/
+
+
+
+
+
+
+
+
+
+
     return StreamBuilder(
 stream: context.read<AuthRepository>().authStateChanges(), 
 builder: (context, snapshot) {

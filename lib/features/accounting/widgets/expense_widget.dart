@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+// import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money2/money2.dart';
@@ -40,6 +42,16 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
   final TextEditingController bruttoQuantityPriceController =
       TextEditingController(); // Eingabe oder berechnet
 
+  final TextEditingController nettoItemPriceController =
+      TextEditingController(); // Eingabe oder berechnet
+  final TextEditingController nettoQuantityPriceController =
+      TextEditingController(); // Eingabe oder berechnet
+
+  final TextEditingController taxOnBruttoItemPriceController =
+      TextEditingController(); // Eingabe oder berechnet
+  final TextEditingController taxOnBruttoQuantityPriceController =
+      TextEditingController(); // Eingabe oder berechnet
+
 /*--------------------------------- Variablen um die Preise zu berechnen ---*/
   double quantity = 0.00; // Eingabe
   String item = 'Stk'; // Eingabe
@@ -60,18 +72,18 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
   void getCalculationResult() {
     /* die einzelnen Positionen berechnen */
     log("----------------------------------------------------------------------------------------------------------------");
-    log('0059 - getCalculationResult - String: ${quantityController.text} ==> Anzahl als double: $quantity');
-    log('0060 - getCalculationResult - String: ${itemController.text} ==> Einheiten als Text: $item');
-    log('0061 - getCalculationResult - String: ${taxPercentController.text} ==> MwSt. als double: $taxPercent');
-    log('0062 - getCalculationResult - String: ${bruttoItemPriceController.text} ==> Brutto-Einzel als double: $bruttoItemPrice €');
-    log('0064 - getCalculationResult - String: ${bruttoQuantityPriceController.text} ==> Brutto-Gesamt als double: $bruttoQuantityPrice €');
-
-    // Netto-Einzel im Update
-    // Netto-Gesamt im Update
-
-    // Validator wegen Schreibweise der Zahlenformate
+    log('0075 - getCalculationResult - Anzahl als double:              ${quantityController.text}');
+    log('0076 - getCalculationResult - Einheiten als Text:             ${itemController.text}');
+    log('0077 - getCalculationResult - MwSt. als Prozentsatz:          ${taxPercentController.text}');
+    log('0078 - getCalculationResult - Brutto-Einzel als double:       ${bruttoItemPriceController.text} €');
+    log('0079 - getCalculationResult - Brutto-Gesamt als double:       ${bruttoQuantityPriceController.text} €');
+    log('0080 - getCalculationResult - Netto-Einzel als double:        ${nettoItemPriceController.text} €');
+    log('0081 - getCalculationResult - Brutto-Gesamt als double:       ${nettoQuantityPriceController.text} €');
+    log('0082 - getCalculationResult - Brutto-Einzel-MwSt. als double: ${taxOnBruttoItemPriceController.text} €');
+    log('0083 - getCalculationResult - Brutto-Gesamt-MwSt. als double: ${taxOnBruttoQuantityPriceController.text} €');
 
     log("----------------------------------------------------------------------------------------------------------------");
+
     /* Netto-Einzelpreis - Umrechnung in Cent für genauere Berechnungen */
     // final nettoItemPriceInCent = nettoItemPrice * 100;
     // log('0080 - getCalculationResult - double: $nettoItemPriceInCent ==> Cent Netto-Einzelpreis');
@@ -121,48 +133,145 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
 
     /*--- Anzahl - Umformatierung in double ---*/
     quantity = double.tryParse(quantityController.text) ?? 1.0;
+    log('0128 -----> Anzahl:           quantity =          $quantity');
 
     /*--- taxPercent - Umformatierung in double ---*/
     /*--- taxOnNettoItemPrice - Umformatierung in double ---*/
     /*--- taxOnNettoQuantityPrice - Umformatierung in double ---*/
 
+    // taxOnBruttoQuantityPrice =
+    //     double.tryParse(taxOnBruttoQuantityPriceController.text) ?? 1.0;
+    // log('0136 -----> Anzahl:           quantity =          $taxOnBruttoQuantityPriceController');
+
     /*--- taxOnBruttoItemPrice - Umformatierung in double ---*/
     /*--- taxOnBruttoQuantityPrice - Umformatierung in double ---*/
 
     /*--- nettoItemPrice - Umformatierung in double ---*/
+
     /*--- nettoQuantityPrice - Umformatierung in double ---*/
     // nettoQuantityPrice =
     //     double.tryParse(nettoQuantityPriceController.text) ?? 1.0;
 
-    /* Brutto-Einzelpreis = Umformatierung in double */
-    bruttoItemPrice = double.tryParse(bruttoItemPriceController.text) ?? 1.0;
-
-    /*--- bruttoQuantityPrice - Umformatierung in double ---*/
-    bruttoQuantityPrice =
-        double.tryParse(bruttoQuantityPriceController.text) ?? 1.0;
-    /*----------------------------------------------------------------------------------------------------------------*/
+    log("----------------------------------------------------------------------------------------------------------------");
 
     /* Netto-Einzelpreis - Berechnung + Umrechnung in Cent für genauere Berechnungen*/
     nettoItemPrice = nettoItemPrice * 0.840336134 * 100;
     final nettoItemPriceInCent = nettoItemPrice.roundToDouble();
-    log('0124 - getCalculationResult - double: $nettoItemPriceInCent ==> Cent Netto-Einzelpreis');
+    log('0143 - getCalculationResult - double: $nettoItemPriceInCent ==> Cent Netto-Einzelpreis');
 
     /* Netto-Gesamtpreis =  Brutto-Einzelpreis * Anzahl */
     final nettoQuantityPriceInCent = nettoItemPrice.roundToDouble() *
         quantity *
         100; // * 100 = Umrechnung in Cent für genauere Berechnungen
-    log('0130 --> Berechnung: [Netto-Gesamtpreis in Cent] $nettoQuantityPriceInCent = [Netto-Einzelpreis] ${nettoItemPrice.roundToDouble()} * [Anzahl] $quantity * 100');
-    log('0132 - getCalculationResult - double: $nettoQuantityPriceInCent ==> Cent Netto-Gesamtpreis');
+    log('0149 --> Berechnung: [Netto-Gesamtpreis in Cent] $nettoQuantityPriceInCent = [Netto-Einzelpreis] ${nettoItemPrice.roundToDouble()} * [Anzahl] $quantity * 100');
+    log('0150 - getCalculationResult - double: $nettoQuantityPriceInCent ==> Cent Netto-Gesamtpreis');
     log("----------------------------------------------------------------------------------------------------------------");
+
+    /* Brutto-Einzelpreis = Umformatierung in double */
+    bruttoItemPrice = double.tryParse(bruttoItemPriceController.text) ?? 1.0;
+    log('0155 -----> Brutto-Einzeln: bruttoItemPrice =     $bruttoItemPrice');
+
     /* Brutto-Gesamtpreis = Brutto-Einzelpreis * Anzahl */
-    final bruttoQuantityPriceInCent = bruttoItemPrice.roundToDouble() *
+    final bruttoQuantityPriceInCent = bruttoItemPrice *
         quantity *
         100; // * 100 = Umrechnung in Cent für genauere Berechnungen
-    log('0137 --> Berechnung: [Brutto-Gesamtpreis in Cent] $bruttoQuantityPriceInCent = [Brutto-Einzelpreis] ${bruttoItemPrice.roundToDouble()} * [Anzahl] $quantity * 100');
-    log('0139 - getCalculationResult - double: $bruttoQuantityPriceInCent ==> Cent Brutto-Gesamtpreis');
+    log('0161 --> Berechnung: [Brutto-Gesamtpreis in Cent] $bruttoQuantityPriceInCent = [Brutto-Einzelpreis] $bruttoItemPrice * [Anzahl] $quantity * 100');
+    log('0162 - getCalculationResult - double: $bruttoQuantityPriceInCent ==> Cent Brutto-Gesamtpreis');
     bruttoQuantityPrice = bruttoQuantityPriceInCent / 100;
-    bruttoQuantityPriceController.text = bruttoQuantityPrice.toString();
+    /*--- bruttoQuantityPrice - Umformatierung in double ---*/
+    // bruttoQuantityPrice =
+    //     double.tryParse(bruttoQuantityPriceController.text) ?? 1.0;
+    bruttoQuantityPriceController.text = bruttoQuantityPrice.toStringAsFixed(2);
+    log('0170 -----> Brutto-Gesamt:  bruttoQuantityPrice = ${bruttoQuantityPrice.toStringAsFixed(2)} €');
     log("----------------------------------------------------------------------------------------------------------------");
+
+    /* Mehrwertsteuersatz - Berechnung */
+    taxPercentController.text = taxPercentController.text
+        .replaceAll(RegExp(r' %'), ''); // das Prozentzeichen entfernen
+    log('0174 √ getCalculationResult - Mehrwertsteuersatz: ${taxPercentController.text} %'); //
+
+    taxPercent = double.tryParse(taxPercentController.text) ?? 0.0;
+    final taxPercentSet = taxPercent / 100;
+    log('0178 √ getCalculationResult - Mehrwertsteuersatz zum Rechnen: $taxPercentSet ==> als double');
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* Das sind die Formeln zur Berechnung eines Betrages mit Mehrwertsteuer (MwSt% = 19%)                            
+       A.1) Brutto aus dem NETTO berechnen: BRUTTO = Netto + (Netto * MwSt% / 100)
+       A.2) Brutto-Zahlenbeispiel bei 100 Euro: BRUTTO = 100€ + (100€ * 19 / 100) = 119,00€ BRUTTO
+
+       B.1) Netto aus dem BRUTTO berechnen: NETTO = Brutto / (1 + (MwSt%/100))
+       B.2) Netto-Zahlenbeispiel bei 100 Euro: NETTO = 100€ / (1 + (19/100)) = 84,03€ NETTO
+
+       C.1) MwSt. in Euro aus dem BRUTTO: MwSt€ = Brutto - (Brutto / (1 + (MwSt%/100)))
+       C.2) MwSt. in Euro aus 100 EURO: MwSt€ = Brutto - (100€ / (1 + (19/100))) = 15,97€ MwSt€ */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    /* NETTO-Einzel aus dem BRUTTO-Einzel berechnen: NETTO = BRUTTO / (1 + (MwSt%/100)) */
+    nettoItemPrice = bruttoItemPrice / (1 + (taxPercent / 100));
+    nettoItemPriceController.text = nettoItemPrice.toStringAsFixed(2);
+
+    /* NETTO-Gesamt aus dem BRUTTO-Gesamt berechnen: NETTO = (BRUTTO / (1 + (MwSt%/100))) * Anzahl */
+    nettoQuantityPrice = bruttoQuantityPrice / (1 + (taxPercent / 100));
+    nettoQuantityPriceController.text = nettoQuantityPrice.toStringAsFixed(2);
+
+    /* Gesamte Mehrwertsteuer aus dem Brutto-Gesamtpreis berechnen */
+    taxOnBruttoItemPrice =
+        (bruttoItemPrice - (bruttoItemPrice / (1 + (taxPercentSet)))) *
+            quantity;
+    taxOnBruttoItemPriceController.text =
+        taxOnBruttoItemPrice.toStringAsFixed(2);
+    log('0210 √ getCalculationResult - Mehrwertsteuer für 1 Artikel ${taxOnBruttoItemPrice.toStringAsFixed(2)} €');
+
+    // /* Gesamt-Mehrwertsteuer der Einzel-Mwst. * Anzahl berechnen */
+    // //taxOnBruttoItemPrice = taxOnBruttoItemPrice * quantity;
+    //     taxOnBruttoItemPrice = bruttoItemPrice * (taxPercent / 100) * quantity;
+    // log('0214 √ getCalculationResult - Mehrwertsteuer für 1 Artikel gerundet auf double: $taxOnBruttoItemPrice €');
+
+    // //taxOnBruttoQuantityPrice = taxOnBruttoItemPrice * quantity;
+    // /* Gesamt-Mehrwertsteuer aus dem Brutto-Gesamtpreis berechnen */
+    // // taxOnBruttoQuantityPrice =
+    // //     bruttoQuantityPrice - (bruttoQuantityPrice / (1 + (taxPercentSet)));
+    // taxOnBruttoQuantityPriceController.text =
+    //     taxOnBruttoQuantityPrice.toStringAsFixed(2);
+    // log('0220 √ getCalculationResult - Gesamt-Mehrwertsteuer aus dem Brutto-Gesamtpreis ${taxOnBruttoQuantityPrice.toStringAsFixed(2)} €');
+    // log("----------------------------------------------------------------------------------------------------------------");
+
+    // // final taxOnBruttoQuantityPriceInCent =
+    // //     bruttoQuantityPriceInCent * (taxPercent / 100);
+    // // log('0183 --> Berechnung: [Brutto-Gesamtpreis in Cent] $bruttoQuantityPriceInCent * [MwSt.-Satz] $taxPercent / 100 = [Brutto-Gesamt-MwSt. in Cent] $taxOnBruttoQuantityPriceInCent');
+    // // taxOnBruttoQuantityPrice = taxOnBruttoQuantityPriceInCent / 100;
+    // // taxOnBruttoQuantityPriceController.text =
+    // //     taxOnBruttoQuantityPrice.toStringAsFixed(2);
+    // // log('0190 - getCalculationResult - Brutto-Gesamt-MwSt.: ${taxOnBruttoQuantityPriceController.text} €');
+    // log("----------------------------------------------------------------------------------------------------------------");
+
+    // /* MwSt. aus dem Brutto-Einzelpreis berechnen (für 1 Artikel) */
+    // taxOnBruttoItemPrice = bruttoItemPrice * (taxPercent / 100);
+    // log('235 √ getCalculationResult - Mwst. aus dem Brutto-Einzelpreis berechnet: ${taxOnBruttoItemPrice.toStringAsFixed(2)} €');
+
+    // /* Mehrwertsteuer auf den Netto-Einzelpreis - Berechnung: (Netto-Einzelpreis / (100 + Mehrwertsteuersatz)) • Mehrwertsteuersatz */
+    // final taxOnNettoItemPrice = nettoItemPriceInCent * taxPercentSet;
+    // // final taxOnNettoItemPrice =
+    // //     (nettoItemPriceInCent / (100 + taxPercentSet)) * taxPercentSet * 100;
+
+    // log('0216 - getCalculationResult - double: $taxOnNettoItemPrice ==> Cent Mehrwertsteuer auf den Netto-Einzelpreis');
+
+    // /* Mehrwertsteuer auf den Netto-Gesamtpreis - Berechnung */
+    // final taxOnNettoQuantityPrice = taxOnNettoItemPrice * quantity;
+    // log('0220 - getCalculationResult - double: $taxOnNettoQuantityPrice ==> Cent Mehrwertsteuer auf den Netto-Gesamtpreis');
+
+    // /* Netto-Gesamtpreis - Berechnung */
+    // final nettoQuantityPrice = nettoItemPrice * quantity;
+    // log('0224 - getCalculationResult - double: $nettoQuantityPrice ==> Cent Netto-Gesamtpreis (falsch)');
+
+    /* Brutto-Einzelpreis - Berechnung aus dem Netto-Einzelpreis */
+
+    //     /* den Brutto-Einzelpreis aus dem Netto-Einzelpreis berechnen */
+//     // bruttoItemPrice = nettoItemPrice / 1.19;
+//     log('0079 - getCalculationResult ---> bruttoItemPrice: $bruttoItemPrice - OHNE "NumberFormat"');
+
+    log("----------------------------------------------------------------------------------------------------------------");
+
     /*-------------------------------------------------------------------------------*/
     /* Die Ergebnisse umformatieren oder im "Money-Währungsformat" darstellen */
     /*-------------------------------------------------------------------------------*/
@@ -170,61 +279,23 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
     /*--- Anzahl ---*/
     Money quantityAsFormat =
         Money.fromInt((quantity * 100).toInt(), isoCode: 'EUR');
-    quantityController.text =
-        quantityAsFormat.format('###,###.#0');
-    log('-----> 0153 - ExpenseWidget - Eintrag im Textfeld "Anzahl": ${quantityAsFormat.format('###,###.#0')}');
+    quantityController.text = quantityAsFormat.format('###,###.#0');
+    log('√ ---> 0180 - ExpenseWidget - Eintrag im Textfeld "Anzahl":        ${quantityAsFormat.format('###,###.#0')}');
 
     /*--- Brutto-Einzelpreis ---*/
-    Money bruttoItemPriceAsMoney = Money.fromInt(
-        (bruttoItemPrice * 100).toInt(),
-        isoCode: 'EUR');
+    Money bruttoItemPriceAsMoney =
+        Money.fromInt((bruttoItemPrice * 100).toInt(), isoCode: 'EUR');
     bruttoItemPriceController.text =
         bruttoItemPriceAsMoney.format('###,###.#0 S');
-    log('-----> 0864 - ExpenseWidget - Eintrag "Brutto-Einzelpreis in €": ${bruttoItemPriceAsMoney.format('###,###.#0 S')}');
+    log('√ ---> 0187 - ExpenseWidget - Eintrag "Brutto-Einzelpreis in €":   ${bruttoItemPriceAsMoney.format('###,###.#0 S')}');
 
-    // /*--- Brutto-Gesamtpreis ---*/
-    Money bruttoQuantityPriceAsMoney = Money.fromInt(
-        (bruttoQuantityPriceInCent).toInt(),
-        isoCode: 'EUR');
+    /*--- Brutto-Gesamtpreis ---*/
+    bruttoQuantityPrice = bruttoQuantityPriceInCent.roundToDouble();
+    Money bruttoQuantityPriceAsMoney =
+        Money.fromInt((bruttoQuantityPrice).toInt(), isoCode: 'EUR');
     bruttoQuantityPriceController.text =
         bruttoQuantityPriceAsMoney.format('###,###.#0 S');
-    log("----------------------------------------------------------------------------------------------------------------");
-
-/* Brutto-Einzelpreis - Berechnung aus dem Netto-Einzelpreis */
-
-    //     /* den Brutto-Einzelpreis aus dem Netto-Einzelpreis berechnen */
-//     // bruttoItemPrice = nettoItemPrice / 1.19;
-//     log('0079 - getCalculationResult ---> bruttoItemPrice: $bruttoItemPrice - OHNE "NumberFormat"');
-
-    /* Mehrwertsteuersatz - Berechnung */
-    taxPercentController.text = taxPercentController.text
-        .replaceAll(RegExp(r' %'), ''); // das Prozentzeichen entfernen
-    log('0097 - getCalculationResult - Mehrwertsteuersatz: ${taxPercentController.text} %'); //
-
-    taxPercent = double.tryParse(taxPercentController.text) ?? 0.0;
-    final taxPercentSet = taxPercent / 100;
-    log('0088 - getCalculationResult - Mehrwertsteuersatz zum Rechnen: $taxPercentSet ==> als double');
-
-    /* Mehrwertsteuer auf den Netto-Einzelpreis - Berechnung: (Netto-Einzelpreis / (100 + Mehrwertsteuersatz)) • Mehrwertsteuersatz */
-    final taxOnNettoItemPrice = nettoItemPriceInCent * taxPercentSet;
-    // final taxOnNettoItemPrice =
-    //     (nettoItemPriceInCent / (100 + taxPercentSet)) * taxPercentSet * 100;
-
-    log('0091 - getCalculationResult - double: $taxOnNettoItemPrice ==> Cent Mehrwertsteuer auf den Netto-Einzelpreis');
-
-    /* Mehrwertsteuer auf den Netto-Gesamtpreis - Berechnung */
-    final taxOnNettoQuantityPrice = taxOnNettoItemPrice * quantity;
-    log('0096 - getCalculationResult - double: $taxOnNettoQuantityPrice ==> Cent Mehrwertsteuer auf den Netto-Gesamtpreis');
-
-    /* Netto-Gesamtpreis - Berechnung */
-    final nettoQuantityPrice = nettoItemPrice * quantity;
-    log('0104 - getCalculationResult - double: $nettoQuantityPrice ==> Cent Netto-Gesamtpreis (falsch)');
-
-    /* Gesamt-Mehrwertsteuer - Berechnung */
-    // final taxOnNettoQuantityPriceInCent = taxOnNettoItemPrice * quantity;
-    final taxOnNettoQuantityPriceInCent =
-        nettoQuantityPriceInCent * quantity * (taxPercent / 100);
-    log('0108 - getCalculationResult - double: $taxOnNettoQuantityPriceInCent ==> Cent Gesamt-Mehrwertsteuer (falsch)');
+    log('√ ---> 0194 - ExpenseWidget - Eintrag "Brutto-Gesamtpreis in €":   ${bruttoQuantityPriceAsMoney.format('###,###.#0 S')}');
     log("----------------------------------------------------------------------------------------------------------------");
 
     setState(() {
@@ -271,9 +342,9 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
 //     String bruttoItemPriceX = formatter.format(bruttoItemPrice);
 //     log('0115 - getCalculationResult ---> bruttoItemPrice: $bruttoItemPriceX mit - "NumberFormat formatter = NumberFormat("#,##0.00", "de_DE")" - ');
 
-    log('0169 - getCalculationResult ---> Netto-Einzelpreis aus dem Brutto-Einzelpreis berechnet: ${nettoItemPrice.toStringAsFixed(2)} €');
-    log('0170 - getCalculationResult ---> Netto-Einzelpreis aus dem Brutto-Einzelpreis berechnet: $nettoItemPrice €');
-    log('0171 - getCalculationResult ---> Netto-Einzelpreis aus dem Brutto-Einzelpreis berechnet: $taxOnNettoItemPrice €');
+    log('0277 - getCalculationResult ---> Netto-Einzelpreis aus dem Brutto-Einzelpreis berechnet: ${nettoItemPrice.toStringAsFixed(2)} €');
+    log('0278 - getCalculationResult ---> Netto-Einzelpreis aus dem Brutto-Einzelpreis berechnet: $nettoItemPrice €');
+    log('0279 - getCalculationResult ---> Netto-Einzelpreis aus dem Brutto-Einzelpreis berechnet: $taxOnNettoItemPrice €');
 
 //     log('0085 - getCalculationResult ---> Rundungsfehler wegen Rechnungszahl "nettoItemPrice": $nettoItemPrice');
 //     log('0086 - getCalculationResult ---> Rundungsfehler wegen Rechnungszahl "bruttoItemPrice": $bruttoItemPrice');
@@ -286,9 +357,9 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
 //     /* den Netto-Gesamtpreis berechnen */
 //     nettoQuantityPrice = nettoItemPrice * quantity;
 
-    log('0093 - getCalculationResult - Netto-Gesamtpreis berechnet: ${nettoQuantityPrice.toStringAsFixed(2)} €');
-    log('0094 - getCalculationResult - Netto-Gesamtpreis berechnet: $nettoQuantityPrice €');
-    log('0095 - getCalculationResult - Netto-Gesamtpreis berechnet: $nettoItemPrice€');
+    log('0292 - getCalculationResult - Netto-Gesamtpreis berechnet: ${nettoQuantityPrice.toStringAsFixed(2)} €');
+    log('0293 - getCalculationResult - Netto-Gesamtpreis berechnet: $nettoQuantityPrice €');
+    log('0294 - getCalculationResult - Netto-Gesamtpreis berechnet: $nettoItemPrice€');
 
 //     /* die MwSt. aus dem Netto-Einzelpreis berechnen */
 //     taxOnNettoItemPrice = nettoItemPrice * (taxPercent / 100);
@@ -300,19 +371,11 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
 
 //     /* die MwSt. aus dem Brutto-Einzelpreis berechnen */
 //     taxOnBruttoItemPrice = bruttoItemPrice * (taxPercent / 100);
-//     log('0105 - getCalculationResult - Mwst. aus dem Brutto-Einzelpreis berechnet: ${taxOnBruttoItemPrice.toStringAsFixed(2)} €');
-
-//     /* die MwSt. aus dem Brutto-Einzelpreis berechnen */
-//     taxOnBruttoItemPrice = bruttoItemPrice * (taxPercent / 100);
 //     log('0109 - getCalculationResult - Mwst. aus dem Brutto-Einzelpreis berechnet: ${taxOnBruttoItemPrice.toStringAsFixed(2)} €');
 
-//     /* die MwSt. aus dem Brutto-Gesamtpreis berechnen */
-//     taxOnBruttoQuantityPrice = bruttoQuantityPrice * (taxPercent / 100);
-//     log('0113 - getCalculationResult - Mwst. aus dem Brutto-Gesamtpreis berechnet: ${taxOnBruttoQuantityPrice.toStringAsFixed(2)} €');
-
-    log('0113 - getCalculationResult - Mwst. aus dem Brutto-Gesamtpreis berechnet: ${taxOnBruttoQuantityPrice.toStringAsFixed(2)} €');
-    log('0114 - getCalculationResult - Mwst. aus dem Brutto-Gesamtpreis berechnet: $taxOnBruttoQuantityPrice €');
-    log('0115 - getCalculationResult - Mwst. aus dem Netto-Gesamtpreis berechnet: $taxOnNettoQuantityPriceInCent €');
+    log('0316 - getCalculationResult - Mwst. aus dem Brutto-Gesamtpreis berechnet: ${taxOnBruttoQuantityPrice.toStringAsFixed(2)} €');
+    log('0317 - getCalculationResult - Mwst. aus dem Brutto-Gesamtpreis berechnet: $taxOnBruttoQuantityPrice €');
+    log('0318 - getCalculationResult - Mwst. aus dem Netto-Gesamtpreis berechnet:  $taxOnBruttoQuantityPriceController €');
 
     // log("----------------------------------------------------------------------------------------------------------------");
 
@@ -469,7 +532,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
           /*--------------------------------- Divider ---*/
           WbDividerWithTextInCenter(
               wbColor: wbColorButtonDarkRed,
-              wbText: 'Brutto-Einkaufspreis in €',
+              wbText: 'Anzahl  •  Einheiten  •  Steuern',
               wbTextColor: wbColorButtonDarkRed,
               wbFontSize12: 18,
               wbHeight3: 3),
@@ -614,7 +677,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                   textFieldWidth: 140,
                   label: "MwSt",
                   dropdownItems: ["0 %", "7 %", "19 %"],
-                  initialSelection: 2, // Index 2 aus "dropdownItems" = "19 %"
+                  //initialSelection: 2, // Index 2 aus "dropdownItems" = "19 %" (soll hier nicht automatisch angezeigt werden)
                   backgroundColor: wbColorBackgroundRed,
                   controller: taxPercentController,
                 ),
@@ -622,12 +685,21 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
             ],
           ),
           /*--------------------------------- Abstand ---*/
-          wbSizedBoxHeight16,
-          /*--------------------------------- Einzelpreis Brutto in € ---*/
+          wbSizedBoxHeight8,
+          /*--------------------------------- Divider ---*/
+          WbDividerWithTextInCenter(
+              wbColor: wbColorButtonDarkRed,
+              wbText: 'Brutto-Preise - inclusive MwSt.',
+              wbTextColor: wbColorButtonDarkRed,
+              wbFontSize12: 18,
+              wbHeight3: 3),
+          /*--------------------------------- Abstand ---*/
+          wbSizedBoxHeight8,
+          /*--------------------------------- Brutto-Einzelpreis in € ---*/
           WbTextFormFieldTEXTOnly(
-            labelText: "Einzelpreis Brutto in €",
+            labelText: "Brutto-Einzelpreis in €",
             labelFontSize20: 18,
-            hintText: "Einzelpreis Brutto in €",
+            hintText: "Brutto-Einzelpreis in €",
             inputTextFontSize22: 22,
             inputFontWeightW900: FontWeight.w900,
             inputFontColor: wbColorLogoBlue,
@@ -636,19 +708,16 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
               decimal: true,
               signed: true, // erlaubt ein "+" oder "-" Zeichen vor der Zahl
             ),
-
             /*--------------------------------- onChanged ---*/
             controller: bruttoItemPriceController,
             onChanged: (String value) {
               log("----------------------------------------------------------------------------------------------------------------");
-              log('0575 - ExpenseWidget - bruttoItemPriceController - Eingabe: "${bruttoItemPriceController.text}" - als String');
-
+              log('0640 - ExpenseWidget - bruttoItemPriceController - Eingabe: "${bruttoItemPriceController.text}" - als String');
               /* wenn beim Eingeben aus Versehen ein falsches Zeichen benutzt wird */
               if (bruttoItemPriceController.text
                   .contains(RegExp(r'[a-zA-Z!"§$%&/(=?`*_:;><#+´^°@€)]'))) {
                 bruttoItemPriceController.text = "";
-                log('0581 - ExpenseWidget - bruttoItemPriceController - umgewandelt in "${bruttoItemPriceController.text}" ---> als String');
-
+                log('0645 - ExpenseWidget - bruttoItemPriceController - umgewandelt in "${bruttoItemPriceController.text}" ---> als String');
                 /*--------------------------------- Snackbar / Toast ---*/
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                   backgroundColor: wbColorButtonDarkRed,
@@ -672,24 +741,19 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
 
                   // quantity = double.parse(bruttoItemPriceController.text);
 
-                  log("0604 - ExpenseWidget - bruttoItemPriceController - setState ausgeführt: $bruttoItemPrice ---> als double");
-                  log('0605 - ExpenseWidget - bruttoItemPriceController - setState ausgeführt: ${bruttoItemPriceController.text} ---> im TextFormField eingetragen? ---> Ja');
+/*--------------------------------- *** ---*/
+                  log("0670 - ExpenseWidget - bruttoItemPriceController - setState ausgeführt: $bruttoItemPrice ---> als double <--- damit darf NICHT gerechnet werden !!!");
+/*--------------------------------- *** ---*/
+
+                  log('0673 - ExpenseWidget - quantityController - setState ausgeführt: ${bruttoItemPriceController.text} ---> im TextFormField eingetragen? ---> Ja');
                   // bruttoItemPriceController.text = quantity.toString();
                 });
                 // getCalculationResult();
                 log("----------------------------------------------------------------------------------------------------------------");
               } catch (e) {
-                log('0611 - ExpenseWidget - Fehlermeldung - Eingabe: ${bruttoItemPriceController.text} - als String');
+                log('0679 - ExpenseWidget - Fehlermeldung - Eingabe: ${bruttoItemPriceController.text} - als String');
                 bruttoItemPriceController.text = '';
               }
-
-              // setState(() {
-              //                                           if (bruttoItemPriceController.text == "") {
-              //     log('0323 - ExpenseWidget - bruttoItemPriceController - Eingabe gelöscht: "$bruttoItemPriceController" ---> als String');
-              //     bruttoItemPriceController.text = "1.00";
-              //     log('0325 - ExpenseWidget - bruttoItemPriceController - umgewandelt in "$bruttoItemPriceController" ---> als String');
-              //   }
-              // });
             },
 
             // /*--------------------------------- onChanged ---*/
@@ -738,11 +802,11 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
           ),
           /*--------------------------------- Abstand ---*/
           wbSizedBoxHeight16,
-          /*--------------------------------- Gesamtpreis Brutto in € ---*/
+          /*--------------------------------- Brutto-Gesamtpreis in € ---*/
           WbTextFormFieldTEXTOnly(
-            labelText: "Gesamtpreis Brutto in €",
+            labelText: "Brutto-Gesamtpreis in €",
             labelFontSize20: 18,
-            hintText: "Gesamtpreis Brutto in €",
+            hintText: "Brutto-Gesamtpreis in €",
             inputTextFontSize22: 22,
             inputFontWeightW900: FontWeight.w900,
             inputFontColor: wbColorLogoBlue,
@@ -751,19 +815,16 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
               decimal: true,
               signed: true, // erlaubt ein "+" oder "-" Zeichen vor der Zahl
             ),
-
             /*--------------------------------- onChanged ---*/
             controller: bruttoQuantityPriceController,
             onChanged: (String value) {
               log("----------------------------------------------------------------------------------------------------------------");
-              log('0697 - ExpenseWidget - bruttoQuantityPriceController - Eingabe: "${bruttoQuantityPriceController.text}" - als String');
-
+              log('0752 - ExpenseWidget - bruttoQuantityPriceController - Eingabe: "${bruttoQuantityPriceController.text}" - als String');
               /* wenn beim Eingeben aus Versehen ein falsches Zeichen benutzt wird */
               if (bruttoQuantityPriceController.text
                   .contains(RegExp(r'[a-zA-Z!"§$%&/(=?`*_:;><#+´^°@€)]'))) {
                 bruttoQuantityPriceController.text = "";
-                log('0703 - ExpenseWidget - bruttoQuantityPriceController - umgewandelt in "${bruttoQuantityPriceController.text}" ---> als String');
-
+                log('0757 - ExpenseWidget - bruttoQuantityPriceController - umgewandelt in "${bruttoQuantityPriceController.text}" ---> als String');
                 /*--------------------------------- Snackbar / Toast ---*/
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                   backgroundColor: wbColorButtonDarkRed,
@@ -783,28 +844,31 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                   bruttoQuantityPriceController.text =
                       bruttoQuantityPriceController.text
                           .replaceAll(RegExp(r','), '.');
-                  log('-------> text neu: ${bruttoQuantityPriceController.text}');
+                  log('-------> Text neu: ${bruttoQuantityPriceController.text}');
 
-                  // quantity = double.parse(bruttoQuantityPriceController.text);
+                  // bruttoQuantityPrice = double.parse(bruttoQuantityPriceController.text);
 
-                  log("0728 - ExpenseWidget - bruttoQuantityPriceController - setState ausgeführt: $bruttoQuantityPrice ---> als double");
-                  log('0729 - ExpenseWidget - bruttoQuantityPriceController - setState ausgeführt: ${bruttoQuantityPriceController.text} ---> im TextFormField eingetragen? ---> Ja');
-                  // bruttoQuantityPriceController.text = quantity.toString();
+                  log("0781 - ExpenseWidget - bruttoQuantityPriceController - setState ausgeführt: $bruttoQuantityPrice ---> als double");
+                  log('0782 - ExpenseWidget - bruttoQuantityPriceController - setState ausgeführt: ${bruttoQuantityPriceController.text} ---> im TextFormField eingetragen? ---> Ja');
+                  bruttoQuantityPriceController.text =
+                      bruttoQuantityPrice.toStringAsFixed(2);
                 });
                 // getCalculationResult();
                 log("----------------------------------------------------------------------------------------------------------------");
               } catch (e) {
-                log('0735 - ExpenseWidget - Fehlermeldung - Eingabe: ${bruttoQuantityPriceController.text} - als String');
+                log('0788 - ExpenseWidget - Fehlermeldung - Eingabe: ${bruttoQuantityPriceController.text} - als String');
                 bruttoQuantityPriceController.text = '';
               }
 
-              // setState(() {
-              //                                           if (bruttoQuantityPriceController.text == "") {
-              //     log('0323 - ExpenseWidget - bruttoQuantityPriceController - Eingabe gelöscht: "$bruttoQuantityPriceController" ---> als String');
-              //     bruttoQuantityPriceController.text = "1.00";
-              //     log('0325 - ExpenseWidget - bruttoQuantityPriceController - umgewandelt in "$bruttoQuantityPriceController" ---> als String');
-              //   }
-              // });
+              setState(() {
+                bruttoQuantityPriceController.text =
+                    bruttoQuantityPrice.toStringAsFixed(2);
+                if (bruttoQuantityPriceController.text == "") {
+                  log('0796 - ExpenseWidget - bruttoQuantityPriceController - Eingabe gelöscht: "$bruttoQuantityPriceController" ---> als String');
+                  bruttoQuantityPriceController.text = "";
+                  log('0798 - ExpenseWidget - bruttoQuantityPriceController - umgewandelt in "$bruttoQuantityPriceController" ---> als String');
+                }
+              });
             },
 
             // /*--------------------------------- onChanged ---*/
@@ -833,7 +897,16 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
             // /*--------------------------------- *** ---*/
           ),
           /*--------------------------------- Abstand ---*/
-          wbSizedBoxHeight16,
+          wbSizedBoxHeight8,
+          /*--------------------------------- Divider ---*/
+          WbDividerWithTextInCenter(
+              wbColor: wbColorButtonDarkRed,
+              wbText: 'Übersicht',
+              wbTextColor: wbColorButtonDarkRed,
+              wbFontSize12: 18,
+              wbHeight3: 3),
+          /*--------------------------------- Abstand ---*/
+          wbSizedBoxHeight8,
           /*--------------------------------- Container - Teil 1 - für Netto-Preise ---*/
           Container(
             width: 400,
@@ -852,20 +925,21 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
             ),
             child: Column(
               children: [
-                /*--------------------------------- Netto-Einzelpreis OHNE MwSt. ---*/
+                /*--------------------------------- Container - Netto-Einzeln OHNE MwSt. ---*/
                 Padding(
                   padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
                   child: Row(
                     children: [
                       Text(
-                        'Netto-Einzelpreis OHNE MwSt.:',
+                        'Netto-Einzeln (ohne MwSt.):',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Expanded(
                         child: Text(
-                          '${nettoItemPrice.toStringAsFixed(2)} €',
+                          // '${nettoItemPrice.toStringAsFixed(2)} €',
+                          '${nettoItemPriceController.text} €',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -875,22 +949,24 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                     ],
                   ),
                 ),
-                /*--------------------------------- Netto-Gesamtpreis ---*/
+                /*--------------------------------- Container - Netto-Gesamt ---*/
                 Padding(
                   padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
                   child: Row(
                     children: [
                       Text(
-                        'Netto-Gesamtpreis für ${quantity.toStringAsFixed(2)} $item:',
+                        // 'Netto-Gesamt für ${quantity.toStringAsFixed(2)} $item:',
+                        'Netto-Gesamt für ${quantityController.text} ${itemController.text}:',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Expanded(
                         child: Text(
-                          '${nettoQuantityPrice.toStringAsFixed(2)} €',
+                          // '${nettoQuantityPrice.toStringAsFixed(2)} €',
+                          '${nettoQuantityPriceController.text} €',
                           style: TextStyle(
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w900,
                           ),
                           textAlign: TextAlign.right,
                         ),
@@ -919,45 +995,52 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
             ),
             child: Column(
               children: [
-                /*--------------------------------- Mehrwertsteuer für 1 Artikel ---*/
+                /*--------------------------------- Container - Mehrwertsteuer für 1 Artikel ---*/
+                // Padding(
+                //   padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+                //   child: Row(
+                //     children: [
+                //       Text(
+                //         'Mehrwertsteuer für 1 Artikel:',
+                //         style: TextStyle(
+                //           fontWeight: FontWeight.bold,
+                //         ),
+                //       ),
+                //       Expanded(
+                //         child: Text(
+                //           // '${taxOnNettoItemPrice.toStringAsFixed(2)} €',
+                //           //'${taxOnNettoItemPrice}Controller 0935',
+                //           '${taxOnBruttoItemPriceController.text} €',
+                //           style: TextStyle(
+                //             fontWeight: FontWeight.bold,
+                //           ),
+                //           textAlign: TextAlign.right,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                /*--------------------------------- Container - Mehrwertsteuer für alle Artikel ---*/
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+                  padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
                   child: Row(
                     children: [
                       Text(
-                        'Mehrwertsteuer für 1 Artikel:',
+                        //'Gesamt-MwSt. für ${quantity.toStringAsFixed(2)} $item:',
+                        // 'Gesamt-MwSt. für ${quantityController.text} ${itemController.text}:',
+                        'MwSt. insgesamt (${taxPercentController.text}):',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Expanded(
                         child: Text(
-                          '${taxOnNettoItemPrice.toStringAsFixed(2)} €',
+                          //'${taxOnNettoQuantityPrice.toStringAsFixed(2)} €'
+                          //'${taxOnNettoQuantityPrice}Controller 0960',
+                          // '${taxOnBruttoQuantityPriceController.text} €',
+                          '${taxOnBruttoItemPriceController.text} €',
                           style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.right,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                /*--------------------------------- Mehrwertsteuer für alle Artikel ---*/
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Mehrwertsteuer für ${quantity.toStringAsFixed(2)} $item:',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          '${taxOnNettoQuantityPrice.toStringAsFixed(2)} €',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w900,
                           ),
                           textAlign: TextAlign.right,
                         ),
@@ -986,20 +1069,21 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
             ),
             child: Column(
               children: [
-                /*--------------------------------- Brutto-Einzelpreis (incl. MwSt.) ---*/
+                /*--------------------------------- Container - Brutto-Einzeln (incl. MwSt.) ---*/
                 Padding(
                   padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
                   child: Row(
                     children: [
                       Text(
-                        'Brutto-Einzelpreis incl. MwSt.:',
+                        'Brutto-Einzeln (incl. MwSt.):',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Expanded(
                         child: Text(
-                          '${bruttoItemPrice.toStringAsFixed(2)} €',
+                          //'${bruttoItemPrice.toStringAsFixed(2)} €'
+                          '${bruttoItemPriceController.text} ',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -1009,22 +1093,24 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                     ],
                   ),
                 ),
-                /*--------------------------------- Brutto-Gesamtpreis für alle Artikel ---*/
+                /*--------------------------------- Container - Brutto-Gesamt für alle Artikel ---*/
                 Padding(
                   padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
                   child: Row(
                     children: [
                       Text(
-                        'Brutto-Gesamtpreis für ${quantity.toStringAsFixed(2)} $item:',
+                        // 'Brutto-Gesamt für ${quantity.toStringAsFixed(2)} $item:',
+                        'Brutto-Gesamt für ${quantityController.text} ${itemController.text}:',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Expanded(
                         child: Text(
-                          '${bruttoQuantityPrice.toStringAsFixed(2)} €',
+                          // '${bruttoQuantityPrice.toStringAsFixed(2)} €',
+                          '${bruttoQuantityPriceController.text} ',
                           style: TextStyle(
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w900,
                           ),
                           textAlign: TextAlign.right,
                         ),
@@ -1035,69 +1121,47 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
               ],
             ),
           ),
-
-          //     /*--------------------------------- Im Gesamtpreis enthaltene MwSt. ---*/
-          //     Padding(
-          //       padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-          //       child: Row(
-          //         children: [
-          //           Text(
-          //             'Im Gesamtpreis enthaltene MwSt.:',
-          //             style: TextStyle(
-          //               fontWeight: FontWeight.bold,
-          //             ),
-          //           ),
-          //           Expanded(
-          //             child: Text(
-          //               '${taxOnBruttoQuantityPrice.toStringAsFixed(2)} €',
-          //               style: TextStyle(
-          //                 fontWeight: FontWeight.bold,
-          //               ),
-          //               textAlign: TextAlign.right,
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          //   ],
-          // ),
-          // ),
+          /*--------------------------------- Abstand ---*/
+          wbSizedBoxHeight8,
+          /*--------------------------------- Divider ---*/
+          WbDividerWithTextInCenter(
+              wbColor: wbColorButtonDarkRed,
+              wbText: 'Netto-Preise - OHNE - MwSt.',
+              wbTextColor: wbColorButtonDarkRed,
+              wbFontSize12: 18,
+              wbHeight3: 3),
+          /*--------------------------------- Abstand ---*/
+          wbSizedBoxHeight8,
           /*--------------------------------- Abstand ---*/
           SizedBox(height: 12),
-          /*--------------------------------- Abstand ---*/
+          /*--------------------------------- ElevatedButton - Berechnung ---*/
           Center(
             child: SizedBox(
               width: 400,
               child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all(
-                      const Color.fromARGB(255, 255, 204, 102)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: wbColorDrawerOrangeLight,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    side: BorderSide(
+                      color: wbColorAppBarBlue,
+                      width: 2,
+                    ),
+                  ),
                 ),
-                onPressed: () {
-                  log("----------------------------------------------------------------------------------------------------------------");
-                  log('0714 - ExpenseWidget - ElevatedButton angeklickt');
-
-                  // /*--- Wenn im Textfeld "MwSt." nichts drin steht ---*/
-                  // if (taxPercentController.text == "") {
-                  //   log('0732 - ExpenseWidget - taxPercentController - Eingabe gelöscht: "${taxPercentController.text}" ---> als String');
-                  //   taxPercentController.text = "19 %";
-                  //   log('0734 - ExpenseWidget - taxPercentController - umgewandelt in "${taxPercentController.text}" ---> als String');
-                  // }
-
-                  getCalculationResult();
-
-                  // setState(() {});
-                  log("----------------------------------------------------------------------------------------------------------------");
-
-                  // log("----------------------------------------------------------------------------------------------------------------");
-                },
                 child: Text(
-                  'Zur Kontrolle NEU berechnen?',
+                  'Berechnung durchführen',
                   style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Colors.black),
                 ),
+                onPressed: () {
+                  log("----------------------------------------------------------------------------------------------------------------");
+                  log('0714 - ExpenseWidget - ElevatedButton angeklickt');
+                  getCalculationResult();
+                  log("----------------------------------------------------------------------------------------------------------------");
+                },
               ),
             ),
           ),
