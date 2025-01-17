@@ -30,33 +30,24 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
 // ScrollController _scrollcontroller = ScrollController();
 
 /*--------------------------------- Controller ---*/
-  final TextEditingController quantityController =
-      TextEditingController(); // Eingabe
-  final TextEditingController itemController =
-      TextEditingController(); // Eingabe
-  final TextEditingController taxPercentController =
-      TextEditingController(); // Eingabe
+  final quantityController = TextEditingController();
+  final itemController = TextEditingController();
+  final taxPercentController = TextEditingController();
 
-  final TextEditingController bruttoItemPriceController =
-      TextEditingController(); // Eingabe oder berechnet
-  final TextEditingController bruttoQuantityPriceController =
-      TextEditingController(); // Eingabe oder berechnet
+  final bruttoItemPriceController = TextEditingController();
+  final bruttoQuantityPriceController = TextEditingController();
 
-  final TextEditingController nettoItemPriceController =
-      TextEditingController(); // Eingabe oder berechnet
-  final TextEditingController nettoQuantityPriceController =
-      TextEditingController(); // Eingabe oder berechnet
+  final nettoItemPriceController = TextEditingController();
+  final nettoQuantityPriceController = TextEditingController();
 
-  final TextEditingController taxOnBruttoItemPriceController =
-      TextEditingController(); // Eingabe oder berechnet
-  final TextEditingController taxOnBruttoQuantityPriceController =
-      TextEditingController(); // Eingabe oder berechnet
+  final taxOnBruttoItemPriceController = TextEditingController();
+  final taxOnBruttoQuantityPriceController = TextEditingController();
 
 /*--------------------------------- Variablen um die Preise zu berechnen ---*/
   double quantity = 0.00; // Eingabe
   String item = 'Stk'; // Eingabe
 
-  double taxPercent = 0.00; // Eingabe
+  double taxPercent = 19.00; // Eingabe
   double taxOnNettoItemPrice = 0.00; // berechnet
   double taxOnNettoQuantityPrice = 0.00; // berechnet
 
@@ -69,8 +60,71 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
   double bruttoItemPrice = 0.00; // Eingabe oder berechnet
   double bruttoQuantityPrice = 0.00; // Eingabe oder berechnet
 
+  /*-------------------------------------------------------------------------------------------------------------------*/
   void getCalculationResult() {
-    /* die einzelnen Positionen berechnen */
+    /* Die einzelnen Positionen berechnen */
+    // log("----------------------------------------------------------------------------------------------------------------");
+    // /* Vor der Berechnung müssen alle Zahlen in das Rechenformat mit Punkt vor den Dezimalzahlen umgestellt werden */
+    // /*-------------------------------------------------------------------------------------------------------------------*/
+    // log('0078 √ getCalculationResult - Anzahl als Text:                ${quantityController.text} --> ist keine Währung');
+    // /* (1) alle Komma durch "x" ersetzen */
+    // quantityController.text =
+    //     quantityController.text.replaceAll(RegExp(r'[,]'), 'x');
+    // log('0082 √ getCalculationResult - Anzahl als Text:                ${quantityController.text} --> Komma durch x ersetzt');
+
+    // /* (2) alle Punkte entfernen */
+    // quantityController.text =
+    //     quantityController.text.replaceAll(RegExp(r'[.]'), '');
+    // log('0087 √ getCalculationResult - Anzahl als Text:                ${quantityController.text} --> Punkte gelöscht');
+
+    // /* (3) alle "x" durch Punkte ersetzen */
+    // quantityController.text =
+    //     quantityController.text.replaceAll(RegExp(r'[x]'), '.');
+    // log('0092 √ getCalculationResult - Anzahl als double:              ${quantityController.text} --> x durch Punkt ersetzt');
+    // log("----------------------------------------------------------------------------------------------------------------");
+    // log('0094 √ getCalculationResult - Einheiten als Text:             ${itemController.text} --> wird nicht umgestellt');
+    // log("----------------------------------------------------------------------------------------------------------------");
+    // log('0096 √ getCalculationResult - MwSt. als Prozentsatz:          ${taxPercentController.text}');
+    // taxPercentController.text =
+    //     taxPercentController.text.replaceAll(RegExp(r'[ %,]'), '');
+    // log('0095 √ getCalculationResult - MwSt. als double:               ${taxPercentController.text}');
+    // log("----------------------------------------------------------------------------------------------------------------");
+    // log('0097 - getCalculationResult - Brutto-Einzel als Text:         ${bruttoItemPriceController.text} €');
+    // bruttoItemPriceController.text =
+    //     bruttoItemPriceController.text.replaceAll(RegExp(r'[ €,]'), '');
+
+    // log('0078 - getCalculationResult - Brutto-Einzel als double:       ${bruttoItemPriceController.text}');
+    // log("----------------------------------------------------------------------------------------------------------------");
+    // log('0079 - getCalculationResult - Brutto-Gesamt als Text:         ${bruttoQuantityPriceController.text} €');
+    // bruttoQuantityPriceController.text =
+    //     bruttoQuantityPriceController.text.replaceAll(RegExp(r'[ €,]'), '');
+
+    // log('0079 - getCalculationResult - Brutto-Gesamt als double:       ${bruttoQuantityPriceController.text}');
+    // log("----------------------------------------------------------------------------------------------------------------");
+    // log('0080 - getCalculationResult - Netto-Einzel als Text:          ${nettoItemPriceController.text} €');
+    // nettoItemPriceController.text =
+    //     nettoItemPriceController.text.replaceAll(RegExp(r'[ €,]'), '');
+
+    // log('0080 - getCalculationResult - Netto-Einzel als double:        ${nettoItemPriceController.text}');
+    // log("----------------------------------------------------------------------------------------------------------------");
+    // log('0081 - getCalculationResult - Brutto-Gesamt als Text:         ${nettoQuantityPriceController.text} €');
+    // nettoQuantityPriceController.text =
+    //     nettoQuantityPriceController.text.replaceAll(RegExp(r'[ €,]'), '');
+
+    // log('0081 - getCalculationResult - Brutto-Gesamt als double:       ${nettoQuantityPriceController.text}');
+    // log("----------------------------------------------------------------------------------------------------------------");
+    // log('0082 - getCalculationResult - Brutto-Einzel-MwSt. als Text:   ${taxOnBruttoItemPriceController.text} €');
+    // taxOnBruttoItemPriceController.text =
+    //     taxOnBruttoItemPriceController.text.replaceAll(RegExp(r'[ €,]'), '');
+
+    // log('0082 - getCalculationResult - Brutto-Einzel-MwSt. als double: ${taxOnBruttoItemPriceController.text}');
+    // log("----------------------------------------------------------------------------------------------------------------");
+    // log('0083 - getCalculationResult - Brutto-Gesamt-MwSt. als Text: ${taxOnBruttoQuantityPriceController.text} €');
+    // taxOnBruttoQuantityPriceController.text = taxOnBruttoQuantityPriceController
+    //     .text
+    //     .replaceAll(RegExp(r'[ €,]'), '');
+
+    // log('0083 - getCalculationResult - Brutto-Gesamt-MwSt. als double: ${taxOnBruttoQuantityPriceController.text}');
     log("----------------------------------------------------------------------------------------------------------------");
     log('0075 - getCalculationResult - Anzahl als double:              ${quantityController.text}');
     log('0076 - getCalculationResult - Einheiten als Text:             ${itemController.text}');
@@ -81,7 +135,6 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
     log('0081 - getCalculationResult - Brutto-Gesamt als double:       ${nettoQuantityPriceController.text} €');
     log('0082 - getCalculationResult - Brutto-Einzel-MwSt. als double: ${taxOnBruttoItemPriceController.text} €');
     log('0083 - getCalculationResult - Brutto-Gesamt-MwSt. als double: ${taxOnBruttoQuantityPriceController.text} €');
-
     log("----------------------------------------------------------------------------------------------------------------");
 
     /* Netto-Einzelpreis - Umrechnung in Cent für genauere Berechnungen */
@@ -277,8 +330,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
     /*-------------------------------------------------------------------------------*/
 
     /*--- Anzahl ---*/
-    Money quantityAsFormat =
-        Money.fromInt((quantity * 100).toInt(), isoCode: 'EUR');
+    Money quantityAsFormat = Money.fromInt((quantity * 100).toInt(), isoCode: 'EUR');
     quantityController.text = quantityAsFormat.format('###,###.#0');
     log('√ ---> 0180 - ExpenseWidget - Eintrag im Textfeld "Anzahl":        ${quantityAsFormat.format('###,###.#0')}');
 
@@ -389,6 +441,69 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
     // log("Mehrwertsteuer:       ${taxSum.toStringAsFixed(2)} €");
     // log("Gesamtsumme           ${totalSum.toStringAsFixed(2)} €");
     log("----------------------------------------------------------------------------------------------------------------");
+    // /* Nach der Berechnung müssen wieder alle Zahlen in das Rechenformat mit Punkt vor den Dezimalzahlen umgestellt werden */
+    // /*-------------------------------------------------------------------------------------------------------------------*/
+    // log('0078 √ getCalculationResult - Anzahl als Text:                ${quantityController.text} --> ist keine Währung');
+    // /* (1) alle Komma durch "x" ersetzen */
+    // quantityController.text =
+    //     quantityController.text.replaceAll(RegExp(r'[,]'), 'x');
+    // log('0082 √ getCalculationResult - Anzahl als Text:                ${quantityController.text} --> Komma durch x ersetzt');
+
+    // /* (2) alle Punkte entfernen */
+    // quantityController.text =
+    //     quantityController.text.replaceAll(RegExp(r'[.]'), '');
+    // log('0087 √ getCalculationResult - Anzahl als Text:                ${quantityController.text} --> Punkte gelöscht');
+
+    // /* (3) alle "x" durch Punkte ersetzen */
+    // quantityController.text =
+    //     quantityController.text.replaceAll(RegExp(r'[x]'), '.');
+    // log('0092 √ getCalculationResult - Anzahl als double:              ${quantityController.text} --> x durch Punkt ersetzt');
+    // log("----------------------------------------------------------------------------------------------------------------");
+    // log('0094 √ getCalculationResult - Einheiten als Text:             ${itemController.text} --> wird nicht umgestellt');
+    // log("----------------------------------------------------------------------------------------------------------------");
+    // log('0096 √ getCalculationResult - MwSt. als Prozentsatz:          ${taxPercentController.text}');
+    // taxPercentController.text =
+    //     taxPercentController.text.replaceAll(RegExp(r'[ %,]'), '');
+    // log('0095 √ getCalculationResult - MwSt. als double:               ${taxPercentController.text}');
+    // log("----------------------------------------------------------------------------------------------------------------");
+    // log('0097 - getCalculationResult - Brutto-Einzel als Text:         ${bruttoItemPriceController.text} €');
+    // bruttoItemPriceController.text =
+    //     bruttoItemPriceController.text.replaceAll(RegExp(r'[ €,]'), '');
+
+    // log('0078 - getCalculationResult - Brutto-Einzel als double:       ${bruttoItemPriceController.text}');
+    // log("----------------------------------------------------------------------------------------------------------------");
+    // log('0079 - getCalculationResult - Brutto-Gesamt als Text:         ${bruttoQuantityPriceController.text} €');
+    // bruttoQuantityPriceController.text =
+    //     bruttoQuantityPriceController.text.replaceAll(RegExp(r'[ €,]'), '');
+
+    // log('0079 - getCalculationResult - Brutto-Gesamt als double:       ${bruttoQuantityPriceController.text}');
+    // log("----------------------------------------------------------------------------------------------------------------");
+    // log('0080 - getCalculationResult - Netto-Einzel als Text:          ${nettoItemPriceController.text} €');
+    // nettoItemPriceController.text =
+    //     nettoItemPriceController.text.replaceAll(RegExp(r'[ €,]'), '');
+
+    // log('0080 - getCalculationResult - Netto-Einzel als double:        ${nettoItemPriceController.text}');
+    // log("----------------------------------------------------------------------------------------------------------------");
+    // log('0081 - getCalculationResult - Brutto-Gesamt als Text:         ${nettoQuantityPriceController.text} €');
+    // nettoQuantityPriceController.text =
+    //     nettoQuantityPriceController.text.replaceAll(RegExp(r'[ €,]'), '');
+
+    // log('0081 - getCalculationResult - Brutto-Gesamt als double:       ${nettoQuantityPriceController.text}');
+    // log("----------------------------------------------------------------------------------------------------------------");
+    // log('0082 - getCalculationResult - Brutto-Einzel-MwSt. als Text:   ${taxOnBruttoItemPriceController.text} €');
+    // taxOnBruttoItemPriceController.text =
+    //     taxOnBruttoItemPriceController.text.replaceAll(RegExp(r'[ €,]'), '');
+
+    // log('0082 - getCalculationResult - Brutto-Einzel-MwSt. als double: ${taxOnBruttoItemPriceController.text}');
+    // log("----------------------------------------------------------------------------------------------------------------");
+    // log('0083 - getCalculationResult - Brutto-Gesamt-MwSt. als Text: ${taxOnBruttoQuantityPriceController.text} €');
+    // taxOnBruttoQuantityPriceController.text = taxOnBruttoQuantityPriceController
+    //     .text
+    //     .replaceAll(RegExp(r'[ €,]'), '');
+
+    // log('0083 - getCalculationResult - Brutto-Gesamt-MwSt. als double: ${taxOnBruttoQuantityPriceController.text}');
+    log("----------------------------------------------------------------------------------------------------------------");
+    setState(() {}); // Aktualisierung der UI
     // packageMoney2Test();
   }
 

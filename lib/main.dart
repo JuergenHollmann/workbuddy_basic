@@ -128,12 +128,22 @@ class MainApp extends StatelessWidget {
   √ für macOS muss im macos/Podfile ---> platform :osx, '10.15' eingestellt werden √ 
 
   /*--------------------------------- TODO's ---
-  - Zustimmung zu Datenschutz + Textvorlage einpflegen
-  - Zustimmung zu Nutzungsbedingungen + Textvorlage einpflegen
-  - Impressum + Textvorlage einpflegen
+  - Mit Provider im Feld "Wer hat eingekauft?" den angemeldeten User automatisch eintragen.
+  - Überprüfen, ob im Device eine Speicherkarte vorhanden ist oder nicht.
+  - Foto von der Quittung oder Rechnung erstellen.
+  - Foto-Datei umbenennen nach folgendem Muster: JJJJ-MM-DD - Einkauf/Verkauf - Wo - Was - Gesamt-Bruttopreis.
+  - Datensatz des Einkaufs/Verkaufs speichern nachf folgendem Muster:
+    Einkauf/Verkauf, Wo, Was, Anzahl, Einheiten, Steuersatz, Einzel-Bruttopreis, Gesamt-Bruttopreis, ... etc.
+  - Foto entweder intern oder extern auf Speicherkarte speichern.
+  - Im ExpenseWidget bleiben die Einträge noch der Berechnung nicht im Textfeld mit dem Wert stehen.
 
-  - allgemein überall "TextEditingController.dispose" einbauen0
-  - Nützliche Funktion vorschlagen - E-Mail DIREKT an den Entwickler senden - "Support-E-Mail" eintragen - CM-0121
+* Datenschutz und Rechtliches:  
+  - Zustimmung zu Datenschutz + Textvorlage einpflegen.
+  - Zustimmung zu Nutzungsbedingungen + Textvorlage einpflegen.
+  - Impressum + Textvorlage einpflegen.
+
+  - Allgemein überall "TextEditingController.dispose" einbauen.
+  - Nützliche Funktion für den User vorschlagen - E-Mail DIREKT an den Entwickler senden - "Support-E-Mail" eintragen - CM-0121
   - "WbInfoContainer" im CompanyScreen ist teilweise noch festverdrahtet - 1030
   - "WbInfoContainer" im ContactScreen ist teilweise noch festverdrahtet - 1030
 
