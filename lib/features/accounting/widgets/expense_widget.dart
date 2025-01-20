@@ -11,6 +11,7 @@ import 'package:workbuddy/config/wb_sizes.dart';
 import 'package:workbuddy/config/wb_text_form_field.dart';
 import 'package:workbuddy/config/wb_text_form_field_text_only.dart';
 import 'package:workbuddy/features/accounting/screens/accounting_menu.dart';
+import 'package:workbuddy/shared/widgets/wb_dialog_alert_update_coming_soon.dart';
 import 'package:workbuddy/shared/widgets/wb_divider_with_text_in_center.dart';
 import 'package:workbuddy/shared/widgets/wb_drop_downmenu_with_0_icon.dart';
 import 'package:workbuddy/shared/widgets/wb_drop_downmenu_with_1_icon.dart';
@@ -185,7 +186,8 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
     // }
 
     /*--- Anzahl - Umformatierung in double ---*/
-    quantity = double.tryParse(quantityController.text) ?? 1.0;
+    quantity = double.tryParse(quantityController.text) ??
+        1.00; // wenn keine Zahl vorhanden ist, dann Zahl = 1.00
     log('0128 -----> Anzahl:           quantity =          $quantity');
 
     /*--- taxPercent - Umformatierung in double ---*/
@@ -220,6 +222,17 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
     log('0150 - getCalculationResult - double: $nettoQuantityPriceInCent ==> Cent Netto-Gesamtpreis');
     log("----------------------------------------------------------------------------------------------------------------");
 
+    // /* überprüfen ob das Feld "Brutto-Gesamtpreis" gefüllt ist */
+    // if (taxPercentController.text.isEmpty || taxPercentController.text == "") {
+    //   showDialog(
+    //       context: context,
+    //       builder: (context) => const WbDialogAlertUpdateComingSoon(
+    //           headlineText: "Zur Berechnung fehlen noch Daten!",
+    //           contentText: 'Bitte noch das Feld "Mehrwertsteuersatz" ergänzen.',
+    //           actionsText: "OK 👍"));
+    //   log('0250 --> Eingabe "Angabe" fehlt! <---');
+    // } else {}
+
     /* Brutto-Einzelpreis = Umformatierung in double */
     bruttoItemPrice = double.tryParse(bruttoItemPriceController.text) ?? 1.0;
     log('0155 -----> Brutto-Einzeln: bruttoItemPrice =     $bruttoItemPrice');
@@ -238,14 +251,26 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
     log('0170 -----> Brutto-Gesamt:  bruttoQuantityPrice = ${bruttoQuantityPrice.toStringAsFixed(2)} €');
     log("----------------------------------------------------------------------------------------------------------------");
 
-    /* Mehrwertsteuersatz - Berechnung */
-    taxPercentController.text = taxPercentController.text
-        .replaceAll(RegExp(r' %'), ''); // das Prozentzeichen entfernen
-    log('0174 √ getCalculationResult - Mehrwertsteuersatz: ${taxPercentController.text} %'); //
+    /* überprüfen ob das Feld "Mehrwertsteuersatz" gefüllt ist */
+    if (taxPercentController.text.isEmpty || taxPercentController.text == "") {
+      showDialog(
+          context: context,
+          builder: (context) => const WbDialogAlertUpdateComingSoon(
+              headlineText: "Zur Berechnung fehlen noch Daten!",
+              contentText: 'Bitte noch das Feld "Mehrwertsteuersatz" ergänzen.',
+              actionsText: "OK 👍"));
+      log('0250 --> Eingabe "Angabe" fehlt! <---');
+      FocusScope.of(context).requestFocus(FocusNode());
+    } else {
+      /* Mehrwertsteuersatz - Berechnung */
+      taxPercentController.text = taxPercentController.text
+          .replaceAll(RegExp(r' %'), ''); // das Prozentzeichen entfernen
+      log('0174 √ getCalculationResult - Mehrwertsteuersatz: ${taxPercentController.text} %'); //
 
-    taxPercent = double.tryParse(taxPercentController.text) ?? 0.0;
-    final taxPercentSet = taxPercent / 100;
-    log('0178 √ getCalculationResult - Mehrwertsteuersatz zum Rechnen: $taxPercentSet ==> als double');
+      taxPercent = double.tryParse(taxPercentController.text) ?? 0.0;
+      final taxPercentSet = taxPercent / 100;
+      log('0178 √ getCalculationResult - Mehrwertsteuersatz zum Rechnen: $taxPercentSet ==> als double');
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* Das sind die Formeln zur Berechnung eines Betrages mit Mehrwertsteuer (MwSt% = 19%)                            
@@ -269,7 +294,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
 
     /* Gesamte Mehrwertsteuer aus dem Brutto-Gesamtpreis berechnen */
     taxOnBruttoItemPrice =
-        (bruttoItemPrice - (bruttoItemPrice / (1 + (taxPercentSet)))) *
+        (bruttoItemPrice - (bruttoItemPrice / (1 + (taxPercent / 100)))) *
             quantity;
     taxOnBruttoItemPriceController.text =
         taxOnBruttoItemPrice.toStringAsFixed(2);
@@ -328,18 +353,19 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
     /*-------------------------------------------------------------------------------*/
     /* Die Ergebnisse umformatieren oder im "Money-Währungsformat" darstellen */
     /*-------------------------------------------------------------------------------*/
-
+    log('---- Anzeigen im Display: ----');
     /*--- Anzahl ---*/
-    Money quantityAsFormat = Money.fromInt((quantity * 100).toInt(), isoCode: 'EUR');
+    Money quantityAsFormat =
+        Money.fromInt((quantity * 100).toInt(), isoCode: 'EUR');
     quantityController.text = quantityAsFormat.format('###,###.#0');
-    log('√ ---> 0180 - ExpenseWidget - Eintrag im Textfeld "Anzahl":        ${quantityAsFormat.format('###,###.#0')}');
+    log('√ ---> 0336 - ExpenseWidget - Eintrag im Textfeld "Anzahl":        ${quantityAsFormat.format('###,###.#0')}');
 
     /*--- Brutto-Einzelpreis ---*/
     Money bruttoItemPriceAsMoney =
         Money.fromInt((bruttoItemPrice * 100).toInt(), isoCode: 'EUR');
     bruttoItemPriceController.text =
         bruttoItemPriceAsMoney.format('###,###.#0 S');
-    log('√ ---> 0187 - ExpenseWidget - Eintrag "Brutto-Einzelpreis in €":   ${bruttoItemPriceAsMoney.format('###,###.#0 S')}');
+    log('√ ---> 0343 - ExpenseWidget - Eintrag "Brutto-Einzelpreis in €":   ${bruttoItemPriceAsMoney.format('###,###.#0 S')}');
 
     /*--- Brutto-Gesamtpreis ---*/
     bruttoQuantityPrice = bruttoQuantityPriceInCent.roundToDouble();
@@ -347,7 +373,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
         Money.fromInt((bruttoQuantityPrice).toInt(), isoCode: 'EUR');
     bruttoQuantityPriceController.text =
         bruttoQuantityPriceAsMoney.format('###,###.#0 S');
-    log('√ ---> 0194 - ExpenseWidget - Eintrag "Brutto-Gesamtpreis in €":   ${bruttoQuantityPriceAsMoney.format('###,###.#0 S')}');
+    log('√ ---> 0351 - ExpenseWidget - Eintrag "Brutto-Gesamtpreis in €":   ${bruttoQuantityPriceAsMoney.format('###,###.#0 S')}');
     log("----------------------------------------------------------------------------------------------------------------");
 
     setState(() {
@@ -427,7 +453,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
 
     log('0316 - getCalculationResult - Mwst. aus dem Brutto-Gesamtpreis berechnet: ${taxOnBruttoQuantityPrice.toStringAsFixed(2)} €');
     log('0317 - getCalculationResult - Mwst. aus dem Brutto-Gesamtpreis berechnet: $taxOnBruttoQuantityPrice €');
-    log('0318 - getCalculationResult - Mwst. aus dem Netto-Gesamtpreis berechnet:  $taxOnBruttoQuantityPriceController €');
+    log('0318 - getCalculationResult - Mwst. aus dem Netto-Gesamtpreis berechnet:  ${taxOnBruttoQuantityPriceController.text} €');
 
     // log("----------------------------------------------------------------------------------------------------------------");
 
@@ -677,24 +703,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                     //value
                     log("----------------------------------------------------------------------------------------------------------------");
                     log('0393 - ExpenseWidget - quantityController - Eingabe: "${quantityController.text}" - als String');
-                    /* wenn beim Löschen aus Versehen eine "null" entsehen sollte, muss das double "1.00" erscheinen */
-
-                    // bool validateInput(String value) {
-                    //   value = quantityController.text;
-                    //   log('');
-                    //   if (validateInput == true) {
-                    //     log('');
-                    //   }
-
-                    //   return value.contains(RegExp(r'[a-zA-z]')) ? false : true;
-                    // }
-
-                    // if (quantityController.text == "") {
-                    //   log('0396 - ExpenseWidget - quantityController - Eingabe gelöscht: "${quantityController.text}" ---> als String');
-                    //                         quantityController.text = "";
-
-                    // }else
-
+                    /* Wenn bei der Eingabe aus Versehen Buchstaben oder Sonderzeichen verwendet werden */
                     if (quantityController.text.contains(
                         RegExp(r'[a-zA-Z!"§$%&/(=?`*_:;><#+´^°@€)]'))) {
                       quantityController.text = "";
@@ -711,37 +720,32 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                           ),
                         ),
                       ));
-                      /*--------------------------------- *** ---*/
+                      /*--------------------------------- Try/catch setState ---*/
                     }
                     try {
                       setState(() {
                         quantityController.text = quantityController.text
                             .replaceAll(RegExp(r','), '.');
                         log('-------> text neu: ${quantityController.text}');
-
-                        // quantity = double.parse(quantityController.text);
-
-/*--------------------------------- *** ---*/
-                        log("0478 - ExpenseWidget - quantityController - setState ausgeführt: $quantity ---> als double <--- damit darf NICHT gerechnet werden !!!");
-/*--------------------------------- *** ---*/
-
-                        log('0479 - ExpenseWidget - quantityController - setState ausgeführt: ${quantityController.text} ---> im TextFormField eingetragen? ---> Ja');
-                        // quantityController.text = quantity.toString();
+                        quantity = double.parse(quantityController.text);
+                        log('0749 - ExpenseWidget - quantityController - in setState als double geparst: ${quantityController.text}');
+                        log("0752 - ExpenseWidget - quantityController - setState ausgeführt: $quantity ---> als double <--- ");
+                        log('0755 - ExpenseWidget - quantityController - setState ausgeführt: ${quantityController.text} ---> im TextFormField eingetragen? ---> Ja');
                       });
-                      // getCalculationResult();
                       log("----------------------------------------------------------------------------------------------------------------");
                     } catch (e) {
-                      log('0410 - ExpenseWidget - Fehlermeldung - Eingabe: ${quantityController.text} - als String');
+                      log('0759 - ExpenseWidget - Fehlermeldung - Eingabe: ${quantityController.text} - als String');
+                      showDialog(
+                          context: context,
+                          builder: (context) =>
+                              const WbDialogAlertUpdateComingSoon(
+                                headlineText: "Fehlermeldung!",
+                                contentText:
+                                    'Entweder ist das Feld "Anzahl" leer oder bei der Eingabe wurde mehr als 1 Dezimalkommastelle eingegeben !\n\nWeiter Hinweis:\nTausender-Trennpunkte werden später nach der Berechnung automatisch angezeigt.',
+                                actionsText: "OK 👍",
+                              ));
                       quantityController.text = '';
                     }
-
-                    // setState(() {
-                    //                                           if (quantityController.text == "") {
-                    //     log('0323 - ExpenseWidget - quantityController - Eingabe gelöscht: "$quantityController" ---> als String');
-                    //     quantityController.text = "1.00";
-                    //     log('0325 - ExpenseWidget - quantityController - umgewandelt in "$quantityController" ---> als String');
-                    //   }
-                    // });
                   },
                   /*--------------------------------- inputFormatters ---*/
                   // inputFormatters: [

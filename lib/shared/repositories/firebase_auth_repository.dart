@@ -6,7 +6,6 @@ class FirebaseAuthRepository implements AuthRepository {
   /*--------------------------------------- FirebaseAuth ---*/
   FirebaseAuth auth = FirebaseAuth.instance;
   /*--------------------------------------- authStateChanges ---*/
-  @override
   Stream<UserData?> get authStateChanges => auth.authStateChanges().map((user) {
         if (user != null) {
           return UserData(
@@ -107,20 +106,20 @@ class FirebaseAuthRepository implements AuthRepository {
     throw UnimplementedError('Die Methode "Alle Benutzer zeigen" ist noch nicht implementiert!');
   }
 /*--------------------------------------- signInWithEmailAndPassword ---*/
-  @override
-  Future<UserData> signInWithEmailAndPassword(
-      String email, String password) async {
-    final UserCredential credential =
-        await auth.signInWithEmailAndPassword(email: email, password: password);
-    final user = credential.user;
-    if (user != null) {
-      return UserData(
-        userName: user.email ?? '',
-        password: '',
-      );
-    }
-    throw Exception('Das Login ist fehlgeschlagen!');
-  }
+  // @override
+  // Future<UserData> signInWithEmailAndPassword(
+  //     String email, String password) async {
+  //   final UserCredential credential =
+  //       await auth.signInWithEmailAndPassword(email: email, password: password);
+  //   final user = credential.user;
+  //   if (user != null) {
+  //     return UserData(
+  //       userName: user.email ?? '',
+  //       password: '',
+  //     );
+  //   }
+  //   throw Exception('Das Login ist fehlgeschlagen!');
+  // }
 /*--------------------------------------- signInWithFacebook ---*/
   @override
   Future<UserData> signInWithFacebook() async {
@@ -152,5 +151,18 @@ class FirebaseAuthRepository implements AuthRepository {
     // throw Exception('Das Login ist fehlgeschlagen!');
     throw UnimplementedError(
         'Das Login mit deinem Google-Account ist noch nicht implementiert!');
+  }
+  
+  @override
+  Stream<User?> get onAuthStateChanges => throw UnimplementedError();
+  
+  @override
+  Future signInWithUserNameAndPassword({required String userName, required String password}) {
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future signInWithEmailAndPassword({required String email, required String password}) {
+    throw UnimplementedError();
   }
 }

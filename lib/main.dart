@@ -249,7 +249,7 @@ class MainApp extends StatelessWidget {
 
 * GitHub:  
   In die ".gitignore" vom Projektverzeichnis eintragen:
-  # Um die Firebase API-Keys bei GitHub geheim zu halten:
+  # Um die Firebase API-Keys bei GitHub NICHT zu veröffentlichen:
   /lib/firebase_options.dart
   /android/app/google-services.json
   /macos/Runner/GoogleService-Info.plist

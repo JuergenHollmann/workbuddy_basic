@@ -5,11 +5,26 @@ Momentan existieren 3 "class User" Modelle für userName und UserPasswort:
 - shared/data/user_data.dart';                    <-- diese wird benutzt --
 */
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:workbuddy/shared/data/user_data.dart';
 
 abstract class AuthRepository {
+  /*--------------------------------------- signInWithUserNameAndPassword ---*/
+  Future signInWithUserNameAndPassword(
+      {required String userName, required String password}) async {
+    FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: userName, password: password);
+    FirebaseAuth.instance.signOut();
+  }
+  /*--------------------------------------- signInWithEmailAndPasswort ---*/
+  Future signInWithEmailAndPassword(
+      {required String email, required String password}) async {
+    FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password);
+    FirebaseAuth.instance.signOut();
+  }
   /*--------------------------------------- authStateChanges ---*/
-  Stream<UserData?> get authStateChanges;
+  Stream<User?> get onAuthStateChanges => FirebaseAuth.instance.authStateChanges();
   /*--------------------------------------- Login ---*/
   /* Den User einloggen */
   Future<bool> login(String userName, String password);
@@ -31,10 +46,8 @@ abstract class AuthRepository {
   /*--------------------------------------- Logout ---*/
   Future<void> logout();
   /*--------------------------------------- getAllUsers ---*/
-   /* Alle vorhandenen User zurückgeben */
+  /* Alle vorhandenen User zurückgeben */
   Future<List<UserData>> getAllUsers();
-  /*--------------------------------------- signInWithEmailAndPassword ---*/
-  Future<UserData> signInWithEmailAndPassword(String userName, String password);
   /*--------------------------------------- signInWithGoogle ---*/
   Future<UserData> signInWithGoogle();
   /*--------------------------------------- signInWithFacebook ---*/
