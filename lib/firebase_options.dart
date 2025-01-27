@@ -41,49 +41,49 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyALUIH3nxrid-k6ZCplJwydCIw2Wa7QMkU',
-    appId: '1:729420274996:web:5c6006deb6284c1f755961',
-    messagingSenderId: '729420274996',
-    projectId: 'workbuddy-test2',
-    authDomain: 'workbuddy-test2.firebaseapp.com',
-    storageBucket: 'workbuddy-test2.firebasestorage.app',
-    measurementId: 'G-4X92YY6PQ3',
+    apiKey: 'AIzaSyBtQogbnkXkb70G8k_OSMi3B_UhNVWDIT4',
+    appId: '1:374218152958:web:42c094b8a154d9a4363eaf',
+    messagingSenderId: '374218152958',
+    projectId: 'workbuddy-basic',
+    authDomain: 'workbuddy-basic.firebaseapp.com',
+    storageBucket: 'workbuddy-basic.firebasestorage.app',
+    measurementId: 'G-YGGKZF8852',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAyrY8daKs2odgqxgew9JPowtrp-lFRKHg',
-    appId: '1:729420274996:android:94bc8b0f81d8acf4755961',
-    messagingSenderId: '729420274996',
-    projectId: 'workbuddy-test2',
-    storageBucket: 'workbuddy-test2.firebasestorage.app',
+    apiKey: 'AIzaSyCBgL-PAwcjWvMnUA7UAkzMxgczqgL39Wc',
+    appId: '1:374218152958:android:84a4f3f58d7c51ab363eaf',
+    messagingSenderId: '374218152958',
+    projectId: 'workbuddy-basic',
+    storageBucket: 'workbuddy-basic.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBDiSXEVZY9qt9VBNtyzdAyfwOKIvEfz7w',
-    appId: '1:729420274996:ios:a04c6d243949ba82755961',
-    messagingSenderId: '729420274996',
-    projectId: 'workbuddy-test2',
-    storageBucket: 'workbuddy-test2.firebasestorage.app',
-    iosBundleId: 'com.example.widgetsIntroductionLiveCoding',
+    apiKey: 'AIzaSyDCAYV89vVyLsHLLcWcm8wDbERICy2dt-o',
+    appId: '1:374218152958:ios:8bc52872ab3fe90b363eaf',
+    messagingSenderId: '374218152958',
+    projectId: 'workbuddy-basic',
+    storageBucket: 'workbuddy-basic.firebasestorage.app',
+    iosBundleId: 'com.example.workbuddy',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBDiSXEVZY9qt9VBNtyzdAyfwOKIvEfz7w',
-    appId: '1:729420274996:ios:a04c6d243949ba82755961',
-    messagingSenderId: '729420274996',
-    projectId: 'workbuddy-test2',
-    storageBucket: 'workbuddy-test2.firebasestorage.app',
-    iosBundleId: 'com.example.widgetsIntroductionLiveCoding',
+    apiKey: 'AIzaSyDCAYV89vVyLsHLLcWcm8wDbERICy2dt-o',
+    appId: '1:374218152958:ios:8bc52872ab3fe90b363eaf',
+    messagingSenderId: '374218152958',
+    projectId: 'workbuddy-basic',
+    storageBucket: 'workbuddy-basic.firebasestorage.app',
+    iosBundleId: 'com.example.workbuddy',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyALUIH3nxrid-k6ZCplJwydCIw2Wa7QMkU',
-    appId: '1:729420274996:web:c2e5e4f30b620f97755961',
-    messagingSenderId: '729420274996',
-    projectId: 'workbuddy-test2',
-    authDomain: 'workbuddy-test2.firebaseapp.com',
-    storageBucket: 'workbuddy-test2.firebasestorage.app',
-    measurementId: 'G-2M2VDBLE4V',
+    apiKey: 'AIzaSyBtQogbnkXkb70G8k_OSMi3B_UhNVWDIT4',
+    appId: '1:374218152958:web:d358234e0daa07ec363eaf',
+    messagingSenderId: '374218152958',
+    projectId: 'workbuddy-basic',
+    authDomain: 'workbuddy-basic.firebaseapp.com',
+    storageBucket: 'workbuddy-basic.firebasestorage.app',
+    measurementId: 'G-J0VD82PRVR',
   );
 
 }

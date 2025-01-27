@@ -1,9 +1,9 @@
 class UserData {
-  String userName;
+  String userName; // Vorübergehend ist der userName die E-Mail-Adresse
   String password;
 
   UserData({
-    required this.userName,
+    required this.userName, // Vorübergehend ist der userName die E-Mail-Adresse
     required this.password,
   });
 

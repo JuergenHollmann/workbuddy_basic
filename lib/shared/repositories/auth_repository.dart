@@ -1,4 +1,5 @@
-/* 
+/* AuthRepository: lib/shared/repositories/auth_repository.dart
+
 Momentan existieren 3 "class User" Modelle für userName und UserPasswort:
 - lib/features/authentication/schema/user.dart;   <-- diese kann später gelöscht werden (Beispiel von Sobhi) --
 - shared/data/user.dart';                         <-- diese kann später gelöscht werden --
@@ -16,6 +17,7 @@ abstract class AuthRepository {
         .signInWithEmailAndPassword(email: userName, password: password);
     FirebaseAuth.instance.signOut();
   }
+
   /*--------------------------------------- signInWithEmailAndPasswort ---*/
   Future signInWithEmailAndPassword(
       {required String email, required String password}) async {
@@ -23,8 +25,10 @@ abstract class AuthRepository {
         .signInWithEmailAndPassword(email: email, password: password);
     FirebaseAuth.instance.signOut();
   }
+
   /*--------------------------------------- authStateChanges ---*/
-  Stream<User?> get onAuthStateChanges => FirebaseAuth.instance.authStateChanges();
+  Stream<User?> get onAuthStateChanges =>
+      FirebaseAuth.instance.authStateChanges();
   /*--------------------------------------- Login ---*/
   /* Den User einloggen */
   Future<bool> login(String userName, String password);

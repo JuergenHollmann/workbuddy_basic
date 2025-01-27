@@ -1,6 +1,18 @@
+/* FirebaseAuthRepository: lib/shared/repositories/firebase_auth_repository.dart
+
+Momentan existieren 3 "class User" Modelle für userName und UserPasswort:
+- lib/features/authentication/schema/user.dart;   <-- diese kann später gelöscht werden (Beispiel von Sobhi) --
+- shared/data/user.dart';                         <-- diese kann später gelöscht werden --
+- shared/data/user_data.dart';                    <-- diese wird benutzt --
+*/
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:workbuddy/shared/data/user_data.dart';
 import 'package:workbuddy/shared/repositories/auth_repository.dart';
+
+
+/*--------------------------------------- FirebaseAuthRepository ---*/
+// Die Klasse FirebaseAuthRepository implementiert das Interface AuthRepository
 
 class FirebaseAuthRepository implements AuthRepository {
   /*--------------------------------------- FirebaseAuth ---*/
