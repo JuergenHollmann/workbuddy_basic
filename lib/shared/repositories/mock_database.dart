@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:workbuddy/shared/data/user_data.dart';
+import 'package:workbuddy/shared/data/user_data.dart'; // <-- diese wird benutzt --
 
 import 'database_repository.dart';
 
@@ -8,16 +8,17 @@ class MockDatabase implements DatabaseRepository {
 /*--------------------------------------- _users ---*/
 /* Man soll von außen keinen direkten Zugriff haben, deshalb der Unterstrich vor der Variablen. */
   final List<UserData> _users = [
-    UserData(userName: "Jürgen", password: "Pass"),
+    UserData(email: 'aa@bb.de', userName: "Jürgen", password: "Pass"),
   ];
   /*--------------------------------------- login ---*/
   @override
   /* (1) Die Logindaten eines Users überprüfen */
-  Future<bool> login(String userName, String password) async {
+  Future<bool> login(String email, String userName, String password) async {
     bool isLoginOK = false;
     for (UserData currentUser in _users) {
       if (currentUser.userName == userName &&
-          currentUser.password == password) {
+              currentUser.password == password ||
+          currentUser.email == email && currentUser.password == password) {
         log("0023 - MockDatabase - login OK");
         isLoginOK = true;
         break;
@@ -32,7 +33,7 @@ class MockDatabase implements DatabaseRepository {
 /*--------------------------------------- createUser ---*/
   @override
   Future<String?> createUser(String userName, String password) {
-    // todo: implement createUser
+    // todo: implement createUser und auf "Duplikat" prüfen
     throw UnimplementedError();
   }
 
@@ -54,14 +55,16 @@ class MockDatabase implements DatabaseRepository {
   @override
   Future<List<UserData>> getAllUsers() {
     // todo: implement getAllUsers
-    throw UnimplementedError('Die Methode "getAllUsers" ist noch nicht implementiert.');
+    throw UnimplementedError(
+        'Die Methode "getAllUsers" ist noch nicht implementiert.');
   }
 
 /*--------------------------------------- getUser ---*/
   @override
   Future<String> getUser() {
     // todo: implement getUser
-    throw UnimplementedError('Die Methode "getUser" ist noch nicht implementiert.');
+    throw UnimplementedError(
+        'Die Methode "getUser" ist noch nicht implementiert.');
   }
 
 /*--------------------------------------- Logout ---*/
@@ -84,17 +87,19 @@ class MockDatabase implements DatabaseRepository {
 // Der aktuell eingeloggte User. Ist keiner eingeloggt, ist der Wert null.
   UserData? _currentUser;
 /*--------------------------------------- duplicateUser ---*/
-// Einen User mit createUser zur App hinzufügen.
-// Jeden User darf es nur einmal geben.
-// Das hier überprüfen und "false" zurückgeben, falls es den User schon gibt.
-  Future<bool> duplicateUser(String newUserName, String newPassword) async {
-    // Überprüfen, ob es den User schon gibt.
+// Einen User mit "createUser" zur App hinzufügen.
+// Jeden User oder eine E-Mail_Adresse darf es nur EINMAL geben.
+// Das hier überprüfen und "false" zurückgeben, falls es den User oder die E-Mail_Adresse schon gibt.
+  Future<bool> duplicateUser(
+      String newEmail, String newUserName, String newPassword) async {
+    // Überprüfen, ob es den User oder die E_Mail-Adresse schon gibt.
     for (UserData user in _users) {
-      if (newUserName == user.userName) {
+      if (newUserName == user.userName || newEmail == user.email) {
         return Future.value(false);
       }
     }
-    UserData newUser = UserData(userName: newUserName, password: newPassword);
+    UserData newUser =
+        UserData(email: newEmail, userName: newUserName, password: newPassword);
     _users.add(newUser);
     return Future.delayed(const Duration(seconds: 1), () => true);
   }

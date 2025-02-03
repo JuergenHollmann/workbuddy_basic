@@ -204,13 +204,127 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
             Text(
               "Bitte melde Dich an: $inputUserName",
               style: const TextStyle(
-                  fontSize: 24,
+                  fontSize: 20,
                   fontWeight: FontWeight.w900,
                   color: Color.fromARGB(255, 255, 0, 0)),
               textAlign: TextAlign.center,
             ),
             /*--------------------------------- Abstand ---*/
             wbSizedBoxHeight16,
+
+            /*--------------------------------- E-Mail-Adresse - Feld ---*/
+            Padding(
+              padding: const EdgeInsets.fromLTRB(2, 0, 12, 0),
+              child: Container(
+                decoration: ShapeDecoration(
+                  shadows: const [
+                    BoxShadow(
+                      color: Colors.black,
+                      blurRadius: 8,
+                      offset: Offset(4, 4),
+                      spreadRadius: 0,
+                    )
+                  ],
+                  // color: wbColor,
+                  shape: RoundedRectangleBorder(
+                    side: const BorderSide(
+                      width: 2,
+                      color: Colors.white,
+                    ),
+                    borderRadius: BorderRadius.circular(
+                      16,
+                    ),
+                  ),
+                ),
+                child: TextFormField(
+                  maxLines:
+                      null, // sorgt für eine dynamische Höhe des Textfeldes (Zeilenumbruch)
+                  style: const TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w900,
+                    color: wbColorButtonGreen,
+                  ),
+                  textAlign: TextAlign.left,
+                  textInputAction: TextInputAction.next,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.all(16),
+                    /*--------------------------------- labelStyle ---*/
+                    labelText: 'E-Mail-Adresse',
+                    labelStyle: const TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      backgroundColor: Colors.white,
+                    ),
+                    /*--------------------------------- prefixIcon ---*/
+                    prefixIcon: const Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Icon(
+                        size: 40,
+                        Icons.email_rounded,
+                      ),
+                    ),
+                    /*--------------------------------- hintText ---*/
+                    hintText:
+                        '${context.watch<CurrentUserProvider>().currentUser} war angemeldet',
+                    hintStyle: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.black38,
+                    ),
+                    /*--------------------------------- border ---*/
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(16)),
+                    ),
+                  ),
+                  /*--------------------------------- onChanged ---*/
+                  controller: userNameTEC,
+                  onChanged: (String userNameTEC) {
+                    log("0284 - p01_login_screen - Eingabe: $userNameTEC");
+                    inputUserName = userNameTEC;
+                    setState(() => inputUserName = userNameTEC);
+                    if (userNameTEC == userName) {
+                      /*--------------------------------- log ---*/
+                      log("0289 - p01_login_screen - Die E-Mail-Adresse \"$userName\" ist KORREKT 😉");
+                      /*--------------------------------- Audio ---*/
+                      /* Überprüfe ob der AudioPlayer in den Settings(Jingles) "an" oder "aus" ist. */ //todo
+                      player.play(AssetSource("sound/sound06pling.wav"));
+                      /*--------------------------------- Snackbar ---*/
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        backgroundColor: wbColorButtonGreen,
+                        duration: Duration(milliseconds: 400),
+                        content: Text(
+                          "Hinweis:\nDie E-Mail-Adresse \"$userName\" ist KORREKT 😉",
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ));
+                      /*--------------------------------- *** ---*/
+                    } else {
+                      log("0308 - p01_login_screen - Die Eingabe für die E-Mail-Adresse ist NICHT korrekt!");
+                    }
+                  },
+                ),
+              ),
+            ),
+            /*--------------------------------- Abstand ---*/
+            wbSizedBoxHeight8,
+            /*--------------------------------- Text in Consumer<CurrentUserProvider> ---*/
+            Consumer<CurrentUserProvider>(
+              builder: (context, value, child) {
+                return Text(
+                  'Zuvor angemeldete E-Mail-Adresse: ${value.currentUser}',
+                  textAlign: TextAlign.center,
+                );
+              },
+            ),
+            /*--------------------------------- Abstand ---*/
+            wbSizedBoxHeight16,
+
             /*--------------------------------- Benutzername - Feld ---*/
             Padding(
               padding: const EdgeInsets.fromLTRB(2, 0, 12, 0),
@@ -236,6 +350,8 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                   ),
                 ),
                 child: TextFormField(
+                  maxLines:
+                      null, // sorgt für eine dynamische Höhe des Textfeldes (Zeilenumbruch)
                   style: const TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.w900,
@@ -275,36 +391,36 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(16)),
                     ),
                   ),
-                  /*--------------------------------- onChanged ---*/
-                  controller: userNameTEC,
-                  onChanged: (String userNameTEC) {
-                    log("0243 - p01_login_screen - Eingabe: $userNameTEC");
-                    inputUserName = userNameTEC;
-                    setState(() => inputUserName = userNameTEC);
-                    if (userNameTEC == userName) {
-                      /*--------------------------------- log ---*/
-                      log("0249 - p01_login_screen - Der Benutzername \"$userName\" ist KORREKT 😉");
-                      /*--------------------------------- Audio ---*/
-                      /* Überprüfe ob der AudioPlayer in den Settings(Jingles) "an" oder "aus" ist. */ //todo
-                      player.play(AssetSource("sound/sound06pling.wav"));
-                      /*--------------------------------- Snackbar ---*/
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        backgroundColor: wbColorButtonGreen,
-                        duration: Duration(milliseconds: 400),
-                        content: Text(
-                          "Hinweis:\nDer Benutzername \"$userName\" ist KORREKT 😉",
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ));
-                      /*--------------------------------- *** ---*/
-                    } else {
-                      log("0274 - p01_login_screen - Die Eingabe für den Benutzername ist NICHT korrekt!");
-                    }
-                  },
+                  // /*--------------------------------- onChanged ---*/
+                  // controller: userNameTEC,
+                  // onChanged: (String userNameTEC) {
+                  //   log("0243 - p01_login_screen - Eingabe: $userNameTEC");
+                  //   inputUserName = userNameTEC;
+                  //   setState(() => inputUserName = userNameTEC);
+                  //   if (userNameTEC == userName) {
+                  //     /*--------------------------------- log ---*/
+                  //     log("0249 - p01_login_screen - Der Benutzername \"$userName\" ist KORREKT 😉");
+                  //     /*--------------------------------- Audio ---*/
+                  //     /* Überprüfe ob der AudioPlayer in den Settings(Jingles) "an" oder "aus" ist. */ //todo
+                  //     player.play(AssetSource("sound/sound06pling.wav"));
+                  //     /*--------------------------------- Snackbar ---*/
+                  //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  //       backgroundColor: wbColorButtonGreen,
+                  //       duration: Duration(milliseconds: 400),
+                  //       content: Text(
+                  //         "Hinweis:\nDer Benutzername \"$userName\" ist KORREKT 😉",
+                  //         style: TextStyle(
+                  //           fontSize: 28,
+                  //           fontWeight: FontWeight.bold,
+                  //           color: Colors.white,
+                  //         ),
+                  //       ),
+                  //     ));
+                  //     /*--------------------------------- *** ---*/
+                  //   } else {
+                  //     log("0274 - p01_login_screen - Die Eingabe für den Benutzername ist NICHT korrekt!");
+                  //   }
+                  // },
                 ),
               ),
             ),

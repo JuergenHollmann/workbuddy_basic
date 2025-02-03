@@ -10,7 +10,7 @@ import 'package:workbuddy/shared/data/user_data.dart';
 abstract class DatabaseRepository {
   /*--------------------------------------- Login ---*/
   /* Den User einloggen */
-  Future<bool> login(String userName, String password);
+  Future<bool> login(String email, String userName, String password);
   /*--------------------------------------- getUser ---*/
   /* Einen User aufrufen. Falls kein User eingeloggt ist, wird "null" zurückgegeben. */
   Future<String> getUser();

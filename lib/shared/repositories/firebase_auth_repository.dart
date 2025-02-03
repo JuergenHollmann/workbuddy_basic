@@ -10,10 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:workbuddy/shared/data/user_data.dart';
 import 'package:workbuddy/shared/repositories/auth_repository.dart';
 
-
 /*--------------------------------------- FirebaseAuthRepository ---*/
-// Die Klasse FirebaseAuthRepository implementiert das Interface AuthRepository
-
 class FirebaseAuthRepository implements AuthRepository {
   /*--------------------------------------- FirebaseAuth ---*/
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -21,7 +18,8 @@ class FirebaseAuthRepository implements AuthRepository {
   Stream<UserData?> get authStateChanges => auth.authStateChanges().map((user) {
         if (user != null) {
           return UserData(
-            userName: user.email ?? '',
+            email: user.email ?? '',
+            userName: '',
             password: '',
           );
         }
@@ -33,19 +31,21 @@ class FirebaseAuthRepository implements AuthRepository {
     final user = auth.currentUser;
     if (user != null) {
       return UserData(
-        userName: user.email ??
-            '', // Vorübergehend ist der userName die E-Mail-Adresse
+        email: user.email ?? '',
+        userName: '',
         password: '',
       );
     }
     throw Exception('ACHTUNG: Es gibt aktuell keinen Benutzer!');
   }
+
 /*--------------------------------------- login ---*/
   @override
-  Future<bool> login(String userName, String password) async {
+  Future<bool> login(String email, String password) async {
     try {
       await auth.signInWithEmailAndPassword(
-        email: userName,
+        email: email,
+        //userName: userName,
         password: password,
       );
     } catch (_) {
@@ -53,6 +53,7 @@ class FirebaseAuthRepository implements AuthRepository {
     }
     return Future.value(true);
   }
+
 /*--------------------------------------- createUser ---*/
   @override
   Future<String?> createUser(String userName, String password) async {
@@ -67,6 +68,7 @@ class FirebaseAuthRepository implements AuthRepository {
       rethrow;
     }
   }
+
 /*--------------------------------------- deleteUser ---*/
   @override
   Future<String> deleteUser() async {
@@ -81,6 +83,7 @@ class FirebaseAuthRepository implements AuthRepository {
     }
     return '';
   }
+
 /*--------------------------------------- editUser ---*/
   @override
   Future<void> editUser(UserData userData) async {
@@ -94,6 +97,7 @@ class FirebaseAuthRepository implements AuthRepository {
       rethrow;
     }
   }
+
 /*--------------------------------------- getUser ---*/
   @override
   Future<String> getUser() async {
@@ -107,16 +111,20 @@ class FirebaseAuthRepository implements AuthRepository {
     }
     return '';
   }
+
 /*--------------------------------------- logout ---*/
   @override
   Future<void> logout() async {
     await auth.signOut();
   }
+
 /*--------------------------------------- getAllUsers ---*/
-    @override
+  @override
   Future<List<UserData>> getAllUsers() async {
-    throw UnimplementedError('Die Methode "Alle Benutzer zeigen" ist noch nicht implementiert!');
+    throw UnimplementedError(
+        'Die Methode "Alle Benutzer zeigen" ist noch nicht implementiert!');
   }
+
 /*--------------------------------------- signInWithEmailAndPassword ---*/
   // @override
   // Future<UserData> signInWithEmailAndPassword(
@@ -148,6 +156,7 @@ class FirebaseAuthRepository implements AuthRepository {
     throw UnimplementedError(
         'Das Login mit deinem Facebook-Account ist noch nicht implementiert!');
   }
+
 /*--------------------------------------- signInWithGoogle ---*/
   @override
   Future<UserData> signInWithGoogle() async {
@@ -164,17 +173,25 @@ class FirebaseAuthRepository implements AuthRepository {
     throw UnimplementedError(
         'Das Login mit deinem Google-Account ist noch nicht implementiert!');
   }
-  
+
   @override
   Stream<User?> get onAuthStateChanges => throw UnimplementedError();
-  
+
   @override
-  Future signInWithUserNameAndPassword({required String userName, required String password}) {
+  Future signInWithUserNameAndPassword(
+      {required String userName, required String password}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future signInWithEmailAndPassword(
+      {required String email, required String password}) {
     throw UnimplementedError();
   }
   
   @override
-  Future signInWithEmailAndPassword({required String email, required String password}) {
+  Future<UserData> signInWithApple() {
+    // todo: implement signInWithApple
     throw UnimplementedError();
   }
 }

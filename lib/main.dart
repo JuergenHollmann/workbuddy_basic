@@ -87,15 +87,15 @@ class MainApp extends StatelessWidget {
     );
   }
 }
-/*--------------------------------- Projekt 21: Provider ---
+/*--------------------------------- 6.2.4 - 6.3.3 - Projekt 21: Provider ---
   1) Provider
   √ Implementiere Provider in deiner App.
   √ Entferne alle Klassenattribute und Parameter aus allen Widgets, die Repositories entgegennehmen und speichern.
-  Nutze stattdessen Provider, um deine Repositories zu holen und zu verwenden.
-  Hinweis: Folge der Anleitung aus der Vorlesung und nutze den Code der Batch App als Hilfe!
+  √ Nutze stattdessen Provider, um deine Repositories zu holen und zu verwenden.
+  √ Hinweis: Folge der Anleitung aus der Vorlesung und nutze den Code der Batch App als Hilfe!
   Wie sieht dein Code aus, um Repositories zur Verfügung zu stellen und zu verwenden?
 
-  /*--------------------------------- Projekt 20: Firebase Auth ---
+  /*--------------------------------- 6.1.1 - 6.2.1 - Projekt 20: Firebase Auth ---
   1) AuthRepository
   √ Implementiere ein AuthRepository in deiner App.
   Dieses soll Methoden bieten, um an einen Benutzer zu kommen
@@ -128,6 +128,7 @@ class MainApp extends StatelessWidget {
   √ für macOS muss im macos/Podfile ---> platform :osx, '10.15' eingestellt werden √ 
 
   /*--------------------------------- TODO's ---
+  - "WbTextFormFieldSHADOWContour" - lib/config/wb_textformfield_shadow_contour.dart als Widget erstellen
   - Mit Provider im Feld "Wer hat eingekauft?" den angemeldeten User automatisch eintragen.
   - Überprüfen, ob im Device eine Speicherkarte vorhanden ist oder nicht.
   - Foto von der Quittung oder Rechnung erstellen.
@@ -188,6 +189,7 @@ class MainApp extends StatelessWidget {
 
    √ wurde gelöscht: "EMailScreen"
    √ wurde gelöscht: "EMailScreenP043x"
+  - kann gelöscht werden: lib/features/authentication/schema/server_user_response.dart
   - kann gelöscht werden: "WBTextfieldNotice"
   - kann gelöscht werden: "WbDividerWithSmallTextCenter"
   - kann gelöscht werden: "WbDropdownButtonFormfield" 

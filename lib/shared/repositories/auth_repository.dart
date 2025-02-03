@@ -17,7 +17,6 @@ abstract class AuthRepository {
         .signInWithEmailAndPassword(email: userName, password: password);
     FirebaseAuth.instance.signOut();
   }
-
   /*--------------------------------------- signInWithEmailAndPasswort ---*/
   Future signInWithEmailAndPassword(
       {required String email, required String password}) async {
@@ -25,13 +24,12 @@ abstract class AuthRepository {
         .signInWithEmailAndPassword(email: email, password: password);
     FirebaseAuth.instance.signOut();
   }
-
   /*--------------------------------------- authStateChanges ---*/
   Stream<User?> get onAuthStateChanges =>
       FirebaseAuth.instance.authStateChanges();
   /*--------------------------------------- Login ---*/
   /* Den User einloggen */
-  Future<bool> login(String userName, String password);
+  Future<bool> login(String email, String password);
   /*--------------------------------------- getUser ---*/
   /* Einen User aufrufen. Falls kein User eingeloggt ist, wird "null" zurückgegeben. */
   Future<String> getUser();
@@ -57,6 +55,6 @@ abstract class AuthRepository {
   /*--------------------------------------- signInWithFacebook ---*/
   Future<UserData> signInWithFacebook();
   /*--------------------------------------- signInWithApple ---*/
-  // Future<UserData> signInWithApple(); // deaktiviert weil Apple Sign-In nicht implementiert ist und Account 99 USD p.a. kostet
+  Future<UserData> signInWithApple(); // deaktiviert weil Apple Sign-In nicht implementiert ist und Account 99 USD p.a. kostet
   /*--------------------------------------- *** ---*/
 }

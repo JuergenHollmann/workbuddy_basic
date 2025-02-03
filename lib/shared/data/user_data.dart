@@ -1,14 +1,16 @@
 class UserData {
-  String userName; // Vorübergehend ist der userName die E-Mail-Adresse
+  String userName;
+  String email;
   String password;
 
   UserData({
-    required this.userName, // Vorübergehend ist der userName die E-Mail-Adresse
+    required this.userName,
+    required this.email,
     required this.password,
   });
 
   @override
   String toString() {
-    return "($userName, ********)";
+    return "($userName, $email, ********)";
   }
 }
