@@ -128,6 +128,7 @@ class MainApp extends StatelessWidget {
   √ für macOS muss im macos/Podfile ---> platform :osx, '10.15' eingestellt werden √ 
 
   /*--------------------------------- TODO's ---
+  - Die Farbe mit "focusNode" in Textformfield ändern - todo 0267 - P01LoginScreen
   - "WbTextFormFieldSHADOWContour" - lib/config/wb_textformfield_shadow_contour.dart als Widget erstellen
   - Mit Provider im Feld "Wer hat eingekauft?" den angemeldeten User automatisch eintragen.
   - Überprüfen, ob im Device eine Speicherkarte vorhanden ist oder nicht.
