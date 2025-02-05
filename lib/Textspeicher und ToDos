@@ -1,14 +1,15 @@
 /*----------------------------------------------------------------------------------*/
 APK in VSCode erstellen:
 
-Terminal: flutter build apk --split-per-abi
-Terminal: cd build/app/outputs/flutter-apk/
-Terminal: open .
+Schritt 1: Im Terminal eingeben "flutter build apk --split-per-abi"
+Schritt 2: Im Terminal eingeben "cd build/app/outputs/flutter-apk/"
+Schritt 2: Im Terminal eingeben "open ."
 
 —> es öffnet sich der Ordner ...
--> am besten die Datei "app-armeabi-v7a-release.apk" dublizieren und dann neu benennen - Muster: "WorkBuddy - Version 0.1.xx.apk"
-—> "WorkBuddy - Version 0.1.xx.apk" in GoogleDrive kopieren (als Sicherung und zum herunterladen)
-—> "WorkBuddy - Version 0.1.xx.apk" auf das Smartphone herunterladen + installieren (oder direkt anklicken zum installieren)
+-> am besten die Datei "app-armeabi-v7a-release.apk" dublizieren und dann neu benennen
+-> Muster: "WorkBuddy - Version 0.12.31.apk"
+—> "WorkBuddy - Version 0.12.31.apk" in GoogleDrive kopieren (als Sicherung und zum herunterladen)
+—> "WorkBuddy - Version 0.12.31.apk" auf das Smartphone herunterladen + installieren (oder direkt anklicken zum installieren)
 
 Hinweis: „arm64-v8a“ ist auf dem BlackView BV9300 nicht kompatibel.
 /*----------------------------------------------------------------------------------*/
