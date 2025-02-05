@@ -11,7 +11,7 @@ import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_dialog_2buttons.dart';
 import 'package:workbuddy/config/wb_imagebutton_no_text.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
-import 'package:workbuddy/config/wb_textformfield_shadow_with_1_icon.dart';
+//import 'package:workbuddy/config/wb_textformfield_shadow_with_1_icon.dart';
 import 'package:workbuddy/config/wb_textformfield_shadow_with_2_icons.dart';
 import 'package:workbuddy/features/authentication/screens/p00_registration_screen.dart';
 import 'package:workbuddy/features/home/screens/main_selection_screen.dart';
@@ -30,13 +30,14 @@ class P01LoginScreen extends StatefulWidget {
 /*--------------------------------- User + Passwort ---*/
 const String userName = "Jürgen";
 const String userPassword = "Pass";
+const String userEMail = "aa@bb.cc";
+
 bool _visibilityPassword = false;
 set visibilityPassword(bool value) {
   _visibilityPassword = value;
 }
 
 bool get visibilityPassword => _visibilityPassword;
-// bool loginButtonIsEnabled = false;
 
 class _P01LoginScreenState extends State<P01LoginScreen> {
   /*--------------------------------- AudioPlayer ---*/
@@ -44,10 +45,12 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
   late AudioPlayer player = AudioPlayer();
 
   /*--------------------------------- Controller ---*/
-  final TextEditingController userNameTEC = TextEditingController();
-  final TextEditingController userPasswordTEC = TextEditingController();
-  final TextEditingController currentUserController = TextEditingController();
+  final userEmailController = TextEditingController();
+  final userNameTEC = TextEditingController();
+  final userPasswordTEC = TextEditingController();
+  final currentUserController = TextEditingController();
 
+  /*--- Den "CurrentUser" in den "SharedPreferences" speichern ---*/
   Future<void> _saveCurrentUser(String currentUser) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('currentUser', currentUser);
@@ -156,11 +159,36 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
   // }
   // /*--------------------------------- MockUserRepository ENDE ---*/
 
-  /*--------------------------------- onChanged-Funktion ---*/
+  /*--------------------------------- bool-Funktionen ---*/
   bool visibilityPassword = true;
+
+  bool isEmailFieldSelected = false;
+  bool isUserNameFieldSelected = false;
+
+  bool showEMailField = true;
+  bool showUserNameField = true;
+
+  void toggleFields() {
+    setState(() {
+      showEMailField = !showEMailField;
+      showUserNameField = !showUserNameField;
+    });
+  }
+
+  /*--------------------------------- onChanged-Funktion ---*/
   String inputUserName = ""; // nur für die "onChanged-Funktion"
   String inputPassword = ""; // nur für die "onChanged-Funktion"
-  bool isEmailFieldSelected = false;
+
+  // Eine Variable, die den Zustand der Seite repräsentiert zum Zurücksetzen und Aktualisieren der Seite (refreshPage)
+  int _counter = 0;
+
+  // Methode zum Zurücksetzen und Aktualisieren der Seite
+  void _refreshPage() {
+    setState(() {
+      _counter = 0; // Setze den Zähler zurück oder führe andere Aktionen durch
+      log('0189 - P01LoginScreen - refreshPage()');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -210,191 +238,102 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
             wbSizedBoxHeight8,
             /*--------------------------------- Text ---*/
             Text(
-              "Bitte melde Dich an: $inputUserName",
+              "Bitte melde Dich an $inputUserName",
               style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w900,
                   color: Color.fromARGB(255, 255, 0, 0)),
               textAlign: TextAlign.center,
             ),
-            /*--------------------------------- *** ---*/
-            // Wenn der User in das Feld "E-Mail-Adresse" klickt, wird das Feld "Benutzername" und der Text "... oder mit deinem Benutzernamen:" ausgeblendet. Umgekehrt genauso ... 0221 - P01LoginScreen
             /*--------------------------------- Abstand ---*/
             wbSizedBoxHeight8,
-            /*--------------------------------- Text ---*/
-            if (!isEmailFieldSelected) ...[
-              Text('Entweder mit deiner E-Mail-Adresse ...',
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w900,
-                    color: Color.fromARGB(255, 0, 80, 220),
-                  ),
-                  textAlign: TextAlign.center),
-            ] else ...[
-              Text(
-                'Mit deiner E-Mail-Adresse ...',
+            /*--------------------------------- E-Mail-Adresse - in das Feld geklickt ---*/
+            // Wenn der User in das Feld "E-Mail-Adresse" klickt, das Feld "Benutzername" und den Text "... oder mit deinem Benutzernamen:" ausblenden. Umgekehrt genauso ... 0221 - P01LoginScreen
+            /*--------------------------------- Funktion für den Text ---*/
+            Text(
+                'Entweder mit deiner E-Mail-Adresse\noder mit deinem Benutzernamen',
                 style: const TextStyle(
-                  fontSize: 15,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w900,
+                  color: Color.fromARGB(255, 0, 80, 220),
+                ),
+                textAlign: TextAlign.center),
+            if (isEmailFieldSelected) ...[
+              Text(
+                'Mit deiner E-Mail-Adresse',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w900,
+                  color: wbColorButtonGreen,
+                ),
+                textAlign: TextAlign.center,
+              )
+            ] else if (isUserNameFieldSelected) ...[
+              Text(
+                'Mit deinem Benutzernamen',
+                style: const TextStyle(
+                  fontSize: 20,
                   fontWeight: FontWeight.w900,
                   color: wbColorButtonGreen,
                 ),
                 textAlign: TextAlign.center,
               )
             ],
-            /*--------------------------------- Abstand ---*/
-            wbSizedBoxHeight8,
             /*--------------------------------- E-Mail-Adresse ---*/
-            WbTextFormFieldShadowWith2Icons(
-              labelText: 'E-Mail-Adresse',
-              prefixIcon: Icons.email_rounded,
-              prefixIconSize32: 32,
-              hintText:
-                  '${context.watch<CurrentUserProvider>().currentUser} war angemeldet',
-              textInputTypeOnKeyboard: TextInputType.emailAddress,
-              textEditingController: userNameTEC,
-              /*--------------------------------- suffixIcon ---*/
-              suffixIcon: Icons.delete_forever, // oder: .front_hand_outlined
-              suffixIconSize32: 32,
-              /*--- Diese Funktion wurde in das Custom-Widget verlagert ---*/
-              // // wenn auf das "Mülltonnen-Icon" geklickt wird, wird der Inhalt des Textfeldes gelöscht
-              // onPressed: () {
-              //   setState(() {
-              //     log('0255 - P01LoginScreen - SuffixIcon "onPressed" löscht den Inhalt des Textfeldes');
-              //     userNameTEC.clear();
-              //   });
-              // },
-              /*--- onChanged = wenn sich der Text im Textfeld ändert ---*/
-              // passsiert erstmal nichts
-              /*--- onTap = wenn direkt in das Textfeld geklickt wird ---*/
-              onTap: () {
-                setState(() {
-                  log('0256 - P01LoginScreen - onTap ==> E-Mail-Adresse - "setState" stellt die Variable "isEmailFieldSelected" auf "true"');
-                  isEmailFieldSelected = true;
-                  // Die Farbe mit focusNode in diesem Textformfield ändern - todo 0267 - P01LoginScreen
-                  // fillColor: Colors.yellow ?? Colors.white,
-                  // das Passwort wird sichtbar oder unsichtbar gemacht
-                  // visibilityPassword = !visibilityPassword;
-                  //   visibilityPassword
-                  //       ? Icons.visibility_outlined
-                  //       : Icons.visibility_off_outlined,
-                  // ),
-                });
-              },
+            if (showEMailField)
+              WbTextFormFieldShadowWith2Icons(
+                labelText: 'E-Mail-Adresse',
+                prefixIcon: Icons.email_rounded,
+                prefixIconSize32: 32,
+                hintText:
+                    '${context.watch<CurrentUserProvider>().currentUser} war angemeldet',
+                textInputTypeOnKeyboard: TextInputType.emailAddress,
+                controller: userEmailController,
+                /*--------------------------------- suffixIcon ---*/
+                suffixIcon: Icons.replay, // oder: .front_hand_outlined
+                suffixIconSize32: 32,
+                /*--- Diese Funktion wurde in das Custom-Widget verlagert ---*/
+                // // wenn auf das "Mülltonnen-Icon" geklickt wird, wird der Inhalt des Textfeldes gelöscht
+                // onPressed: () {
+                //   setState(() {
+                //     log('0255 - P01LoginScreen - SuffixIcon "onPressed" löscht den Inhalt des Textfeldes');
+                //     userEmailController.clear();
+                //   });
+                // },
+                /*--- onChanged = wenn sich der Text im Textfeld ändert ---*/
+                // passsiert erstmal nichts
+                /*--- onTap = wenn direkt in das Textfeld geklickt wird ---*/
+                onTap: () {
+                  toggleFields;
+                  setState(() {
+                    log('0256 - P01LoginScreen - onTap ==> E-Mail-Adresse - "setState" stellt die Variable "isEmailFieldSelected" auf "true"');
+                    //_refreshPage();
+                    showEMailField = true;
+                    showUserNameField = false;
+                    isEmailFieldSelected = true;
+                    isUserNameFieldSelected = false;
 
-              // suffixIcon: Icons.visibility_off_outlined,
+                    // Die Farbe mit focusNode in diesem Textformfield ändern - todo 0267 - P01LoginScreen
+                    // fillColor: Colors.yellow ?? Colors.white,
+                    // das Passwort wird sichtbar oder unsichtbar gemacht
+                    // visibilityPassword = !visibilityPassword;
+                    //   visibilityPassword
+                    //       ? Icons.visibility_outlined
+                    //       : Icons.visibility_off_outlined,
+                    // ),
+                  });
+                },
+              ),
 
-              // WbTextFormFieldShadowWith1Icon(
-              //   labelText: 'E-Mail-Adresse',
-              //   prefixIcon: Icons.email_rounded,
-              //   hintText:
-              //       '${context.watch<CurrentUserProvider>().currentUser} war angemeldet',
-              //   textInputTypeOnKeyboard: TextInputType.emailAddress,
-
-              // WbTextFormFieldShadowWith1Icon(
-              //   labelText: "E-Mail-Adresse",
-              //   labelFontSize20: 22,
-              //   labelTextColor: wbColorAppBarBlue,
-              //   labelBackgroundColor: Colors.white,
-              //   inputTextFontSize22: 24,
-              //   inputTextAlign: TextAlign.left,
-              //   inputFontWeightW900: FontWeight.w900,
-              //   inputFontColor: wbColorButtonGreen,
-              //   fillColor: Colors.white,
-              //   prefixIcon: Icons.email_rounded,
-              //   prefixIconSize28: 24,
-              //   hintText:
-              //       '${context.watch<CurrentUserProvider>().currentUser} war angemeldet',
-              //   hintTextFontSize16: 16,
-
-              // /*--- onChanged ---*/
-              // onChanged: (value) {
-              //   setState(() {
-              //     isEmailFieldSelected = true;
-              //   });
-              // },
-              // /*--- onTap ---*/
-              // onTap: () {
-              //   setState(() {
-              //     isEmailFieldSelected = true;
-              //   });
-              // },
-            ),
-            /*--------------------------------- Abstand ---*/
-
-            // Padding(
-            //   padding: const EdgeInsets.fromLTRB(2, 0, 12, 0),
-            //   child: Container(
-            //     decoration: ShapeDecoration(
-            //       shadows: const [
-            //         BoxShadow(
-            //           color: Colors.black,
-            //           blurRadius: 8,
-            //           offset: Offset(4, 4),
-            //           spreadRadius: 0,
-            //         )
-            //       ],
-            //       // color: wbColor,
-            //       shape: RoundedRectangleBorder(
-            //         side: const BorderSide(
-            //           width: 2,
-            //           color: Colors.white,
-            //         ),
-            //         borderRadius: BorderRadius.circular(
-            //           16,
-            //         ),
-            //       ),
-            //     ),
-            //     child: TextFormField(
-            //       maxLines:
-            //           null, // sorgt für eine dynamische Höhe des Textfeldes (Zeilenumbruch)
-            //       style: const TextStyle(
-            //         fontSize: 28,
-            //         fontWeight: FontWeight.w900,
-            //         color: wbColorButtonGreen,
-            //       ),
-            //       textAlign: TextAlign.left,
-            //       textInputAction: TextInputAction.next,
-            //       decoration: InputDecoration(
-            //         filled: true,
-            //         fillColor: Colors.white,
-            //         contentPadding: const EdgeInsets.all(8),
-            //         /*--------------------------------- labelStyle ---*/
-            //         labelText: 'E-Mail-Adresse',
-            //         labelStyle: const TextStyle(
-            //           fontSize: 28,
-            //           fontWeight: FontWeight.bold,
-            //           backgroundColor: Colors.white,
-            //         ),
-            //         /*--------------------------------- prefixIcon ---*/
-            //         prefixIcon: const Padding(
-            //           padding: EdgeInsets.all(16),
-            //           child: Icon(
-            //             size: 40,
-            //             Icons.email_rounded,
-            //           ),
-            //         ),
-            //         /*--------------------------------- hintText ---*/
-            //         hintText:
-            //             '${context.watch<CurrentUserProvider>().currentUser} war angemeldet',
-            //         hintStyle: const TextStyle(
-            //           fontSize: 18,
-            //           fontWeight: FontWeight.w900,
-            //           color: Colors.black38,
-            //         ),
-            //         /*--------------------------------- border ---*/
-            //         border: const OutlineInputBorder(
-            //           borderRadius: BorderRadius.all(Radius.circular(16)),
-            //         ),
-            //       ),
             //       /*--------------------------------- onChanged ---*/
-            //       controller: userNameTEC,
-            //       onChanged: (String userNameTEC) {
-            //         log("0284 - p01_login_screen - Eingabe: $userNameTEC");
-            //         inputUserName = userNameTEC;
-            //         setState(() => inputUserName = userNameTEC);
-            //         if (userNameTEC == userName) {
+            //       controller: userEmailController,
+            //       onChanged: (String userEmailController) {
+            //         log("0284 - p01_login_screen - Eingabe: $userEmailController");
+            //         userEMail = userEmailController;
+            //         setState(() => userEMail = userEmailController);
+            //         if (userEmailController == userEMail) {
             //           /*--------------------------------- log ---*/
-            //           log("0289 - p01_login_screen - Die E-Mail-Adresse \"$userName\" ist KORREKT 😉");
+            //           log("0289 - p01_login_screen - Die E-Mail-Adresse \"$userEMail\" ist KORREKT 😉");
             //           /*--------------------------------- Audio ---*/
             //           /* Überprüfe ob der AudioPlayer in den Settings(Jingles) "an" oder "aus" ist. */ //todo
             //           player.play(AssetSource("sound/sound06pling.wav"));
@@ -403,7 +342,7 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
             //             backgroundColor: wbColorButtonGreen,
             //             duration: Duration(milliseconds: 400),
             //             content: Text(
-            //               "Hinweis:\nDie E-Mail-Adresse \"$userName\" ist KORREKT 😉",
+            //               "Hinweis:\nDie E-Mail-Adresse \"$userEMail\" ist KORREKT 😉",
             //               style: TextStyle(
             //                 fontSize: 28,
             //                 fontWeight: FontWeight.bold,
@@ -419,6 +358,7 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
             //     ),
             //   ),
             // ),
+
             /*--------------------------------- Abstand ---*/
             wbSizedBoxHeight16,
             /*--------------------------------- Text in Consumer<CurrentUserProvider> ---*/
@@ -430,30 +370,74 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
             //     );
             //   },
             // ),
+
+            /*--------------------------------- Benutzername - in das Feld geklickt ---*/
+            // Wenn der User in das Feld "Benutzername" klickt, wird das Feld "E-Mail-Adresse" und der Text "Mit deiner E-Mail-Adresse ..." ausgeblendet. Umgekehrt genauso ... 0446 - P01LoginScreen
             /*--------------------------------- Text ---*/
-            if (!isEmailFieldSelected) ...[
-              Text('... oder mit deinem Benutzernamen:',
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w900,
-                    color: Color.fromARGB(255, 0, 80, 220),
-                  ),
-                  textAlign: TextAlign.center),
-              /*--------------------------------- Abstand ---*/
-              wbSizedBoxHeight8,
-              /*--------------------------------- Benutzername ---*/
+            // if (!isUserNameFieldSelected) ...[
+            //   Text('Oder mit deinem Benutzernamen',
+            //       style: const TextStyle(
+            //         fontSize: 17,
+            //         fontWeight: FontWeight.w900,
+            //         color: Color.fromARGB(255, 0, 80, 220),
+            //       ),
+            //       textAlign: TextAlign.center),
+            // ] else if (isEmailFieldSelected) ...[
+            //   /*--- nichts einblenden ---*/
+            // ] else if (!isEmailFieldSelected) ...[
+            //   Text(
+            //     'Mit deinem Benutzernamen',
+            //     style: const TextStyle(
+            //       fontSize: 20,
+            //       fontWeight: FontWeight.w900,
+            //       color: wbColorButtonGreen,
+            //     ),
+            //     textAlign: TextAlign.center,
+            //   )
+            // ] else if (isUserNameFieldSelected) ...[
+            //   /*--- nichts einblenden ---*/
+            // ],
+
+            // if (!isUserNameFieldSelected) ...[
+            //   // Text('... oder mit deinem Benutzernamen:',
+            //   //     style: const TextStyle(
+            //   //       fontSize: 15,
+            //   //       fontWeight: FontWeight.w900,
+            //   //       color: Color.fromARGB(255, 0, 80, 220),
+            //   //     ),
+            //   //     textAlign: TextAlign.center),
+            // ] else ...[
+            //   Text(
+            //     'Mit deinem Benutzernamen ...',
+            //     style: const TextStyle(
+            //       fontSize: 15,
+            //       fontWeight: FontWeight.w900,
+            //       color: wbColorButtonGreen,
+            //     ),
+            //     textAlign: TextAlign.center,
+            //   )
+            // ],
+            /*--------------------------------- Benutzername ---*/
+            if (showUserNameField)
               WbTextFormFieldShadowWith2Icons(
                 labelText: 'Benutzername',
                 hintText: 'Benutzername',
                 prefixIcon: Icons.person,
                 prefixIconSize32: 32,
-                suffixIcon: Icons.delete_forever,
+                suffixIcon: Icons
+                    .replay, //icons.front_hand_outlined, //Icons.email_rounded,
                 suffixIconSize32: 32,
-                textEditingController: userNameTEC,
+                controller: userNameTEC,
                 onTap: () {
+                  toggleFields;
                   setState(() {
                     log('0455 - P01LoginScreen - onTap ==> Benutzername - "setState" stellt die Variable "isEmailFieldSelected" auf "false"');
+                    showEMailField = false;
+                    showUserNameField = true;
                     isEmailFieldSelected = false;
+                    isUserNameFieldSelected = true;
+                    // _visibleEmailField = false;
+                    // _visibleUserNameField = true;
                   });
                 },
                 onChanged: (String userNameTEC) {
@@ -480,206 +464,54 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                   }
                 },
               ),
-
-
-            //   WbTextFormFieldShadowWith1Icon(
-            //     labelText: "Benutzername",
-            //     // labelFontSize20: 22,
-            //     labelTextColor: wbColorAppBarBlue,
-            //     labelBackgroundColor: Colors.white,
-            //     // inputTextFontSize22: 24,
-            //     inputTextAlign: TextAlign.left,
-            //     inputFontWeightW900: FontWeight.w900,
-            //     inputFontColor: wbColorButtonGreen,
-            //     fillColor: Colors.white,
-            //     prefixIcon: Icons.person,
-            //     // prefixIconSize28: 28,
-            //     hintText:
-            //         '${context.watch<CurrentUserProvider>().currentUser} war angemeldet',
-            //     hintTextFontSize16: 16,
-            //     /*--------------------------------- onChanged ---*/
-            //     controller: userNameTEC,
-            //     onChanged: (String userNameTEC) {
-            //       log("0243 - p01_login_screen - Eingabe: $userNameTEC");
-            //       inputUserName = userNameTEC;
-            //       setState(() => inputUserName = userNameTEC);
-            //       if (userNameTEC == userName) {
-            //         /*--------------------------------- log ---*/
-            //         log("0249 - p01_login_screen - Der Benutzername \"$userName\" ist KORREKT 😉");
-            //         /*--------------------------------- Audio ---*/
-            //         /* Überprüfe ob der AudioPlayer in den Settings(Jingles) "an" oder "aus" ist. */ //todo
-            //         player.play(AssetSource("sound/sound06pling.wav"));
-            //         /*--------------------------------- Snackbar ---*/
-            //         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            //           backgroundColor: wbColorButtonGreen,
-            //           duration: Duration(milliseconds: 400),
-            //           content: Text(
-            //             "Hinweis:\nDer Benutzername \"$userName\" ist KORREKT 😉",
-            //             style: TextStyle(
-            //               fontSize: 28,
-            //               fontWeight: FontWeight.bold,
-            //               color: Colors.white,
-            //             ),
-            //           ),
-            //         ));
-            //         /*--------------------------------- *** ---*/
-            //       } else {
-            //         log("0274 - p01_login_screen - Die Eingabe für den Benutzername ist NICHT korrekt!");
-            //       }
-            //     },
-            //     // onTap: () {
-            //     //   setState(() {
-            //     //     isEmailFieldSelected = false;
-            //     //   });
-            //     // },
-            //   ),
-            ],
             /*--------------------------------- Abstand ---*/
             wbSizedBoxHeight16,
-            // /*--------------------------------- Benutzername - Feld ---*/
-            // Padding(
-            //   padding: const EdgeInsets.fromLTRB(2, 0, 12, 0),
-            //   child: Container(
-            //     decoration: ShapeDecoration(
-            //       shadows: const [
-            //         BoxShadow(
-            //           color: Colors.black,
-            //           blurRadius: 8,
-            //           offset: Offset(4, 4),
-            //           spreadRadius: 0,
-            //         )
-            //       ],
-            //       // color: wbColor,
-            //       shape: RoundedRectangleBorder(
-            //         side: const BorderSide(
-            //           width: 2,
-            //           color: Colors.white,
-            //         ),
-            //         borderRadius: BorderRadius.circular(
-            //           16,
-            //         ),
-            //       ),
-            //     ),
-            //     child: TextFormField(
-            //       maxLines:
-            //           null, // sorgt für eine dynamische Höhe des Textfeldes (Zeilenumbruch)
-            //       style: const TextStyle(
-            //         fontSize: 28,
-            //         fontWeight: FontWeight.w900,
-            //         color: wbColorButtonGreen,
-            //       ),
-            //       textAlign: TextAlign.left,
-            //       textInputAction: TextInputAction.next,
-            //       decoration: InputDecoration(
-            //         filled: true,
-            //         fillColor: Colors.white,
-            //         contentPadding: const EdgeInsets.all(8),
-            //         /*--------------------------------- labelStyle ---*/
-            //         labelText: 'Benutzername',
-            //         labelStyle: const TextStyle(
-            //           fontSize: 28,
-            //           fontWeight: FontWeight.bold,
-            //           backgroundColor: Colors.white,
-            //         ),
-            //         /*--------------------------------- prefixIcon ---*/
-            //         prefixIcon: const Padding(
-            //           padding: EdgeInsets.all(16),
-            //           child: Icon(
-            //             size: 40,
-            //             Icons.person,
-            //           ),
-            //         ),
-            //         /*--------------------------------- hintText ---*/
-            //         hintText:
-            //             '${context.watch<CurrentUserProvider>().currentUser} war angemeldet',
-            //         hintStyle: const TextStyle(
-            //           fontSize: 18,
-            //           fontWeight: FontWeight.w900,
-            //           color: Colors.black38,
-            //         ),
-            //         /*--------------------------------- border ---*/
-            //         border: const OutlineInputBorder(
-            //           borderRadius: BorderRadius.all(Radius.circular(16)),
-            //         ),
-            //       ),
-            //       /*--------------------------------- onChanged ---*/
-            //       controller: userNameTEC,
-            //       onChanged: (String userNameTEC) {
-            //         log("0243 - p01_login_screen - Eingabe: $userNameTEC");
-            //         inputUserName = userNameTEC;
-            //         setState(() => inputUserName = userNameTEC);
-            //         if (userNameTEC == userName) {
-            //           /*--------------------------------- log ---*/
-            //           log("0249 - p01_login_screen - Der Benutzername \"$userName\" ist KORREKT 😉");
-            //           /*--------------------------------- Audio ---*/
-            //           /* Überprüfe ob der AudioPlayer in den Settings(Jingles) "an" oder "aus" ist. */ //todo
-            //           player.play(AssetSource("sound/sound06pling.wav"));
-            //           /*--------------------------------- Snackbar ---*/
-            //           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            //             backgroundColor: wbColorButtonGreen,
-            //             duration: Duration(milliseconds: 400),
-            //             content: Text(
-            //               "Hinweis:\nDer Benutzername \"$userName\" ist KORREKT 😉",
-            //               style: TextStyle(
-            //                 fontSize: 28,
-            //                 fontWeight: FontWeight.bold,
-            //                 color: Colors.white,
-            //               ),
-            //             ),
-            //           ));
-            //           /*--------------------------------- *** ---*/
-            //         } else {
-            //           log("0274 - p01_login_screen - Die Eingabe für den Benutzername ist NICHT korrekt!");
-            //         }
-            //       },
-            //     ),
-            //   ),
-            // ),
-            // /*--------------------------------- Abstand ---*/
-            // wbSizedBoxHeight8,
-            // /*--------------------------------- Text in Consumer<CurrentUserProvider> ---*/
-            // Consumer<CurrentUserProvider>(
-            //   builder: (context, value, child) {
-            //     return Text(
-            //       'Zuvor angemeldeter Benutzer: ${value.currentUser}',
-            //       textAlign: TextAlign.center,
-            //     );
-            //   },
-            // ),
-            // /*--------------------------------- Abstand ---*/
-            // wbSizedBoxHeight8,
+            /*--------------------------------- Refresh / Reset ---*/
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 8, 12, 8),
+              child: WbButtonUniversal2(
+                wbColor: Colors.orange,
+                wbIcon: Icons.replay,
+                wbIconSize40: 40,
+                wbText: 'Die Anmeldung noch\neinmal "NEU" starten',
+                wbFontSize24: 20,
+                wbWidth155: 155,
+                wbHeight60: 80,
+                wbOnTap: () {
+                  /* Hier wird "Navigator.pushReplacement" verwendet, um die aktuelle Seite durch eine neue Instanz der LoginScreen-Seite zu ersetzen, wodurch die Seite effektiv neu geladen wird. */
+                  log('0472 - P01LoginScreen - onPressed: Reset $_counter');
+                  Navigator.pushReplacement(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation1, animation2) =>
+                          P01LoginScreen(),
+                      transitionDuration: Duration.zero,
+                      reverseTransitionDuration: Duration.zero,
+                    ),
+                  );
+                },
+              ),
+            ),
+            /*--------------------------------- Abstand ---*/
+            wbSizedBoxHeight8,
             /*--------------------------------- Passwort ---*/
             WbTextFormFieldShadowWith2Icons(
               labelText: 'Passwort',
-              //labelFontSize20: 20,
               hintText: 'Passwort',
-              //inputTextFontSize22: 22,
-              // inputFontWeightW900: FontWeight.w900,
-              // inputFontColor: wbColorButtonGreen,
-              // fillColor: Colors.white,
               prefixIcon: Icons.lock,
               prefixIconSize32: 32,
               suffixIcon: Icons.visibility_off_outlined,
               suffixIconSize32: 32,
             ),
-
-            // labelText: "Benutzername",
-            // labelFontSize20: 22,
-            // labelTextColor: wbColorAppBarBlue,
-            // labelBackgroundColor: Colors.white,
-            // inputTextFontSize22: 24,
-            // inputTextAlign: TextAlign.left,
-            // inputFontWeightW900: FontWeight.w900,
-            // inputFontColor: wbColorButtonGreen,
-            // fillColor: Colors.white,
-            // prefixIcon: Icons.person,
-            // prefixIconSize28: 28,
-            // hintText:
-            //     '${context.watch<CurrentUserProvider>().currentUser} war angemeldet',
-            // hintTextFontSize16: 16,
-
             /*--------------------------------- Abstand ---*/
             wbSizedBoxHeight8,
+
+            /*--------------------------------- Passwort - Feld ---*/
+            /*--------------------------------- Passwort - Feld ---*/
+            /*--------------------------------- Passwort - Feld ---*/
+            /*--------------------------------- Passwort - Feld ---*/
+            /*--------------------------------- Passwort - Feld ---*/
+
             /*--------------------------------- Passwort - Feld ---*/
             Padding(
               padding: const EdgeInsets.fromLTRB(2, 0, 12, 0),
@@ -819,6 +651,12 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
               ),
             ),
             /*--------------------------------- Abstand ---*/
+            /*--------------------------------- Abstand ---*/
+            /*--------------------------------- Abstand ---*/
+            /*--------------------------------- Abstand ---*/
+            /*--------------------------------- Abstand ---*/
+            /*--------------------------------- Abstand ---*/
+
             wbSizedBoxHeight8,
             /*--------------------------------- Text ---*/
             const Text(
