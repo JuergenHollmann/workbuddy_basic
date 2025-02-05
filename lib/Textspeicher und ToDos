@@ -12,7 +12,13 @@ Terminal: open .
 
 Hinweis: „arm64-v8a“ ist auf dem BlackView BV9300 nicht kompatibel.
 /*----------------------------------------------------------------------------------*/
+/* WhatsApp-Emojis:
+⬆️ Pfeil nach oben
+⬇️ Pfeil nach unten
+⬅️ Pfeil nach links
+➡️ Pfeil nach rechts
 
+*/
 // '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // '-- Das sind die Formeln zur Berechnung eines Betrages mit Mehrwertsteuer (MwSt% = 19%):
 // '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

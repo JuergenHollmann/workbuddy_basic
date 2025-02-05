@@ -14,8 +14,10 @@ import 'package:workbuddy/config/wb_sizes.dart';
 //import 'package:workbuddy/config/wb_textformfield_shadow_with_1_icon.dart';
 import 'package:workbuddy/config/wb_textformfield_shadow_with_2_icons.dart';
 import 'package:workbuddy/features/authentication/screens/p00_registration_screen.dart';
+import 'package:workbuddy/features/home/screens/home_screen.dart';
 import 'package:workbuddy/features/home/screens/main_selection_screen.dart';
 import 'package:workbuddy/shared/providers/current_user_provider.dart';
+import 'package:workbuddy/shared/repositories/shared_preferences_repository.dart';
 import 'package:workbuddy/shared/widgets/wb_dialog_alert_update_coming_soon.dart';
 import 'package:workbuddy/shared/widgets/wb_divider_with_text_in_center.dart';
 import 'package:workbuddy/shared/widgets/wb_green_button.dart';
@@ -165,13 +167,19 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
   bool isEmailFieldSelected = false;
   bool isUserNameFieldSelected = false;
 
+  bool showDescriptionText = true;
   bool showEMailField = true;
   bool showUserNameField = true;
+  bool showUserPasswordField = false;
+  bool showPasswordForgotten = false;
 
   void toggleFields() {
     setState(() {
+      showDescriptionText = !showDescriptionText;
       showEMailField = !showEMailField;
       showUserNameField = !showUserNameField;
+      showUserPasswordField = !showUserPasswordField;
+      showPasswordForgotten = !showPasswordForgotten;
     });
   }
 
@@ -179,10 +187,10 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
   String inputUserName = ""; // nur für die "onChanged-Funktion"
   String inputPassword = ""; // nur für die "onChanged-Funktion"
 
-  // Eine Variable, die den Zustand der Seite repräsentiert zum Zurücksetzen und Aktualisieren der Seite (refreshPage)
+  /* Eine Variable, die den Zustand der Seite repräsentiert zum Zurücksetzen und Aktualisieren der Seite (refreshPage) */
   int _counter = 0;
 
-  // Methode zum Zurücksetzen und Aktualisieren der Seite
+  /* Methode zum Zurücksetzen und Aktualisieren der Seite */
   void _refreshPage() {
     setState(() {
       _counter = 0; // Setze den Zähler zurück oder führe andere Aktionen durch
@@ -245,20 +253,19 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                   color: Color.fromARGB(255, 255, 0, 0)),
               textAlign: TextAlign.center,
             ),
-            /*--------------------------------- Abstand ---*/
-            wbSizedBoxHeight8,
-            /*--------------------------------- E-Mail-Adresse - in das Feld geklickt ---*/
-            // Wenn der User in das Feld "E-Mail-Adresse" klickt, das Feld "Benutzername" und den Text "... oder mit deinem Benutzernamen:" ausblenden. Umgekehrt genauso ... 0221 - P01LoginScreen
-            /*--------------------------------- Funktion für den Text ---*/
-            Text(
-                'Entweder mit deiner E-Mail-Adresse\noder mit deinem Benutzernamen',
-                style: const TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w900,
-                  color: Color.fromARGB(255, 0, 80, 220),
-                ),
-                textAlign: TextAlign.center),
-            if (isEmailFieldSelected) ...[
+            /*--------------------------------- wenn showDescriptionText true ist ---*/
+            if (showDescriptionText)
+              Text(
+                  'Entweder mit deiner E-Mail-Adresse\noder mit deinem Benutzernamen',
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w900,
+                    color: Color.fromARGB(255, 0, 80, 220),
+                  ),
+                  textAlign: TextAlign.center),
+            if (showDescriptionText) wbSizedBoxHeight8,
+            /*--------------------------------- wenn isEmailFieldSelected true ist ---*/
+            if (isEmailFieldSelected)
               Text(
                 'Mit deiner E-Mail-Adresse',
                 style: const TextStyle(
@@ -267,8 +274,9 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                   color: wbColorButtonGreen,
                 ),
                 textAlign: TextAlign.center,
-              )
-            ] else if (isUserNameFieldSelected) ...[
+              ),
+            /*--------------------------------- wenn isEmailFieldSelected true ist ---*/
+            if (isUserNameFieldSelected)
               Text(
                 'Mit deinem Benutzernamen',
                 style: const TextStyle(
@@ -277,8 +285,7 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                   color: wbColorButtonGreen,
                 ),
                 textAlign: TextAlign.center,
-              )
-            ],
+              ),
             /*--------------------------------- E-Mail-Adresse ---*/
             if (showEMailField)
               WbTextFormFieldShadowWith2Icons(
@@ -292,28 +299,20 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                 /*--------------------------------- suffixIcon ---*/
                 suffixIcon: Icons.replay, // oder: .front_hand_outlined
                 suffixIconSize32: 32,
-                /*--- Diese Funktion wurde in das Custom-Widget verlagert ---*/
-                // // wenn auf das "Mülltonnen-Icon" geklickt wird, wird der Inhalt des Textfeldes gelöscht
-                // onPressed: () {
-                //   setState(() {
-                //     log('0255 - P01LoginScreen - SuffixIcon "onPressed" löscht den Inhalt des Textfeldes');
-                //     userEmailController.clear();
-                //   });
-                // },
-                /*--- onChanged = wenn sich der Text im Textfeld ändert ---*/
-                // passsiert erstmal nichts
                 /*--- onTap = wenn direkt in das Textfeld geklickt wird ---*/
                 onTap: () {
                   toggleFields;
                   setState(() {
-                    log('0256 - P01LoginScreen - onTap ==> E-Mail-Adresse - "setState" stellt die Variable "isEmailFieldSelected" auf "true"');
-                    //_refreshPage();
+                    log('0299 - P01LoginScreen - onTap ==> E-Mail-Adresse - "setState"');
+                    showDescriptionText = false;
                     showEMailField = true;
                     showUserNameField = false;
+                    showUserPasswordField = true;
+                    showPasswordForgotten = true;
                     isEmailFieldSelected = true;
                     isUserNameFieldSelected = false;
 
-                    // Die Farbe mit focusNode in diesem Textformfield ändern - todo 0267 - P01LoginScreen
+                    /* Die Farbe mit "focusNode" in diesem Textformfield ändern - todo 0267 - P01LoginScreen */
                     // fillColor: Colors.yellow ?? Colors.white,
                     // das Passwort wird sichtbar oder unsichtbar gemacht
                     // visibilityPassword = !visibilityPassword;
@@ -360,7 +359,7 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
             // ),
 
             /*--------------------------------- Abstand ---*/
-            wbSizedBoxHeight16,
+            if (!showPasswordForgotten) wbSizedBoxHeight16,
             /*--------------------------------- Text in Consumer<CurrentUserProvider> ---*/
             // Consumer<CurrentUserProvider>(
             //   builder: (context, value, child) {
@@ -370,70 +369,27 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
             //     );
             //   },
             // ),
-
-            /*--------------------------------- Benutzername - in das Feld geklickt ---*/
-            // Wenn der User in das Feld "Benutzername" klickt, wird das Feld "E-Mail-Adresse" und der Text "Mit deiner E-Mail-Adresse ..." ausgeblendet. Umgekehrt genauso ... 0446 - P01LoginScreen
-            /*--------------------------------- Text ---*/
-            // if (!isUserNameFieldSelected) ...[
-            //   Text('Oder mit deinem Benutzernamen',
-            //       style: const TextStyle(
-            //         fontSize: 17,
-            //         fontWeight: FontWeight.w900,
-            //         color: Color.fromARGB(255, 0, 80, 220),
-            //       ),
-            //       textAlign: TextAlign.center),
-            // ] else if (isEmailFieldSelected) ...[
-            //   /*--- nichts einblenden ---*/
-            // ] else if (!isEmailFieldSelected) ...[
-            //   Text(
-            //     'Mit deinem Benutzernamen',
-            //     style: const TextStyle(
-            //       fontSize: 20,
-            //       fontWeight: FontWeight.w900,
-            //       color: wbColorButtonGreen,
-            //     ),
-            //     textAlign: TextAlign.center,
-            //   )
-            // ] else if (isUserNameFieldSelected) ...[
-            //   /*--- nichts einblenden ---*/
-            // ],
-
-            // if (!isUserNameFieldSelected) ...[
-            //   // Text('... oder mit deinem Benutzernamen:',
-            //   //     style: const TextStyle(
-            //   //       fontSize: 15,
-            //   //       fontWeight: FontWeight.w900,
-            //   //       color: Color.fromARGB(255, 0, 80, 220),
-            //   //     ),
-            //   //     textAlign: TextAlign.center),
-            // ] else ...[
-            //   Text(
-            //     'Mit deinem Benutzernamen ...',
-            //     style: const TextStyle(
-            //       fontSize: 15,
-            //       fontWeight: FontWeight.w900,
-            //       color: wbColorButtonGreen,
-            //     ),
-            //     textAlign: TextAlign.center,
-            //   )
-            // ],
             /*--------------------------------- Benutzername ---*/
             if (showUserNameField)
               WbTextFormFieldShadowWith2Icons(
                 labelText: 'Benutzername',
-                hintText: 'Benutzername',
+                //textInputAction:TextInputAction.next,
+                hintText: 'Benutzername eingeben',
+                hintTextFontSize16: 18,
                 prefixIcon: Icons.person,
                 prefixIconSize32: 32,
-                suffixIcon: Icons
-                    .replay, //icons.front_hand_outlined, //Icons.email_rounded,
+                suffixIcon: Icons.replay,
                 suffixIconSize32: 32,
                 controller: userNameTEC,
                 onTap: () {
                   toggleFields;
                   setState(() {
                     log('0455 - P01LoginScreen - onTap ==> Benutzername - "setState" stellt die Variable "isEmailFieldSelected" auf "false"');
+                    showDescriptionText = false;
                     showEMailField = false;
                     showUserNameField = true;
+                    showUserPasswordField = true;
+                    showPasswordForgotten = true;
                     isEmailFieldSelected = false;
                     isUserNameFieldSelected = true;
                     // _visibleEmailField = false;
@@ -465,209 +421,190 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                 },
               ),
             /*--------------------------------- Abstand ---*/
-            wbSizedBoxHeight16,
-            /*--------------------------------- Refresh / Reset ---*/
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 8, 12, 8),
-              child: WbButtonUniversal2(
-                wbColor: Colors.orange,
-                wbIcon: Icons.replay,
-                wbIconSize40: 40,
-                wbText: 'Die Anmeldung noch\neinmal "NEU" starten',
-                wbFontSize24: 20,
-                wbWidth155: 155,
-                wbHeight60: 80,
-                wbOnTap: () {
-                  /* Hier wird "Navigator.pushReplacement" verwendet, um die aktuelle Seite durch eine neue Instanz der LoginScreen-Seite zu ersetzen, wodurch die Seite effektiv neu geladen wird. */
-                  log('0472 - P01LoginScreen - onPressed: Reset $_counter');
-                  Navigator.pushReplacement(
-                    context,
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation1, animation2) =>
-                          P01LoginScreen(),
-                      transitionDuration: Duration.zero,
-                      reverseTransitionDuration: Duration.zero,
-                    ),
-                  );
-                },
-              ),
-            ),
-            /*--------------------------------- Abstand ---*/
-            wbSizedBoxHeight8,
-            /*--------------------------------- Passwort ---*/
-            WbTextFormFieldShadowWith2Icons(
-              labelText: 'Passwort',
-              hintText: 'Passwort',
-              prefixIcon: Icons.lock,
-              prefixIconSize32: 32,
-              suffixIcon: Icons.visibility_off_outlined,
-              suffixIconSize32: 32,
-            ),
-            /*--------------------------------- Abstand ---*/
-            wbSizedBoxHeight8,
-
-            /*--------------------------------- Passwort - Feld ---*/
-            /*--------------------------------- Passwort - Feld ---*/
-            /*--------------------------------- Passwort - Feld ---*/
-            /*--------------------------------- Passwort - Feld ---*/
-            /*--------------------------------- Passwort - Feld ---*/
-
-            /*--------------------------------- Passwort - Feld ---*/
-            Padding(
-              padding: const EdgeInsets.fromLTRB(2, 0, 12, 0),
-              child: Container(
-                decoration: ShapeDecoration(
-                  shadows: const [
-                    BoxShadow(
-                      color: Colors.black,
-                      blurRadius: 8,
-                      offset: Offset(4, 4),
-                      spreadRadius: 0,
-                    )
-                  ],
-                  // color: wbColor,
-                  shape: RoundedRectangleBorder(
-                    side: const BorderSide(
-                      width: 2,
-                      color: Colors.white,
-                    ),
-                    borderRadius: BorderRadius.circular(
-                      16,
-                    ),
-                  ),
+            if (!showPasswordForgotten) wbSizedBoxHeight16,
+            if (showPasswordForgotten) wbSizedBoxHeight8,
+            /*--------------------------------- Funktionen für den Text ---*/
+            if (isEmailFieldSelected) ...[
+              Text(
+                '... und deinem Passwort  ⬇️',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w900,
+                  color: wbColorButtonGreen,
                 ),
-                child: TextFormField(
-                  style: const TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w900,
-                    color: wbColorButtonDarkRed,
-                  ),
-                  textAlign: TextAlign.left,
-                  textInputAction: TextInputAction.next,
-                  obscureText: visibilityPassword,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    contentPadding: const EdgeInsets.all(16),
-                    /*--------------------------------- labelStyle ---*/
-                    labelText: 'Passwort',
-                    labelStyle: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      backgroundColor: Colors.white,
-                    ),
-                    /*--------------------------------- prefixIcon ---*/
-                    prefixIcon: const Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Icon(
-                        size: 40,
-                        Icons.lock,
+                textAlign: TextAlign.center,
+              )
+            ] else if (isUserNameFieldSelected) ...[
+              Text(
+                '... und deinem Passwort  ⬇️',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w900,
+                  color: wbColorButtonGreen,
+                ),
+                textAlign: TextAlign.center,
+              )
+            ],
+            // /*--------------------------------- Passwort - deaktiviert (siehe unten) ---*/
+            // WbTextFormFieldShadowWith2Icons(
+            //   labelText: 'Passwort',
+            //   hintText: 'Passwort',
+            //   prefixIcon: Icons.lock,
+            //   prefixIconSize32: 32,
+            //   suffixIcon: Icons.visibility_off_outlined,
+            //   suffixIconSize32: 32,
+            // ),
+            /*--------------------------------- Abstand ---*/
+            if (showPasswordForgotten) wbSizedBoxHeight8,
+            /*--------------------------------- Passwort - hier nicht als CustomWidget ---*/
+            /* Weil das "suffixIcon" in der "WbTextFormFieldShadowWith2Icons" Klasse ist, kann ich es momentan nicht beim Anklicken austauschen, deshalb benutze ich hier nicht das CustomWidget, sondern schreibe alles einzeln hier rein. */
+            if (showUserPasswordField)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(2, 0, 12, 0),
+                child: Container(
+                  height: 52,
+                  decoration: ShapeDecoration(
+                    shadows: const [
+                      BoxShadow(
+                        color: Colors.black,
+                        blurRadius: 8,
+                        offset: Offset(4, 4),
+                        spreadRadius: 0,
+                      )
+                    ],
+                    shape: RoundedRectangleBorder(
+                      side: const BorderSide(
+                        width: 2,
+                        color: Colors.white,
+                      ),
+                      borderRadius: BorderRadius.circular(
+                        16,
                       ),
                     ),
-                    /*--------------------------------- hintText ---*/
-                    hintText: "Passwort eingeben",
-                    hintStyle: const TextStyle(
-                      fontSize: 18,
+                  ),
+                  child: TextFormField(
+                    style: const TextStyle(
+                      fontSize: 22,
                       fontWeight: FontWeight.w900,
-                      color: Colors.black38,
+                      color: wbColorButtonDarkRed,
                     ),
-                    /*--------------------------------- suffixIcon ---*/
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          visibilityPassword = !visibilityPassword;
-                        });
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
+                    textAlign: TextAlign.left,
+                    textInputAction: TextInputAction.next,
+                    obscureText: visibilityPassword,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      contentPadding: const EdgeInsets.all(16),
+                      /*--------------------------------- labelStyle ---*/
+                      labelText: 'Passwort',
+                      labelStyle: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: wbColorAppBarBlue,
+                        backgroundColor: Colors.white,
+                      ),
+                      /*--------------------------------- prefixIcon ---*/
+                      prefixIcon: Icon(
+                        size: 32,
+                        Icons.lock,
+                      ),
+                      /*--------------------------------- hintText ---*/
+                      hintText: "Passwort eingeben",
+                      hintStyle: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.black38,
+                      ),
+                      /*--------------------------------- suffixIcon ---*/
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            visibilityPassword = !visibilityPassword;
+                          });
+                        },
                         child: Icon(
-                          size: 40,
+                          size: 32,
                           visibilityPassword
                               ? Icons.visibility_outlined
                               : Icons.visibility_off_outlined,
                         ),
                       ),
+                      /*--------------------------------- border ---*/
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(16)),
+                      ),
                     ),
-                    /*--------------------------------- border ---*/
-                    border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(16)),
-                    ),
-                  ),
-                  /*--------------------------------- onChanged ---*/
-                  onChanged: (String userPasswordTEC) {
-                    log("Eingabe: $userPasswordTEC");
-                    inputPassword = userPasswordTEC;
-                    setState(() => inputPassword = userPasswordTEC);
-                    if (userPasswordTEC == userPassword &&
-                        inputUserName == userName) {
-                      log("Das Passwort \"$userPassword\" ist KORREKT!");
-                      /*--------------------------------- Audio ---*/
-                      /* Überprüfe ob der AudioPlayer in den Settings(Jingles) "an" oder "aus" ist. */ //todo
-                      player.play(AssetSource("sound/sound06pling.wav"));
-                      /*--------------------------------- Snackbar ---*/
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        backgroundColor: wbColorButtonGreen,
-                        duration: Duration(milliseconds: 500),
-                        content: Text(
-                          "Hinweis:\nDas Passwort \"$userPassword\" ist KORREKT 😉",
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                    /*--------------------------------- onChanged ---*/
+                    onChanged: (String userPasswordTEC) {
+                      log("Eingabe: $userPasswordTEC");
+                      inputPassword = userPasswordTEC;
+                      setState(() => inputPassword = userPasswordTEC);
+                      if (userPasswordTEC == userPassword &&
+                          inputUserName == userName) {
+                        log("Das Passwort \"$userPassword\" ist KORREKT!");
+                        /*--------------------------------- Audio ---*/
+                        /* Überprüfe ob der AudioPlayer in den Settings(Jingles) "an" oder "aus" ist. */ //todo
+                        player.play(AssetSource("sound/sound06pling.wav"));
+                        /*--------------------------------- Snackbar ---*/
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          backgroundColor: wbColorButtonGreen,
+                          duration: Duration(milliseconds: 500),
+                          content: Text(
+                            "Hinweis:\nDas Passwort \"$userPassword\" ist KORREKT 😉",
+                            style: TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                      ));
-                      // /*--------------------------------- checkUserAndPassword ---*/
-                      // } else if (userName == "Jürgen" && userPassword == "Pass") {
-                      //   // userPasswordTEC
-                      log("0435 - P01LoginScreen - nach erfolgreicher Prüfung wechsle zur MainSelectionScreen");
-                      /* Den Zustand vom MainSelectionScreen aktualisieren */
-                      // Navigator.pushReplacement( // nicht mit "Navigator.pushReplacement", sondern mit "Navigator.push" da sonst der "Zurück-Button" nicht mehr funktioniert!
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const MainSelectionScreen(),
-                        ),
-                      );
-                    } else {
-                      log("Die Eingabe für das Passwort ist NICHT korrekt!");
-                    }
-                  },
-                  /*--------------------------------- validator ---*/
-                  validator: (userPassword) {
-                    // Password wurde nicht ausgefüllt:
-                    if (userPassword == null) {
-                      // return "Bitte Passwort angeben";
-                      log("Password wurde nicht ausgefüllt");
-                    } else if (userPassword == "Pass") {
-                      // } else if (userPassword == userPasswordTEC) {
-                      // return "Passwort ist korrekt";
-                      log("Password ist korrekt");
-                    }
-                    // Passwort und Benutzername sind beide korrekt:
-                    return null;
-                  },
+                        ));
+                        // /*--------------------------------- checkUserAndPassword ---*/
+                        // } else if (userName == "Jürgen" && userPassword == "Pass") {
+                        //   // userPasswordTEC
+                        log("0435 - P01LoginScreen - nach erfolgreicher Prüfung wechsle zur MainSelectionScreen");
+                        /* Den Zustand vom MainSelectionScreen aktualisieren */
+                        // Navigator.pushReplacement( // nicht mit "Navigator.pushReplacement", sondern mit "Navigator.push" da sonst der "Zurück-Button" nicht mehr funktioniert!
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MainSelectionScreen(),
+                          ),
+                        );
+                      } else {
+                        log("Die Eingabe für das Passwort ist NICHT korrekt!");
+                      }
+                    },
+                    /*--------------------------------- validator ---*/
+                    validator: (userPassword) {
+                      // Password wurde nicht ausgefüllt:
+                      if (userPassword == null) {
+                        // return "Bitte Passwort angeben";
+                        log("Password wurde nicht ausgefüllt");
+                      } else if (userPassword == "Pass") {
+                        // } else if (userPassword == userPasswordTEC) {
+                        // return "Passwort ist korrekt";
+                        log("Password ist korrekt");
+                      }
+                      // Passwort und Benutzername sind beide korrekt:
+                      return null;
+                    },
+                  ),
                 ),
               ),
-            ),
             /*--------------------------------- Abstand ---*/
-            /*--------------------------------- Abstand ---*/
-            /*--------------------------------- Abstand ---*/
-            /*--------------------------------- Abstand ---*/
-            /*--------------------------------- Abstand ---*/
-            /*--------------------------------- Abstand ---*/
-
-            wbSizedBoxHeight8,
+            if (showPasswordForgotten) wbSizedBoxHeight8,
             /*--------------------------------- Text ---*/
-            const Text(
-              "Passwort vergessen?",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w900,
-                color: wbColorButtonDarkRed,
+            if (showPasswordForgotten)
+              const Text(
+                "Passwort vergessen?",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w900,
+                  color: wbColorButtonDarkRed,
+                ),
+                textAlign: TextAlign.right,
               ),
-              textAlign: TextAlign.right,
-            ),
             /*--------------------------------- Divider ---*/
             const Divider(thickness: 4, color: wbColorButtonGreen),
             /*--------------------------------- Abstand ---*/
@@ -701,7 +638,7 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                   log("0489 - P01LoginScreen - nach erfolgreicher Prüfung wechsle zur MainSelectionScreen");
 
                   /* Den Zustand vom MainSelectionScreen aktualisieren */
-                  // Navigator.pushReplacement( // nicht mit Navigator.pushReplacement, da sonst der "Zurück-Button" nicht mehr funktioniert!
+                  /* NICHT mit "Navigator.pushReplacement", da sonst der "Zurück-Button" nicht mehr funktioniert! */
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -729,7 +666,36 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
               },
             ),
             /*--------------------------------- Abstand ---*/
-            wbSizedBoxHeight16,
+            wbSizedBoxHeight8,
+            /*--------------------------------- Refresh / Reset = Login "NEU" starten ---*/
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 8, 12, 8),
+              child: WbButtonUniversal2(
+                wbColor: Colors.blue,
+                wbIcon: Icons.replay,
+                wbIconSize40: 40,
+                wbText: 'Login "NEU" starten',
+                wbFontSize24: 20,
+                wbWidth155: 155,
+                wbHeight60: 60,
+                wbOnTap: () {
+                  log('0472 - P01LoginScreen - onPressed: Reset $_counter');
+                  /*--------------------------------- Navigator.push ---*/
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => WbHomePage(
+                        title: 'WorkBuddy • save time and money!',
+                        preferencesRepository: SharedPreferencesRepository(),
+                      ),
+                    ),
+                  );
+                  // /*--------------------------------- Navigator.push - ENDE ---*/
+                },
+              ),
+            ),
+            /*--------------------------------- Abstand ---*/
+            wbSizedBoxHeight8,
             /*--------------------------------- Divider ---*/
             WbDividerWithTextInCenter(
               wbColor: wbColorButtonGreen,

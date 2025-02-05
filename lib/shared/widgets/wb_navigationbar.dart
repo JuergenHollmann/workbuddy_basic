@@ -99,7 +99,7 @@ class _WbNavigationbarState extends State<WbNavigationbar> {
                     /*--- Navigiere zur WbHomePage wenn der Home-Button in der NavigationBar angeklickt wird
                     ----> von dort geht es automatisch weiter zum P01LoginScreen,  ---*/
                     log('0084 - WbNavigationbar - Navigiere zur WbHomePage'); // anstatt direkt zum P01LoginScreen
-                    /*--------------------------------- *** ---*/
+                    /*--------------------------------- Navigator.push ---*/
                     Navigator.push(
                       context,
                       MaterialPageRoute(

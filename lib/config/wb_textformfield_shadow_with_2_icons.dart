@@ -163,7 +163,6 @@ class WbTextFormFieldShadowWith2Icons extends StatelessWidget {
                     Icons.replay, //Icons.delete_forever, //Icons.email_rounded,
                 size: suffixIconSize32 ?? 32,
               ),
-
               onPressed: () {
                 log('0161 - WbTextFormFieldShadowWith2Icons - SuffixIcon "onPressed" ist je nachdem welches Icon angezeigt wird, unterschiedlich!');
 
@@ -178,18 +177,26 @@ class WbTextFormFieldShadowWith2Icons extends StatelessWidget {
                   // Das Passwort ist sichtbar!
                   visibilityPassword = false;
                   // Weil "suffixIcon" final ist, muss der Sichtbarkeitsstatus anders behandelt werden. Entweder mit einer Statusverwaltungslösung, um das Symbol zu aktualisieren, oder einen "Callback" übergeben, um das Symbol vom übergeordneten Widget aus zu aktualisieren. In diesem Fall wird der Sichtbarkeitsstatus in der Klasse "P01LoginScreen" aktualisiert.
-                  // void refreshPage() {
-                  //   log('0182 - WbTextFormFieldShadowWith2Icons - SuffixIcon "onPressed" - refreshPage()');
-                  //   // setState(() {});
-                  // }
+                  /*--- visibilityPassword ---*/
+                  // suffixIcon: GestureDetector(
+                  //   onTap: () {
+                  //     setState(() {
+                  //       visibilityPassword = !visibilityPassword;
+                  //     });
+                  //   },
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.all(16.0),
+                  //     child: Icon(
+                  //       size: 40,
+                  //       visibilityPassword
+                  //           ? Icons.visibility_outlined
+                  //           : Icons.visibility_off_outlined,
+                  //     ),
+                  //   ),
+                  // ),
                 }
                 //controller!.clear();
               },
-
-              // icon: Icon(
-              //   Icons.front_hand_outlined,
-              //   size: suffixIconSize32 ?? 32,
-              // ),
             ),
 
             // // void _handleIconButtonPress(IconData icon) {
@@ -244,3 +251,5 @@ class WbTextFormFieldShadowWith2Icons extends StatelessWidget {
     );
   }
 }
+
+//icons.front_hand_outlined, //Icons.email_rounded,
