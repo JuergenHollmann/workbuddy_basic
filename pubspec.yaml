@@ -1,7 +1,7 @@
 name: workbuddy
 description: "save time and money"
 publish_to: 'none'
-version: 0.02.05+1
+version: 0.02.07+1
 
 environment:
   sdk: '>=3.4.3 <4.0.0'
@@ -29,6 +29,8 @@ dependencies:
     sdk: flutter
   age_calculator: ^1.0.0
   money2: ^5.4.6
+  url_launcher: ^6.3.1
+  path_provider: ^2.1.5
 
 cupertino_icons: ^1.0.6
 
@@ -65,3 +67,4 @@ flutter:
    - assets/iconbuttons/
    - assets/company_logos/
    - assets/sound/
+   - assets/JOTHAsoft.FiveStars.db

@@ -9,11 +9,13 @@ class WbDialogAlertUpdateComingSoon extends StatelessWidget {
     required this.headlineText,
     required this.contentText,
     required this.actionsText,
+    this.onTap,
   });
 
   final String headlineText;
   final String contentText;
   final String actionsText;
+  final GestureTapCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -35,47 +37,51 @@ class WbDialogAlertUpdateComingSoon extends StatelessWidget {
                                 "Willst Du jetzt die Nummer\n+49-XXX-XXXX-XXXX\nvon Klaus Müller anrufen?\n\nDiese Funktion kommt bald in einem KOSTENLOSEN Update!\n\nHinweis: CS-0282"),);
                                 */
 /*-----------------------------------------------------------------*/
-        AlertDialog(
-      scrollable: true,
-      title: Text(
-        headlineText,
-        style: const TextStyle(
-            fontSize: 24, fontWeight: FontWeight.w900, color: Colors.blue),
-      ),
-      content: Text(
-        contentText,
-        // Individueller Text - Beispiel:
-        // 'Diese Funktion kommt bald in einem kostenlosen Update!\n\nHinweis: CS-0000'
-        style: const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold, color: wbColorLogoBlue,
+        GestureDetector(
+      onTap: onTap,
+      child: AlertDialog(
+        scrollable: true,
+        title: Text(
+          headlineText,
+          style: const TextStyle(
+              fontSize: 24, fontWeight: FontWeight.w900, color: Colors.blue),
         ),
-      ),
-      actions: [
-        TextButton(
-          child: Text(
-            actionsText, // "OK 👍",
-            style: TextStyle(
-              color: Colors.blue,
-              shadows: [
-                BoxShadow(
-                  color: Colors.black,
-                  blurRadius: 8,
-                  offset: Offset(4, 4),
-                  spreadRadius: 0,
-                )
-              ],
-              fontSize: 40,
-              fontWeight: FontWeight.w900,
-              letterSpacing: 2, // Zwischenraum der Buchtstaben
-            ),
+        content: Text(
+          contentText,
+          // Individueller Text - Beispiel:
+          // 'Diese Funktion kommt bald in einem kostenlosen Update!\n\nHinweis: CS-0000'
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: wbColorLogoBlue,
           ),
-          onPressed: () {
-            log("0071 - WbDialogAlertUpdateComingSoon - OK wurde angeklickt");
-            Navigator.of(context).pop();
-          },
         ),
-      ],
+        actions: [
+          TextButton(
+            child: Text(
+              actionsText, // "OK 👍",
+              style: TextStyle(
+                color: Colors.blue,
+                shadows: [
+                  BoxShadow(
+                    color: Colors.black,
+                    blurRadius: 8,
+                    offset: Offset(4, 4),
+                    spreadRadius: 0,
+                  )
+                ],
+                fontSize: 40,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 2, // Zwischenraum der Buchtstaben
+              ),
+            ),
+            onPressed: () {
+              log("0071 - WbDialogAlertUpdateComingSoon - OK wurde angeklickt");
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
     );
   }
 }

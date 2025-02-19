@@ -1,11 +1,17 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:age_calculator/age_calculator.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:time_picker_spinner_pop_up/time_picker_spinner_pop_up.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:workbuddy/config/wb_button_universal_2.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
@@ -25,6 +31,50 @@ class CompanyScreen extends StatefulWidget {
   State<CompanyScreen> createState() => _CompanyScreenState();
 }
 
+/*--------------------------------- SQL-Datenbank ---*/
+class DatabaseHelper {
+  static Database? _database;
+
+// Singleton-Muster
+  Future<Database> get database async {
+    if (_database != null) return _database!;
+    _database = await _openDatabaseFromAssets();
+    return _database!;
+  }
+
+  Future<Database> _openDatabaseFromAssets() async {
+    log('0046 - CompanyScreen - Öffnet die Datenbank');
+    Directory documentsDir = await getApplicationDocumentsDirectory();
+    String dbPath = join(documentsDir.path, "JOTHAsoft.FiveStars.db");
+    bool dbExists = await databaseExists(dbPath);
+    if (!dbExists) {
+      ByteData data = await rootBundle.load("assets/JOTHAsoft.FiveStars.db");
+      List<int> bytes = data.buffer.asUint8List();
+      await File(dbPath).writeAsBytes(bytes, flush: true);
+    }
+    return openDatabase(dbPath);
+  }
+}
+
+Future<void> fetchData() async {
+  var db = await DatabaseHelper().database;
+  // var query = await db.rawQuery("SELECT * FROM KundenDaten WHERE TKD_Feld_007 = 'Schwäbisch Gmünd'");
+    var query = await db.rawQuery(
+      "SELECT * FROM KundenDaten WHERE TKD_Feld_030 = 'KundenID: 1683296820166'");
+  log('0062 - CompanyScreen - Abfrage Ergebnis: $query');
+
+  /* Die Daten in die dazugehörgen Felder einfügen. */
+  
+}
+
+class _CompanyScreenState extends State<CompanyScreen> {
+  late AudioPlayer player = AudioPlayer();
+
+  /* für die Berechnung des Alters und der Zeitspanne bis zum nächsten Geburtstag */
+  int ageY = 0, ageM = 0, ageD = 0, nextY = 0, nextM = 0, nextD = 0;
+  DateTime initTime = DateTime.now();
+  DateTime selectedTime = DateTime.now();
+
 /*--------------------------------- Controller ---*/
 final TextEditingController inputCompanyNameTEC = TextEditingController();
 final TextEditingController inputCompanyVNContactPersonTEC =
@@ -39,14 +89,56 @@ String inputCompanyVNContactPerson =
     "Ansprechpartner"; // nur für die "onChanged-Funktion"
 String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
 
-class _CompanyScreenState extends State<CompanyScreen> {
-  late AudioPlayer player = AudioPlayer();
 
-  /* für die Berechnung des Alters und der Zeitspanne bis zum nächsten Geburtstag */
-  int ageY = 0, ageM = 0, ageD = 0, nextY = 0, nextM = 0, nextD = 0;
-  DateTime initTime = DateTime.now();
-  DateTime selectedTime = DateTime.now();
+  /*--------------------------------- Telefon-Anruf-Funktionen ---*/
+  bool _hasCallSupport = false;
+  late String _phone = '';
+  Future<void>? _launched;
 
+  /*--------------------------------- *** ---*/
+  @override
+  void initState() {
+    super.initState();
+
+    /*--- Überprüfe den Telefon-Anruf-Support ---*/
+    canLaunchUrl(Uri(scheme: 'tel', path: '123')).then((bool result) {
+      setState(() {
+        _hasCallSupport = result;
+      });
+    });
+
+    fetchData();
+  }
+
+  /*--------------------------------- Telefon-Anruf-Funktionen ---*/
+  Widget _launchStatus(BuildContext context, AsyncSnapshot<void> snapshot) {
+    if (snapshot.hasError) {
+      log('0072 - CompanyScreen - _launchStatus:     $_launchStatus');
+      log('0073 - CompanyScreen - context:           $context');
+      log('0074 - CompanyScreen - snapshot:          $snapshot');
+      log('0075 - CompanyScreen - snapshot.hasError: ${snapshot.hasError}');
+      log('0076 - CompanyScreen - snapshot.error:    ${snapshot.error}');
+      return Text('Error: ${snapshot.error}');
+    } else {
+      log('0080 - CompanyScreen - _launchStatus:     $_launchStatus');
+      log('0081 - CompanyScreen - context:           $context');
+      log('0082 - CompanyScreen - snapshot:          $snapshot');
+      log('0083 - CompanyScreen - snapshot.hasError: ${snapshot.hasError}');
+      log('0084 - CompanyScreen - snapshot.error:    ${snapshot.error}');
+      return const Text('');
+    }
+  }
+
+/*--------------------------------- Telefon-Anruf-Funktionen ---*/
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    await launchUrl(launchUri);
+  }
+
+/*--------------------------------- *** ---*/
   @override
   Widget build(BuildContext context) {
     log("0038 - CompanyScreen - aktiviert");
@@ -54,7 +146,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
     return Scaffold(
       backgroundColor: wbColorBackgroundBlue,
       appBar: AppBar(
-        /*--- "toolbarHeight" wird hier nicht mehr benötigt, weil jetzt "WbInfoContainer" die Daten anzeigt */
+        /*--- "toolbarHeight" wird hier nicht mehr benötigt, weil jetzt "WbInfoContainer" die Daten anzeigt ---*/
         // toolbarHeight: 100,
         title: Text(
           'Eine Firma NEU anlegen',
@@ -71,7 +163,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
         //elevation: 10,
         //scrolledUnderElevation: 10,
         /*--------------------------------- *** ---*/
-        /*--- "RichText" wird hier nicht mehr benötigt, weil jetzt "WbInfoContainer" die Daten anzeigt */
+        /*--- "RichText" wird hier nicht mehr benötigt, weil jetzt "WbInfoContainer" die Daten anzeigt ---*/
         // title: RichText(
         //   textAlign: TextAlign.center,
         //   text: TextSpan(
@@ -696,7 +788,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
                     // const WBTextfieldNotice(
                     //     headlineText: "Notizen zum Ansprechpartner:",
                     //     hintText: "Beispiele: Hobbys, Lieblingswein, usw."),
-                    /*--------------------------------- Telefon 1 ---*/
+                    /*--------------------------------- Telefon 1 - TKD_Feld_008 ---*/
                     Row(
                       children: [
                         Expanded(
@@ -714,6 +806,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
                               inputFontColor: wbColorLogoBlue,
                               fillColor: wbColorLightYellowGreen,
                               textInputTypeOnKeyboard: TextInputType.phone,
+                              onChanged: (String text) => _phone = text,
                             ),
                           ),
                         ),
@@ -723,36 +816,97 @@ class _CompanyScreenState extends State<CompanyScreen> {
                           width: 48,
                           height: 48,
                           child: GestureDetector(
-                            //   /*--------------------------------- Telefon-Anruf starten ---*/
-                            //   // benötigt package = recherchieren"
-                            //   onTap: () async {
-                            //   log("00513 - company_screen - Anruf starten");
-                            //   Uri.parse("+491789697193"); // funzt das?
-                            //   launchUrl("tel:+491789697193");
-                            //   UrlLauncher.launch('tel:+${p.phone.toString()}');
-                            //   final call = Uri.parse('tel:+491789697193');
-                            //   if (await canLaunchUrl(call)) {
-                            //     launchUrl(call);
-                            //   } else {
-                            //     throw 'Could not launch $call';
-                            //   }
-                            // },
-                            // /*--------------------------------- Telefon-Anruf erledigt ---*/
+                            /*--------------------------------- Telefon-Anruf starten ---*/
+                            onTap: () async {
+                              log("0767 - CompanyScreen - Anruf starten");
+                              /*--------------------------------- Telefon-Anruf - Variante 1 ---*/
+                              /*--- Überprüfe den Telefon-Anruf-Support ---*/
+                              _hasCallSupport
+                                  ? () => setState(() {
+                                        _launched = _makePhoneCall(_phone);
+                                      })
+                                  : null;
+                              log('0785 - CompanyScreen - Anruf wird supportet, $_hasCallSupport wenn result = "$_launched" | Telefonnummer: $_phone');
+                              log('0786 - CompanyScreen - Anruf wird supportet');
+                              log('0787 - CompanyScreen - _launched:       $_launched');
+                              //log('0788 - CompanyScreen - call:            $call');
+                              log('0789 - CompanyScreen - _phone:          $_phone');
+                              log('0790 - CompanyScreen - _hasCallSupport: $_hasCallSupport');
 
-                            /*--------------------------------- Icon onTap ---*/
-                            onTap: () {
-                              log("0510 - company_screen - Einen Anruf starten");
-                              showDialog(
-                                context: context,
-                                builder: (context) =>
-                                    const WbDialogAlertUpdateComingSoon(
-                                  headlineText: "Einen Anruf starten",
-                                  contentText:
-                                      "Willst Du jetzt die Nummer\n+49-XXX-XXXX-XXXX\nvon Klaus Müller\nin der Firma XXXXXXXXXXXX GmbH & Co. KG\nanrufen?\n\nDiese Funktion kommt bald in einem KOSTENLOSEN Update!\n\nHinweis: CS-0510",
-                                  actionsText: "OK 👍",
-                                ),
+                              final call = Uri.parse(_phone);
+                              if (await canLaunchUrl(call)) {
+                                launchUrl(call);
+                                log('0793 - CompanyScreen - Anruf wird supportet - Telefonnummer anrufen: $_phone / Freigabe: $call');
+                              } else {
+                                log('0795 - CompanyScreen - Anruf wird NICHT supportet');
+                                log('0796 - CompanyScreen - _launched:       $_launched');
+                                log('0797 - CompanyScreen - call:            $call');
+                                log('0798 - CompanyScreen - _phone:          $_phone');
+                                log('0799 - CompanyScreen - _hasCallSupport: $_hasCallSupport');
+                              }
+
+                              FutureBuilder<void>(
+                                future: _launched,
+                                builder: _launchStatus,
                               );
+                              log('0785 - CompanyScreen - future: $_launched');
+                              log('0787 - CompanyScreen - builder: $_launchStatus');
+
+                              /*--------------------------------- Telefon-Anruf - Variante 2 ---*/
+                              // Uri.parse(_phone); // funzt
+                              // log('0782 - CompanyScreen - $_phone');
+                              // launchUrl(Uri.parse(_phone)); // funzt
+                              // log('0787 - CompanyScreen - $_phone');
+                              // launchUrl(Uri.parse('${_phone.toString()} ')); // funzt
+                              // log('0790 - CompanyScreen - $_phone');
+
+                              // final call = Uri.parse(_phone);
+                              // if (await canLaunchUrl(call)) {
+                              //   launchUrl(call);
+                              //   log('0793 - CompanyScreen - Anruf wird supportet - Telefonnummer anrufen: $_phone / Freigabe: $call');
+                              // } else {
+                              //   log('0795 - CompanyScreen - Anruf wird NICHT supportet');
+                              //   log('0796 - CompanyScreen - _launched:       $_launched');
+                              //   log('0797 - CompanyScreen - call:            $call');
+                              //   log('0798 - CompanyScreen - _phone:          $_phone');
+                              //   log('0799 - CompanyScreen - _hasCallSupport: $_hasCallSupport');
+                              // }
+                              /*--------------------------------- Telefon-Anruf erledigt ---*/
+
+                              /*--------------------------------- Icon onTap ---*/
+                              // onTap: () {
+
+                              //                                   /*--------------------------------- Telefon-Anruf starten  ---*/
+                              //     child: TextField(
+                              //         onChanged: (String text) => _phone = text,
+                              //         decoration: const InputDecoration(
+                              //             hintText: 'Hier die Telefonnummer eingeben')),
+                              //   ),
+                              //   ElevatedButton(
+                              //     onPressed:
+                              // _hasCallSupport
+                              //         ? () => setState(() {
+                              //               _launched = _makePhoneCall(_phone);
+                              //             })
+                              //         : null,
+                              //     child: _hasCallSupport
+                              //         ? const Text('Rufe diese Nummer an')
+                              //         : const Text('Anrufe sind zur Zeit nicht möglich'),
+                              //   ),
+
+                              // log("0744 - CompanyScreen - Einen Anruf starten");
+                              // showDialog(
+                              //   context: context,
+                              //   builder: (context) =>
+                              //       const WbDialogAlertUpdateComingSoon(
+                              //     headlineText: "Einen Anruf starten",
+                              //     contentText:
+                              //         "Willst Du jetzt die Nummer\n+49-XXX-XXXX-XXXX\nvon Klaus Müller\nin der Firma XXXXXXXXXXXX GmbH & Co. KG\nanrufen?\n\nDiese Funktion kommt bald in einem KOSTENLOSEN Update!\n\nHinweis: CS-0510",
+                              //     actionsText: "OK 👍",
+                              //   ),
+                              // );
                             },
+
                             /*--------------------------------- Icon onTap ENDE---*/
 
                             child: Image(
@@ -1177,3 +1331,24 @@ class _CompanyScreenState extends State<CompanyScreen> {
     );
   }
 }
+
+              //   /*--------------------------------- Telefon ---*/
+              //   child: TextField(
+              //       onChanged: (String text) => _phone = text,
+              //       decoration: const InputDecoration(
+              //           hintText: 'Hier die Telefonnummer eingeben')),
+              // ),
+              // ElevatedButton(
+              //   onPressed: _hasCallSupport
+              //       ? () => setState(() {
+              //             _launched = _makePhoneCall(_phone);
+              //           })
+              //       : null,
+              //   child: _hasCallSupport
+              //       ? const Text('Rufe diese Nummer an')
+              //       : const Text('Anrufe sind zur Zeit nicht möglich'),
+              // ),
+              // /*--------------------------------- *** ---*/
+              // FutureBuilder<void>(future: _launched, builder: _launchStatus),
+              // /*--------------------------------- *** ---*/
+
