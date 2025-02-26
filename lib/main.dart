@@ -190,7 +190,7 @@ class MainApp extends StatelessWidget {
   - Alle Ausgaben als Liste zeigen                - Update AM-0115
   - Alle Einnahmen als Liste zeigen               - Update AM-0146
   - Alle Ausgaben suchen und finden               - Update AM-0180
-  - Alle Einnahmen suchen und finden              - Update AM-0212
+  - Alle Einnahmen suchen und finden              - Update AM-02129
 
   √ Datums-Picker (Geburtstage, etc.) installiert: time_picker_spinner_pop_up: ^2.0.0 √
     x - flutter_rounded_date_picker: ^3.0.4 (nicht installiert, ist aber umfangreicher)

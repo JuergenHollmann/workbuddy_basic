@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:age_calculator/age_calculator.dart' show AgeCalculator;
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -864,7 +865,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
                                 Text(
                                   'Geburtstag',
                                   style: TextStyle(
-                                    fontSize: 22,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -881,7 +882,53 @@ class _CompanyScreenState extends State<CompanyScreen> {
                                     inputTextFontSize22: 22,
                                     inputFontWeightW900: FontWeight.w900,
                                     inputFontColor: wbColorButtonDarkRed,
-                                    fillColor: Colors.yellow),
+                                    fillColor: Colors.yellow,
+                                    textInputAction: TextInputAction.go, // auf der Tastatur erscheint der Button "go" 
+                                    onChanged: (controllerCS004) {
+
+
+
+                                      log('0887 - CompanyScreen - onChanged $controllerCS004 - Geburtsdatum berechnen');
+
+                                      // /*--- Automatisch das Alter berechnen mit "age_calculator" 0785 - CompanyScreen ---*/
+                                      // AgeCalculator();
+                                      // DateTime birthday = DateTime.parse(controllerCS004);
+                                      // var age = AgeCalculator.age(birthday);
+                                      // log('0561 - CompanyScreen - Berechnetes Alter = ${age.years} Jahre + ${age.months} Monate + ${age.days} Tage');
+
+                                      // /*--- automatisch die Zeit bis zum nächsten Geburtstag berechnen mit "age_calculator" ---*/
+                                      // DateTime nextBirthday =
+                                      //     DateTime.parse(controllerCS004);
+                                      // var timeToNextBirthday =
+                                      //     AgeCalculator.timeToNextBirthday(
+                                      //   DateTime(
+                                      //     nextBirthday.year,
+                                      //     nextBirthday.month,
+                                      //     nextBirthday.day,
+                                      //   ),
+                                      //   fromDate: DateTime.now(),
+                                      // );
+
+                                      // /*--- die Daten aktualisieren ---*/
+                                      // setState(() {
+                                      //   /*--- das Alter berechnen aktualisieren ---*/
+                                      //   ageY = age.years;
+                                      //   ageM = age.months;
+                                      //   ageD = age.days;
+
+                                      //   /*--- die Zeit bis zum nächsten Geburtstag aktualisieren ---*/
+                                      //   nextY = timeToNextBirthday.years;
+                                      //   nextM = timeToNextBirthday.months;
+                                      //   nextD = timeToNextBirthday.days;
+                                      // });
+                                    }),
+
+
+
+
+
+
+
                                 /*--------------------------------- *** ---*/
                                 /*--- vorübergehend deaktiviert: TimePickerSpinnerPopUp ---*/
                                 // TimePickerSpinnerPopUp(
@@ -914,40 +961,11 @@ class _CompanyScreenState extends State<CompanyScreen> {
                                 //     confirmText: 'OK',
                                 //     pressType: PressType.singlePress,
                                 //     timeFormat: 'dd.MM.yyyy',
-                                //     onChange: (dateTime) {
-                                //       log('0539 - CompanyScreen - Geburtsdatum eingegeben: $dateTime');
-                                //     /*--------------------------------- *** ---*/
 
-                                // /*--- Automatisch das Alter berechnen mit "age_calculator" 0785 - CompanyScreen ---*/
-                                // AgeCalculator();
-                                // DateTime birthday = dateTime;
-                                // var age = AgeCalculator.age(birthday);
-                                // log('0561 - CompanyScreen - Berechnetes Alter = ${age.years} Jahre + ${age.months} Monate + ${age.days} Tage');
-
-                                // /*--- automatisch die Zeit bis zum nächsten Geburtstag berechnen mit "age_calculator" ---*/
-                                // DateTime nextBirthday = dateTime;
-                                // var timeToNextBirthday =
-                                //     AgeCalculator.timeToNextBirthday(
-                                //   DateTime(
-                                //     nextBirthday.year,
-                                //     nextBirthday.month,
-                                //     nextBirthday.day,
-                                //   ),
-                                //   fromDate: DateTime.now(),
-                                // );
-
-                                //   /*--- die Daten aktualisieren ---*/
-                                //   setState(() {
-
-                                //     /*--- das Alter berechnen aktualisieren ---*/
-                                //     ageY = age.years;
-                                //     ageM = age.months;
-                                //     ageD = age.days;
-
-                                //     /*--- die Zeit bis zum nächsten Geburtstag aktualisieren ---*/
-                                //     nextY = timeToNextBirthday.years;
-                                //     nextM = timeToNextBirthday.months;
-                                //     nextD = timeToNextBirthday.days;
+                                /*--------------------------------- *** ---*/
+                                // onChanged: (dateTime) {
+                                //   log('0539 - CompanyScreen - Geburtsdatum eingegeben: $dateTime');
+                                /*--------------------------------- *** ---*/
 
                                 //     /*--- Das angeklickte Geburtsdatum im "TimePickerSpinnerPopUp" soll behalten werden ---*/
                                 //     selectedTime = birthday;
