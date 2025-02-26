@@ -1,21 +1,20 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:age_calculator/age_calculator.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart';
-import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:time_picker_spinner_pop_up/time_picker_spinner_pop_up.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:workbuddy/config/wb_button_universal_2.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
 import 'package:workbuddy/config/wb_text_form_field.dart';
+import 'package:workbuddy/config/wb_text_form_field_only_date.dart';
 import 'package:workbuddy/config/wb_text_form_field_text_only.dart';
 import 'package:workbuddy/features/home/screens/main_selection_screen.dart';
 import 'package:workbuddy/shared/providers/current_user_provider.dart';
@@ -25,17 +24,52 @@ import 'package:workbuddy/shared/widgets/wb_drop_downmenu_with_1_icon.dart';
 import 'package:workbuddy/shared/widgets/wb_info_container.dart';
 
 class CompanyScreen extends StatefulWidget {
-  const CompanyScreen({super.key});
+  final Map<String, dynamic> contact;
+  const CompanyScreen({super.key, required this.contact});
 
   @override
   State<CompanyScreen> createState() => _CompanyScreenState();
 }
 
+/*--------------------------------- Controller ---*/
+final compPersonAge = TextEditingController();
+final controllerCS001 = TextEditingController(); // Anrede
+final controllerCS002 = TextEditingController(); // Vorname
+final controllerCS003 = TextEditingController(); // Nachname
+// final controllerCS004 = TimePickerSpinnerController(); // Geburtstag
+final controllerCS004 = TextEditingController(); // Geburtstag
+final controllerCS005 = TextEditingController(); // Straße
+final controllerCS006 = TextEditingController(); // PLZ
+final controllerCS007 = TextEditingController(); // Stadt
+final controllerCS008 = TextEditingController(); // Telefon_1
+final controllerCS009 = TextEditingController(); // E-Mail_1
+final controllerCS010 = TextEditingController(); // Telefon_2
+final controllerCS011 = TextEditingController(); // E-Mail_2
+final controllerCS012 = TextEditingController(); // Webseite
+final controllerCS013 = TextEditingController(); //
+final controllerCS014 = TextEditingController(); // Firma
+final controllerCS015 = TextEditingController(); // Logo
+final controllerCS016 = TextEditingController(); // Notizen
+final controllerCS017 = TextEditingController(); // Branche
+final controllerCS018 = TextEditingController(); // KontaktQuelle
+final controllerCS019 = TextEditingController(); // Status
+final controllerCS020 = TextEditingController(); // 'Position
+final controllerCS021 = TextEditingController(); // '77765
+final controllerCS022 = TextEditingController(); // 'noch NICHT versandt
+final controllerCS023 = TextEditingController(); // 'noch NICHT versandt
+final controllerCS024 = TextEditingController(); // '99 - Gebietskennung
+final controllerCS025 = TextEditingController(); //
+final controllerCS026 = TextEditingController(); //
+final controllerCS027 = TextEditingController(); // letzte_Aenderung_am_um
+final controllerCS028 = TextEditingController(); // Betreuer
+final controllerCS029 = TextEditingController(); // Betreuer_Job
+final controllerCS030 = TextEditingController(); // KontaktID
+
 /*--------------------------------- SQL-Datenbank ---*/
 class DatabaseHelper {
   static Database? _database;
 
-// Singleton-Muster
+  // Singleton-Muster
   Future<Database> get database async {
     if (_database != null) return _database!;
     _database = await _openDatabaseFromAssets();
@@ -58,15 +92,144 @@ class DatabaseHelper {
 
 Future<void> fetchData() async {
   var db = await DatabaseHelper().database;
-  // var query = await db.rawQuery("SELECT * FROM KundenDaten WHERE TKD_Feld_007 = 'Schwäbisch Gmünd'");
-    var query = await db.rawQuery(
-      "SELECT * FROM KundenDaten WHERE TKD_Feld_030 = 'KundenID: 1683296820166'");
-  log('0062 - CompanyScreen - Abfrage Ergebnis: $query');
 
-  /* Die Daten in die dazugehörgen Felder einfügen. */
-  
+  /*--- Zeige alle Kontakte aus Schwäbisch Gmünd ---*/
+  // var query = await db.rawQuery(
+  //     "SELECT * FROM KundenDaten WHERE TKD_Feld_007 = 'Schwäbisch Gmünd'");
+
+  /*--- Zeige den Kontakt mit der KundenID: 1683296820166' ---*/
+  var query = await db.rawQuery(
+      "SELECT * FROM KundenDaten WHERE TKD_Feld_030 = 'KundenID: 1683296820166'");
+
+  /*--- Zeige alle Kunden mit allen Daten ---*/
+  // var query = await db.rawQuery("SELECT * FROM KundenDaten");
+
+  log('0062 - CompanyScreen - Abfrage Ergebnis: $query');
 }
 
+// Future<int> updateTest(Map<String, dynamic> row) async {
+//   Database db = await instance.database;
+//   int id = row[columnId];
+//   return await db.update(table, row, where: '$columnId = ?', whereArgs: [id]);
+// }
+
+// Future<void> updateDog() async {
+//   // Get a reference to the database.
+//   final db = await database;
+
+//   // Update the given Dog.
+//   await db.update(
+//     'dogs',
+//     dog.toMap(),
+//     // Ensure that the Dog has a matching id.
+//     where: "id = ?",
+//     // Pass the Dog's id as a whereArg to prevent SQL injection.
+//     whereArgs: [dog.id],
+//   );
+// }
+
+/*--------------------------------- Daten aktualisieren ---*/
+Future<void> updateData(Map<String, dynamic> row) async {
+  var db = await DatabaseHelper().database;
+
+  /*--- Ändere den Kontakt mit der KundenID: 1683296820166 ---*/
+  var query = await db.rawUpdate('''
+    UPDATE KundenDaten SET
+      TKD_Feld_001 = ?,
+      TKD_Feld_002 = ?,
+      TKD_Feld_003 = ?,
+      TKD_Feld_004 = ?,
+      TKD_Feld_005 = ?,
+      TKD_Feld_006 = ?,
+      TKD_Feld_007 = ?,
+      TKD_Feld_008 = ?,
+      TKD_Feld_009 = ?,
+      TKD_Feld_010 = ?,
+      TKD_Feld_011 = ?,
+      TKD_Feld_012 = ?,
+      TKD_Feld_013 = ?,
+      TKD_Feld_014 = ?,
+      TKD_Feld_015 = ?,
+      TKD_Feld_016 = ?,
+      TKD_Feld_017 = ?,
+      TKD_Feld_018 = ?,
+      TKD_Feld_019 = ?,
+      TKD_Feld_020 = ?,
+      TKD_Feld_021 = ?,
+      TKD_Feld_022 = ?,
+      TKD_Feld_023 = ?,
+      TKD_Feld_024 = ?,
+      TKD_Feld_025 = ?,
+      TKD_Feld_026 = ?,
+      TKD_Feld_027 = ?,
+      TKD_Feld_028 = ?,
+      TKD_Feld_029 = ?
+    WHERE TKD_Feld_030 = ?
+  ''', [
+    controllerCS001.text,
+    controllerCS002.text,
+    controllerCS003.text,
+    controllerCS004.text,
+    controllerCS005.text,
+    controllerCS006.text,
+    controllerCS007.text,
+    controllerCS008.text,
+    controllerCS009.text,
+    controllerCS010.text,
+    controllerCS011.text,
+    controllerCS012.text,
+    controllerCS013.text,
+    controllerCS014.text,
+    controllerCS015.text,
+    controllerCS016.text,
+    controllerCS017.text,
+    controllerCS018.text,
+    controllerCS019.text,
+    controllerCS020.text,
+    controllerCS021.text,
+    controllerCS022.text,
+    controllerCS023.text,
+    controllerCS024.text,
+    controllerCS025.text,
+    controllerCS026.text,
+    controllerCS027.text,
+    controllerCS028.text,
+    controllerCS029.text,
+    controllerCS030.text,
+  ]);
+
+  log('0200 - CompanyScreen - Abfrage Ergebnis: $query');
+}
+
+/*--------------------------------- Datensatz löschen ---*/
+Future<void> deleteData(Map<String, dynamic> row) async {
+  // Die Datenbank öffnen, indem auf die Instanz von DatabaseHelper zugegriffen wird
+  var db = await DatabaseHelper().database;
+
+  // Der Name der Tabelle, aus der der Datensatz gelöscht werden soll
+  final String tableName = 'KundenDaten';
+
+  // Die Spalte, welche KundenID enthält
+  final String columnKundenID = 'TKD_Feld_030';
+
+  // Die KundenID, die gelöscht werden soll
+  final String kundenIDToDelete = controllerCS030.text;
+
+  // Den Löschvorgang durchführen
+  await db.delete(
+    tableName, // Name der Tabelle
+    where:
+        '$columnKundenID = ?', // WHERE-Bedingung: Löschen, wo die KundenID gleich dem Wert ist
+    whereArgs: [
+      kundenIDToDelete
+    ], // Argument für die WHERE-Bedingung (hier: KundenID 1234)
+  );
+
+  // Optional: Gib eine Bestätigung aus, dass der Datensatz gelöscht wurde
+  log('0227 - CompanyScreen - Der Datensatz mit KundenID $kundenIDToDelete wurde gelöscht.');
+}
+
+/*--------------------------------- *** ---*/
 class _CompanyScreenState extends State<CompanyScreen> {
   late AudioPlayer player = AudioPlayer();
 
@@ -75,20 +238,11 @@ class _CompanyScreenState extends State<CompanyScreen> {
   DateTime initTime = DateTime.now();
   DateTime selectedTime = DateTime.now();
 
-/*--------------------------------- Controller ---*/
-final TextEditingController inputCompanyNameTEC = TextEditingController();
-final TextEditingController inputCompanyVNContactPersonTEC =
-    TextEditingController();
-final TextEditingController inputCompanyNNContactPersonTEC =
-    TextEditingController();
-final TextEditingController compPersonAge = TextEditingController();
-
-/*--------------------------------- onChanged-Funktion ---*/
-String inputCompanyName = "Firmenlogo"; // nur für die "onChanged-Funktion"
-String inputCompanyVNContactPerson =
-    "Ansprechpartner"; // nur für die "onChanged-Funktion"
-String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
-
+  /*--------------------------------- onChanged-Funktion ---*/
+  String inputCompanyName = "Firmenlogo"; // nur für die "onChanged-Funktion"
+  String inputCompanyVNContactPerson =
+      "Ansprechpartner"; // nur für die "onChanged-Funktion"
+  String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
 
   /*--------------------------------- Telefon-Anruf-Funktionen ---*/
   bool _hasCallSupport = false;
@@ -99,6 +253,104 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
   @override
   void initState() {
     super.initState();
+    log("0227 - CompanyScreen - initState - aktiviert");
+
+    // Den Zustand (State) erst nach dem Build ändern
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        try {
+          /*--------------------------------- Daten aus der SQFlite ---*/
+          controllerCS001.text = widget.contact['TKD_Feld_001'] ?? ''; // Anrede
+          controllerCS002.text =
+              widget.contact['TKD_Feld_002'] ?? ''; // Vorname
+          controllerCS003.text =
+              widget.contact['TKD_Feld_003'] ?? ''; // Nachname
+
+          // Geburtstag ist ein Datum und kein String - wie kann ich das mit einem Controller verarbeiten? - 0146 - CompanyScreen
+          // controllerCS004.menuIsShowing = widget.contact['TKD_Feld_004'] ?? ''; // Geburtstag
+
+          controllerCS004.text =
+              widget.contact['TKD_Feld_004'] ?? ''; // Geburtstag
+          controllerCS005.text = widget.contact['TKD_Feld_005'] ?? ''; // Straße
+          controllerCS006.text = widget.contact['TKD_Feld_006'] ?? ''; // PLZ
+          controllerCS007.text = widget.contact['TKD_Feld_007'] ?? ''; // Stadt
+          controllerCS008.text =
+              widget.contact['TKD_Feld_008'] ?? ''; // Telefon 1
+          controllerCS009.text =
+              widget.contact['TKD_Feld_009'] ?? ''; // E-Mail 1
+          controllerCS010.text =
+              widget.contact['TKD_Feld_010'] ?? ''; // Telefon 2
+          controllerCS011.text =
+              widget.contact['TKD_Feld_011'] ?? ''; // E-Mail 2
+          controllerCS012.text =
+              widget.contact['TKD_Feld_012'] ?? ''; // Webseite
+          controllerCS013.text = widget.contact['TKD_Feld_013'] ?? ''; //
+          controllerCS014.text = widget.contact['TKD_Feld_014'] ?? ''; // Firma
+          controllerCS015.text = widget.contact['TKD_Feld_015'] ?? ''; // Logo
+          controllerCS016.text =
+              widget.contact['TKD_Feld_016'] ?? ''; // Notizen
+          controllerCS017.text = widget.contact['TKD_Feld_017'] ?? ''; //
+          controllerCS018.text = widget.contact['TKD_Feld_018'] ?? ''; //
+          controllerCS019.text = widget.contact['TKD_Feld_019'] ?? ''; // Status
+          controllerCS020.text =
+              widget.contact['TKD_Feld_020'] ?? ''; // 'Position
+          controllerCS021.text = widget.contact['TKD_Feld_021'] ?? ''; // '77765
+          controllerCS022.text =
+              widget.contact['TKD_Feld_022'] ?? ''; // 'noch NICHT versandt
+          controllerCS023.text =
+              widget.contact['TKD_Feld_023'] ?? ''; // 'noch NICHT versandt
+          controllerCS024.text =
+              widget.contact['TKD_Feld_024'] ?? ''; // '99 - Gebietskennung
+          controllerCS025.text = widget.contact['TKD_Feld_025'] ?? ''; //
+          controllerCS026.text = widget.contact['TKD_Feld_026'] ?? ''; //
+          controllerCS027.text =
+              widget.contact['TKD_Feld_027'] ?? ''; // letzte_Aenderung_am_um
+          controllerCS028.text =
+              widget.contact['TKD_Feld_028'] ?? ''; // Betreuer
+          controllerCS029.text =
+              widget.contact['TKD_Feld_029'] ?? ''; // Betreuer_Job
+          controllerCS030.text =
+              widget.contact['TKD_Feld_030'] ?? ''; // KontaktID
+        } catch (e) {
+          log('0271 - CompanyScreen - Fehler: $e');
+        }
+      });
+    });
+
+    /*--- Zeitstempel in ein lesbares Datum umwandeln ---*/
+    void timestampToDateTime(int timestamp) {
+      DateTime dateTime =
+          DateTime.fromMillisecondsSinceEpoch(timestamp, isUtc: true);
+      DateTime localDateTime = dateTime.toLocal();
+      String formattedDate =
+          DateFormat('dd.MM.yyyy HH:mm').format(localDateTime);
+      log('0192 - CompanyScreen - formattedDate: $formattedDate');
+    }
+    // // Zeitstempel als String aus dem Controller
+    // String timestampString = controllerCS027.text;
+
+    // // Umwandlung des Strings in einen Integer
+    // int timestamp = int.parse(timestampString);
+
+    // // Umwandlung des Zeitstempels in ein DateTime-Objekt
+    // DateTime dateTime =
+    //     DateTime.fromMillisecondsSinceEpoch(timestamp, isUtc: true);
+
+    // // Umwandlung in die lokale Zeit (MESZ)
+    // DateTime localDateTime = dateTime.toLocal();
+
+    // // Formatierung des Datums im europäischen Format
+    // String formattedDate = DateFormat('dd.MM.yyyy HH:mm').format(localDateTime);
+    // log('0192 - CompanyScreen - formattedDate: $formattedDate');
+
+    // String formatEuropeanTimeLocal(String timestamp) {
+    //   final dateTime =
+    //       DateTime.fromMillisecondsSinceEpoch(int.parse(timestamp));
+    //   final localTime = dateTime.toLocal();
+    //   final formatter = DateFormat('dd.MM.yyyy HH:mm:ss');
+    //   final isDst = localTime.timeZoneOffset.inHours == 2;
+    //   return '${formatter.format(localTime)} ${isDst ? 'MESZ' : 'MEZ'}';
+    // }
 
     /*--- Überprüfe den Telefon-Anruf-Support ---*/
     canLaunchUrl(Uri(scheme: 'tel', path: '123')).then((bool result) {
@@ -108,6 +360,8 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
     });
 
     fetchData();
+    //dispose();
+    //updateData();
   }
 
   /*--------------------------------- Telefon-Anruf-Funktionen ---*/
@@ -129,7 +383,7 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
     }
   }
 
-/*--------------------------------- Telefon-Anruf-Funktionen ---*/
+  /*--------------------------------- Telefon-Anruf-Funktionen ---*/
   Future<void> _makePhoneCall(String phoneNumber) async {
     final Uri launchUri = Uri(
       scheme: 'tel',
@@ -138,7 +392,7 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
     await launchUrl(launchUri);
   }
 
-/*--------------------------------- *** ---*/
+  /*--------------------------------- *** ---*/
   @override
   Widget build(BuildContext context) {
     log("0038 - CompanyScreen - aktiviert");
@@ -149,7 +403,7 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
         /*--- "toolbarHeight" wird hier nicht mehr benötigt, weil jetzt "WbInfoContainer" die Daten anzeigt ---*/
         // toolbarHeight: 100,
         title: Text(
-          'Eine Firma NEU anlegen',
+          'Firma anzeigen | bearbeiten', // oder NEU anlegen
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w900,
@@ -258,7 +512,9 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
-                            inputCompanyName,
+                            controllerCS014.text.isEmpty
+                                ? "KEINE Firma"
+                                : controllerCS014.text,
                           ),
                         ),
                       ],
@@ -309,7 +565,7 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
-                            ("$inputCompanyVNContactPerson $inputCompanyNNContactPerson"),
+                            ('${controllerCS002.text} ${controllerCS003.text}'),
                           ),
                         ),
                       ],
@@ -329,8 +585,10 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
                     wbSizedBoxHeight16,
                     /*--------------------------------- Kontakt-Status auswählen ---*/
                     WbDropDownMenu(
+                      controller: controllerCS019,
                       label: "Kontakt-Staus",
                       dropdownItems: [
+                        controllerCS019.text,
                         "Kontakt",
                         "Interessent",
                         "Kunde",
@@ -372,11 +630,11 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
                       // suffixIconSize48: 28,
                       //textInputAction: textInputAction,
                       /*--------------------------------- onChanged ---*/
-                      controller: inputCompanyNameTEC,
-                      onChanged: (String inputCompanyNameTEC) {
-                        log("0189 - company_screen - Eingabe: $inputCompanyNameTEC");
-                        inputCompanyName = inputCompanyNameTEC;
-                        setState(() => inputCompanyName = inputCompanyNameTEC);
+                      controller: controllerCS014,
+                      onChanged: (String controllerCS014) {
+                        log("0189 - company_screen - Eingabe: $controllerCS014");
+                        inputCompanyName = controllerCS014;
+                        setState(() => inputCompanyName = controllerCS014);
                       },
                     ),
                     /*--------------------------------- Branchenzuordnung ---*/
@@ -421,6 +679,7 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
                     wbSizedBoxHeight16,
                     /*--------------------------------- Straße + Nummer ---*/
                     WbTextFormField(
+                      controller: controllerCS005,
                       labelText: "Straße und Hausnummer",
                       labelFontSize20: 20,
                       hintText: "Bitte Straße + Hausnr. eintragen",
@@ -449,11 +708,12 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
                     ),
                     /*--------------------------------- PLZ ---*/
                     wbSizedBoxHeight16,
-                    const Row(
+                    Row(
                       children: [
                         SizedBox(
-                          width: 114,
+                          width: 120,
                           child: WbTextFormFieldTEXTOnly(
+                            controller: controllerCS006,
                             labelText: "PLZ",
                             labelFontSize20: 20,
                             hintText: "PLZ",
@@ -472,14 +732,18 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
                         wbSizedBoxWidth8,
                         /*--------------------------------- Firmensitz | Ort ---*/
                         Expanded(
-                          child: WbTextFormFieldTEXTOnly(
+                          child: WbTextFormField(
                             labelText: "Firmensitz | Ort",
                             labelFontSize20: 20,
-                            hintText: "Firmensitz",
+                            hintText: "Bitte den Ort eintragen",
+                            hintTextFontSize16: 15,
                             inputTextFontSize22: 22,
+                            prefixIcon: Icons.home_work_outlined,
+                            prefixIconSize28: 24,
                             inputFontWeightW900: FontWeight.w900,
                             inputFontColor: wbColorLogoBlue,
                             fillColor: wbColorLightYellowGreen,
+                            controller: controllerCS007,
                           ),
                         ),
                       ],
@@ -498,8 +762,10 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
                     wbSizedBoxHeight16,
                     /*--------------------------------- Anrede ---*/
                     WbDropDownMenu(
+                      controller: controllerCS001,
                       label: "Anrede",
                       dropdownItems: [
+                        // controllerCS001.text,
                         "Herr",
                         "Frau",
                         "Divers",
@@ -538,17 +804,15 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
                       inputFontWeightW900: FontWeight.w900,
                       inputFontColor: wbColorLogoBlue,
                       fillColor: wbColorLightYellowGreen,
-
                       /*--------------------------------- onChanged ---*/
-                      controller: inputCompanyVNContactPersonTEC,
-                      onChanged: (String inputCompanyVNContactPersonTEC) {
-                        log("0478 - company_screen - Eingabe: $inputCompanyVNContactPersonTEC");
+                      controller: controllerCS002,
+                      onChanged: (String controllerCS002) {
+                        log("0478 - company_screen - Eingabe: $controllerCS002");
 
-                        inputCompanyVNContactPerson =
-                            inputCompanyVNContactPersonTEC;
+                        inputCompanyVNContactPerson = controllerCS002;
 
-                        setState(() => inputCompanyVNContactPerson =
-                            inputCompanyVNContactPersonTEC);
+                        setState(() =>
+                            inputCompanyVNContactPerson = controllerCS002);
                       },
                     ),
                     /*--------------------------------- Abstand ---*/
@@ -566,20 +830,19 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
                       inputFontColor: wbColorLogoBlue,
                       fillColor: wbColorLightYellowGreen,
                       /*--------------------------------- onChanged ---*/
-                      controller: inputCompanyNNContactPersonTEC,
-                      onChanged: (String inputCompanyNNContactPersonTEC) {
-                        log("0504 - CompanyScreen - Eingabe: $inputCompanyNNContactPersonTEC");
+                      controller: controllerCS003,
+                      onChanged: (String controllerCS003) {
+                        log("0504 - CompanyScreen - Eingabe: $controllerCS003");
 
-                        inputCompanyNNContactPerson =
-                            inputCompanyNNContactPersonTEC;
+                        inputCompanyNNContactPerson = controllerCS003;
 
-                        setState(() => inputCompanyNNContactPerson =
-                            inputCompanyNNContactPersonTEC);
+                        setState(() =>
+                            inputCompanyNNContactPerson = controllerCS003);
                       },
                     ),
                     /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight16,
-                    /*--- TimePickerSpinnerPopUp wegen Geburtstag ---*/
+                    /*--------------------------------- Geburtstag ---*/
                     Container(
                       width: 400,
                       decoration: ShapeDecoration(
@@ -594,7 +857,6 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
                       ),
                       child: Column(
                         children: [
-                          /*--------------------------------- TimePickerSpinnerPopUp ---*/
                           Padding(
                             padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                             child: Row(
@@ -608,69 +870,90 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
                                 ),
                                 /*--------------------------------- Abstand ---*/
                                 wbSizedBoxWidth16,
+                                /*--------------------------------- Geburtstag - Feld ---*/
+                                WbTextFormFieldOnlyDATE(
+                                    width: 210,
+                                    controller: controllerCS004,
+                                    prefixIcon: Icons.cake_outlined,
+                                    labelText: 'Geburtstag',
+                                    labelFontSize20: 20,
+                                    hintText: 'Geburtstag',
+                                    inputTextFontSize22: 22,
+                                    inputFontWeightW900: FontWeight.w900,
+                                    inputFontColor: wbColorButtonDarkRed,
+                                    fillColor: Colors.yellow),
                                 /*--------------------------------- *** ---*/
-                                TimePickerSpinnerPopUp(
-                                    locale: Locale('de', 'DE'),
-                                    iconSize: 20,
-                                    textStyle: TextStyle(
-                                        backgroundColor:
-                                            wbColorLightYellowGreen,
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold),
-                                    isCancelTextLeft: true,
-                                    paddingHorizontalOverlay: 80,
-                                    mode: CupertinoDatePickerMode.date,
-                                    radius: 16,
-                                    initTime: selectedTime,
-                                    minTime: DateTime.now()
-                                        .subtract(const Duration(days: 36500)),
-                                    /*--------------------------------- *** ---*/
-                                    /* das Geburtsdatum kann nicht in der Zukunft liegen */
-                                    maxTime: DateTime.now()
-                                        .add(const Duration(days: 0)),
-                                    /*--------------------------------- *** ---*/
-                                    use24hFormat: true,
-                                    barrierColor: Colors.black12,
-                                    minuteInterval: 1,
-                                    padding:
-                                        const EdgeInsets.fromLTRB(12, 8, 8, 8),
-                                    cancelText: 'Abbruch',
-                                    confirmText: 'OK',
-                                    pressType: PressType.singlePress,
-                                    timeFormat: 'dd.MM.yyyy',
-                                    onChange: (dateTime) {
-                                      log('0539 - CompanyScreen - Geburtsdatum eingegeben: $dateTime');
-                                      /*--- automatisch das Alter berechnen mit "age_calculator" ---*/
-                                      AgeCalculator();
-                                      DateTime birthday = dateTime;
-                                      var age = AgeCalculator.age(birthday);
-                                      log('0561 - CompanyScreen - Berechnetes Alter = ${age.years} Jahre + ${age.months} Monate + ${age.days} Tage');
-                                      /*--- automatisch die Zeit bis zum nächsten Geburtstag berechnen mit "age_calculator" ---*/
-                                      DateTime nextBirthday = dateTime;
-                                      var timeToNextBirthday =
-                                          AgeCalculator.timeToNextBirthday(
-                                        DateTime(
-                                          nextBirthday.year,
-                                          nextBirthday.month,
-                                          nextBirthday.day,
-                                        ),
-                                        fromDate: DateTime.now(),
-                                      );
-                                      /*--- die Daten aktualisieren ---*/
-                                      setState(() {
-                                        /*--- das Alter berechnen aktualisieren ---*/
-                                        ageY = age.years;
-                                        ageM = age.months;
-                                        ageD = age.days;
-                                        /*--- die Zeit bis zum nächsten Geburtstag aktualisieren ---*/
-                                        nextY = timeToNextBirthday.years;
-                                        nextM = timeToNextBirthday.months;
-                                        nextD = timeToNextBirthday.days;
-                                        /*--- Das angeklickte Geburtsdatum im "TimePickerSpinnerPopUp" soll behalten werden ---*/
-                                        selectedTime = birthday;
-                                        log('0573 - CompanyScreen - selectedTime: $selectedTime = birthday: $birthday');
-                                      });
-                                    }),
+                                /*--- vorübergehend deaktiviert: TimePickerSpinnerPopUp ---*/
+                                // TimePickerSpinnerPopUp(
+                                //     // controller: controllerCS004,
+                                //     locale: Locale('de', 'DE'),
+                                //     iconSize: 20,
+                                //     textStyle: TextStyle(
+                                //         backgroundColor:
+                                //             wbColorLightYellowGreen,
+                                //         fontSize: 22,
+                                //         fontWeight: FontWeight.bold),
+                                //     isCancelTextLeft: true,
+                                //     paddingHorizontalOverlay: 80,
+                                //     mode: CupertinoDatePickerMode.date,
+                                //     radius: 16,
+                                //     initTime: selectedTime,
+                                //     minTime: DateTime.now()
+                                //         .subtract(const Duration(days: 36500)),
+                                //     /*--------------------------------- *** ---*/
+                                //     /* das Geburtsdatum kann nicht in der Zukunft liegen */
+                                //     maxTime: DateTime.now()
+                                //         .add(const Duration(days: 0)),
+                                //     /*--------------------------------- *** ---*/
+                                //     use24hFormat: true,
+                                //     barrierColor: Colors.black12,
+                                //     minuteInterval: 1,
+                                //     padding:
+                                //         const EdgeInsets.fromLTRB(12, 8, 8, 8),
+                                //     cancelText: 'Abbruch',
+                                //     confirmText: 'OK',
+                                //     pressType: PressType.singlePress,
+                                //     timeFormat: 'dd.MM.yyyy',
+                                //     onChange: (dateTime) {
+                                //       log('0539 - CompanyScreen - Geburtsdatum eingegeben: $dateTime');
+                                //     /*--------------------------------- *** ---*/
+
+                                // /*--- Automatisch das Alter berechnen mit "age_calculator" 0785 - CompanyScreen ---*/
+                                // AgeCalculator();
+                                // DateTime birthday = dateTime;
+                                // var age = AgeCalculator.age(birthday);
+                                // log('0561 - CompanyScreen - Berechnetes Alter = ${age.years} Jahre + ${age.months} Monate + ${age.days} Tage');
+
+                                // /*--- automatisch die Zeit bis zum nächsten Geburtstag berechnen mit "age_calculator" ---*/
+                                // DateTime nextBirthday = dateTime;
+                                // var timeToNextBirthday =
+                                //     AgeCalculator.timeToNextBirthday(
+                                //   DateTime(
+                                //     nextBirthday.year,
+                                //     nextBirthday.month,
+                                //     nextBirthday.day,
+                                //   ),
+                                //   fromDate: DateTime.now(),
+                                // );
+
+                                //   /*--- die Daten aktualisieren ---*/
+                                //   setState(() {
+
+                                //     /*--- das Alter berechnen aktualisieren ---*/
+                                //     ageY = age.years;
+                                //     ageM = age.months;
+                                //     ageD = age.days;
+
+                                //     /*--- die Zeit bis zum nächsten Geburtstag aktualisieren ---*/
+                                //     nextY = timeToNextBirthday.years;
+                                //     nextM = timeToNextBirthday.months;
+                                //     nextD = timeToNextBirthday.days;
+
+                                //     /*--- Das angeklickte Geburtsdatum im "TimePickerSpinnerPopUp" soll behalten werden ---*/
+                                //     selectedTime = birthday;
+                                //     log('0573 - CompanyScreen - selectedTime: $selectedTime = birthday: $birthday');
+                                //   });
+                                // }),
                               ],
                             ),
                           ),
@@ -680,7 +963,7 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
                             child: Row(
                               children: [
                                 Text(
-                                  'Alter:',
+                                  'Alter:', // ${controllerCS004.text}
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -760,6 +1043,7 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
                     wbSizedBoxHeight16,
                     /*--------------------------------- Notizen zum Ansprechpartner ---*/
                     WbTextFormField(
+                      controller: controllerCS016, // Notizen
                       labelText: "Notizen zum Ansprechpartner",
                       labelFontSize20: 20,
                       hintText:
@@ -795,6 +1079,7 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
                           child: SizedBox(
                             width: 400,
                             child: WbTextFormField(
+                              controller: controllerCS008,
                               labelText: "Telefon 1 - Mobil",
                               labelFontSize20: 20,
                               hintText: "Bitte die Mobilnummer eintragen",
@@ -925,6 +1210,7 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
                           child: SizedBox(
                             width: 185,
                             child: WbTextFormField(
+                              controller: controllerCS008,
                               labelText: "WhatsApp",
                               labelFontSize20: 20,
                               hintText: "Bitte die WhatsApp-Nr. eintragen",
@@ -967,10 +1253,10 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
                               showDialog(
                                 context: context,
                                 builder: (context) =>
-                                    const WbDialogAlertUpdateComingSoon(
+                                    WbDialogAlertUpdateComingSoon(
                                   headlineText: "Eine WhatsApp versenden",
                                   contentText:
-                                      "Willst Du jetzt an die Nummer\n+49-XXX-XXXX-XXXX\nvon Klaus Müller\nin der Firma XXXXXXXXXXXX GmbH & Co. KG\neine WhatsApp senden?\n\nDiese Funktion kommt bald in einem KOSTENLOSEN Update!\n\nHinweis: CS-0594",
+                                      "Willst Du jetzt an die Nummer\n${controllerCS008.text}\nvon ${controllerCS002.text} ${controllerCS003.text}\neine WhatsApp senden?\n\nDiese Funktion kommt bald in einem KOSTENLOSEN Update!\n\nHinweis: CS-0594",
                                   actionsText: "OK 👍",
                                 ),
                               );
@@ -993,6 +1279,7 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
                           child: SizedBox(
                             width: 185,
                             child: WbTextFormField(
+                              controller: controllerCS010,
                               labelText: "Telefon 2",
                               labelFontSize20: 20,
                               hintText: "Bitte ggf. die 2. Nummer eintragen",
@@ -1060,6 +1347,7 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
                           child: SizedBox(
                             width: 185,
                             child: WbTextFormField(
+                              controller: controllerCS009,
                               labelText: "E-Mail 1",
                               labelFontSize20: 20,
                               hintText: "Bitte E-Mail-Adresse eintragen",
@@ -1129,6 +1417,7 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
                           child: SizedBox(
                             width: 185,
                             child: WbTextFormField(
+                              controller: controllerCS011,
                               labelText: "E-Mail 2",
                               labelFontSize20: 20,
                               hintText: "Bitte ggf. die 2. E-Mail eintragen",
@@ -1199,6 +1488,7 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
                           child: SizedBox(
                             width: 185,
                             child: WbTextFormField(
+                              controller: controllerCS012,
                               labelText: "Webseite der Firma",
                               labelFontSize20: 20,
                               hintText: "Bitte Webseite der Firma eintragen",
@@ -1265,25 +1555,54 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
                     wbSizedBoxHeight16,
                     const Divider(thickness: 3, color: wbColorLogoBlue),
                     wbSizedBoxHeight8,
-                    /*--------------------------------- Button Firma speichern ---*/
+
+                    // /*--- Zeitstempel in ein lesbares Datum umwandeln ---*/
+                    // // Zeitstempel als String aus dem Controller
+                    // String timestampString = '${controllerCS027.text}';
+
+                    // // Umwandlung des Strings in einen Integer
+                    // int timestamp = int.parse(timestampString);
+
+                    // // Umwandlung des Zeitstempels in ein DateTime-Objekt
+                    // DateTime dateTime =
+                    //     DateTime.fromMillisecondsSinceEpoch(timestamp, isUtc: true);
+
+                    // // Umwandlung in die lokale Zeit (MESZ)
+                    // DateTime localDateTime = dateTime.toLocal();
+
+                    // // Formatierung des Datums im europäischen Format
+                    // String formattedDate = DateFormat('dd.MM.yyyy HH:mm').format(localDateTime);
+                    // log('0192 - CompanyScreen - formattedDate: $formattedDate');
+
+                    /*--------------------------------- Zeitstempel ---*/
+                    Text(
+                        'Zuletzt aktualisiert am ${controllerCS027.text}'), // Zeitstempel formatieren - 01441 - CompanyScreen
+                    Text('Kontakt-Quelle: ${controllerCS018.text}'),
+                    Text('Betreut durch: ${controllerCS028.text}'),
+                    Text('Betreuer-Stufe: ${controllerCS029.text}'),
+                    Text('Gebietskennung: ${controllerCS024.text}'),
+                    Text('${controllerCS030.text} '), // KontaktID
+                    /*--------------------------------- Abstand ---*/
+                    wbSizedBoxHeight8,
+                    const Divider(thickness: 3, color: wbColorLogoBlue),
+                    wbSizedBoxHeight8,
+                    /*--------------------------------- Button Daten speichern ---*/
                     WbButtonUniversal2(
                         wbColor: wbColorButtonGreen,
                         wbIcon: Icons.save_rounded,
                         wbIconSize40: 40,
-                        wbText: "Firma SPEICHERN",
+                        wbText: "Daten SPEICHERN",
                         wbFontSize24: 24,
                         wbWidth155: 398,
                         wbHeight60: 60,
-                        wbOnTap: () {
-                          log("0965 - CompanyScreen - Firma speichern - geklick");
+                        wbOnTap: () async {
+                          log("1584 - CompanyScreen - Daten speichern - geklickt");
                           /*--------------------------------- Snackbar ---*/
-
                           player.play(AssetSource("sound/sound06pling.wav"));
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             backgroundColor: wbColorButtonGreen,
                             content: Text(
-                              "Die Speicherung wird jetzt durchgeführt ... Bitte warten ...",
+                              "Die Daten von\n${controllerCS002.text} ${controllerCS003.text} wurden erfolgreich gespeichert!",
                               style: TextStyle(
                                 fontSize: 28,
                                 fontWeight: FontWeight.bold,
@@ -1291,9 +1610,64 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
                               ),
                             ),
                           ));
-
+                          /*--------------------------------- Speicherung in die SQL ---*/
+                          await updateData({}); // Datensatz aktualisieren
+                          log('1646 - CompanyScreen - Daten gespeichert!');
                           /*--------------------------------- Navigator.push ---*/
                           Navigator.push(
+                            // ignore: use_build_context_synchronously
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const MainSelectionScreen(),
+                            ),
+                          );
+                        }),
+                    /*--------------------------------- Abstand ---*/
+                    wbSizedBoxHeight16,
+                    const Divider(thickness: 3, color: wbColorLogoBlue),
+                    wbSizedBoxHeight8,
+                    /*--------------------------------- Button Daten LÖSCHEN ---*/
+                    WbButtonUniversal2(
+                        wbColor: wbColorButtonDarkRed,
+                        wbIcon: Icons.delete_forever,
+                        wbIconSize40: 40,
+                        wbText: "Daten LÖSCHEN",
+                        wbFontSize24: 24,
+                        wbWidth155: 398,
+                        wbHeight60: 60,
+                        wbOnTap: () async {
+                          log("1671 - CompanyScreen - Daten LÖSCHEN - geklickt");
+                          /*--------------------------------- Sound ---*/
+                          player
+                              .play(AssetSource("sound/sound03enterprise.wav"));
+                          /*--------------------------------- Alert-Dialog ---*/
+                          showDialog(
+                              context: context,
+                              builder: (context) =>
+                                  const WbDialogAlertUpdateComingSoon(
+                                    headlineText: 'headlineText',
+                                    contentText: 'contentText',
+                                    actionsText: 'Ja',
+                                  ));
+                          /*--------------------------------- Snackbar ---*/
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: wbColorButtonDarkRed,
+                            content: Text(
+                              "Die Daten von\n${controllerCS002.text} ${controllerCS003.text} wurden erfolgreich GELÖSCHT!",
+                              style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ));
+                          /*--------------------------------- LÖSCHUNG aus der SQL ---*/
+                          // await updateData({}); // Datensatz aktualisieren
+                          await deleteData({}); // Datensatz löschen
+                          log('1689 - CompanyScreen - Daten GEÖSCHT!');
+                          /*--------------------------------- Navigator.push ---*/
+                          Navigator.push(
+                            // ignore: use_build_context_synchronously
                             context,
                             MaterialPageRoute(
                               builder: (context) => const MainSelectionScreen(),
@@ -1304,6 +1678,7 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
                     wbSizedBoxHeight16,
                     const Divider(thickness: 3, color: wbColorLogoBlue),
                     wbSizedBoxHeight32,
+                    /*--------------------------------- Abstand nach unten wegen anderer Devices ---*/
                     wbSizedBoxHeight32,
                     wbSizedBoxHeight16,
                     /* das sorgt für die automatische Anpassung der Höhe, wenn mehr Text hineingeschrieben wird */
@@ -1324,11 +1699,47 @@ String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
       /*--------------------------------- WbInfoContainer ---*/
       bottomSheet: WbInfoContainer(
         infoText:
-            '$inputCompanyName • $inputCompanyVNContactPerson $inputCompanyNNContactPerson\nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}\nLetzte Änderung: Am 18.12.2024 um 22:51 Uhr', // todo 1030
+            '${controllerCS014.text} • ${controllerCS002.text} ${controllerCS003.text}\nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}',
         wbColors: Colors.yellow,
       ),
       /*--------------------------------- ENDE ---*/
     );
+  }
+
+  @override
+  void dispose() {
+    /* Nicht vergessen: Alle Controller freigeben = Speicher freigeben! */
+    controllerCS001.dispose();
+    controllerCS002.dispose();
+    controllerCS003.dispose();
+    controllerCS004.dispose();
+    controllerCS005.dispose();
+    controllerCS006.dispose();
+    controllerCS007.dispose();
+    controllerCS008.dispose();
+    controllerCS009.dispose();
+    controllerCS010.dispose();
+    controllerCS011.dispose();
+    controllerCS012.dispose();
+    controllerCS013.dispose();
+    controllerCS014.dispose();
+    controllerCS015.dispose();
+    controllerCS016.dispose();
+    controllerCS017.dispose();
+    controllerCS018.dispose();
+    controllerCS019.dispose();
+    controllerCS020.dispose();
+    controllerCS021.dispose();
+    controllerCS022.dispose();
+    controllerCS023.dispose();
+    controllerCS024.dispose();
+    controllerCS025.dispose();
+    controllerCS026.dispose();
+    controllerCS027.dispose();
+    controllerCS028.dispose();
+    controllerCS029.dispose();
+    controllerCS030.dispose();
+    super.dispose();
   }
 }
 

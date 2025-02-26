@@ -20,24 +20,17 @@ class WbDialogAlertUpdateComingSoon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     log("0017 - WbDialogAlertUpdateComingSoon - aktiviert");
-    return
+    return GestureDetector(
 /*-----------------------------------------------------------------*/
 /* MUSTER - das muß zum Aufruf ab "showDialog" zum Widget hinzugefügt werden:
 /*-----------------------------------------------------------------*/
-                    GestureDetector(
-                      onTap: () {
-                        log("Einen Anruf starten");
-/*-----------------------------------------------------------------*/
-                        showDialog(
-                          context: context,
-                          builder: (context) => const WbDialogAlertUpdateComingSoon(
-/*-----------------------------------------------------------------*/
-                            headlineText: "Einen Anruf starten",
-                            contentText:
-                                "Willst Du jetzt die Nummer\n+49-XXX-XXXX-XXXX\nvon Klaus Müller anrufen?\n\nDiese Funktion kommt bald in einem KOSTENLOSEN Update!\n\nHinweis: CS-0282"),);
-                                */
-/*-----------------------------------------------------------------*/
-        GestureDetector(
+/*--------------------------------- showAlertDialog ---*/
+showDialog(context: context, builder: (context) => const WbDialogAlertUpdateComingSoon(
+headlineText: "Alle Aufgaben anlegen, bearbeiten, delegieren und verwalten?",
+contentText: "Diese Funktion kommt bald in einem Update!\n\nUpdate AM-0019",
+actionsText: "OK 👍",
+),);/*--------------------------------- showAlertDialog ENDE ---*/
+/*-----------------------------------------------------------------*/*/
       onTap: onTap,
       child: AlertDialog(
         scrollable: true,

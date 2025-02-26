@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 
 class WbTextFormFieldOnlyDATE extends StatelessWidget {
-  const WbTextFormFieldOnlyDATE({
+  WbTextFormFieldOnlyDATE({
     super.key,
     required this.labelText,
     required this.labelFontSize20,
@@ -22,6 +22,7 @@ class WbTextFormFieldOnlyDATE extends StatelessWidget {
     this.textInputAction, // default: Enter | TextInputAction.done
     this.controller,
     this.onChanged,
+    this.width,
   });
 
   final String labelText;
@@ -38,18 +39,22 @@ class WbTextFormFieldOnlyDATE extends StatelessWidget {
   final TextEditingController? controller;
   final TextInputAction? textInputAction;
   final Function(String inputInWbTextFormField)? onChanged;
+  final DateFormat formatter = DateFormat('dd.MM.yyyy');
+  final double? width;
 
   @override
   Widget build(BuildContext context) {
     log("0043 - WbTextFormFieldOnlyDATE - aktiviert");
 
     /*--- TextEditingController ---*/
-    final TextEditingController dateController = TextEditingController();
+    // final dateController = TextEditingController();
 
     return SizedBox(
-      width: 400,
+      width: width,
       child: TextFormField(
-        controller: dateController,
+                
+        // controller: dateController,
+        controller: controller,
         maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
         keyboardType: textInputTypeOnKeyboard,
         textAlignVertical: TextAlignVertical.center,
@@ -62,10 +67,12 @@ class WbTextFormFieldOnlyDATE extends StatelessWidget {
           color: inputFontColor,
         ),
         textAlign: TextAlign.left,
+                  
         textInputAction: textInputAction,
 
         /*--- InputDecoration ---*/
         decoration: InputDecoration(
+          
           floatingLabelAlignment: FloatingLabelAlignment.start,
           filled: true,
           fillColor: fillColor, //wbColorBackgroundBlue

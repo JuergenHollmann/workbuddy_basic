@@ -87,47 +87,16 @@ class MainApp extends StatelessWidget {
     );
   }
 }
-/*--------------------------------- 6.2.4 - 6.3.3 - Projekt 21: Provider ---
-  1) Provider
-  √ Implementiere Provider in deiner App.
-  √ Entferne alle Klassenattribute und Parameter aus allen Widgets, die Repositories entgegennehmen und speichern.
-  √ Nutze stattdessen Provider, um deine Repositories zu holen und zu verwenden.
-  √ Hinweis: Folge der Anleitung aus der Vorlesung und nutze den Code der Batch App als Hilfe!
-  Wie sieht dein Code aus, um Repositories zur Verfügung zu stellen und zu verwenden?
-
-  /*--------------------------------- 6.1.1 - 6.2.1 - Projekt 20: Firebase Auth ---
-  1) AuthRepository
-  √ Implementiere ein AuthRepository in deiner App.
-  Dieses soll Methoden bieten, um an einen Benutzer zu kommen
-  und Benutzer zu registrieren und anzumelden.
-  Implementiere außerdem ein MockAuthRepository, das das AuthRepository implementiert
-  und den Login etc. ermöglicht.
-  Hinweis: Nutze die Anleitung im Classroom und den Code der Beispiel-App!
-  Hinweis: Wenn du bereits ein Repository für Login und Registrierung nutzt,
-  musst du nur den Code dafür kopieren.
-  Erzeuge dann an der Wurzel deiner App eine Instanz dieser Klasse
-  und reiche sie durch den Widget Tree an alle Widgets (Screens) weiter,
-  die sie benötigen (z.B. zum Login oder Logout).
-  Nutze die Funktionen deines AuthRepository nun in deinen Screens.
-  Wie sieht dein AuthRepository und dein MockAuthRepository aus? Kopiere den Code.
-  Deine Antwort:
-
-  2) Binde nun Firebase Auth ein.
-  Baue dies in ein FirebaseAuthRepository ein, das AuthRepository implementiert.
-  In diesem sollst du FirebaseAuth verwenden.
-  Ermögliche es, dass der Benutzer sich einloggt.
-  Reagiere außerdem im FirebaseAuthRepository auf den Stream authStateChanges
-  und gib die Benutzerdaten weiter.
-  Reagiere in der UI mit einem StreamBuilder, sodass du deine Nutzer je nach Login-Status
-  auf den LoginScreen bzw. deinen Hauptscreen leiten kannst.
-  Hinweis: Nutze die Anleitung im Classroom und den Code der Beispiel-App!
-  Wie sieht dein Code jetzt aus? Kopiere ihn in das Antwortfeld.
-
+/*--------------------------------- TODO's ---
 * Firebase:
   √ für iOS muss im ios/Podfile     ---> platform :ios, '13.0'  eingestellt werden √ 
   √ für macOS muss im macos/Podfile ---> platform :osx, '10.15' eingestellt werden √ 
-
-  /*--------------------------------- TODO's ---
+  /*--------------------------------- *** ---
+  - Klicke unten auf den E-Mail-Button - dann das E-Mail-Menü starten - CM-0121
+  - dispose(); // löscht die Controller aus dem Speicher - hängt sich auf - 1652 - CompanyScreen
+  - Automatisch das Alter berechnen mit "age_calculator" 0785 - CompanyScreen
+  - Zeitstempel formatieren - 01441 - CompanyScreen
+  - Geburtstag ist ein Datum und kein String - wie kann ich das mit einem Controller verarbeiten? - 0146 - CompanyScreen
   - Die Farbe mit "focusNode" in Textformfield ändern - todo 0267 - P01LoginScreen
   - "WbTextFormFieldSHADOWContour" - lib/config/wb_textformfield_shadow_contour.dart als Widget erstellen
   - Mit Provider im Feld "Wer hat eingekauft?" den angemeldeten User automatisch eintragen.
@@ -139,7 +108,7 @@ class MainApp extends StatelessWidget {
   - Foto entweder intern oder extern auf Speicherkarte speichern.
   - Im ExpenseWidget bleiben die Einträge noch der Berechnung nicht im Textfeld mit dem Wert stehen.
 
-* Datenschutz und Rechtliches:  
+- Datenschutz und Rechtliches:  
   - Zustimmung zu Datenschutz + Textvorlage einpflegen.
   - Zustimmung zu Nutzungsbedingungen + Textvorlage einpflegen.
   - Impressum + Textvorlage einpflegen.
@@ -158,8 +127,8 @@ class MainApp extends StatelessWidget {
   - In allen Buttons eine Soundfunktion (Click) einfügen
   - "ButtonAccounting"    umbauen und mit Text erweitern - MainSelectionScreen - 0043
   - "ButtonCommunication" umbauen und mit Text erweitern - MainSelectionScreen - 0043
-  - "ButtonCustomer"      umbauen und mit Text erweitern - MainSelectionScreen - 0043
-  - "ButtonCompanies"     umbauen und mit Text erweitern - MainSelectionScreen - 0043
+  - "ButtonTasksAndToDos"      umbauen und mit Text erweitern - MainSelectionScreen - 0043
+  - "ButtonContacts"     umbauen und mit Text erweitern - MainSelectionScreen - 0043
   - "wbImageAssetImage"   hat keine Auswirkung!          - MainSelectionScreen - 0124
   
   - Es sollen alle Kontakte angezeigt werden - ContactListP051 - 0010 */
@@ -205,14 +174,15 @@ class MainApp extends StatelessWidget {
   - Hier besser eine Map erstellen - ExpenseWidget - 0033
   - CompanyScreen: leadingIconsInMenu hat hier keine Auswikung // todo 0233 + 0406
 
-* Updates:
+- Updates:
+  - Aufgaben anlegen, bearbeiten, delegieren ...  - Update AM-0019
   - Kontakt direkt anrufen                        - Update CM-0090
   - WhatsApp direkt versenden                     - Update CM-0150
   - mehr Funktionen - E-Mail an den Entwickler    - Update CM-0249
   - mehr Funktionen - E-Mail an den Entwickler    - Update CM-0132
   - mehr Funktionen - E-Mail an den Entwickler    - Update AM-0249
   - mehr Funktionen - E-Mail an den Entwickler    - Update SM-0263
-  - Alle Kontakte zeigen                          - Update CM-0098
+  √ Alle Kontakte suchen und finden               - Update CM-0098 √
   - Mit Google-Account einloggen                  - Update LS-0495
   - Mit Apple-Account einloggen                   - Update LS-0573
   - Mit Facebook-Account einloggen                - Update LS-0601
@@ -221,7 +191,6 @@ class MainApp extends StatelessWidget {
   - Alle Einnahmen als Liste zeigen               - Update AM-0146
   - Alle Ausgaben suchen und finden               - Update AM-0180
   - Alle Einnahmen suchen und finden              - Update AM-0212
-
 
   √ Datums-Picker (Geburtstage, etc.) installiert: time_picker_spinner_pop_up: ^2.0.0 √
     x - flutter_rounded_date_picker: ^3.0.4 (nicht installiert, ist aber umfangreicher)
@@ -233,16 +202,16 @@ class MainApp extends StatelessWidget {
   - App-Icon neu erstellen (Android-Bug? - in Android nur schwarz)
 - Splash-Screen neu erstellen (Android-Bug? - in Android beschnitten) - wird nicht besser - selber programmmieren
 
-* WbInfoContainer:
+- WbInfoContainer:
   √ Der "WbInfoContainer" soll außerhalb der Scrollview am Bottom fixiert sein - 0927 √
   √ Den "WbInfoContainer" als "bottomSheet" deklarieren √
     - Im "WbInfoContainer" sollen unten die Änderungen und der Kunde angezeigt werden, wenn keine Änderungen, dann "zuletzt geändert am" anzeigen.
 
-* Drawer:
+- Drawer:
   - Überprüfe ob der AudioPlayer in den Settings(Jingles) "an" oder "aus" ist.
   - Im Drawer eine Liste anlegen (wie ein Inhaltsverzeichnis - nach Themen geordnet), die eine direkte Navigation auf alle möglichen Seiten durch anklicken erstellt. Hinweis: WbButtonUniversal2 
 
-* Firebase Services:
+- Firebase Services:
   - Mit Analytics werden Nutzungs- und Verhaltensdaten für meine App erfasst   → firebase_analytics
   - Authentication zur Identifizierung meiner User                             → firebase_auth
   - Cloud Firestore-Datenbank zur Speicherung von Daten in der Cloud           → cloud_firestore
@@ -250,7 +219,7 @@ class MainApp extends StatelessWidget {
   - Mit Cloud Storage - Bilder und Videos hochladen und teilen                 → firebase_storage
   - Crashlytics - Fehlermeldungen und Abstürze der App auswerten               → firebase_crashlytics
 
-* GitHub:  
+- GitHub:  
   In die ".gitignore" vom Projektverzeichnis eintragen:
   # Um die Firebase API-Keys bei GitHub NICHT zu veröffentlichen:
   /lib/firebase_options.dart
@@ -286,5 +255,41 @@ class MainApp extends StatelessWidget {
   - Text an andere Felder übergeben mit "TextEditingController" und der Funktion "onChange".
   - Den GestureDetector nicht "doppelt" benutzen, sondern die Funktion in den Button-Widget-Vorlagen richtig übergeben und nur einmal nutzen.
   - Für die Arbeit im Team nicht nur Buttons (ohne Funktion) als Platzhalter anlegen, sondern dann einen Hinweis ("showDialog" oder "snackBar") anzeigen.
-  *--------------------------------- *** ---*/
+
+--------------------------------- 6.2.4 - 6.3.3 - Projekt 21: Provider ---
+  1) Provider
+  √ Implementiere Provider in deiner App.
+  √ Entferne alle Klassenattribute und Parameter aus allen Widgets, die Repositories entgegennehmen und speichern.
+  √ Nutze stattdessen Provider, um deine Repositories zu holen und zu verwenden.
+  √ Hinweis: Folge der Anleitung aus der Vorlesung und nutze den Code der Batch App als Hilfe!
+  Wie sieht dein Code aus, um Repositories zur Verfügung zu stellen und zu verwenden?
+
+
+  --------------------------------- 6.1.1 - 6.2.1 - Projekt 20: Firebase Auth ---
+  1) AuthRepository
+  √ Implementiere ein AuthRepository in deiner App.
+  Dieses soll Methoden bieten, um an einen Benutzer zu kommen
+  und Benutzer zu registrieren und anzumelden.
+  Implementiere außerdem ein MockAuthRepository, das das AuthRepository implementiert
+  und den Login etc. ermöglicht.
+  Hinweis: Nutze die Anleitung im Classroom und den Code der Beispiel-App!
+  Hinweis: Wenn du bereits ein Repository für Login und Registrierung nutzt,
+  musst du nur den Code dafür kopieren.
+  Erzeuge dann an der Wurzel deiner App eine Instanz dieser Klasse
+  und reiche sie durch den Widget Tree an alle Widgets (Screens) weiter,
+  die sie benötigen (z.B. zum Login oder Logout).
+  Nutze die Funktionen deines AuthRepository nun in deinen Screens.
+  Wie sieht dein AuthRepository und dein MockAuthRepository aus? Kopiere den Code.
+  Deine Antwort:
+
+  2) Binde nun Firebase Auth ein.
+  Baue dies in ein FirebaseAuthRepository ein, das AuthRepository implementiert.
+  In diesem sollst du FirebaseAuth verwenden.
+  Ermögliche es, dass der Benutzer sich einloggt.
+  Reagiere außerdem im FirebaseAuthRepository auf den Stream authStateChanges
+  und gib die Benutzerdaten weiter.
+  Reagiere in der UI mit einem StreamBuilder, sodass du deine Nutzer je nach Login-Status
+  auf den LoginScreen bzw. deinen Hauptscreen leiten kannst.
+  Hinweis: Nutze die Anleitung im Classroom und den Code der Beispiel-App!
+  Wie sieht dein Code jetzt aus? Kopiere ihn in das Antwortfeld.
   */

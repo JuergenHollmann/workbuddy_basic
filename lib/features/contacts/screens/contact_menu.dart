@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:workbuddy/config/wb_button_universal_2.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
-import 'package:workbuddy/features/contacts/screens/contact_screen.dart';
+import 'package:workbuddy/features/companies/screens/company_screen.dart';
+import 'package:workbuddy/features/contacts/screens/contact_list.dart';
+// import 'package:workbuddy/features/contacts/screens/contact_screen.dart';
 import 'package:workbuddy/shared/providers/current_app_version_provider.dart';
 import 'package:workbuddy/shared/providers/current_user_provider.dart';
 import 'package:workbuddy/shared/widgets/wb_dialog_alert_update_coming_soon.dart';
@@ -69,7 +71,9 @@ class ContactMenu extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const ContactScreen(),
+                            builder: (context) =>
+                                CompanyScreen(contact: {},),
+                                // (contact: {},), // ContactScreen
                           ),
                         );
                       },
@@ -79,7 +83,7 @@ class ContactMenu extends StatelessWidget {
                     /*--------------------------------- *** ---*/
                     const Divider(
                         thickness: 3, height: 32, color: wbColorLogoBlue),
-                    /*--------------------------------- *** ---*/
+                    /*--------------------------------- Kontakte suchen - Kontaktliste ---*/
                     WbButtonUniversal2(
                       wbColor: wbColorAppBarBlue,
                       wbIcon: Icons.person_search_outlined,
@@ -89,17 +93,27 @@ class ContactMenu extends StatelessWidget {
                       wbWidth155: 398,
                       wbHeight60: 80,
                       wbOnTap: () {
-                        log("0085 - ContactMenu - Einen Kontakt suchen - Update-Hinweis - CM108 - angeklickt");
-                        showDialog(
-                          context: context,
-                          builder: (context) =>
-                              const WbDialogAlertUpdateComingSoon(
-                            headlineText: 'Update-Hinweis - CM108',
-                            contentText:
-                                'Diese Funktion kommt bald in einem kostenlosen Update!',
-                            actionsText: "OK 👍",
+                        /*--------------------------------- Navigator.push ---*/
+                        log("0090 - ContactMenu - Einen Kontakt SUCHEN - angeklickt");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ContactList(), // ContactScreen
                           ),
                         );
+
+                        // log("0085 - ContactMenu - Einen Kontakt suchen - Update-Hinweis - CM108 - angeklickt");
+                        // showDialog(
+                        //   context: context,
+                        //   builder: (context) =>
+                        //       const WbDialogAlertUpdateComingSoon(
+                        //     headlineText: 'Update-Hinweis - CM108',
+                        //     contentText:
+                        //         'Diese Funktion kommt bald in einem kostenlosen Update!',
+                        //     actionsText: "OK 👍",
+                        //   ),
+                        // );
                       },
                     ),
                     /*--------------------------------- Abstand ---*/

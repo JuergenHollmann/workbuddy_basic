@@ -18,6 +18,11 @@ migrate_working_dir/
 /macos/Runner/GoogleService-Info.plist
 /ios/Runner/GoogleService-Info.plist
 
+# Ignoriere meine SQFLite-Datenbanken:
+*.db
+assets/databases/
+assets/JOTHAsoft.FiveStars.db/
+
 # IntelliJ related
 *.iml
 *.ipr

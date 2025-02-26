@@ -5,8 +5,8 @@ import 'package:workbuddy/config/wb_sizes.dart';
 import 'package:workbuddy/shared/providers/current_user_provider.dart';
 import 'package:workbuddy/shared/widgets/button_accounting.dart';
 import 'package:workbuddy/shared/widgets/button_communication.dart';
-import 'package:workbuddy/shared/widgets/button_companies.dart';
-import 'package:workbuddy/shared/widgets/button_customer.dart';
+import 'package:workbuddy/shared/widgets/button_contacts.dart';
+import 'package:workbuddy/shared/widgets/button_tasks_and_todos.dart';
 import 'package:workbuddy/shared/widgets/wb_navigationbar.dart';
 
 class MainSelectionScreen extends StatefulWidget {
@@ -54,36 +54,43 @@ class _MainSelectionScreenState extends State<MainSelectionScreen> {
           )),
           /*--------------------------------- GridView ---*/
           // Expanded(
-          // child: Padding(
-          //   padding: const EdgeInsets.fromLTRB(32, 24, 32, 16),
-          // child: GridView.count(
-          //   crossAxisCount: 2, // Anzahl der Spalten
-          //   crossAxisSpacing: 1, // Platz zwischen den Spalten
-          //   mainAxisSpacing: 20, // Platz zwischen den Reihen
-          //   childAspectRatio: 1.2, // Verhältnis Höhe zu Breite
-          //   // /*--------------------------------- GridView children ---*/
-          //   children: [
-          //     ButtonAccounting(),
-          //     ButtonCommunication(),
-          //     ButtonCustomer(),
-          //     ButtonCompanies(),
-          //   ],
+          //   child: Padding(
+          //     padding: const EdgeInsets.fromLTRB(32, 24, 32, 16),
+          //     child: GridView.count(
+          //       crossAxisCount: 2, // Anzahl der Spalten
+          //       crossAxisSpacing: 1, // Platz zwischen den Spalten
+          //       mainAxisSpacing: 1, // Platz zwischen den Reihen
+          //       childAspectRatio: 1.1, // Verhältnis Höhe zu Breite
+          //       // /*--------------------------------- GridView children ---*/
+          //       children: [
+          //         ButtonContacts(),
+          //         ButtonContacts(),
+          //         ButtonContacts(),
+          //         ButtonContacts(),
+          //         // ButtonAccounting(),
+          //         // ButtonContacts(),
+          //         // ButtonTasksAndToDos(),
+          //         // ButtonCommunication(),
+          //       ],
+          //     ),
+          //   ),
           // ),
-          // ),
-          //  ),
           /*--------------------------------- Alternative zur GridView ---*/
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ButtonAccounting(),
-              ButtonCommunication(),
+              ButtonContacts(),
+              // ButtonContacts(),
+              //ButtonCommunication(),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ButtonCustomer(),
-              ButtonCompanies(),
+              //ButtonTasksAndToDos(),
+              ButtonCommunication(),
+              ButtonTasksAndToDos(),
             ],
           ),
           /*--------------------------------- Abstand ---*/

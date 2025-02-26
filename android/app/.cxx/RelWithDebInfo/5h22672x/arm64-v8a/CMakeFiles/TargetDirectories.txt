@@ -1,0 +1,2 @@
+/Users/jurgenhollmann/Code/workbuddy_basic/android/app/.cxx/RelWithDebInfo/5h22672x/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/jurgenhollmann/Code/workbuddy_basic/android/app/.cxx/RelWithDebInfo/5h22672x/arm64-v8a/CMakeFiles/rebuild_cache.dir

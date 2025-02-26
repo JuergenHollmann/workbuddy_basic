@@ -13,6 +13,7 @@ class WbDropDownMenu extends StatelessWidget {
     this.backgroundColor,
     this.labelBackgroundColor,
     this.width,
+    this.controller,
   });
 
   final String label;
@@ -22,6 +23,8 @@ class WbDropDownMenu extends StatelessWidget {
   final Color? backgroundColor;
   final Color? labelBackgroundColor;
   final double? width;
+  final TextEditingController? controller;
+
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +44,7 @@ class WbDropDownMenu extends StatelessWidget {
       label: Padding(
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 0), // nur für das Label
         child: Text(
+          maxLines: null,
           label,
           style: TextStyle(
             fontSize: 18,
@@ -102,6 +106,7 @@ class WbDropDownMenu extends StatelessWidget {
         ),
       ).toList(),
       /*--------------------------------- *** ---*/
+      controller: controller,
     );
   }
 }

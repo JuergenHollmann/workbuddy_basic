@@ -142,7 +142,7 @@ class _WbNavigationbarState extends State<WbNavigationbar> {
                               headlineText:
                                   'Ein paar Informationen zu WorkBuddy',
                               contentText:
-                                  'Hallo ${value.currentUser},\nDu benutzt zur Zeit ${context.watch<CurrentAppVersionProvider>().currentAppVersion}.\n\n- Mit "Herz" ❤️ und 🖐️ "Hand"\n- gemacht im 🇩🇪 Schwabenland.\n\nDie App wird ständig weiterentwickelt ... Hast Du konstruktive Kritik oder Anregungen? ... Weiter ... usw, usw, usw, Lorem ipsum ...\n\nHier kommen dann noch die Kontaktinformationen rein:\n• Entwickler: Jürgen Hollmann\n• E-Mail: H.Juergen.Hollmann@gmail.com\n• Telefon: XXXXXXXXXX\n• usw: XXXXXXXXXX\n• usw: XXXXXXXXXX\n• usw: XXXXXXXXXX\n• usw: XXXXXXXXXX\n• usw: XXXXXXXXXX\n\nInformation: NB-0136',
+                                  'Hallo ${value.currentUser},\nDu benutzt zur Zeit ${context.watch<CurrentAppVersionProvider>().currentAppVersion}.\n\n- Mit "Herz" ❤️ und 🖐️ "Hand"\n- gemacht im 🇩🇪 Schwabenland.\n\nDie App wird ständig weiterentwickelt ... Hast Du konstruktive Kritik oder Anregungen? Dann sende einfach eine E-Mail direkt an den Entwickler.\n\nKontaktinformationen:\n• Entwickler: Jürgen Hollmann\n• E-Mail: JOTHAsoft@gmail.com\n• Telefon: +49-178-9697-193\n\nInformation: NB-0136',
                               actionsText: 'OK 👍',
                             ));
                     /*--------------------------------- *** ---*/

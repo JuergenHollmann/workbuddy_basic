@@ -6,6 +6,7 @@ import 'package:workbuddy/config/wb_button_universal_2.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
 import 'package:workbuddy/features/companies/screens/company_screen.dart';
+import 'package:workbuddy/features/contacts/screens/contact_list.dart';
 import 'package:workbuddy/shared/providers/current_app_version_provider.dart';
 import 'package:workbuddy/shared/providers/current_user_provider.dart';
 import 'package:workbuddy/shared/widgets/wb_dialog_alert_update_coming_soon.dart';
@@ -41,10 +42,10 @@ class CompanyMenu extends StatelessWidget {
               const Image(
                 image: AssetImage("assets/workbuddy_glow_schriftzug.png"),
               ),
-              /*--------------------------------- Firmen-Menü ---*/
+              /*--------------------------------- Kontakte-Menü ---*/
               const WbDividerWithTextInCenter(
                 wbColor: wbColorLogoBlue,
-                wbText: "Firmen",
+                wbText: "Kontakte",
                 wbTextColor: wbColorLogoBlue,
                 wbFontSize12: 28,
                 wbHeight3: 3,
@@ -54,58 +55,62 @@ class CompanyMenu extends StatelessWidget {
                 child: ListView(
                   padding: const EdgeInsets.all(8),
                   children: [
+                    /*--------------------------------- Alle Kontakte suchen und finden ---*/
+                    WbButtonUniversal2(
+                      wbColor: wbColorAppBarBlue,
+                      wbIcon: Icons.person_search_outlined,
+                      wbIconSize40: 40,
+                      wbText: 'Alle Kontakte\nSUCHEN und FINDEN',
+                      wbFontSize24: 20,
+                      wbWidth155: 398,
+                      wbHeight60: 80,
+                      wbOnTap: () {
+                        log("0092 - CompanyMenu - Einen Kontakt suchen - angeklickt");
+                        /*--------------------------------- Navigator.push ---*/
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ContactList(), // ContactScreen
+                          ),
+                        );
+                      },
+                    ),
+                    /*--------------------------------- Abstand ---*/
+                    wbSizedBoxHeight8,
+                    const Divider(
+                      thickness: 3,
+                      height: 32,
+                      color: wbColorLogoBlue,
+                    ),
                     /*--------------------------------- Kontakt NEU anlegen ---*/
                     WbButtonUniversal2(
                       wbColor: wbColorButtonGreen,
                       wbIcon: Icons.person_add_alt_1_outlined,
                       wbIconSize40: 40,
-                      wbText: 'Eine Firma \nNEU anlegen',
-                      wbFontSize24: 22,
-                      wbWidth155: 398,
-                      wbHeight60: 80,
-                      wbOnTap: () {
-                        /*--------------------------------- Navigator.push ---*/
-                        log("0090 - CompanyMenu - Eine Firma NEU anlegen - angeklickt");
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const CompanyScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                    /*--------------------------------- Abstand ---*/
-                    wbSizedBoxHeight8,
-                    /*--------------------------------- *** ---*/
-                    const Divider(
-                        thickness: 3, height: 32, color: wbColorLogoBlue),
-                    /*--------------------------------- *** ---*/
-                    WbButtonUniversal2(
-                      wbColor: wbColorAppBarBlue,
-                      wbIcon: Icons.person_search_outlined,
-                      wbIconSize40: 40,
-                      wbText: 'In allen Firmen\nsuchen und finden',
+                      wbText: 'Einen Kontakt \nNEU anlegen',
                       wbFontSize24: 20,
                       wbWidth155: 398,
                       wbHeight60: 80,
                       wbOnTap: () {
-                        log("0092 - CompanyMenu - Eine Firma suchen - Update-Hinweis - CM092 - angeklickt");
-                        showDialog(
-                          context: context,
-                          builder: (context) =>
-                               WbDialogAlertUpdateComingSoon(
-                            headlineText: 'Hey ${context.watch<CurrentUserProvider>().currentUser},\nDu willst jetzt eine Firma aus deinen Kontakten heraussuchen?',
-                            contentText:
-                                'Diese Funktion kommt bald in einem kostenlosen Update!\n\nHinweis: CM-0092',
-                            actionsText: "OK 👍",
+                        /*--------------------------------- Navigator.push ---*/
+                        log("0090 - CompanyMenu - Einen Kontakt NEU anlegen - angeklickt");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CompanyScreen(
+                              contact: {},
+                            ),
                           ),
                         );
                       },
                     ),
                     /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight8,
+                    /*--------------------------------- *** ---*/
                     const Divider(
                         thickness: 3, height: 32, color: wbColorLogoBlue),
+
                     /*--------------------------------- Mehr Funktionen? ---*/
                     WbButtonUniversal2(
                       wbColor: const Color.fromARGB(255, 255, 102, 219),
@@ -120,12 +125,11 @@ class CompanyMenu extends StatelessWidget {
                         log("0121 - CompanyMenu - Mehr Info? - Update-Hinweis wird angezeigt");
                         showDialog(
                           context: context,
-                          builder: (context) =>
-                               WbDialogAlertUpdateComingSoon(
+                          builder: (context) => WbDialogAlertUpdateComingSoon(
                             headlineText:
                                 'Hey ${context.watch<CurrentUserProvider>().currentUser},\nmöchtest Du noch mehr Funktionen in dieser App?',
                             contentText:
-                                'Diese App wird ständig weiterentwickelt.\n\nWenn Du eine nützliche Funktion vorschlagen möchtest, kannst Du gerne eine E-Mail DIREKT an den Entwickler senden.\n\nSchreibe dazu einfach an XXXXXXXXXXXX oder klicke unten auf den E-Mail-Button.\n\nHinweis: CM-0121',
+                                'Diese App wird ständig weiterentwickelt.\n\nWenn Du eine nützliche Funktion vorschlagen möchtest, kannst Du gerne eine E-Mail DIREKT an den Entwickler senden.\n\nSchreibe dazu einfach an JOTHAsoft@gmail.com oder klicke unten auf den E-Mail-Button.\n\nHinweis: CM-0121',
                             actionsText: "OK 👍",
                           ),
                         );

@@ -1,0 +1,1 @@
+/Users/jurgenhollmann/Code/workbuddy_basic/build/app/intermediates/cxx/RelWithDebInfo/5h22672x/obj/armeabi-v7a
