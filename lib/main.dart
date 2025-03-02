@@ -14,16 +14,20 @@ import 'package:workbuddy/shared/providers/current_day_short_provider.dart';
 import 'package:workbuddy/shared/providers/current_time_provider.dart';
 import 'package:workbuddy/shared/providers/current_user_provider.dart';
 import 'package:workbuddy/shared/repositories/auth_repository.dart';
+import 'package:workbuddy/shared/repositories/database_helper.dart';
 import 'package:workbuddy/shared/repositories/database_repository.dart';
+import 'package:workbuddy/shared/repositories/database_setup.dart';
 import 'package:workbuddy/shared/repositories/firebase_auth_repository.dart';
 import 'package:workbuddy/shared/repositories/mock_database.dart';
 import 'package:workbuddy/shared/repositories/shared_preferences_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await DatabaseHelper().database;
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await DatabaseHelper().database; // Initialisiere die Datenbank
   /*--------------------------------- Repositories ---*/
   final DatabaseRepository databaseRepository = MockDatabase();
   final AuthRepository authRepository = FirebaseAuthRepository();
@@ -66,6 +70,8 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     log("0015 - MainApp - wird gestartet");
 
+    DatabaseSetup();
+
     /*--- Datum formatieren auf DE = Deutschland ---*/
     initializeDateFormatting('de', null);
 
@@ -87,6 +93,7 @@ class MainApp extends StatelessWidget {
     );
   }
 }
+
 /*--------------------------------- TODO's ---
 * Firebase:
   √ für iOS muss im ios/Podfile     ---> platform :ios, '13.0'  eingestellt werden √ 

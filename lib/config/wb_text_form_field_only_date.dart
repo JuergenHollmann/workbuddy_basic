@@ -23,6 +23,7 @@ class WbTextFormFieldOnlyDATE extends StatelessWidget {
     this.controller,
     this.onChanged,
     this.width,
+    this.onEditingComplete,
   });
 
   final String labelText;
@@ -41,6 +42,7 @@ class WbTextFormFieldOnlyDATE extends StatelessWidget {
   final Function(String inputInWbTextFormField)? onChanged;
   final DateFormat formatter = DateFormat('dd.MM.yyyy');
   final double? width;
+  final Function()? onEditingComplete;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +54,6 @@ class WbTextFormFieldOnlyDATE extends StatelessWidget {
     return SizedBox(
       width: width,
       child: TextFormField(
-                
         // controller: dateController,
         controller: controller,
         maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
@@ -67,12 +68,11 @@ class WbTextFormFieldOnlyDATE extends StatelessWidget {
           color: inputFontColor,
         ),
         textAlign: TextAlign.left,
-                  
+
         textInputAction: textInputAction,
 
         /*--- InputDecoration ---*/
         decoration: InputDecoration(
-          
           floatingLabelAlignment: FloatingLabelAlignment.start,
           filled: true,
           fillColor: fillColor, //wbColorBackgroundBlue
@@ -119,8 +119,8 @@ class WbTextFormFieldOnlyDATE extends StatelessWidget {
         ),
 
         /*--- onChanged ---*/
-        //controller: controller,
         onChanged: onChanged,
+        onEditingComplete: onEditingComplete,
 
         /*--- inputFormatters ---*/
         inputFormatters: [

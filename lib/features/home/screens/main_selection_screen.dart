@@ -96,22 +96,24 @@ class _MainSelectionScreenState extends State<MainSelectionScreen> {
           /*--------------------------------- Abstand ---*/
           wbSizedBoxHeight8,
           /*--------------------------------- Wer ist angemeldet? ---*/
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Consumer<CurrentUserProvider>(
-              builder: (context, value, child) => Text(
-                '${value.currentUser} ist angemeldet',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w900,
-                  color: Colors.white,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Consumer<CurrentUserProvider>(
+                builder: (context, value, child) => Text(
+                  '${value.currentUser} ist angemeldet',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
           ),
           /*--------------------------------- Abstand ---*/
-          wbSizedBoxHeight16,
+          wbSizedBoxHeight32,
           /*--------------------------------- *** ---*/
         ],
       ),

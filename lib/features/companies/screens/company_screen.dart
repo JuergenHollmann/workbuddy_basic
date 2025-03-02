@@ -82,6 +82,7 @@ class DatabaseHelper {
     Directory documentsDir = await getApplicationDocumentsDirectory();
     String dbPath = join(documentsDir.path, "JOTHAsoft.FiveStars.db");
     bool dbExists = await databaseExists(dbPath);
+    
     if (!dbExists) {
       ByteData data = await rootBundle.load("assets/JOTHAsoft.FiveStars.db");
       List<int> bytes = data.buffer.asUint8List();
@@ -199,7 +200,9 @@ Future<void> updateData(Map<String, dynamic> row) async {
     controllerCS030.text,
   ]);
 
-  log('0200 - CompanyScreen - Abfrage Ergebnis: $query');
+  log('0202 - CompanyScreen - Abfrage Ergebnis: $query'); // Ergebnis: 1
+  log('0203 - CompanyScreen - Abfrage Ergebnis: $controllerCS004'); // Geburtstag als Instance
+  log('0204 - CompanyScreen - Abfrage Ergebnis: ${controllerCS004.text}'); // Geburtstag als Datum (oder leer)
 }
 
 /*--------------------------------- Datensatz löschen ---*/
@@ -230,14 +233,161 @@ Future<void> deleteData(Map<String, dynamic> row) async {
   log('0227 - CompanyScreen - Der Datensatz mit KundenID $kundenIDToDelete wurde gelöscht.');
 }
 
-/*--------------------------------- *** ---*/
+/*--------------------------------- State ---*/
 class _CompanyScreenState extends State<CompanyScreen> {
+  /*--------------------------------- AudioPlayer ---*/
   late AudioPlayer player = AudioPlayer();
 
-  /* für die Berechnung des Alters und der Zeitspanne bis zum nächsten Geburtstag */
+  /*--- für die Berechnung des Alters und der Zeitspanne bis zum nächsten Geburtstag ---*/
   int ageY = 0, ageM = 0, ageD = 0, nextY = 0, nextM = 0, nextD = 0;
   DateTime initTime = DateTime.now();
   DateTime selectedTime = DateTime.now();
+  String today = DateFormat('dd.MM.yyyy').format(DateTime.now());
+
+  /*--- Automatisch das Alter berechnen mit "age_calculator" 0785 - CompanyScreen ---*/
+  void calculateAgeFromBirthday() {
+    try {
+      AgeCalculator();
+      // DateTime birthday = DateTime.parse('29.02.1964');
+      // DateTime birthday =
+      // DateTime.now().subtract(const Duration(days: 20505)); // funzt - nur zum Testen!
+      // String birthday = '29.02.1964'; // funzt - nur zum Testen!
+
+      //  String birthday = controllerCS004.text; // leer? warum?
+      log('Geburtstag: ${controllerCS004.text}'); // leer? warum?
+      log('Geburtstag: $controllerCS004'); // leer? warum?
+
+      // DateTime birthday = DateTime.parse(controllerCS004.text); // leer? warum?
+      String birthday = controllerCS004.text;
+
+      log('Geburtstag: $birthday / ${controllerCS004.text}');
+
+      /*--- Den String in Tag, Monat und Jahr aufteilen ---*/
+      List<String> dateParts = controllerCS004.text.split('.');
+      String day = dateParts[0];
+      String month = dateParts[1];
+      String year = dateParts[2];
+
+      /*--- Einen neuen String im ISO 8601 Format erstellen ---*/
+      String isoDateString = "$year-$month-$day";
+
+      /*--- Den String in ein DateTime-Objekt parsen ---*/
+      DateTime dateTime = DateTime.parse(isoDateString);
+
+      log('0267 - CompanyScreen - $birthday');
+      log('0268 - CompanyScreen - $dateTime');
+
+      // DateTime birthday = DateTime.parse(controllerCS004.text);
+      var age = AgeCalculator.age(dateTime);
+      log('0297 - CompanyScreen - Berechnetes Alter = ${age.years} Jahre + ${age.months} Monate + ${age.days} Tage');
+
+      /*--- Automatisch die Zeit bis zum nächsten Geburtstag berechnen mit "age_calculator" ---*/
+      // DateTime nextBirthday = DateTime.parse(controllerCS004.text);
+      DateTime nextBirthday = dateTime;
+
+      var timeToNextBirthday = AgeCalculator.timeToNextBirthday(
+        DateTime(
+          nextBirthday.year,
+          nextBirthday.month,
+          nextBirthday.day,
+        ),
+        fromDate: DateTime.now(),
+      );
+
+      /*--- die Daten aktualisieren ---*/
+      setState(() {
+        /*--- das Alter berechnen aktualisieren ---*/
+        ageY = age.years;
+        ageM = age.months;
+        ageD = age.days;
+
+        /*--- die Zeit bis zum nächsten Geburtstag aktualisieren ---*/
+        nextY = timeToNextBirthday.years;
+        nextM = timeToNextBirthday.months;
+        nextD = timeToNextBirthday.days;
+      });
+    } catch (e) {
+      log('0309 - CompanyScreen - Fehlermeldung: $e');
+      // /*--------------------------------- showAlertDialog ---*/ // funzt nicht!
+      // showDialog(
+
+      //   context: context,
+      //   builder: (context) => const WbDialogAlertUpdateComingSoon(
+      //     headlineText:
+      //         "Das Geburtsdatum ist nicht korrekt!\n\nBitte überprüfe das Datum.",
+      //     contentText: "Bitte überprüfe das Datum.\n\nUpdate CS-0317",
+      //     actionsText: "OK 👍",
+      //   ),
+      // );
+      // /*--------------------------------- showAlertDialog ENDE ---*/
+
+      // /*--------------------------------- showAlertDialog ---*/
+      // showDialog(
+      //   context: context,
+      //   builder: (context) => AlertDialog(
+      //     title: Text("Fehler"),
+      //     content: Text(
+      //         "Das Geburtsdatum ist nicht korrekt!\n\nBitte überprüfe das Datum."),
+      //     actions: [
+      //       TextButton(
+      //         onPressed: () {
+      //           Navigator.of(context).pop();
+      //         },
+      //         child: Text("OK 👍"),
+      //       ),
+      //     ],
+      //   ),
+      // );
+      // /*--------------------------------- showAlertDialog ENDE ---*/
+    }
+  }
+
+  /*--------------------------------- getNextBirthdayText ---*/
+  String getNextBirthdayText() {
+    log('0314 - CompanyScreen - Abfrage Ergebnis: ${controllerCS004.text}'); // Geburtstag als Datum (oder leer)
+
+    /*--- Wenn das Geburtsdatum leer ist, dann ist das Alter und die Zeit bis zum nächsten Geburtstag unbekannt ---*/
+    if (controllerCS004.text.isEmpty) {
+      log('0318 - CompanyScreen ---> controllerCS004.text.isEmpty: ${controllerCS004.text.isEmpty} <---');
+      return '---> ist UNBEKANNT!';
+    }
+    if (nextD == 0 && nextM == 0) {
+      log('0322 - CompanyScreen - .... ist wieder in 1 Jahr 😃');
+      return '... ist wieder in 1 Jahr 😃';
+    }
+    if (nextD == 1 && nextM == 0) {
+      log('0326 - CompanyScreen - ... ist schon MORGEN 🚀');
+      return '... ist schon MORGEN 🚀';
+    }
+    if (nextD == 2 && nextM == 0) {
+      log('0330 - CompanyScreen - ... ist schon ÜBERMORGEN!');
+      return '... ist schon ÜBERMORGEN!';
+    }
+    if (nextD >= 3 && nextM == 0) {
+      log('0334 - CompanyScreen - .. ist schon in $nextD Tagen!');
+      return '... ist schon in $nextD Tagen!';
+    }
+
+    List<String> parts = [];
+    log('0339 - CompanyScreen ---> parts: $parts <--- müssten hier leer sein!');
+    if (nextY > 0) {
+      parts.add(nextY == 1 ? '... in $nextY Jahr' : '$nextY Jahre');
+    }
+    if (nextM > 0) {
+      parts.add(nextM == 1 ? '... in $nextM Monat' : '$nextM Monate');
+    }
+    if (nextD > 0) {
+      parts.add(nextD == 1 ? '... in $nextD Tag' : '$nextD Tage');
+    }
+    if (parts.isEmpty) {
+      return '---> ist UNBEKANNT!';
+    }
+    log('0352 - CompanyScreen ---> parts: $parts <--- müssten hier gefüllt sein!');
+
+    return parts.join(' + ');
+
+    //return '---> ist UNBEKANNT!';
+  }
 
   /*--------------------------------- onChanged-Funktion ---*/
   String inputCompanyName = "Firmenlogo"; // nur für die "onChanged-Funktion"
@@ -250,14 +400,17 @@ class _CompanyScreenState extends State<CompanyScreen> {
   late String _phone = '';
   Future<void>? _launched;
 
-  /*--------------------------------- *** ---*/
+  /*--------------------------------- initState ---*/
   @override
   void initState() {
     super.initState();
-    log("0227 - CompanyScreen - initState - aktiviert");
+    log("0344 - CompanyScreen - initState - aktiviert");
 
-    // Den Zustand (State) erst nach dem Build ändern
+    /*--- Den Zustand (State) erst nach dem Build ändern.
+          Diese Methode wird verwendet, um eine Aktion auszuführen, nachdem das Widget vollständig aufgebaut wurde. 
+          Die Daten werden direkt nach dem Rendern gespeichert. ---*/
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      log('0350 - CompanyScreen - WidgetsBinding.instance.addPostFrameCallback - aktiviert');
       setState(() {
         try {
           /*--------------------------------- Daten aus der SQFlite ---*/
@@ -316,6 +469,12 @@ class _CompanyScreenState extends State<CompanyScreen> {
           log('0271 - CompanyScreen - Fehler: $e');
         }
       });
+
+      /*--- Daten direkt nach dem Rendern speichern ---*/
+      updateData({});
+
+      /*--- Hier nochmal das Alter aus dem Geburtstag berechnen ---*/
+      calculateAgeFromBirthday();
     });
 
     /*--- Zeitstempel in ein lesbares Datum umwandeln ---*/
@@ -361,6 +520,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
     });
 
     fetchData();
+    calculateAgeFromBirthday();
     //dispose();
     //updateData();
   }
@@ -404,7 +564,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
         /*--- "toolbarHeight" wird hier nicht mehr benötigt, weil jetzt "WbInfoContainer" die Daten anzeigt ---*/
         // toolbarHeight: 100,
         title: Text(
-          'Firma anzeigen | bearbeiten', // oder NEU anlegen
+          'Firma zeigen   |   bearbeiten', // oder NEU anlegen
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w900,
@@ -417,6 +577,26 @@ class _CompanyScreenState extends State<CompanyScreen> {
         shadowColor: Colors.black,
         //elevation: 10,
         //scrolledUnderElevation: 10,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            log('0561 - CompanyScreen - "arrow_back" wurde angeklickt');
+            /*--- Daten direkt nach dem "arrow_back" speichern ---*/
+            updateData({}); // Datensatz aktualisieren
+            log('0564 - CompanyScreen - Daten gespeichert!');
+            /*--------------------------------- Navigator.push ---*/
+            Navigator.push(
+              // ignore: use_build_context_synchronously
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MainSelectionScreen(),
+              ),
+            );
+
+            // Navigator.pop(context);
+          },
+        ),
+
         /*--------------------------------- *** ---*/
         /*--- "RichText" wird hier nicht mehr benötigt, weil jetzt "WbInfoContainer" die Daten anzeigt ---*/
         // title: RichText(
@@ -522,7 +702,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
                     ),
                     /*--- Das ist der Zwischenabstand bei Expanded --- */
                     const SizedBox(width: 14),
-                    /*--------------------------------- Ansprechpartner --- */
+                    /*--------------------------------- Bild des Ansprechpartners --- */
                     Column(
                       children: [
                         Container(
@@ -614,153 +794,6 @@ class _CompanyScreenState extends State<CompanyScreen> {
                     const Divider(thickness: 3, color: wbColorLogoBlue),
                     /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight16,
-                    /*--------------------------------- Firmenbezeichnung ---*/
-                    WbTextFormField(
-                      labelText: "Firmenbezeichnung",
-                      labelFontSize20: 20,
-                      hintText: "Wie heißt die Firma?",
-                      hintTextFontSize16: 16,
-                      inputTextFontSize22: 22,
-                      prefixIcon: Icons.source_outlined,
-                      prefixIconSize28: 28,
-                      inputFontWeightW900: FontWeight.w900,
-                      inputFontColor: wbColorLogoBlue,
-                      fillColor: wbColorLightYellowGreen,
-                      // textInputTypeOnKeyboard: TextInputType.multiline,
-                      // suffixIcon: Icons.help_outline_outlined,
-                      // suffixIconSize48: 28,
-                      //textInputAction: textInputAction,
-                      /*--------------------------------- onChanged ---*/
-                      controller: controllerCS014,
-                      onChanged: (String controllerCS014) {
-                        log("0189 - company_screen - Eingabe: $controllerCS014");
-                        inputCompanyName = controllerCS014;
-                        setState(() => inputCompanyName = controllerCS014);
-                      },
-                    ),
-                    /*--------------------------------- Branchenzuordnung ---*/
-                    wbSizedBoxHeight16,
-                    WbTextFormField(
-                      labelText: "Branchenzuordnung",
-                      labelFontSize20: 20,
-                      hintText: "Welcher Branche zugeordnet?",
-                      hintTextFontSize16: 16,
-                      inputTextFontSize22: 22,
-                      prefixIcon: Icons.comment_bank_outlined,
-                      prefixIconSize28: 24,
-                      inputFontWeightW900: FontWeight.w900,
-                      inputFontColor: wbColorLogoBlue,
-                      fillColor: wbColorLightYellowGreen,
-                    ),
-                    /*--------------------------------- Notizen zu Warengruppen ---*/
-                    wbSizedBoxHeight16,
-                    WbTextFormField(
-                      labelText: "Notizen zu Warengruppen",
-                      labelFontSize20: 20,
-                      hintText:
-                          "Welche Waren sind für die Suchfunktion in der App relevant? Beispiele: Schrauben, Werkzeug, etc.?",
-                      hintTextFontSize16: 12,
-                      inputTextFontSize22: 15,
-                      prefixIcon: Icons.shopping_basket_outlined,
-                      prefixIconSize28: 24,
-                      inputFontWeightW900: FontWeight.w900,
-                      inputFontColor: wbColorLogoBlue,
-                      fillColor: wbColorLightYellowGreen,
-                      textInputTypeOnKeyboard: TextInputType.multiline,
-                    ),
-                    /*--------------------------------- WbDividerWithTextInCenter ---*/
-                    wbSizedBoxHeight8,
-                    WbDividerWithTextInCenter(
-                      wbColor: wbColorLogoBlue,
-                      wbText: 'Adressdaten der Firma',
-                      wbTextColor: wbColorLogoBlue,
-                      wbFontSize12: 18,
-                      wbHeight3: 3,
-                    ),
-                    wbSizedBoxHeight16,
-                    /*--------------------------------- Straße + Nummer ---*/
-                    WbTextFormField(
-                      controller: controllerCS005,
-                      labelText: "Straße und Hausnummer",
-                      labelFontSize20: 20,
-                      hintText: "Bitte Straße + Hausnr. eintragen",
-                      hintTextFontSize16: 15,
-                      inputTextFontSize22: 22,
-                      prefixIcon: Icons.location_on_outlined,
-                      prefixIconSize28: 24,
-                      inputFontWeightW900: FontWeight.w900,
-                      inputFontColor: wbColorLogoBlue,
-                      fillColor: wbColorLightYellowGreen,
-                      textInputTypeOnKeyboard: TextInputType.streetAddress,
-                    ),
-                    /*--------------------------------- Zusatzinformation ---*/
-                    wbSizedBoxHeight16,
-                    WbTextFormField(
-                      labelText: "Zusatzinfo zur Adresse",
-                      labelFontSize20: 20,
-                      hintText: "c/o-Adresse? | Hinterhaus? | EG?",
-                      hintTextFontSize16: 15,
-                      inputTextFontSize22: 15,
-                      prefixIcon: Icons.location_on_outlined,
-                      prefixIconSize28: 24,
-                      inputFontWeightW900: FontWeight.w900,
-                      inputFontColor: wbColorLogoBlue,
-                      fillColor: wbColorLightYellowGreen,
-                    ),
-                    /*--------------------------------- PLZ ---*/
-                    wbSizedBoxHeight16,
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 120,
-                          child: WbTextFormFieldTEXTOnly(
-                            controller: controllerCS006,
-                            labelText: "PLZ",
-                            labelFontSize20: 20,
-                            hintText: "PLZ",
-                            inputTextFontSize22: 22,
-                            inputFontWeightW900: FontWeight.w900,
-                            inputFontColor: wbColorLogoBlue,
-                            fillColor: wbColorLightYellowGreen,
-                            textInputTypeOnKeyboard:
-                                TextInputType.numberWithOptions(
-                              decimal: false,
-                              signed: true,
-                            ),
-                          ),
-                        ),
-                        /*--------------------------------- Abstand ---*/
-                        wbSizedBoxWidth8,
-                        /*--------------------------------- Firmensitz | Ort ---*/
-                        Expanded(
-                          child: WbTextFormField(
-                            labelText: "Firmensitz | Ort",
-                            labelFontSize20: 20,
-                            hintText: "Bitte den Ort eintragen",
-                            hintTextFontSize16: 15,
-                            inputTextFontSize22: 22,
-                            prefixIcon: Icons.home_work_outlined,
-                            prefixIconSize28: 24,
-                            inputFontWeightW900: FontWeight.w900,
-                            inputFontColor: wbColorLogoBlue,
-                            fillColor: wbColorLightYellowGreen,
-                            controller: controllerCS007,
-                          ),
-                        ),
-                      ],
-                    ),
-                    /*--------------------------------- Abstand ---*/
-                    wbSizedBoxHeight8,
-                    /*--------------------------------- Divider ---*/
-                    WbDividerWithTextInCenter(
-                      wbColor: wbColorLogoBlue,
-                      wbText: 'Ansprechpartner',
-                      wbTextColor: wbColorLogoBlue,
-                      wbFontSize12: 18,
-                      wbHeight3: 3,
-                    ),
-                    /*--------------------------------- Abstand ---*/
-                    wbSizedBoxHeight16,
                     /*--------------------------------- Anrede ---*/
                     WbDropDownMenu(
                       controller: controllerCS001,
@@ -843,7 +876,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
                     ),
                     /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight16,
-                    /*--------------------------------- Geburtstag ---*/
+                    /*--------------------------------- Container um den Geburtstag herum ---*/
                     Container(
                       width: 400,
                       decoration: ShapeDecoration(
@@ -862,43 +895,54 @@ class _CompanyScreenState extends State<CompanyScreen> {
                             padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                             child: Row(
                               children: [
-                                Text(
-                                  'Geburtstag',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
+                                GestureDetector(
+                                  onTap: () {
+                                    log('0752 - CompanyScreen - das Alter mit "${controllerCS004.text}" berechnen');
+                                    calculateAgeFromBirthday();
+                                  },
+                                  child: Text(
+                                    'Geburtstag',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                                /*--------------------------------- Abstand ---*/
+                                /*--------------------------------- Abstand zum Geburtstag-Feld ---*/
                                 wbSizedBoxWidth16,
-                                /*--------------------------------- Geburtstag - Feld ---*/
-                                WbTextFormFieldOnlyDATE(
-                                    width: 210,
-                                    controller: controllerCS004,
-                                    prefixIcon: Icons.cake_outlined,
-                                    labelText: 'Geburtstag',
-                                    labelFontSize20: 20,
-                                    hintText: 'Geburtstag',
-                                    inputTextFontSize22: 22,
-                                    inputFontWeightW900: FontWeight.w900,
-                                    inputFontColor: wbColorButtonDarkRed,
-                                    fillColor: Colors.yellow,
-                                    textInputAction: TextInputAction.go, // auf der Tastatur erscheint der Button "go" 
-                                    onChanged: (controllerCS004) {
+                                /*--------------------------------- Geburtstag-Feld ---*/
+                                Expanded(
+                                  child: WbTextFormFieldOnlyDATE(
+                                      // width: 210, // ist hier ohne Auswirkung wegen Expanded
+                                      controller: controllerCS004,
+                                      // validator?
+                                      prefixIcon: Icons.cake_outlined,
+                                      labelText: 'Geburtstag',
+                                      labelFontSize20: 20,
+                                      hintText: 'Geburtstag',
+                                      inputTextFontSize22: 22,
+                                      inputFontWeightW900: FontWeight.w900,
+                                      inputFontColor: wbColorButtonDarkRed,
+                                      fillColor: Colors.yellow,
 
+                                      // textInputAction: TextInputAction
+                                      //     .go, // auf der Tastatur erscheint der Button "go"
 
-
-                                      log('0887 - CompanyScreen - onChanged $controllerCS004 - Geburtsdatum berechnen');
+                                      onEditingComplete: () {
+                                        log('0890 - CompanyScreen - das Alter mit "${controllerCS004.text}" berechnen');
+                                        calculateAgeFromBirthday();
+                                      }
 
                                       // /*--- Automatisch das Alter berechnen mit "age_calculator" 0785 - CompanyScreen ---*/
                                       // AgeCalculator();
-                                      // DateTime birthday = DateTime.parse(controllerCS004);
+                                      // DateTime birthday = DateTime.parse(
+                                      //     '${controllerCS004.text}');
                                       // var age = AgeCalculator.age(birthday);
                                       // log('0561 - CompanyScreen - Berechnetes Alter = ${age.years} Jahre + ${age.months} Monate + ${age.days} Tage');
 
-                                      // /*--- automatisch die Zeit bis zum nächsten Geburtstag berechnen mit "age_calculator" ---*/
-                                      // DateTime nextBirthday =
-                                      //     DateTime.parse(controllerCS004);
+                                      // /*--- Automatisch die Zeit bis zum nächsten Geburtstag berechnen mit "age_calculator" ---*/
+                                      // DateTime nextBirthday = DateTime.parse(
+                                      //     '${controllerCS004.text}');
                                       // var timeToNextBirthday =
                                       //     AgeCalculator.timeToNextBirthday(
                                       //   DateTime(
@@ -921,13 +965,16 @@ class _CompanyScreenState extends State<CompanyScreen> {
                                       //   nextM = timeToNextBirthday.months;
                                       //   nextD = timeToNextBirthday.days;
                                       // });
-                                    }),
 
+                                      // },
 
+                                      // onChanged: (controllerCS004) {
 
+                                      //   log('0887 - CompanyScreen - onChanged $controllerCS004 - Geburtsdatum berechnen');
 
-
-
+                                      // }
+                                      ),
+                                ),
 
                                 /*--------------------------------- *** ---*/
                                 /*--- vorübergehend deaktiviert: TimePickerSpinnerPopUp ---*/
@@ -981,14 +1028,119 @@ class _CompanyScreenState extends State<CompanyScreen> {
                             child: Row(
                               children: [
                                 Text(
-                                  'Alter:', // ${controllerCS004.text}
+                                  'Aktuelles Alter:',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
+                                    fontSize: 11,
                                   ),
                                 ),
                                 Expanded(
                                   child: Text(
-                                    '$ageY Jahre + $ageM Monate + $ageD Tage',
+                                    (ageY != 0 && ageM == 0 && ageD == 0)
+                                        ? 'Heute genau $ageY Jahre alt 😃'
+                                        // : (ageD != 0 && ageM != 0 && ageY == 0)
+                                        //     ? '$ageM Monate + $ageD Tage'
+                                        //     : (ageD != 0 && ageM == 0 && ageY == 0)
+                                        //         ? '$ageD Tage'
+                                        //         : '---> ist UNBEKANNT!',
+                                        // ? '$ageY Jahre + $ageM Monate + $ageD Tage'
+                                        // : '$ageY Jahre + $ageM Monate + $ageD Tage',
+                                        /*--------------------------------- mehrfach verschachtelter ternärer Operator ---*/
+                                        : (ageY == 1 && ageM == 1 && ageD == 1)
+                                            ? '$ageY Jahr + $ageM Monat + $ageD Tag'
+                                            : (ageY == 0 &&
+                                                    ageM == 0 &&
+                                                    ageD == 1)
+                                                ? '$ageD Tag'
+                                                : (ageY == 1 &&
+                                                        ageM == 0 &&
+                                                        ageD == 1)
+                                                    ? '$ageY Jahr + $ageD Tag'
+                                                    : (ageY == 1 &&
+                                                            ageM == 1 &&
+                                                            ageD == 0)
+                                                        ? '$ageY Jahr + $ageM Monat'
+                                                        /*--------------------------------- *** ---*/
+                                                        : (controllerCS004
+                                                                    .text ==
+                                                                today)
+                                                            ? '---> ist HEUTE 😃'
+                                                            : (ageY == 0 &&
+                                                                    ageM == 0 &&
+                                                                    ageD == 0)
+                                                                ? '---> ist UNBEKANNT!'
+                                                                : (ageM == 1)
+                                                                    ? '$ageM Monat'
+                                                                    : (ageD ==
+                                                                            1)
+                                                                        ? '+ $ageD Tag'
+                                                                        : (ageM ==
+                                                                                0)
+                                                                            ? '+ $ageM Monat'
+                                                                            /*--------------------------------- *** ---*/
+                                                                            : (ageY == 0 && ageM == 0 && ageD == 0)
+                                                                                ? '---> ist UNBEKANNT!'
+                                                                                : (ageY == 1)
+                                                                                    ? '$ageY Jahr'
+                                                                                    : (ageM == 1)
+                                                                                        ? '$ageM Monat'
+                                                                                        : (ageD == 1)
+                                                                                            ? '$ageD Tag'
+                                                                                            : (ageY == 0)
+                                                                                                ? '$ageY Jahr'
+                                                                                                : (ageM == 0)
+                                                                                                    ? '$ageM Monat'
+                                                                                                    : '$ageY Jahre + $ageM Monate + $ageD Tage',
+                                    // /*--------------------------------- mehrfach verschachtelter ternärer Operator ---*/
+                                    // (nextY == 0 && nextM == 0 && nextD == 0)
+                                    //     ? '---> ist UNBEKANNT!'
+                                    //     : (nextY == 1)
+                                    //         ? '$ageY Jahr + $nextM Monate + $nextD Tage'
+                                    //         : (nextY == 0)
+                                    //             ? '$nextM Monate + $nextD Tage'
+                                    //             : (nextM == 1)
+                                    //                 ? '$ageY Jahr + $nextM Monat + $nextD Tage'
+                                    //                 : (nextM == 0)
+                                    //                     ? '$nextY Jahre + $nextD Tage'
+                                    //                     : (nextD == 1)
+                                    //                         ? '$ageY Jahr + $nextM Monat + $nextD Tag'
+                                    //                         : (nextD == 0)
+                                    //                             ? '$nextY Jahre + $nextM Monate'
+                                    //                             : '$ageY Jahre + $nextM Monate + $nextD Tage',
+                                    // /*--------------------------------- *** ---*/
+
+                                    // (nextY == 0 && nextM == 0 && nextD == 0)
+                                    //     ? '---> ist UNBEKANNT!'
+                                    //     // : (nextY == 1 &&
+                                    //     //         nextM == 1 &&
+                                    //     //         nextD == 1)
+                                    //     //     ? '$ageY Jahr + $ageM Monat + $ageD Tag'
+                                    //     //     : (nextY == 0 &&
+                                    //     //             nextM == 0 &&
+                                    //     //             nextD == 1)
+                                    //     //         ? '$ageD Tag'
+                                    //     //         : (nextY == 1 &&
+                                    //     //                 nextM == 0 &&
+                                    //     //                 nextD == 1)
+                                    //     //             ? '$ageY Jahr + $ageD Tag'
+                                    //     //             : (nextY == 1 &&
+                                    //     //                     nextM == 1 &&
+                                    //     //                     nextD == 0)
+                                    //     //                 ? '$ageY Jahr + $ageM Monat'
+                                    //                     : '$ageY Jahre + $nextM Monate + $nextD Tage',
+
+                                    // (nextY == 0 && nextM == 0 && nextD == 0)
+                                    //     ? '---> ist UNBEKANNT!'
+                                    //     : (nextM ==
+                                    //             1) // verschachtelter ternärer Operator
+                                    //         ? '$nextM Monat'
+                                    //         : (nextD == 1)
+                                    //             ? '+ $nextD Tag'
+                                    //             : (nextM == 0)
+                                    //                 ? '+ $nextM Monat'
+                                    //                 : '$ageY Jahre + $nextM Monate + $nextD Tage',
+
+                                    /*--------------------------------- *** ---*/
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -1004,14 +1156,28 @@ class _CompanyScreenState extends State<CompanyScreen> {
                             child: Row(
                               children: [
                                 Text(
-                                  'Nächster ...',
+                                  'Nächster Geburtstag:',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
+                                    fontSize: 11,
                                   ),
                                 ),
                                 Expanded(
                                   child: Text(
-                                    '$nextY Jahre + $nextM Monate + $nextD Tage',
+                                    getNextBirthdayText(), // 1075 - CompanyScreen
+
+                                    // /*--------------------------------- mehrfach verschachtelter ternärer Operator ---*/
+                                    // child: Text(
+                                    //   (nextY == 0 && nextM == 0 && nextD == 0)
+                                    //       ? '---> ist UNBEKANNT!'
+                                    //       : (nextD == 1)
+                                    //           ? '---> ist schon MORGEN!'
+                                    //           : (nextD == 0)
+                                    //               ? '---> ist HEUTE!'
+                                    //               : (nextM == 0)
+                                    //                   ? '---> in $nextD Tagen'
+                                    //                   : 'noch $nextM Monate + $nextD Tage',
+                                    //   /*--------------------------------- *** ---*/
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -1057,8 +1223,165 @@ class _CompanyScreenState extends State<CompanyScreen> {
                     //     ),
                     //   ],
                     // ),
-                    /*--------------------------------- Abstand ---*/
+
+                    /*--------------------------------- Daten der Firma ---*/
+                    wbSizedBoxHeight8,
+                    WbDividerWithTextInCenter(
+                      wbColor: wbColorLogoBlue,
+                      wbText: 'Daten der Firma',
+                      wbTextColor: wbColorLogoBlue,
+                      wbFontSize12: 18,
+                      wbHeight3: 3,
+                    ),
+                    wbSizedBoxHeight8,
+
+                    /*--------------------------------- Firmenbezeichnung ---*/
+                    WbTextFormField(
+                      labelText: "Firmenbezeichnung",
+                      labelFontSize20: 20,
+                      hintText: "Wie heißt die Firma?",
+                      hintTextFontSize16: 16,
+                      inputTextFontSize22: 22,
+                      prefixIcon: Icons.source_outlined,
+                      prefixIconSize28: 28,
+                      inputFontWeightW900: FontWeight.w900,
+                      inputFontColor: wbColorLogoBlue,
+                      fillColor: wbColorLightYellowGreen,
+                      // textInputTypeOnKeyboard: TextInputType.multiline,
+                      // suffixIcon: Icons.help_outline_outlined,
+                      // suffixIconSize48: 28,
+                      //textInputAction: textInputAction,
+                      /*--------------------------------- onChanged ---*/
+                      controller: controllerCS014,
+                      onChanged: (String controllerCS014) {
+                        log("0189 - company_screen - Eingabe: $controllerCS014");
+                        inputCompanyName = controllerCS014;
+                        setState(() => inputCompanyName = controllerCS014);
+                      },
+                    ),
+                    /*--------------------------------- Branchenzuordnung ---*/
                     wbSizedBoxHeight16,
+                    WbTextFormField(
+                      labelText: "Branchenzuordnung",
+                      labelFontSize20: 20,
+                      hintText: "Welcher Branche zugeordnet?",
+                      hintTextFontSize16: 16,
+                      inputTextFontSize22: 22,
+                      prefixIcon: Icons.comment_bank_outlined,
+                      prefixIconSize28: 24,
+                      inputFontWeightW900: FontWeight.w900,
+                      inputFontColor: wbColorLogoBlue,
+                      fillColor: wbColorLightYellowGreen,
+                    ),
+                    /*--------------------------------- Notizen zu Warengruppen ---*/
+                    wbSizedBoxHeight16,
+                    WbTextFormField(
+                      labelText: "Notizen zu Warengruppen",
+                      labelFontSize20: 20,
+                      hintText:
+                          "Welche Waren sind für die Suchfunktion in der App relevant? Beispiele: Schrauben, Werkzeug, etc.?",
+                      hintTextFontSize16: 12,
+                      inputTextFontSize22: 15,
+                      prefixIcon: Icons.shopping_basket_outlined,
+                      prefixIconSize28: 24,
+                      inputFontWeightW900: FontWeight.w900,
+                      inputFontColor: wbColorLogoBlue,
+                      fillColor: wbColorLightYellowGreen,
+                      textInputTypeOnKeyboard: TextInputType.multiline,
+                    ),
+                    /*--------------------------------- WbDividerWithTextInCenter ---*/
+                    wbSizedBoxHeight8,
+                    WbDividerWithTextInCenter(
+                      wbColor: wbColorLogoBlue,
+                      wbText: 'Adressdaten der Firma',
+                      wbTextColor: wbColorLogoBlue,
+                      wbFontSize12: 18,
+                      wbHeight3: 3,
+                    ),
+                    wbSizedBoxHeight8,
+                    /*--------------------------------- Straße + Nummer ---*/
+                    WbTextFormField(
+                      controller: controllerCS005,
+                      labelText: "Straße und Hausnummer",
+                      labelFontSize20: 20,
+                      hintText: "Bitte Straße + Hausnr. eintragen",
+                      hintTextFontSize16: 15,
+                      inputTextFontSize22: 22,
+                      prefixIcon: Icons.location_on_outlined,
+                      prefixIconSize28: 24,
+                      inputFontWeightW900: FontWeight.w900,
+                      inputFontColor: wbColorLogoBlue,
+                      fillColor: wbColorLightYellowGreen,
+                      textInputTypeOnKeyboard: TextInputType.streetAddress,
+                    ),
+                    /*--------------------------------- Zusatzinformation ---*/
+                    wbSizedBoxHeight16,
+                    WbTextFormField(
+                      labelText: "Zusatzinfo zur Adresse",
+                      labelFontSize20: 20,
+                      hintText: "c/o-Adresse? | Hinterhaus? | EG?",
+                      hintTextFontSize16: 15,
+                      inputTextFontSize22: 15,
+                      prefixIcon: Icons.location_on_outlined,
+                      prefixIconSize28: 24,
+                      inputFontWeightW900: FontWeight.w900,
+                      inputFontColor: wbColorLogoBlue,
+                      fillColor: wbColorLightYellowGreen,
+                    ),
+                    /*--------------------------------- PLZ ---*/
+                    wbSizedBoxHeight16,
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 120,
+                          child: WbTextFormFieldTEXTOnly(
+                            controller: controllerCS006,
+                            labelText: "PLZ",
+                            labelFontSize20: 20,
+                            hintText: "PLZ",
+                            inputTextFontSize22: 22,
+                            inputFontWeightW900: FontWeight.w900,
+                            inputFontColor: wbColorLogoBlue,
+                            fillColor: wbColorLightYellowGreen,
+                            textInputTypeOnKeyboard:
+                                TextInputType.numberWithOptions(
+                              decimal: false,
+                              signed: true,
+                            ),
+                          ),
+                        ),
+                        /*--------------------------------- Abstand ---*/
+                        wbSizedBoxWidth8,
+                        /*--------------------------------- Firmensitz | Ort ---*/
+                        Expanded(
+                          child: WbTextFormField(
+                            labelText: "Firmensitz | Ort",
+                            labelFontSize20: 20,
+                            hintText: "Bitte den Ort eintragen",
+                            hintTextFontSize16: 15,
+                            inputTextFontSize22: 22,
+                            prefixIcon: Icons.home_work_outlined,
+                            prefixIconSize28: 24,
+                            inputFontWeightW900: FontWeight.w900,
+                            inputFontColor: wbColorLogoBlue,
+                            fillColor: wbColorLightYellowGreen,
+                            controller: controllerCS007,
+                          ),
+                        ),
+                      ],
+                    ),
+                    /*--------------------------------- Abstand ---*/
+                    wbSizedBoxHeight8,
+                    /*--------------------------------- Divider ---*/
+                    WbDividerWithTextInCenter(
+                      wbColor: wbColorLogoBlue,
+                      wbText: 'Notizen zum Ansprechpartner',
+                      wbTextColor: wbColorLogoBlue,
+                      wbFontSize12: 18,
+                      wbHeight3: 3,
+                    ),
+                    /*--------------------------------- Abstand ---*/
+                    wbSizedBoxHeight8,
                     /*--------------------------------- Notizen zum Ansprechpartner ---*/
                     WbTextFormField(
                       controller: controllerCS016, // Notizen
@@ -1086,7 +1409,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
                       wbFontSize12: 18,
                       wbHeight3: 3,
                     ),
-                    wbSizedBoxHeight16,
+                    wbSizedBoxHeight8,
                     // const WBTextfieldNotice(
                     //     headlineText: "Notizen zum Ansprechpartner:",
                     //     hintText: "Beispiele: Hobbys, Lieblingswein, usw."),

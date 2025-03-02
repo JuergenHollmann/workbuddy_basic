@@ -57,7 +57,7 @@ class CompanyMenu extends StatelessWidget {
                   children: [
                     /*--------------------------------- Alle Kontakte suchen und finden ---*/
                     WbButtonUniversal2(
-                      wbColor: wbColorAppBarBlue,
+                      wbColor: wbColorButtonGreen,
                       wbIcon: Icons.person_search_outlined,
                       wbIconSize40: 40,
                       wbText: 'Alle Kontakte\nSUCHEN und FINDEN',
@@ -85,7 +85,7 @@ class CompanyMenu extends StatelessWidget {
                     ),
                     /*--------------------------------- Kontakt NEU anlegen ---*/
                     WbButtonUniversal2(
-                      wbColor: wbColorButtonGreen,
+                      wbColor: wbColorAppBarBlue,
                       wbIcon: Icons.person_add_alt_1_outlined,
                       wbIconSize40: 40,
                       wbText: 'Einen Kontakt \nNEU anlegen',

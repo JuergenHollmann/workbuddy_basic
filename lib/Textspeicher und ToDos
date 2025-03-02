@@ -2,14 +2,19 @@
 APK in VSCode erstellen:
 
 Schritt 1: Im Terminal eingeben "flutter build apk --split-per-abi"
-Schritt 2: Im Terminal eingeben "cd build/app/outputs/flutter-apk/"
-Schritt 2: Im Terminal eingeben "open ."
+Schritt 2: Im Terminal "build/app/outputs/flutter-apk/app-arm64-v8a-release.apk" mit gedrückter "cmd-Taste" anklicken.
+Schritt 3: Aus dem Explorer in VSCode die erstellte Datei auf den Desktop ziehen (kopieren) und ggf. nach Wunsch umbenennen.
+Schritt 4: GoogleDrive öffnen und "+ Neu/Dateien hochladen" anklicken, die Datei auswählen. 
+Schritt 5: Vom GoogleDrive auf das Smartphone herunterladen + installieren (oder direkt anklicken zum installieren).
 
+Wenn man im Terminal weiterarbeiten möchte: 
+Schritt 3: Im Terminal eingeben "cd build/app/outputs/flutter-apk/".
+Schritt 4: Im Terminal eingeben "open .".
 —> es öffnet sich der Ordner ...
--> am besten die Datei "app-armeabi-v7a-release.apk" dublizieren und dann neu benennen
--> Muster: "WorkBuddy - Version 0.12.31.apk"
-—> "WorkBuddy - Version 0.12.31.apk" in GoogleDrive kopieren (als Sicherung und zum herunterladen)
-—> "WorkBuddy - Version 0.12.31.apk" auf das Smartphone herunterladen + installieren (oder direkt anklicken zum installieren)
+-> am besten die Datei "app-armeabi-v7a-release.apk" dublizieren und dann NEU benennen.
+-> Muster: "WorkBuddy - 0.03.01.apk" (oder jede andere beliebige Bezeichnung - ACHTUNG: Suffix ".apk" beibehalten!).
+—> "WorkBuddy - 0.03.01.apk" in GoogleDrive kopieren (als Sicherung und zum herunterladen).
+—> "WorkBuddy - 0.03.01.apk" auf das Smartphone herunterladen + installieren (oder direkt anklicken zum installieren).
 
 Hinweis: „arm64-v8a“ ist auf dem BlackView BV9300 nicht kompatibel.
 /*----------------------------------------------------------------------------------*/
@@ -19,6 +24,25 @@ Hinweis: „arm64-v8a“ ist auf dem BlackView BV9300 nicht kompatibel.
 ⬅️ Pfeil nach links
 ➡️ Pfeil nach rechts
 👍 Hand OK
+
+
+                                    /*--------------------------------- mehrfach verschachtelter ternärer Operator ---*/
+                                    (nextY == 0 && nextM == 0 && nextD == 0)
+                                        ? '---> ist UNBEKANNT!'
+                                        : (nextY == 1)
+                                            ? '$ageY Jahr + $nextM Monate + $nextD Tage'
+                                            : (nextY == 0)
+                                                ? '$nextM Monate + $nextD Tage'
+                                                : (nextM == 1)
+                                                    ? '$ageY Jahr + $nextM Monat + $nextD Tage'
+                                                    : (nextM == 0)
+                                                        ? '$nextY Jahre + $nextD Tage'
+                                                        : (nextD == 1)
+                                                            ? '$ageY Jahr + $nextM Monat + $nextD Tag'
+                                                            : (nextD == 0)
+                                                                ? '$nextY Jahre + $nextM Monate'
+                                                                : '$ageY Jahre + $nextM Monate + $nextD Tage',
+                                    /*--------------------------------- *** ---*/
 
 */
 // '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
