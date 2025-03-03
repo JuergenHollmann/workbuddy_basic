@@ -13,6 +13,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:workbuddy/config/wb_button_universal_2.dart';
 import 'package:workbuddy/config/wb_colors.dart';
+import 'package:workbuddy/config/wb_dialog_2buttons.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
 import 'package:workbuddy/config/wb_text_form_field.dart';
 import 'package:workbuddy/config/wb_text_form_field_only_date.dart';
@@ -82,7 +83,7 @@ class DatabaseHelper {
     Directory documentsDir = await getApplicationDocumentsDirectory();
     String dbPath = join(documentsDir.path, "JOTHAsoft.FiveStars.db");
     bool dbExists = await databaseExists(dbPath);
-    
+
     if (!dbExists) {
       ByteData data = await rootBundle.load("assets/JOTHAsoft.FiveStars.db");
       List<int> bytes = data.buffer.asUint8List();
@@ -1977,24 +1978,37 @@ class _CompanyScreenState extends State<CompanyScreen> {
                         wbWidth155: 398,
                         wbHeight60: 60,
                         wbOnTap: () async {
-                          log("1671 - CompanyScreen - Daten LÖSCHEN - geklickt");
+                          log("1981 - CompanyScreen - Daten LÖSCHEN - geklickt");
                           /*--------------------------------- Sound ---*/
                           player
                               .play(AssetSource("sound/sound03enterprise.wav"));
                           /*--------------------------------- Alert-Dialog ---*/
                           showDialog(
-                              context: context,
-                              builder: (context) =>
-                                  const WbDialogAlertUpdateComingSoon(
-                                    headlineText: 'headlineText',
-                                    contentText: 'contentText',
-                                    actionsText: 'Ja',
-                                  ));
+                            context: context,
+                            builder: (context) => WBDialog2Buttons(
+                              headLineText: 'ACHTUNG:\nDaten werden gelöscht!',
+                              descriptionText:
+/*--- Der Text muss hier genaus so formatiert werden - ANFANG ---*/
+                                  '''
+Möchtest Du jetzt die Daten von
+
+    ${controllerCS014.text} • ${controllerCS002.text} ${controllerCS003.text} •
+    ${controllerCS005.text}
+    ${controllerCS006.text} ${controllerCS007.text}
+    ${controllerCS030.text}
+
+wirklich endgültig löschen?
+''',
+/*--- Der Text muss bis hier genaus so formatiert sein - ENDE ---*/
+                            ),
+                          );
+                          /*--------------------------------- Navigator ---*/
+                          Navigator.pop(context);
                           /*--------------------------------- Snackbar ---*/
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: wbColorButtonDarkRed,
+                            backgroundColor: wbColorButtonGreen,
                             content: Text(
-                              "Die Daten von\n${controllerCS002.text} ${controllerCS003.text} wurden erfolgreich GELÖSCHT!",
+                              "Die Daten von\n${controllerCS002.text} ${controllerCS003.text} wurden NICHT gelöscht!",
                               style: TextStyle(
                                 fontSize: 28,
                                 fontWeight: FontWeight.bold,
@@ -2002,10 +2016,10 @@ class _CompanyScreenState extends State<CompanyScreen> {
                               ),
                             ),
                           ));
+
                           /*--------------------------------- LÖSCHUNG aus der SQL ---*/
-                          // await updateData({}); // Datensatz aktualisieren
-                          await deleteData({}); // Datensatz löschen
-                          log('1689 - CompanyScreen - Daten GEÖSCHT!');
+                          // await deleteData({}); // Datensatz löschen
+                          // log('1689 - CompanyScreen - Daten GEÖSCHT!');
                           /*--------------------------------- Navigator.push ---*/
                           Navigator.push(
                             // ignore: use_build_context_synchronously

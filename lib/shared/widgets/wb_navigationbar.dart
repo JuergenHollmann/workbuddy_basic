@@ -1,7 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_exit_app/flutter_exit_app.dart';
 import 'package:provider/provider.dart';
+import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_dialog_2buttons.dart';
 import 'package:workbuddy/features/home/screens/home_screen.dart';
 import 'package:workbuddy/features/settings_menu.dart';
@@ -142,7 +144,7 @@ class _WbNavigationbarState extends State<WbNavigationbar> {
                               headlineText:
                                   'Ein paar Informationen zu WorkBuddy',
                               contentText:
-                                  'Hallo ${value.currentUser},\nDu benutzt zur Zeit ${context.watch<CurrentAppVersionProvider>().currentAppVersion}.\n\n- Mit "Herz" ❤️ und 🖐️ "Hand"\n- gemacht im 🇩🇪 Schwabenland.\n\nDie App wird ständig weiterentwickelt ... Hast Du konstruktive Kritik oder Anregungen? Dann sende einfach eine E-Mail direkt an den Entwickler.\n\nKontaktinformationen:\n• Entwickler: Jürgen Hollmann\n• E-Mail: JOTHAsoft@gmail.com\n• Telefon: +49-178-9697-193\n\nInformation: NB-0136',
+                                  'Hallo ${value.currentUser},\nDu benutzt zur Zeit ${context.watch<CurrentAppVersionProvider>().currentAppVersion}.\n\n- Mit "Herz" ❤️ und 🖐️ "Hand"\n- gemacht im 🇩🇪 Schwabenland.\n\nDie App wird ständig weiterentwickelt ... Hast Du konstruktive Kritik oder Anregungen? Dann sende einfach eine E-Mail direkt an den Entwickler.\n\nKontaktinformationen:\n• Entwickler:\n  Jürgen Hollmann\n• E-Mail:\n  JOTHAsoft@gmail.com\n• Telefon:\n  +49-178-9697-193\n\nInformation: NB-0136',
                               actionsText: 'OK 👍',
                             ));
                     /*--------------------------------- *** ---*/
@@ -165,9 +167,38 @@ class _WbNavigationbarState extends State<WbNavigationbar> {
                       context: context,
                       builder: (BuildContext context) => WBDialog2Buttons(
                         headLineText:
-                            "Hey ${value.currentUser},\nmöchtest Du jetzt wirklich diese tolle WorkBuddy-App beenden?",
+                            'Hey ${value.currentUser},\nmöchtest Du jetzt die WorkBuddy-App beenden?',
                         descriptionText:
-                            "Bevor Du diese tolle WorkBuddy-App beendest, denke bitte daran:\n\n Bei aller Aufregung sollten wir aber nicht vergessen, dass Al Bundy im Jahr 1966 vier Touchdowns in einem Spiel gemacht hat und damit den den Polk High School Panthers zur Stadtmeisterschaft verholfen hat!\n\nAußerdem sollte man auf gesunde Ernährung achten, deshalb empfehle ich täglich ein gutes Käsebrot (für Vegetarier und Veganer natürlich auch gerne mit veganer Butter).\n\nWenn du keinen Käse magst, dann kannst du natürlich auch ein Wurstbrot essen, aber dann ist das logischerweise wiederum nicht vegan (aber es gibt ja auch vegane Wurst) und in diesem Falle kannst du eben auch die Wurst weglassen, wenn Du eine vegane Butter auf dem Brot hast. \n\nWarum schreibe ich das alles hier hin?\n\nGanz einfach:\nWeil ich zeigen wollte, dass diese Textzeilen SCROLLBAR sind.",
+                            'Wenn die App hier beendet wird, musst Du dich später wieder einloggen.\n\nWenn Du WorkBuddy im Hintergrund einfach weiterlaufen läßt, hast Du schnelleren Zugriff auf deine Daten.',
+                        wbText2: "Ja • Beenden",
+                        wbOnTap2: () {
+                          Navigator.of(context).pop();
+                          log('0185 - WbNavigationbar - Button 2 wurde angeklickt');
+
+                          /*--------------------------------- Snackbar ---*/
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: wbColorOrangeDarker,
+                            content: Text(
+                              "Danke für das Benutzen der WorkBuddy-App ... 😉",
+                              style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ));
+
+                          /*--------------------------------- *** ---*/
+                          log('0199 - WbNavigationbar - App wird beendet ...');
+                          /*--- Noch 2 Sekunden warten, bevor die App beendet wird ---*/
+                          Future.delayed(
+                            const Duration(seconds: 2),
+                            () {
+                              FlutterExitApp.exitApp(iosForceExit: true);
+                            },
+                          );
+                          /*--------------------------------- *** ---*/
+                        },
                       ),
                     );
                     /*--------------------------------- AlertDialog ENDE ---*/

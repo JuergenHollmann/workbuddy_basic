@@ -107,7 +107,7 @@ class _ContactListState extends State<ContactList> {
                 child: WbTextFormFieldShadowWith2Icons(
                   controller: _searchController,
                   labelText: 'Suche Kontakte',
-                  hintText: 'Suche nach Vorname, Nachname, Firma oder Ort 🔎',
+                  hintText: 'Suche Vorname, Nachname, Firma oder Ort',
                   prefixIcon: Icons.search,
                   suffixIcon: Icons.delete_forever,
                   fillColor: Colors.yellow,
@@ -126,12 +126,6 @@ class _ContactListState extends State<ContactList> {
                     });
                     log('0093 - ContactList - Suchfeld - value: $value');
                   },
-                  // onTap: () {
-                  //   setState(() {
-                  //   data = [];
-                  //   });
-                  //   fetchData();
-                  // }
                   ),
                 ),
               /*--------------------------------- Anzahl der Kontakte ---*/
