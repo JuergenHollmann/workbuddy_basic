@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
+import 'dart:developer';
 import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 class DatabaseSetup extends StatefulWidget {
   const DatabaseSetup({super.key});
@@ -25,15 +27,21 @@ class _DatabaseSetupState extends State<DatabaseSetup> {
     // Pfad zur Datenbank im lokalen Speicher
     final String dbPath =
         join(await getDatabasesPath(), 'JOTHAsoft.WorkBuddy.db');
+    log('0030 - DatasbaseSetup - dbPath: $dbPath');
 
     // Überprüfen, ob die Datenbank bereits existiert
     bool dbExists = await File(dbPath).exists();
+    log('0034 - DatasbaseSetup - dbExists: $dbExists');
 
     if (!dbExists) {
+      log('0037 - DatasbaseSetup - Datenbank existiert nicht, erstelle eine leere Kopie');
       // Datenbank aus dem Assets-Ordner kopieren
       ByteData data = await rootBundle.load('assets/JOTHAsoft.WorkBuddy.db');
       List<int> bytes = data.buffer.asUint8List();
       await File(dbPath).writeAsBytes(bytes);
+      log('0042 - DatasbaseSetup - Datenbank aus dem Assets-Ordner kopiert');
+      _createTables(await openDatabase(dbPath));
+      log('0044 - DatasbaseSetup - Tabellen erstellt im Pfad: $dbPath');
     }
 
     // Datenbank öffnen
@@ -47,6 +55,7 @@ class _DatabaseSetupState extends State<DatabaseSetup> {
     });
   }
 
+  /*--------------------------------- Tabellen erstellen ---*/
   Future<void> _createTables(Database database) async {
     // Tabelle "KontaktDaten"
     await database.execute('''
@@ -196,7 +205,7 @@ class _DatabaseSetupState extends State<DatabaseSetup> {
       )
     ''');
 
-        // Tabelle "EinkaufVerkauf"
+    // Tabelle "EinkaufVerkauf"
     await database.execute('''
       CREATE TABLE IF NOT EXISTS EinkaufVerkauf (
         TEV_000 INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -233,6 +242,41 @@ class _DatabaseSetupState extends State<DatabaseSetup> {
       )
     ''');
 
+    // /*--- Tabelle "KontaktDaten", wie Sie im "DB Browser for SQLite" erstellt wird: ---*/
+    // await database.execute(''' CREATE TABLE "KontaktDaten" (
+    //     "TKD_000" INTEGER,
+    //     "TKD_001" TEXT,
+    //     "TKD_002" TEXT,
+    //     "TKD_003" TEXT,
+    //     "TKD_004" TEXT,
+    //     "TKD_005" TEXT,
+    //     "TKD_006" TEXT,
+    //     "TKD_007" TEXT,
+    //     "TKD_008" TEXT,
+    //     "TKD_009" TEXT,
+    //     "TKD_010" TEXT,
+    //     "TKD_011" TEXT,
+    //     "TKD_012" TEXT,
+    //     "TKD_013" TEXT,
+    //     "TKD_014" TEXT,
+    //     "TKD_015" TEXT,
+    //     "TKD_016" TEXT,
+    //     "TKD_017" TEXT,
+    //     "TKD_018" TEXT,
+    //     "TKD_019" TEXT,
+    //     "TKD_020" TEXT,
+    //     "TKD_021" TEXT,
+    //     "TKD_022" TEXT,
+    //     "TKD_023" TEXT,
+    //     "TKD_024" TEXT,
+    //     "TKD_025" TEXT,
+    //     "TKD_026" TEXT,
+    //     "TKD_027" TEXT,
+    //     "TKD_028" TEXT,
+    //     "TKD_029" TEXT,
+    //     "TKD_030" TEXT
+    //   )
+    // ''');
   }
 
   @override

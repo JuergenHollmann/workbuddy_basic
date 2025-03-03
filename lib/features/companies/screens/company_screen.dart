@@ -427,7 +427,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
               widget.contact['TKD_Feld_004'] ?? ''; // Geburtstag
           controllerCS005.text = widget.contact['TKD_Feld_005'] ?? ''; // Straße
           controllerCS006.text = widget.contact['TKD_Feld_006'] ?? ''; // PLZ
-          controllerCS007.text = widget.contact['TKD_Feld_007'] ?? ''; // Stadt
+          controllerCS007.text = widget.contact['TKD_Feld_007'] ?? ''; // Ort
           controllerCS008.text =
               widget.contact['TKD_Feld_008'] ?? ''; // Telefon 1
           controllerCS009.text =

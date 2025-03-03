@@ -24,7 +24,10 @@ Hinweis: „arm64-v8a“ ist auf dem BlackView BV9300 nicht kompatibel.
 ⬅️ Pfeil nach links
 ➡️ Pfeil nach rechts
 👍 Hand OK
-
+🚀 Rakete
+😃 Smiley
+🔎 Lupe nach rechts
+🔍 Lupe nach links
 
                                     /*--------------------------------- mehrfach verschachtelter ternärer Operator ---*/
                                     (nextY == 0 && nextM == 0 && nextD == 0)

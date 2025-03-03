@@ -43,6 +43,10 @@ class ContactList extends StatefulWidget {
   _ContactListState createState() => _ContactListState();
 }
 
+/*--------------------------------- Controller ---*/
+final TextEditingController _searchController = TextEditingController();
+
+/*--------------------------------- State ---*/
 class _ContactListState extends State<ContactList> {
   List<Map<String, dynamic>> data = [];
   late Database db;
@@ -98,24 +102,38 @@ class _ContactListState extends State<ContactList> {
           child: Column(
             children: [
               /*--------------------------------- Suchfeld ---*/
-              Padding(
+                Padding(
                 padding: const EdgeInsets.fromLTRB(8, 8, 0, 0),
                 child: WbTextFormFieldShadowWith2Icons(
-                    labelText: 'Vor- oder Nachname',
-                    hintText: 'Suche Vor- oder Nachname',
-                    prefixIcon: Icons.search,
-                    suffixIcon: Icons.clear,
-                    fillColor: Colors.yellow,
-                    labelBackgroundColor: Colors.yellow,
-                    onChanged: (value) async {
-                      var query = await db.rawQuery(
-                          "SELECT * FROM KundenDaten WHERE TKD_Feld_002 LIKE '%$value%' OR TKD_Feld_003 LIKE '%$value%'");
-                      setState(() {
-                        data = query;
-                      });
-                      log('0093 - ContactList - Suchfeld - value: $value');
-                    }),
-              ),
+                  controller: _searchController,
+                  labelText: 'Suche Kontakte',
+                  hintText: 'Suche nach Vorname, Nachname, Firma oder Ort 🔎',
+                  prefixIcon: Icons.search,
+                  suffixIcon: Icons.delete_forever,
+                  fillColor: Colors.yellow,
+                  // inputTextAlign: TextAlign.start,
+                  textAlignVertical: TextAlignVertical.center,
+                  labelBackgroundColor: Colors.yellow,
+                  onChanged: (value) async {
+                    var query = await db.rawQuery('''
+                      SELECT * FROM KundenDaten WHERE
+                      TKD_Feld_002 LIKE '%$value%' OR
+                      TKD_Feld_003 LIKE '%$value%' OR
+                      TKD_Feld_007 LIKE '%$value%' OR
+                      TKD_Feld_014 LIKE '%$value%' ''');
+                    setState(() {
+                    data = query;
+                    });
+                    log('0093 - ContactList - Suchfeld - value: $value');
+                  },
+                  // onTap: () {
+                  //   setState(() {
+                  //   data = [];
+                  //   });
+                  //   fetchData();
+                  // }
+                  ),
+                ),
               /*--------------------------------- Anzahl der Kontakte ---*/
               Padding(
                 padding: const EdgeInsets.only(top: 12),

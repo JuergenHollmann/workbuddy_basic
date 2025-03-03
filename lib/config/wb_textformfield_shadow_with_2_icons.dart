@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/features/authentication/screens/p01_login_screen.dart';
+import 'package:workbuddy/features/companies/screens/company_screen.dart';
 
 class WbTextFormFieldShadowWith2Icons extends StatelessWidget {
   const WbTextFormFieldShadowWith2Icons({
@@ -164,15 +165,28 @@ class WbTextFormFieldShadowWith2Icons extends StatelessWidget {
                 size: suffixIconSize32 ?? 32,
               ),
               onPressed: () {
-                log('0161 - WbTextFormFieldShadowWith2Icons - SuffixIcon "onPressed" ist je nachdem welches Icon angezeigt wird, unterschiedlich!');
-
+                log('0168 - WbTextFormFieldShadowWith2Icons - SuffixIcon "onPressed" ist je nachdem welches Icon angezeigt wird, unterschiedlich!');
                 if (suffixIcon == Icons.replay) {
-                  controller!.clear();
+                  if (controller != null) {
+                    controller!.clear();
+                    log('0172 - WbTextFormFieldShadowWith2Icons - SuffixIcon "onPressed" - Text wurde gelöscht!');
+                  }
                   //_refreshPage();
+                } else if (suffixIcon == Icons.cancel) {
+                  if (controller != null) {
+                    controller!.clear();
+                    log('0178 - WbTextFormFieldShadowWith2Icons - SuffixIcon "onPressed" - Text wurde gelöscht!');
+                  }
                 } else if (suffixIcon == Icons.front_hand_outlined) {
-                  controller!.text = "Bitte warten ...";
+                  if (controller != null) {
+                    controller!.text = "Bitte warten ...";
+                    log('0183 - WbTextFormFieldShadowWith2Icons - SuffixIcon "onPressed" - Text: "Bitte warten ..."');
+                  }
                 } else if (suffixIcon == Icons.delete_forever) {
-                  controller!.text = "Bitte warten ...";
+                  if (controller != null) {
+                    controller!.clear();
+                    log('0188 - WbTextFormFieldShadowWith2Icons - SuffixIcon "onPressed" - Text wurde gelöscht!');
+                  }
                 } else if (suffixIcon == Icons.visibility_outlined) {
                   // Das Passwort ist sichtbar!
                   visibilityPassword = false;
@@ -231,7 +245,6 @@ class WbTextFormFieldShadowWith2Icons extends StatelessWidget {
           onChanged: onChanged,
           onTap: onTap,
           //onPressed: context,
-          //onSuffixIconTap: onSuffixIconTap,
 
           /*--- onChanged ---*/
           // onChanged: (String newInputPassword) {
