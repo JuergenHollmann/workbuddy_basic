@@ -46,58 +46,58 @@ class _MainSelectionScreenState extends State<MainSelectionScreen> {
         elevation: 20, // graue Zone für den Schatten unter der AppBar
       ),
       /*--------------------------------- Logo ---*/
-      body: Column(
-        children: [
-          const Image(
-              image: AssetImage(
-            "assets/workbuddy_patch_and_slogan.png",
-          )),
-          /*--------------------------------- GridView ---*/
-          // Expanded(
-          //   child: Padding(
-          //     padding: const EdgeInsets.fromLTRB(32, 24, 32, 16),
-          //     child: GridView.count(
-          //       crossAxisCount: 2, // Anzahl der Spalten
-          //       crossAxisSpacing: 1, // Platz zwischen den Spalten
-          //       mainAxisSpacing: 1, // Platz zwischen den Reihen
-          //       childAspectRatio: 1.1, // Verhältnis Höhe zu Breite
-          //       // /*--------------------------------- GridView children ---*/
-          //       children: [
-          //         ButtonContacts(),
-          //         ButtonContacts(),
-          //         ButtonContacts(),
-          //         ButtonContacts(),
-          //         // ButtonAccounting(),
-          //         // ButtonContacts(),
-          //         // ButtonTasksAndToDos(),
-          //         // ButtonCommunication(),
-          //       ],
-          //     ),
-          //   ),
-          // ),
-          /*--------------------------------- Alternative zur GridView ---*/
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ButtonAccounting(),
-              ButtonContacts(),
-              // ButtonContacts(),
-              //ButtonCommunication(),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              //ButtonTasksAndToDos(),
-              ButtonCommunication(),
-              ButtonTasksAndToDos(),
-            ],
-          ),
-          /*--------------------------------- Abstand ---*/
-          wbSizedBoxHeight8,
-          /*--------------------------------- Wer ist angemeldet? ---*/
-          Expanded(
-            child: Padding(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const Image(
+                image: AssetImage(
+              "assets/workbuddy_patch_and_slogan.png",
+            )),
+            /*--------------------------------- GridView ---*/
+            // Expanded(
+            //   child: Padding(
+            //     padding: const EdgeInsets.fromLTRB(32, 24, 32, 16),
+            //     child: GridView.count(
+            //       crossAxisCount: 2, // Anzahl der Spalten
+            //       crossAxisSpacing: 1, // Platz zwischen den Spalten
+            //       mainAxisSpacing: 1, // Platz zwischen den Reihen
+            //       childAspectRatio: 1.1, // Verhältnis Höhe zu Breite
+            //       // /*--------------------------------- GridView children ---*/
+            //       children: [
+            //         ButtonContacts(),
+            //         ButtonContacts(),
+            //         ButtonContacts(),
+            //         ButtonContacts(),
+            //         // ButtonAccounting(),
+            //         // ButtonContacts(),
+            //         // ButtonTasksAndToDos(),
+            //         // ButtonCommunication(),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+            /*--------------------------------- Alternative zur GridView ---*/
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ButtonAccounting(),
+                ButtonContacts(),
+                // ButtonContacts(),
+                //ButtonCommunication(),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                //ButtonTasksAndToDos(),
+                ButtonCommunication(),
+                ButtonTasksAndToDos(),
+              ],
+            ),
+            /*--------------------------------- Abstand ---*/
+            wbSizedBoxHeight8,
+            /*--------------------------------- Wer ist angemeldet? ---*/
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Consumer<CurrentUserProvider>(
                 builder: (context, value, child) => Text(
@@ -111,11 +111,11 @@ class _MainSelectionScreenState extends State<MainSelectionScreen> {
                 ),
               ),
             ),
-          ),
-          /*--------------------------------- Abstand ---*/
-          wbSizedBoxHeight32,
-          /*--------------------------------- *** ---*/
-        ],
+            /*--------------------------------- Abstand ---*/
+            wbSizedBoxHeight32,
+            /*--------------------------------- *** ---*/
+          ],
+        ),
       ),
       /*--------------------------------- NavigationBar ---*/
       bottomNavigationBar: WbNavigationbar(

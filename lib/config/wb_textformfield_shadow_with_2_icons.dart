@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/features/authentication/screens/p01_login_screen.dart';
-import 'package:workbuddy/features/companies/screens/company_screen.dart';
 
 class WbTextFormFieldShadowWith2Icons extends StatelessWidget {
   const WbTextFormFieldShadowWith2Icons({
