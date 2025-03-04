@@ -119,8 +119,11 @@ class _MainSelectionScreenState extends State<MainSelectionScreen> {
       ),
       /*--------------------------------- NavigationBar ---*/
       bottomNavigationBar: WbNavigationbar(
-        wbImageAssetImage: AssetImage(
-            "assets/iconbuttons/icon_button_einstellungen_rund_3d_neon_viel_breiter.png"), // hat keine Auswirkung! - 0124 - MainSelectionScreen
+        wbIcon1: AssetImage(
+            'assets/iconbuttons/icon_button_login_rund_3d_neon.png'), // icon_button_home_rund_3d_neon
+
+        wbTextButton1: 'Neuer Login',
+
       ),
       /*--------------------------------- *** ---*/
     );

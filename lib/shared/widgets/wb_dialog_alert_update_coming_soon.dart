@@ -32,48 +32,53 @@ actionsText: "OK 👍",
 ),);/*--------------------------------- showAlertDialog ENDE ---*/
 /*-----------------------------------------------------------------*/*/
       onTap: onTap,
-      child: AlertDialog(
-        scrollable: true,
-        title: Text(
-          headlineText,
-          style: const TextStyle(
-              fontSize: 24, fontWeight: FontWeight.w900, color: Colors.blue),
-        ),
-        content: Text(
-          contentText,
-          // Individueller Text - Beispiel:
-          // 'Diese Funktion kommt bald in einem kostenlosen Update!\n\nHinweis: CS-0000'
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: wbColorLogoBlue,
+      child: Padding(
+        padding: const EdgeInsets.all(0),
+        child: AlertDialog(
+                insetPadding: const EdgeInsets.all(8),
+
+          scrollable: true,
+          title: Text(
+            headlineText,
+            style: const TextStyle(
+                fontSize: 24, fontWeight: FontWeight.w900, color: Colors.blue),
           ),
-        ),
-        actions: [
-          TextButton(
-            child: Text(
-              actionsText, // "OK 👍",
-              style: TextStyle(
-                color: Colors.blue,
-                shadows: [
-                  BoxShadow(
-                    color: Colors.black,
-                    blurRadius: 8,
-                    offset: Offset(4, 4),
-                    spreadRadius: 0,
-                  )
-                ],
-                fontSize: 40,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 2, // Zwischenraum der Buchtstaben
-              ),
+          content: Text(
+            contentText,
+            // Individueller Text - Beispiel:
+            // 'Diese Funktion kommt bald in einem kostenlosen Update!\n\nHinweis: CS-0000'
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: wbColorLogoBlue,
             ),
-            onPressed: () {
-              log("0071 - WbDialogAlertUpdateComingSoon - OK wurde angeklickt");
-              Navigator.of(context).pop();
-            },
           ),
-        ],
+          actions: [
+            TextButton(
+              child: Text(
+                actionsText, // "OK 👍",
+                style: TextStyle(
+                  color: Colors.blue,
+                  shadows: [
+                    BoxShadow(
+                      color: Colors.black,
+                      blurRadius: 8,
+                      offset: Offset(4, 4),
+                      spreadRadius: 0,
+                    )
+                  ],
+                  fontSize: 40,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 2, // Zwischenraum der Buchtstaben
+                ),
+              ),
+              onPressed: () {
+                log("0071 - WbDialogAlertUpdateComingSoon - OK wurde angeklickt");
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

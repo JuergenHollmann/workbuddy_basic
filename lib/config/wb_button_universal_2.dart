@@ -1,8 +1,5 @@
 // Todo's:
 
-/* Wechsle die Farbe des Buttons beim Anklicken:
-String color = isSunny ? 'yellow' : 'blue'; // ternärer Operator? */
-
 /* anstelle von "MainSelectionScreen" eine Liste mit Verknüpfungen "NavigateToPageName" zu allen Seiten anlegen:
 builder: (context) => const MainSelectionScreen(), // NavigateToPageName(), //MainSelectionScreen(),*/
 
@@ -92,22 +89,25 @@ class WbButtonUniversal2 extends StatelessWidget {
               ),
             ),
             /*--------------------------------- Text ---*/
-            Text(
-              maxLines: null,
-              wbText,
-              style: TextStyle(
-                color: Colors.white,
-                shadows: const [
-                  BoxShadow(
-                    color: Colors.black,
-                    blurRadius: 8,
-                    offset: Offset(4, 4),
-                    spreadRadius: 0,
-                  )
-                ],
-                fontSize: wbFontSize24,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 2, // Zwischenraum der Buchtstaben
+            Expanded(
+              child: Text(
+                maxLines: null,
+                wbText,
+                // textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  shadows: const [
+                    BoxShadow(
+                      color: Colors.black,
+                      blurRadius: 8,
+                      offset: Offset(4, 4),
+                      spreadRadius: 0,
+                    )
+                  ],
+                  fontSize: wbFontSize24,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 2, // Zwischenraum der Buchtstaben
+                ),
               ),
             ),
           ],

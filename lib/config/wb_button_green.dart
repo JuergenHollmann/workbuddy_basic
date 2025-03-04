@@ -36,9 +36,6 @@ class WBGreenIncomeButton extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () {
-// wechsle die Farbe des Buttons beim Anklicken:
-// String color = isSunny ? 'yellow' : 'blue'; // ternärer Operator
-
           log("0042 - WBGreenIncomeButton - Wechsle zur Seite 2 = MainSelectionScreen");
           Navigator.push(
             context,

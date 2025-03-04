@@ -102,7 +102,7 @@ class _ContactListState extends State<ContactList> {
           child: Column(
             children: [
               /*--------------------------------- Suchfeld ---*/
-                Padding(
+              Padding(
                 padding: const EdgeInsets.fromLTRB(8, 8, 0, 0),
                 child: WbTextFormFieldShadowWith2Icons(
                   controller: _searchController,
@@ -122,12 +122,12 @@ class _ContactListState extends State<ContactList> {
                       TKD_Feld_007 LIKE '%$value%' OR
                       TKD_Feld_014 LIKE '%$value%' ''');
                     setState(() {
-                    data = query;
+                      data = query;
                     });
                     log('0093 - ContactList - Suchfeld - value: $value');
                   },
-                  ),
                 ),
+              ),
               /*--------------------------------- Anzahl der Kontakte ---*/
               Padding(
                 padding: const EdgeInsets.only(top: 12),
@@ -196,7 +196,8 @@ class _ContactListState extends State<ContactList> {
                                   // leading: const Icon(Icons.person),
                                   /*--------------------------------- Überschrift ---*/
                                   title: Padding(
-                                      padding: const EdgeInsets.only(top: 16,
+                                      padding: const EdgeInsets.only(
+                                        top: 16,
                                         bottom: 4,
                                         right: 72,
                                       ),
@@ -282,7 +283,7 @@ class _ContactListState extends State<ContactList> {
                               left: 20,
                               child: Text(
                                 textAlign: TextAlign.center,
-                                contact['TKD_Feld_030'] ,
+                                contact['TKD_Feld_030'],
                                 style: TextStyle(
                                   color: Colors.blue,
                                   fontWeight: FontWeight.w900,
@@ -370,9 +371,12 @@ class _ContactListState extends State<ContactList> {
         ),
         /*--------------------------------- NavigationBar ---*/
         bottomNavigationBar: WbNavigationbar(
-          wbImageAssetImage: AssetImage(
-              "assets/iconbuttons/icon_button_einstellungen_rund_3d_neon_viel_breiter.png"), // hat keine Auswirkung! - 0124 - MainSelectionScreen
+          wbIcon1: AssetImage(
+            'assets/iconbuttons/icon_button_home_rund_3d_neon.png',
+          ),
+          wbTextButton1: 'Startseite',
         ),
+        /*--------------------------------- NavigationBar - ENDE ---*/
       ),
     );
   }

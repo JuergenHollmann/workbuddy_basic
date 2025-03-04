@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_dialog_2buttons.dart';
 import 'package:workbuddy/features/home/screens/home_screen.dart';
+import 'package:workbuddy/features/home/screens/main_selection_screen.dart';
 import 'package:workbuddy/features/settings_menu.dart';
 import 'package:workbuddy/shared/providers/current_app_version_provider.dart';
 import 'package:workbuddy/shared/providers/current_user_provider.dart';
@@ -15,28 +16,36 @@ import 'package:workbuddy/shared/widgets/wb_dialog_alert_update_coming_soon.dart
 class WbNavigationbar extends StatefulWidget {
   const WbNavigationbar({
     super.key,
-    required this.wbImageAssetImage,
+    //required this.wbImageAssetImage,
+    this.wbIcon1,
+    this.wbIcon2,
+    this.wbIcon3,
+    this.wbIcon4,
+    this.wbTextButton1,
+    this.wbTextButton2,
+    this.wbTextButton3,
+    this.wbTextButton4,
   });
 
-  //final ImageProvider<Object> imageButton;
-  //final Image imageButton;
-  final ImageProvider<Object> wbImageAssetImage;
-  //final String? wbImageAssetImage;
+  final ImageProvider<Object>? wbIcon1;
+  final ImageProvider<Object>? wbIcon2;
+  final ImageProvider<Object>? wbIcon3;
+  final ImageProvider<Object>? wbIcon4;
+  final String? wbTextButton1;
+  final String? wbTextButton2;
+  final String? wbTextButton3;
+  final String? wbTextButton4;
 
   @override
   State<WbNavigationbar> createState() => _WbNavigationbarState();
 }
 
 class _WbNavigationbarState extends State<WbNavigationbar> {
-  //String imageButton;
-  // get wbImageAssetImage =>
-  //     Image(image: AssetImage("assets/button_info.png")); //OK
-
-  get wbImageAssetImage => Image(
-        image: AssetImage(
-          "assets/iconbuttons/icon_button_einstellungen_rund_3d_neon.png",
-        ),
-      );
+  // get wbImageAssetImage => Image(
+  //       image: AssetImage(
+  //         "assets/iconbuttons/icon_button_einstellungen_rund_3d_neon.png",
+  //       ),
+  //     );
 
   final preferencesRepository = SharedPreferencesRepository();
   final prefs = SharedPreferencesRepository();
@@ -49,9 +58,7 @@ class _WbNavigationbarState extends State<WbNavigationbar> {
 
   @override
   Widget build(BuildContext context) {
-    /*--------------------------------- NavigationBarTheme ---*/
-    //String? wbImageAssetImage;
-    //var wbImageAssetImage;
+    log('0061 - WbNavigationBar - aktiviert');
     /*--------------------------------- *** ---*/
     return NavigationBarTheme(
       data: NavigationBarThemeData(
@@ -71,15 +78,12 @@ class _WbNavigationbarState extends State<WbNavigationbar> {
       /*--------------------------------- *** ---*/
       child: Container(
         width: MediaQuery.of(context).size.width, // gesamte Screen-Breite
-        // width: 398,
-        // height: 190,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [Colors.blue, Colors.black], //wbColorAppBarBlue
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             stops: [0.1, 0.5],
-            // tileMode: TileMode.mirror,
           ),
         ),
         child: Padding(
@@ -91,16 +95,15 @@ class _WbNavigationbarState extends State<WbNavigationbar> {
                 /*--- backgroundColor ist transparent, damit LinearGradient sichtbar ist ---*/
                 backgroundColor: Colors.transparent,
                 height: 110,
-                //indicatorColor: Colors.black,
+                // indicatorColor: Colors.black, // hat keinen Effekt
                 selectedIndex: 0, //currentIndex,
                 onDestinationSelected: (int index) {
-                  log("0076 - WbNavigationbar - Button-Index $index angeklickt");
-                  //currentIndex = index;
+                  log("0101 - WbNavigationbar - Button-Index $index angeklickt");
                   /*--------------------------------- Button (index 0) in der WbNavigationbar---*/
-                  if (index == 0) {
+                  if (index == 0 && widget.wbTextButton1 == 'Neuer Login') {
                     /*--- Navigiere zur WbHomePage wenn der Home-Button in der NavigationBar angeklickt wird
                     ----> von dort geht es automatisch weiter zum P01LoginScreen,  ---*/
-                    log('0084 - WbNavigationbar - Navigiere zur WbHomePage'); // anstatt direkt zum P01LoginScreen
+                    log('0106 - WbNavigationbar - Navigiere zur WbHomePage'); // anstatt direkt zum P01LoginScreen
                     /*--------------------------------- Navigator.push ---*/
                     Navigator.push(
                       context,
@@ -113,15 +116,18 @@ class _WbNavigationbarState extends State<WbNavigationbar> {
                       ),
                     );
                     /*--------------------------------- *** ---*/
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => P01LoginScreen(
-                    //         // title: 'WorkBuddy • save time and money!',
-                    //         // preferencesRepository: preferencesRepository,
-                    //         ),
-                    //   ),
-                    // );
+                  } else if (index == 0 &&
+                      widget.wbTextButton1 == 'Startseite') {
+                    /*--- Navigiere zur 'Startseite' = WbHomePage wenn der Home-Button in der NavigationBar angeklickt wird */
+                    log('0132 - WbNavigationbar - Navigiere zur WbHomePage'); // anstatt direkt zum P01LoginScreen
+                    /*--------------------------------- Navigator.push ---*/
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MainSelectionScreen(),
+                      ),
+                    );
+
                     /*--------------------------------- Button (index 1) in der WbNavigationbar---*/
                   } else if (index == 1) {
                     log('00125 - WbNavigationbar - Navigiere zur SettingsScreen');
@@ -136,32 +142,38 @@ class _WbNavigationbarState extends State<WbNavigationbar> {
                             ),
                       ),
                     );
-                    /*--------------------------------- Button (index 2) in der WbNavigationbar---*/
-                  } else if (index == 2) {
+
+                    /*---- Button (index 2 && widget.wbTextButton1 == 'Neuer Login') in der WbNavigationbar ---*/
+                  } else if (index == 2 &&
+                      widget.wbTextButton1 == 'Neuer Login') {
                     showDialog(
                         context: context,
                         builder: (context) => WbDialogAlertUpdateComingSoon(
                               headlineText:
-                                  'Ein paar Informationen zu WorkBuddy',
+                                  'Informationen zur Startseite von WorkBuddy',
                               contentText:
-                                  'Hallo ${value.currentUser},\nDu benutzt zur Zeit ${context.watch<CurrentAppVersionProvider>().currentAppVersion}.\n\n- Mit "Herz" ❤️ und 🖐️ "Hand"\n- gemacht im 🇩🇪 Schwabenland.\n\nDie App wird ständig weiterentwickelt ... Hast Du konstruktive Kritik oder Anregungen? Dann sende einfach eine E-Mail direkt an den Entwickler.\n\nKontaktinformationen:\n• Entwickler:\n  Jürgen Hollmann\n• E-Mail:\n  JOTHAsoft@gmail.com\n• Telefon:\n  +49-178-9697-193\n\nInformation: NB-0136',
+                                  'Hallo ${value.currentUser},\n\nDu befindest dich hier auf der "Startseite" von WorkBuddy.\n\nHier kannst Du deine Aktivitäten zentral verwalten und steuern.\n\nDu benutzt zur Zeit ${context.watch<CurrentAppVersionProvider>().currentAppVersion}.\n\n   • Mit "Herz" ❤️ und 🖐️ "Hand",\n   • gemacht im 🇩🇪 Schwabenland.\n\nWorkBuddy wird ständig weiterentwickelt.\n\nHast Du konstruktive Kritik oder Anregungen? Dann sende einfach eine E-Mail direkt an den Entwickler.\n\nKontaktinformationen:\n• Entwickler: Jürgen Hollmann\n• E-Mail: JOTHAsoft@gmail.com\n• Telefon:  +49-178-9697-193\n\nInfo: NB-0156',
                               actionsText: 'OK 👍',
                             ));
-                    /*--------------------------------- *** ---*/
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => WbInfoPage(
-                    //       title: 'WorkBuddy • Info',
-                    //       preferencesRepository: preferencesRepository,
-                    //     ),
-                    //   ),
-                    // );
-                    log('0165 - WbNavigationbar - Info wurde angezeigt √');
+                    log('0165 - WbNavigationbar - Info "Startseite" wurde angezeigt √');
+
+                    /*---- Button (index 2 && widget.wbTextButton1 == 'Startseite') in der WbNavigationbar ---*/
+                  } else if (index == 2 && widget.wbTextButton1 == 'Startseite') {
+                    showDialog(
+                        context: context,
+                        builder: (context) => WbDialogAlertUpdateComingSoon(
+                              headlineText:
+                                  'Informationen zur Kontaktliste von WorkBuddy',
+                              contentText:
+                                  'Hallo ${value.currentUser},\n\nDu befindest dich hier auf der "Kontaktliste" von WorkBuddy.\n\nHier werden alle deine Kontakte an einer Stelle zentral verwaltet, egal ob es nur Kontakte,Interessenten, Firmen, Lieferanten, Mitbewerber oder Mitarbeiter sind.\n\nDu kannst in der Suchfunktion (gelb) nach Vornamen, Nachnamen, Firmennamen oder nach Orten suchen.\n\nDurch anklicken der "Visitenkarte" kommst Du dann an alle witeren Informantionen.\n\nInfo: NB-0168',
+                              actionsText: 'OK 👍',
+                            ));
+                    log('0165 - WbNavigationbar - Info "Startseite" wurde angezeigt √');
+
                     /*--------------------------------- Button (index 3) in der WbNavigationbar---*/
                   } else if (index == 3) {
                     log('0171 - WbNavigationbar - Navigiere zur WbExitApp');
-                    /*--------------------------------- AlertDialog ---*/
+                    /*--------------------------------- AlertDialog - START ---*/
                     /* Abfrage ob die App geschlossen werden soll */
                     showDialog(
                       context: context,
@@ -204,36 +216,23 @@ class _WbNavigationbarState extends State<WbNavigationbar> {
                     /*--------------------------------- AlertDialog ENDE ---*/
                   }
                 },
+                /*--------------------------------- destinations ---*/
                 destinations: [
-                  /*--------------------------------- Button X ---*/
-                  // NavigationDestination(
-                  //   //icon: wbImageAssetImage, // funzt noch nicht
-                  //   //Image(image: AssetImage("assets/$wbImageAssetImage")), // OK nur wenn als String deklareirt ist
-                  //   // icon: Image(image: AssetImage("assets/button_info.png")),//OK
-                  //   icon: Image(
-                  //     image: AssetImage(
-                  //       "assets/iconbuttons/icon_button_home_rund_3d_neon.png",
-                  //     ),
-                  //   ),
-                  //   label: "Home",
-                  //   // enabled: true,
-                  // ),
                   /*--------------------------------- Button 1 ---*/
-                  const NavigationDestination(
-                    // icon: Image(image: AssetImage("assets/button_settings.png")),
+                  NavigationDestination(
                     icon: Image(
-                      image: AssetImage(
-                        "assets/iconbuttons/icon_button_login_rund_3d_neon.png",
-                      ),
+                      image: widget.wbIcon1 ??
+                          AssetImage(
+                            "assets/iconbuttons/icon_button_login_rund_3d_neon.png", // icon_button_home_rund_3d_neon
+                          ),
                     ),
-                    label: "Neuer Login",
+                    label: widget.wbTextButton1 ?? 'Neuer Login',
                   ),
                   /*--------------------------------- Button 2 ---*/
                   const NavigationDestination(
-                    // icon: Image(image: AssetImage("assets/button_settings.png")),
                     icon: Image(
                       image: AssetImage(
-                        "assets/iconbuttons/icon_button_einstellungen_rund_3d_neon.png",
+                        "assets/iconbuttons/icon_button_einstellungen_rund_3d_neon.png", // assets/button_settings.png
                       ),
                     ),
                     label: "Einstellungen",

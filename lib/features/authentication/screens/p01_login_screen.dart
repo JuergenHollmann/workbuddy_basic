@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_exit_app/flutter_exit_app.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workbuddy/config/wb_button_universal_2.dart';
@@ -20,7 +21,6 @@ import 'package:workbuddy/shared/providers/current_user_provider.dart';
 import 'package:workbuddy/shared/repositories/shared_preferences_repository.dart';
 import 'package:workbuddy/shared/widgets/wb_dialog_alert_update_coming_soon.dart';
 import 'package:workbuddy/shared/widgets/wb_divider_with_text_in_center.dart';
-import 'package:workbuddy/shared/widgets/wb_green_button.dart';
 
 class P01LoginScreen extends StatefulWidget {
   const P01LoginScreen({super.key});
@@ -619,71 +619,12 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
             /*--------------------------------- Abstand ---*/
             wbSizedBoxHeight8,
             /*--------------------------------- Login-Button ---*/
-            WBGreenButton(
-              onTap: () async {
-                /* Den Zustand des CurrentUserProvider aktualisieren */
-                context
-                    .read<CurrentUserProvider>()
-                    .currentUser; // funzt nicht 0616 - P01LoginScreen
-
-                /* Den eingetragenen Benutzer in den SharedPreferences speichern */
-                currentUserController.text = userNameTEC.text;
-                _saveCurrentUser(currentUserController.text);
-                log('0486 - P01LoginScreen - Speichere den Benutzernamen ---> ${currentUserController.text} <--- in den SharedPreferences');
-
-                /* Wenn kein Benutzer eingetragern ist, soll ein "Gast-User" in den SharedPreferences gespeichert werden */
-                if (currentUserController.text.isEmpty) {
-                  final prefs = await SharedPreferences.getInstance();
-                  currentUserController.text = "Gast-User";
-                  await prefs.setString(
-                      'currentUser', currentUserController.text);
-                  log('0489 - P01LoginScreen - KEIN Benutzername eingetragen, deswegen wurde ein ---> ${currentUserController.text} <--- gespeichert.');
-                }
-
-                /* Den currentUser nach Anklicken auf den "Login-Button" laden */
-                context.read<CurrentUserProvider>().loadCurrentUser();
-
-                /*--------------------------------- checkUserAndPassword ---*/
-                log("0440 - P01LoginScreen - überprüfe Benutzer UND Passwort");
-                if (userName == "Jürgen" && userPassword == "Pass") {
-                  log("0489 - P01LoginScreen - nach erfolgreicher Prüfung wechsle zur MainSelectionScreen");
-
-                  /* Den Zustand vom MainSelectionScreen aktualisieren */
-                  /* NICHT mit "Navigator.pushReplacement", da sonst der "Zurück-Button" nicht mehr funktioniert! */
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const MainSelectionScreen(),
-                    ),
-                  );
-                } else {
-                  /*--------------------------------- Snackbar (Toast) ---*/
-                  log("Das Passwort oder der Benutzername sind nicht korrekt ... 😉");
-                  player.play(AssetSource("sound/sound03enterprise.wav"));
-                  /*--------------------------------- Snackbar / Toast ---*/
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    backgroundColor: wbColorButtonDarkRed,
-                    content: Text(
-                      "Hinweis:\nDas Passwort oder der Benutzername sind NICHT korrekt ... 😉",
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ));
-                  /*--------------------------------- *** ---*/
-                }
-              },
-            ),
-            /*--------------------------------- Abstand ---*/
-            wbSizedBoxHeight8,
-            /*--------------------------------- Refresh / Reset = Login "NEU" starten ---*/
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 8, 12, 8),
               child: WbButtonUniversal2(
-                wbColor:
-                    isButton01Clicked ? wbColorButtonDarkRed : wbColorButtonBlue,
+                wbColor: isButton01Clicked
+                    ? wbColorButtonDarkRed
+                    : wbColorButtonGreen,
                 wbOnTapDown: (details) {
                   setState(() {
                     isButton01Clicked = true;
@@ -697,6 +638,94 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                 wbOnTapCancel: () {
                   setState(() {
                     isButton01Clicked = false;
+                  });
+                },
+                wbIcon: Icons.input_outlined,
+                wbIconSize40: 40,
+                wbText: '       Login',
+                wbFontSize24: 34,
+                wbWidth155: 155, // hat hier keine Auswirkung, weil die Breite des Buttons durch die das "Padding" bestimmt wird
+                wbHeight60: 60,
+
+                wbOnTap: () async { // WBGreenButton war hier vorher mit einer Funktion "final VoidCallback onTap" definiert;
+                  /* Den Zustand des CurrentUserProvider aktualisieren */
+                  context
+                      .read<CurrentUserProvider>()
+                      .currentUser; // funzt nicht 0616 - P01LoginScreen
+
+                  /* Den eingetragenen Benutzer in den SharedPreferences speichern */
+                  currentUserController.text = userNameTEC.text;
+                  _saveCurrentUser(currentUserController.text);
+                  log('0486 - P01LoginScreen - Speichere den Benutzernamen ---> ${currentUserController.text} <--- in den SharedPreferences');
+
+                  /* Wenn kein Benutzer eingetragern ist, soll ein "Gast-User" in den SharedPreferences gespeichert werden */
+                  if (currentUserController.text.isEmpty) {
+                    final prefs = await SharedPreferences.getInstance();
+                    currentUserController.text = "Gast-User";
+                    await prefs.setString(
+                        'currentUser', currentUserController.text);
+                    log('0489 - P01LoginScreen - KEIN Benutzername eingetragen, deswegen wurde ein ---> ${currentUserController.text} <--- gespeichert.');
+                  }
+
+                  /* Den currentUser nach Anklicken auf den "Login-Button" laden */
+                  context.read<CurrentUserProvider>().loadCurrentUser();
+
+                  /*--------------------------------- checkUserAndPassword ---*/
+                  log("0440 - P01LoginScreen - überprüfe Benutzer UND Passwort");
+                  if (userName == "Jürgen" && userPassword == "Pass") {
+                    log("0489 - P01LoginScreen - nach erfolgreicher Prüfung wechsle zur MainSelectionScreen");
+
+                    /* Den Zustand vom MainSelectionScreen aktualisieren */
+                    /* NICHT mit "Navigator.pushReplacement", da sonst der "Zurück-Button" nicht mehr funktioniert! */
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MainSelectionScreen(),
+                      ),
+                    );
+                  } else {
+                    /*--------------------------------- Snackbar (Toast) ---*/
+                    log("Das Passwort oder der Benutzername sind nicht korrekt ... 😉");
+                    player.play(AssetSource("sound/sound03enterprise.wav"));
+                    /*--------------------------------- Snackbar / Toast ---*/
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      backgroundColor: wbColorButtonDarkRed,
+                      content: Text(
+                        "Hinweis:\nDas Passwort oder der Benutzername sind NICHT korrekt ... 😉",
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ));
+                    /*--------------------------------- *** ---*/
+                  }
+                },
+              ),
+            ),
+            /*--------------------------------- Abstand ---*/
+            wbSizedBoxHeight8,
+            /*--------------------------------- Refresh / Reset = Login "NEU" starten ---*/
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 8, 12, 8),
+              child: WbButtonUniversal2(
+                wbColor: isButton02Clicked
+                    ? wbColorButtonDarkRed
+                    : wbColorButtonBlue,
+                wbOnTapDown: (details) {
+                  setState(() {
+                    isButton02Clicked = true;
+                  });
+                },
+                wbOnTapUp: (details) {
+                  setState(() {
+                    isButton02Clicked = false;
+                  });
+                },
+                wbOnTapCancel: () {
+                  setState(() {
+                    isButton02Clicked = false;
                   });
                 },
                 wbIcon: Icons.replay,
@@ -967,9 +996,8 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
             Padding(
               padding: const EdgeInsets.fromLTRB(2, 0, 12, 0),
               child: WbButtonUniversal2(
-                  wbColor: isButton07Clicked
-                      ? Colors.yellow
-                      : wbColorButtonDarkRed,
+                  wbColor:
+                      isButton07Clicked ? Colors.yellow : wbColorButtonDarkRed,
                   wbOnTapDown: (details) {
                     setState(() {
                       isButton07Clicked = true;
@@ -992,19 +1020,64 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                   wbWidth155: 155, // hat hier keine Auswirkung
                   wbHeight60: 60,
                   wbOnTap: () {
-                    /*--------------------------------- AlertDialog ---*/
+                    log('0996 - P01LoginScreen - "WorkBuddy beenden" wurde angeklickt');
+                    /*--------------------------------- AlertDialog - START ---*/
                     /* Abfrage ob die App geschlossen werden soll */
                     showDialog(
-                        context: context,
-                        builder: (BuildContext context) =>
-                            const WBDialog2Buttons(
-                              headLineText:
-                                  //"Hey ${value.currentUser.currentUserName},\n
-                                  'Möchtest Du jetzt wirklich diese tolle WorkBuddy-App beenden?',
-                              descriptionText:
-                                  "Bevor Du diese tolle WorkBuddy-App beendest, denke bitte daran:\n\n Bei aller Aufregung sollten wir aber nicht vergessen, dass Al Bundy im Jahr 1966 vier Touchdowns in einem Spiel gemacht hat und damit den den Polk High School Panthers zur Stadtmeisterschaft verholfen hat!\n\nAußerdem sollte man auf gesunde Ernährung achten, deshalb empfehle ich täglich ein gutes Käsebrot (für Vegetarier und Veganer natürlich auch gerne mit veganer Butter).\n\nWenn du keinen Käse magst, dann kannst du natürlich auch ein Wurstbrot essen, aber dann ist das logischerweise wiederum nicht vegan (aber es gibt ja auch vegane Wurst) und in diesem Falle kannst du eben auch die Wurst weglassen, wenn Du eine vegane Butter auf dem Brot hast. \n\nWarum schreibe ich das alles hier hin?\n\nGanz einfach:\nWeil ich zeigen wollte, dass diese Textzeilen SCROLLBAR sind.",
-                            ));
-                    /*--------------------------------- AlertDialog ---*/
+                      context: context,
+                      builder: (BuildContext context) => WBDialog2Buttons(
+                        headLineText:
+                            // 'Hey ${value.currentUser},\nmöchtest Du jetzt die WorkBuddy-App beenden?',
+                            'Möchtest Du jetzt die WorkBuddy-App beenden?',
+                        descriptionText:
+                            'Falls Du Fragen, konstruktive Kritik oder Verbesserungsvorschläge hast, kannst Du den Entwickler gerne direkt anrufen oder eine E-Mail schreiben.\n\nDie Kontaktdaten: \n  • JOTHAsoft • Jürgen Hollmann\n  • Telefon: 0178-9897-193\n  • E-Mail: JOTHAsoft@gmail.com',
+                        // 'Wenn die App hier beendet wird, musst Du dich später wieder einloggen.\n\nWenn Du WorkBuddy im Hintergrund einfach weiterlaufen läßt, hast Du schnelleren Zugriff auf deine Daten.',
+                        wbText2: "Ja • Beenden",
+                        wbOnTap2: () {
+                          Navigator.of(context).pop();
+                          log('0185 - WbNavigationbar - Button 2 wurde angeklickt');
+
+                          /*--------------------------------- Snackbar ---*/
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: wbColorOrangeDarker,
+                            content: Text(
+                              "Danke für das Benutzen der WorkBuddy-App ... 😉",
+                              style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ));
+
+                          /*--------------------------------- *** ---*/
+                          log('1025 - P01LoginScreen - App wird beendet ...');
+                          /*--- Noch 2 Sekunden warten, bevor die App beendet wird ---*/
+                          Future.delayed(
+                            const Duration(seconds: 2),
+                            () {
+                              FlutterExitApp.exitApp(iosForceExit: true);
+                            },
+                          );
+                          /*--------------------------------- *** ---*/
+                        },
+                      ),
+                    );
+                    /*--------------------------------- AlertDialog ENDE ---*/
+
+                    // /*--------------------------------- AlertDialog ---*/
+                    // /* Abfrage ob die App geschlossen werden soll */
+                    // showDialog(
+                    //     context: context,
+                    //     builder: (BuildContext context) =>
+                    //         const WBDialog2Buttons(
+                    //           headLineText:
+                    //               //"Hey ${value.currentUser.currentUserName},\n
+                    //               'Möchtest Du jetzt wirklich diese tolle WorkBuddy-App beenden?',
+                    //           descriptionText:
+                    //               "Bevor Du diese tolle WorkBuddy-App beendest, denke bitte daran:\n\n Bei aller Aufregung sollten wir aber nicht vergessen, dass Al Bundy im Jahr 1966 vier Touchdowns in einem Spiel gemacht hat und damit den den Polk High School Panthers zur Stadtmeisterschaft verholfen hat!\n\nAußerdem sollte man auf gesunde Ernährung achten, deshalb empfehle ich täglich ein gutes Käsebrot (für Vegetarier und Veganer natürlich auch gerne mit veganer Butter).\n\nWenn du keinen Käse magst, dann kannst du natürlich auch ein Wurstbrot essen, aber dann ist das logischerweise wiederum nicht vegan (aber es gibt ja auch vegane Wurst) und in diesem Falle kannst du eben auch die Wurst weglassen, wenn Du eine vegane Butter auf dem Brot hast. \n\nWarum schreibe ich das alles hier hin?\n\nGanz einfach:\nWeil ich zeigen wollte, dass diese Textzeilen SCROLLBAR sind.",
+                    //         ));
+                    // /*--------------------------------- AlertDialog ---*/
                   }),
             ),
             /*--------------------------------- Abstand ---*/

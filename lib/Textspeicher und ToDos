@@ -206,7 +206,7 @@ Mache Commit und Push, wenn du fertig bist.
       //       NavigationDestination(
       //         icon: Icon(Icons.home, color: Colors.white70),
       //         selectedIcon: Icon(Icons.home, color: Colors.white),
-      //         label: 'Home',
+      //         label: 'Startseite',
       //       ),
       //       NavigationDestination(
       //         icon: Icon(Icons.airplane_ticket, color: Colors.white70),

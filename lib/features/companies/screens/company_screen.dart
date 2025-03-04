@@ -68,7 +68,17 @@ final controllerCS029 = TextEditingController(); // Betreuer_Job
 final controllerCS030 = TextEditingController(); // KontaktID
 
 /*--------------------------------- Button-Farbe beim Anklicken ändern ---*/
-bool isButtonClicked = false;
+bool isButton01Clicked = false;
+bool isButton02Clicked = false;
+bool isButton03Clicked = false;
+bool isButton04Clicked = false;
+bool isButton05Clicked = false;
+bool isButton06Clicked = false;
+bool isButton07Clicked = false;
+bool isButton08Clicked = false;
+bool isButton09Clicked = false; // Daten speichern
+bool isButton10Clicked = false; // Daten löschen
+bool isButton11Clicked = false;
 
 /*--------------------------------- SQL-Datenbank ---*/
 class DatabaseHelper {
@@ -1926,24 +1936,29 @@ class _CompanyScreenState extends State<CompanyScreen> {
                     Text('Betreut durch: ${controllerCS028.text}'),
                     Text('Betreuer-Stufe: ${controllerCS029.text}'),
                     Text('Gebietskennung: ${controllerCS024.text}'),
-                    Text('${controllerCS030.text} '), // KontaktID
+                    // Text('${controllerCS030.text} '), // KontaktID
                     /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight8,
                     const Divider(thickness: 3, color: wbColorLogoBlue),
                     wbSizedBoxHeight8,
                     /*--------------------------------- Button Daten speichern ---*/
                     WbButtonUniversal2(
-                        wbColor: isButtonClicked
+                        wbColor: isButton09Clicked
                             ? wbColorButtonDarkRed
                             : wbColorButtonGreen,
                         wbOnTapDown: (details) {
                           setState(() {
-                            isButtonClicked = true;
+                            isButton09Clicked = true;
                           });
                         },
                         wbOnTapUp: (details) {
                           setState(() {
-                            isButtonClicked = false;
+                            isButton09Clicked = false;
+                          });
+                        },
+                        wbOnTapCancel: () {
+                          setState(() {
+                            isButton09Clicked = false;
                           });
                         },
                         wbIcon: Icons.save_rounded,
@@ -1986,7 +2001,24 @@ class _CompanyScreenState extends State<CompanyScreen> {
                     wbSizedBoxHeight8,
                     /*--------------------------------- Button Daten LÖSCHEN ---*/
                     WbButtonUniversal2(
-                        wbColor: wbColorButtonDarkRed,
+                        wbColor: isButton10Clicked
+                            ? Colors.yellow
+                            : wbColorButtonDarkRed,
+                        wbOnTapDown: (details) {
+                          setState(() {
+                            isButton10Clicked = true;
+                          });
+                        },
+                        wbOnTapUp: (details) {
+                          setState(() {
+                            isButton10Clicked = false;
+                          });
+                        },
+                        wbOnTapCancel: () {
+                          setState(() {
+                            isButton10Clicked = false;
+                          });
+                        },
                         wbIcon: Icons.delete_forever,
                         wbIconSize40: 40,
                         wbText: "Daten LÖSCHEN",
@@ -2048,7 +2080,12 @@ wirklich endgültig löschen?
                     /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight16,
                     const Divider(thickness: 3, color: wbColorLogoBlue),
-                    wbSizedBoxHeight32,
+                    /*--------------------------------- KontaktID ---*/
+                    Center(
+                      child: Text(controllerCS030.text),
+                    ),
+                    /*--------------------------------- Abstand ---*/
+                    wbSizedBoxHeight8,
                     /*--------------------------------- Abstand nach unten wegen anderer Devices ---*/
                     wbSizedBoxHeight32,
                     wbSizedBoxHeight16,
@@ -2070,7 +2107,7 @@ wirklich endgültig löschen?
       /*--------------------------------- WbInfoContainer ---*/
       bottomSheet: WbInfoContainer(
         infoText:
-            '${controllerCS014.text} • ${controllerCS002.text} ${controllerCS003.text}\nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}',
+            '${controllerCS014.text} • ${controllerCS002.text} ${controllerCS003.text} •\nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}',
         wbColors: Colors.yellow,
       ),
       /*--------------------------------- ENDE ---*/
