@@ -21,6 +21,9 @@ class WbButtonUniversal2 extends StatelessWidget {
     required this.wbWidth155,
     required this.wbHeight60,
     required this.wbOnTap,
+    this.wbOnTapDown,
+    this.wbOnTapUp,
+    this.wbOnTapCancel,
   });
 
   final Color wbColor;
@@ -31,6 +34,9 @@ class WbButtonUniversal2 extends StatelessWidget {
   final double wbWidth155;
   final double wbHeight60;
   final void Function() wbOnTap;
+  final GestureTapDownCallback? wbOnTapDown;
+  final GestureTapUpCallback? wbOnTapUp;
+  final GestureTapCancelCallback? wbOnTapCancel;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +44,9 @@ class WbButtonUniversal2 extends StatelessWidget {
     /*--------------------------------- GestureDetector ---*/
     return GestureDetector(
       onTap: wbOnTap,
+      onTapDown: wbOnTapDown,
+      onTapUp: wbOnTapUp,
+      onTapCancel: wbOnTapCancel,
       /*--------------------------------- Container ---*/
       child: Container(
         width: wbWidth155,

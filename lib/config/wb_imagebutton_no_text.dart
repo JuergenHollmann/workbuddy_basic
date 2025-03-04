@@ -15,6 +15,9 @@ class WbImageButtonNoText extends StatelessWidget {
     required this.wbBorderRadius16,
     required this.hasShadow,
     required this.wbOnTap,
+    this.wbOnTapDown,
+    this.wbOnTapUp,
+    this.wbOnTapCancel,
   });
 
   final Color wbColor;
@@ -25,13 +28,19 @@ class WbImageButtonNoText extends StatelessWidget {
   final double wbBorderRadius16;
   final bool hasShadow;
   final void Function() wbOnTap;
+  final GestureTapDownCallback? wbOnTapDown;
+  final GestureTapUpCallback? wbOnTapUp;
+  final GestureTapCancelCallback? wbOnTapCancel;
 
   @override
   Widget build(BuildContext context) {
-    log("0025 - WbImageButtonNoText - aktiviert");
+    log("0037 - WbImageButtonNoText - aktiviert");
     /*--------------------------------- *** ---*/
     return GestureDetector(
       onTap: wbOnTap,
+      onTapDown: wbOnTapDown,
+      onTapUp: wbOnTapUp,
+      onTapCancel: wbOnTapCancel,
       child: Container(
         width: wbWidth60,
         height: wbHeight60,

@@ -41,6 +41,15 @@ set visibilityPassword(bool value) {
 
 bool get visibilityPassword => _visibilityPassword;
 
+/*--------------------------------- Button-Farbe beim Anklicken ändern ---*/
+bool isButton01Clicked = false; // Login-Button
+bool isButton02Clicked = false; // Login-NEU-Button
+bool isButton03Clicked = false; // Google-Button
+bool isButton04Clicked = false; // Apple-Button
+bool isButton05Clicked = false; // Facebook-Button
+bool isButton06Clicked = false; // WorkBuddy-Button
+bool isButton07Clicked = false; // Beenden-Button
+
 class _P01LoginScreenState extends State<P01LoginScreen> {
   /*--------------------------------- AudioPlayer ---*/
   // ACHTUNG: Beim player den sound OHNE "assets/...", sondern gleich mit "sound/..." eintragen (siehe unten):
@@ -613,7 +622,9 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
             WBGreenButton(
               onTap: () async {
                 /* Den Zustand des CurrentUserProvider aktualisieren */
-                context.read<CurrentUserProvider>().currentUser;
+                context
+                    .read<CurrentUserProvider>()
+                    .currentUser; // funzt nicht 0616 - P01LoginScreen
 
                 /* Den eingetragenen Benutzer in den SharedPreferences speichern */
                 currentUserController.text = userNameTEC.text;
@@ -671,7 +682,23 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 8, 12, 8),
               child: WbButtonUniversal2(
-                wbColor: Colors.blue,
+                wbColor:
+                    isButton01Clicked ? wbColorButtonDarkRed : wbColorButtonBlue,
+                wbOnTapDown: (details) {
+                  setState(() {
+                    isButton01Clicked = true;
+                  });
+                },
+                wbOnTapUp: (details) {
+                  setState(() {
+                    isButton01Clicked = false;
+                  });
+                },
+                wbOnTapCancel: () {
+                  setState(() {
+                    isButton01Clicked = false;
+                  });
+                },
                 wbIcon: Icons.replay,
                 wbIconSize40: 40,
                 wbText: 'Login "NEU" starten',
@@ -679,7 +706,7 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                 wbWidth155: 155,
                 wbHeight60: 60,
                 wbOnTap: () {
-                  log('0472 - P01LoginScreen - onPressed: Reset $_counter');
+                  log('0703 - P01LoginScreen - onPressed: Reset $_counter');
                   /*--------------------------------- Navigator.push ---*/
                   Navigator.push(
                     context,
@@ -712,7 +739,24 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
               child: Row(children: [
                 Expanded(
                   child: WbImageButtonNoText(
-                    wbColor: const Color.fromARGB(255, 209, 209, 209),
+                    wbColor: isButton02Clicked
+                        ? wbColorButtonDarkRed
+                        : Color.fromARGB(255, 209, 209, 209),
+                    wbOnTapDown: (details) {
+                      setState(() {
+                        isButton02Clicked = true;
+                      });
+                    },
+                    wbOnTapUp: (details) {
+                      setState(() {
+                        isButton02Clicked = false;
+                      });
+                    },
+                    wbOnTapCancel: () {
+                      setState(() {
+                        isButton02Clicked = false;
+                      });
+                    },
                     wbImage: Image(image: AssetImage("assets/logo_google.png")),
                     wbImagePadding: 8,
                     wbWidth60: 60,
@@ -720,7 +764,7 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                     wbBorderRadius16: 16,
                     hasShadow: true,
                     wbOnTap: () {
-                      log("0490 - P01LoginScreen - Google angeklickt");
+                      log("0761 - P01LoginScreen - Google angeklickt");
                       /*--------------------------------- showDialog ---*/
                       showDialog(
                         context: context,
@@ -741,7 +785,24 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                 /*--------------------------------- Login mit Apple ---*/
                 Expanded(
                   child: WbImageButtonNoText(
-                    wbColor: wbColorButtonBlue,
+                    wbColor: isButton03Clicked
+                        ? wbColorButtonDarkRed
+                        : wbColorButtonBlue,
+                    wbOnTapDown: (details) {
+                      setState(() {
+                        isButton03Clicked = true;
+                      });
+                    },
+                    wbOnTapUp: (details) {
+                      setState(() {
+                        isButton03Clicked = false;
+                      });
+                    },
+                    wbOnTapCancel: () {
+                      setState(() {
+                        isButton03Clicked = false;
+                      });
+                    },
                     wbImage: Image(image: AssetImage("assets/logo_apple.png")),
                     wbImagePadding: 8,
                     wbWidth60: 60,
@@ -749,7 +810,7 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                     wbBorderRadius16: 16,
                     hasShadow: true,
                     wbOnTap: () {
-                      log("0508 - P01LoginScreen - Apple angeklickt");
+                      log("0807 - P01LoginScreen - Apple angeklickt");
                       /*--------------------------------- showDialog ---*/
                       showDialog(
                         context: context,
@@ -770,7 +831,24 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                 /*--------------------------------- Login mit Facebook ---*/
                 Expanded(
                   child: WbImageButtonNoText(
-                    wbColor: wbColorDrawerOrangeLight,
+                    wbColor: isButton04Clicked
+                        ? wbColorButtonDarkRed
+                        : wbColorDrawerOrangeLight,
+                    wbOnTapDown: (details) {
+                      setState(() {
+                        isButton04Clicked = true;
+                      });
+                    },
+                    wbOnTapUp: (details) {
+                      setState(() {
+                        isButton04Clicked = false;
+                      });
+                    },
+                    wbOnTapCancel: () {
+                      setState(() {
+                        isButton04Clicked = false;
+                      });
+                    },
                     wbImage:
                         Image(image: AssetImage("assets/logo_facebook.png")),
                     wbImagePadding: 8,
@@ -779,7 +857,7 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                     wbBorderRadius16: 16,
                     hasShadow: true,
                     wbOnTap: () {
-                      log("0594 - P01LoginScreen - Facebook angeklickt");
+                      log("0854 - P01LoginScreen - Facebook angeklickt");
                       /*--------------------------------- showDialog ---*/
                       showDialog(
                         context: context,
@@ -801,7 +879,24 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                 /*--------------------------------- Login intern mit WorkBuddy ---*/
                 Expanded(
                   child: WbImageButtonNoText(
-                    wbColor: wbColorButtonGreen,
+                    wbColor: isButton06Clicked
+                        ? wbColorButtonDarkRed
+                        : wbColorButtonGreen,
+                    wbOnTapDown: (details) {
+                      setState(() {
+                        isButton06Clicked = true;
+                      });
+                    },
+                    wbOnTapUp: (details) {
+                      setState(() {
+                        isButton06Clicked = false;
+                      });
+                    },
+                    wbOnTapCancel: () {
+                      setState(() {
+                        isButton06Clicked = false;
+                      });
+                    },
                     wbImage: Image(
                         image: AssetImage("assets/workbuddy_glow_logo.png")),
                     wbImagePadding: 8,
@@ -810,7 +905,7 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                     wbBorderRadius16: 16,
                     hasShadow: true,
                     wbOnTap: () {
-                      log("0574 - P01LoginScreen - WorkBuddy angeklickt");
+                      log("0902 - P01LoginScreen - WorkBuddy angeklickt");
                       // /*--- StreamBuilder auslesen ---*/
                       //                     StreamBuilder(
                       //                       stream: context.read<AuthRepository>().authStateChanges(),
@@ -868,11 +963,28 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
             const Divider(thickness: 4, color: wbColorButtonGreen),
             /*--------------------------------- Abstand ---*/
             wbSizedBoxHeight8,
-            /*--------------------------------- WbButtonUniversal ---*/
+            /*--------------------------------- WorkBuddy beenden ---*/
             Padding(
               padding: const EdgeInsets.fromLTRB(2, 0, 12, 0),
               child: WbButtonUniversal2(
-                  wbColor: wbColorButtonDarkRed,
+                  wbColor: isButton07Clicked
+                      ? Colors.yellow
+                      : wbColorButtonDarkRed,
+                  wbOnTapDown: (details) {
+                    setState(() {
+                      isButton07Clicked = true;
+                    });
+                  },
+                  wbOnTapUp: (details) {
+                    setState(() {
+                      isButton07Clicked = false;
+                    });
+                  },
+                  wbOnTapCancel: () {
+                    setState(() {
+                      isButton07Clicked = false;
+                    });
+                  },
                   wbIcon: Icons.report_outlined,
                   wbIconSize40: 40,
                   wbText: 'WorkBuddy beenden',

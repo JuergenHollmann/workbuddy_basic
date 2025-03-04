@@ -67,6 +67,9 @@ final controllerCS028 = TextEditingController(); // Betreuer
 final controllerCS029 = TextEditingController(); // Betreuer_Job
 final controllerCS030 = TextEditingController(); // KontaktID
 
+/*--------------------------------- Button-Farbe beim Anklicken ändern ---*/
+bool isButtonClicked = false;
+
 /*--------------------------------- SQL-Datenbank ---*/
 class DatabaseHelper {
   static Database? _database;
@@ -1930,7 +1933,19 @@ class _CompanyScreenState extends State<CompanyScreen> {
                     wbSizedBoxHeight8,
                     /*--------------------------------- Button Daten speichern ---*/
                     WbButtonUniversal2(
-                        wbColor: wbColorButtonGreen,
+                        wbColor: isButtonClicked
+                            ? wbColorButtonDarkRed
+                            : wbColorButtonGreen,
+                        wbOnTapDown: (details) {
+                          setState(() {
+                            isButtonClicked = true;
+                          });
+                        },
+                        wbOnTapUp: (details) {
+                          setState(() {
+                            isButtonClicked = false;
+                          });
+                        },
                         wbIcon: Icons.save_rounded,
                         wbIconSize40: 40,
                         wbText: "Daten SPEICHERN",
@@ -1939,8 +1954,9 @@ class _CompanyScreenState extends State<CompanyScreen> {
                         wbHeight60: 60,
                         wbOnTap: () async {
                           log("1584 - CompanyScreen - Daten speichern - geklickt");
-                          /*--------------------------------- Snackbar ---*/
+                          /*--------------------------------- Sound ---*/
                           player.play(AssetSource("sound/sound06pling.wav"));
+                          /*--------------------------------- Snackbar ---*/
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             backgroundColor: wbColorButtonGreen,
                             content: Text(
