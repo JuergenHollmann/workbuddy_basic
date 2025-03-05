@@ -1,3 +1,4 @@
+/*--- lib/features/authentication/screens/p00_registration_screen.dart ---*/
 import 'dart:developer';
 
 import 'package:audioplayers/audioplayers.dart';
@@ -209,7 +210,7 @@ class _P00RegistrationScreenState extends State<P00RegistrationScreen> {
                                   headlineText:
                                       "Warum soll ich meine WhatsApp-Nummer  angeben?",
                                   contentText:
-                                      "Diese Angabe ist freiwillig!\n\nWenn Du deine WhatsApp-Nummer angibst, kann es sein, dass Du direkt vom Entwickler als einer der \"Ersten\" Informationen über Updates erhältst oder zu einem Betatest von neuen Funktionen eingeladen wirst. 🙂\n\nDarüber hinaus kann es auch Bonus-Module für nützliche neue Funktionen geben, die im Normalfall etwas Geld kosten würden.",
+                                      'Diese Angabe ist freiwillig!\n\nWenn Du deine WhatsApp-Nummer angibst, kann es sein, dass Du direkt vom Entwickler als einer der "Ersten" Informationen über Updates erhältst oder zu einem Betatest von neuen Funktionen eingeladen wirst. 🙂\n\nDarüber hinaus kann es auch Bonus-Module für nützliche neue Funktionen geben, die im Normalfall etwas Geld kosten würden.\n\nInfo: RS-0213',
                                   actionsText: "OK 👍",
                                 ),
                               );

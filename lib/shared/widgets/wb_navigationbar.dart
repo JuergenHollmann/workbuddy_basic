@@ -165,7 +165,7 @@ class _WbNavigationbarState extends State<WbNavigationbar> {
                               headlineText:
                                   'Informationen zur Kontaktliste von WorkBuddy',
                               contentText:
-                                  'Hallo ${value.currentUser},\n\nDu befindest dich hier auf der "Kontaktliste" von WorkBuddy.\n\nHier werden alle deine Kontakte an einer Stelle zentral verwaltet, egal ob es nur Kontakte,Interessenten, Firmen, Lieferanten, Mitbewerber oder Mitarbeiter sind.\n\nDu kannst in der Suchfunktion (gelb) nach Vornamen, Nachnamen, Firmennamen oder nach Orten suchen.\n\nDurch anklicken der "Visitenkarte" kommst Du dann an alle witeren Informantionen.\n\nInfo: NB-0168',
+                                  'Hallo ${value.currentUser},\n\nDu befindest dich hier auf der "Kontaktliste" von WorkBuddy.\n\nHier werden alle deine Kontakte an einer Stelle zentral verwaltet, egal ob es nur Kontakte, Interessenten, Firmen, Lieferanten, Mitbewerber oder Mitarbeiter sind.\n\nDu kannst in der Suchfunktion (gelb) nach Vornamen, Nachnamen, Firmennamen oder nach Orten suchen.\n\nDurch anklicken der "Visitenkarte" kommst Du dann an alle weiteren Informationen.\n\nInfo: NB-0168',
                               actionsText: 'OK 👍',
                             ));
                     log('0165 - WbNavigationbar - Info "Startseite" wurde angezeigt √');

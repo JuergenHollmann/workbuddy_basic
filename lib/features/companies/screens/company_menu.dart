@@ -16,6 +16,8 @@ import 'package:workbuddy/shared/widgets/wb_info_container.dart';
 class CompanyMenu extends StatelessWidget {
   const CompanyMenu({super.key});
 
+  final bool isButton01Clicked = false;
+
   @override
   Widget build(BuildContext context) {
     log("0020 - CompanyMenu - wird benutzt");
@@ -55,17 +57,62 @@ class CompanyMenu extends StatelessWidget {
                 child: ListView(
                   padding: const EdgeInsets.all(8),
                   children: [
-                    /*--------------------------------- Alle Kontakte suchen und finden ---*/
+
+                    // /*--------------------------------- In allen Kontakten SUCHEN und FINDEN - hier deaktiviert ---*/
+                    // /*--- In allen Kontakten SUCHEN und FINDEN (mit "Material" und "InkWell") - deaktiviert ---*/
+                    // Material(
+                    //   // Material ist ein Container, der auf Berührungen reagiert - funktioniert nicht mit "WbButtonUniversal2"
+                    //   color: wbColorButtonGreen,
+                    //   child: InkWell(
+                    //     onTap: () {
+                    //       log("0092 - CompanyMenu - Einen Kontakt suchen - angeklickt");
+                    //       Navigator.push(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //           builder: (context) => ContactList(),
+                    //         ),
+                    //       );
+                    //     },
+                    //     onTapDown: (_) {
+                    //       // Ändere die Farbe des Buttons beim Anklicken
+                    //       (context as Element).markNeedsBuild();
+                    //     },
+                    //     onTapUp: (_) {
+                    //       // Setze die Farbe des Buttons zurück
+                    //       (context as Element).markNeedsBuild();
+                    //     },
+                    //     onTapCancel: () {
+                    //       // Setze die Farbe des Buttons zurück
+                    //       (context as Element).markNeedsBuild();
+                    //     },
+                    //     child: Container(
+                    //       padding: const EdgeInsets.all(16),
+                    //       child: Row(
+                    //         children: [
+                    //           Icon(Icons.person_search_outlined, size: 40),
+                    //           const SizedBox(width: 16),
+                    //           Text(
+                    //             'In allen Kontakten\nSUCHEN und FINDEN',
+                    //             style: TextStyle(fontSize: 20),
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    // /*--------------------------------- deaktiviert - ENDE ---*/
+
+                    /*--------------------------------- In allen Kontakten SUCHEN und FINDEN ---*/
                     WbButtonUniversal2(
                       wbColor: wbColorButtonGreen,
                       wbIcon: Icons.person_search_outlined,
                       wbIconSize40: 40,
-                      wbText: 'Alle Kontakte\nSUCHEN und FINDEN',
+                      wbText: 'In allen Kontakten\nSUCHEN und FINDEN',
                       wbFontSize24: 20,
                       wbWidth155: 398,
                       wbHeight60: 80,
                       wbOnTap: () {
-                        log("0092 - CompanyMenu - Einen Kontakt suchen - angeklickt");
+                        log('0092 - CompanyMenu - "In allen Kontakten SUCHEN und FINDEN" - angeklickt');
                         /*--------------------------------- Navigator.push ---*/
                         Navigator.push(
                           context,

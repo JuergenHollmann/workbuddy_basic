@@ -1030,7 +1030,7 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                             // 'Hey ${value.currentUser},\nmöchtest Du jetzt die WorkBuddy-App beenden?',
                             'Möchtest Du jetzt die WorkBuddy-App beenden?',
                         descriptionText:
-                            'Falls Du Fragen, konstruktive Kritik oder Verbesserungsvorschläge hast, kannst Du den Entwickler gerne direkt anrufen oder eine E-Mail schreiben.\n\nDie Kontaktdaten: \n  • JOTHAsoft • Jürgen Hollmann\n  • Telefon: 0178-9897-193\n  • E-Mail: JOTHAsoft@gmail.com',
+                            'Falls Du Fragen, konstruktive Kritik oder Verbesserungsvorschläge hast, kannst Du den Entwickler gerne direkt anrufen oder eine E-Mail schreiben.\n\nDie Kontaktdaten: \n  • JOTHAsoft • Jürgen Hollmann\n  • Telefon: 0178-9697-193\n  • E-Mail: JOTHAsoft@gmail.com',
                         // 'Wenn die App hier beendet wird, musst Du dich später wieder einloggen.\n\nWenn Du WorkBuddy im Hintergrund einfach weiterlaufen läßt, hast Du schnelleren Zugriff auf deine Daten.',
                         wbText2: "Ja • Beenden",
                         wbOnTap2: () {
