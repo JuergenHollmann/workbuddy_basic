@@ -55,6 +55,7 @@ class WBDialog2Buttons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log('0058 - WBDialog2Buttons - gestartet ...');
     return AlertDialog(
       backgroundColor: wbColorButtonBlue,
       scrollable: true,
@@ -105,7 +106,7 @@ class WBDialog2Buttons extends StatelessWidget {
           wbOnTap: wbOnTap1 ??
               () {
                 /*--------------------------------- Navigator ---*/
-                Navigator.pop(context);
+                // Navigator.pop(context);
                 /*--------------------------------- Snackbar 1 ---*/
                 // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 //   backgroundColor: wbColorButtonGreen,
@@ -138,7 +139,7 @@ class WBDialog2Buttons extends StatelessWidget {
           wbOnTap: wbOnTap2 ??
               () {
                 /*--------------------------------- Navigator ---*/
-                Navigator.pop(context);
+                // Navigator.pop(context);
                 /*--------------------------------- Snackbar ---*/
                 //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                 //       backgroundColor: Colors.black,

@@ -34,6 +34,8 @@ class WbTextFormFieldShadowWith2Icons extends StatelessWidget {
     this.suffixIcon,
     this.suffixIconSize32,
     this.onPressed,
+    this.contentPadding,
+
   });
 
   final String labelText;
@@ -60,6 +62,7 @@ class WbTextFormFieldShadowWith2Icons extends StatelessWidget {
   final GestureTapCallback? onPressed;
   final IconData? suffixIcon;
   final double? suffixIconSize32;
+  final EdgeInsets? contentPadding;
   // final List<String>? autofillHints;
 
   @override
@@ -115,7 +118,7 @@ class WbTextFormFieldShadowWith2Icons extends StatelessWidget {
             floatingLabelAlignment: FloatingLabelAlignment.start,
             filled: true,
             fillColor: fillColor ?? Colors.white, //wbColorBackgroundBlue
-            contentPadding:
+            contentPadding: contentPadding ??
                 const EdgeInsets.fromLTRB(16, 24, 8, 0), // Label-Abstand
             // contentPadding:
             //     const EdgeInsets.symmetric(vertical:0, horizontal: 16),

@@ -67,6 +67,50 @@ final controllerCS028 = TextEditingController(); // Betreuer
 final controllerCS029 = TextEditingController(); // Betreuer_Job
 final controllerCS030 = TextEditingController(); // KontaktID
 
+// @override
+// void initState() {
+//   super.initState();
+//   controllerCS030.text = widget.contact['TKD_Feld_030'] ?? '';
+// }
+
+/*--------------------------------- Daten speichern ---*/
+Future<void> saveData() async {
+  var db = await DatabaseHelper().database;
+  await db.insert('KundenDaten', {
+    'TKD_Feld_001': controllerCS001.text,
+    'TKD_Feld_002': controllerCS002.text,
+    'TKD_Feld_003': controllerCS003.text,
+    'TKD_Feld_004': controllerCS004.text,
+    'TKD_Feld_005': controllerCS005.text,
+    'TKD_Feld_006': controllerCS006.text,
+    'TKD_Feld_007': controllerCS007.text,
+    'TKD_Feld_008': controllerCS008.text,
+    'TKD_Feld_009': controllerCS009.text,
+    'TKD_Feld_010': controllerCS010.text,
+    'TKD_Feld_011': controllerCS011.text,
+    'TKD_Feld_012': controllerCS012.text,
+    'TKD_Feld_013': controllerCS013.text,
+    'TKD_Feld_014': controllerCS014.text,
+    'TKD_Feld_015': controllerCS015.text,
+    'TKD_Feld_016': controllerCS016.text,
+    'TKD_Feld_017': controllerCS017.text,
+    'TKD_Feld_018': controllerCS018.text,
+    'TKD_Feld_019': controllerCS019.text,
+    'TKD_Feld_020': controllerCS020.text,
+    'TKD_Feld_021': controllerCS021.text,
+    'TKD_Feld_022': controllerCS022.text,
+    'TKD_Feld_023': controllerCS023.text,
+    'TKD_Feld_024': controllerCS024.text,
+    'TKD_Feld_025': controllerCS025.text,
+    'TKD_Feld_026': controllerCS026.text,
+    'TKD_Feld_027': controllerCS027.text,
+    'TKD_Feld_028': controllerCS028.text,
+    'TKD_Feld_029': controllerCS029.text,
+    'TKD_Feld_030': controllerCS030.text,
+  });
+  log('Daten gespeichert: ${controllerCS030.text}');
+}
+
 /*--------------------------------- Button-Farbe beim Anklicken ändern ---*/
 bool isButton01Clicked = false;
 bool isButton02Clicked = false;
@@ -80,31 +124,31 @@ bool isButton09Clicked = false; // Daten speichern
 bool isButton10Clicked = false; // Daten löschen
 bool isButton11Clicked = false;
 
-/*--------------------------------- SQL-Datenbank ---*/
-class DatabaseHelper {
-  static Database? _database;
+// /*--------------------------------- SQL-Datenbank ---*/
+// class DatabaseHelper {
+//   static Database? _database;
 
-  // Singleton-Muster
-  Future<Database> get database async {
-    if (_database != null) return _database!;
-    _database = await _openDatabaseFromAssets();
-    return _database!;
-  }
+//   // Singleton-Muster
+//   Future<Database> get database async {
+//     if (_database != null) return _database!;
+//     _database = await _openDatabaseFromAssets();
+//     return _database!;
+//   }
 
-  Future<Database> _openDatabaseFromAssets() async {
-    log('0046 - CompanyScreen - Öffnet die Datenbank');
-    Directory documentsDir = await getApplicationDocumentsDirectory();
-    String dbPath = join(documentsDir.path, "JOTHAsoft.FiveStars.db");
-    bool dbExists = await databaseExists(dbPath);
+//   Future<Database> _openDatabaseFromAssets() async {
+//     log('0046 - CompanyScreen - Öffnet die Datenbank');
+//     Directory documentsDir = await getApplicationDocumentsDirectory();
+//     String dbPath = join(documentsDir.path, "JOTHAsoft.FiveStars.db");
+//     bool dbExists = await databaseExists(dbPath);
 
-    if (!dbExists) {
-      ByteData data = await rootBundle.load("assets/JOTHAsoft.FiveStars.db");
-      List<int> bytes = data.buffer.asUint8List();
-      await File(dbPath).writeAsBytes(bytes, flush: true);
-    }
-    return openDatabase(dbPath);
-  }
-}
+//     if (!dbExists) {
+//       ByteData data = await rootBundle.load("assets/JOTHAsoft.FiveStars.db");
+//       List<int> bytes = data.buffer.asUint8List();
+//       await File(dbPath).writeAsBytes(bytes, flush: true);
+//     }
+//     return openDatabase(dbPath);
+//   }
+// }
 
 Future<void> fetchData() async {
   var db = await DatabaseHelper().database;
@@ -419,6 +463,8 @@ class _CompanyScreenState extends State<CompanyScreen> {
   void initState() {
     super.initState();
     log("0344 - CompanyScreen - initState - aktiviert");
+    controllerCS030.text = widget.contact['TKD_Feld_030'] ??
+        ''; // Fehlermeldung: disposed() called on null - 0466 - CompanyScreen
 
     /*--- Den Zustand (State) erst nach dem Build ändern.
           Diese Methode wird verwendet, um eine Aktion auszuführen, nachdem das Widget vollständig aufgebaut wurde. 
@@ -567,7 +613,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
     await launchUrl(launchUri);
   }
 
-  /*--------------------------------- *** ---*/
+  /*--------------------------------- *** ---*/ // 0619 - CompanyScreen
   @override
   Widget build(BuildContext context) {
     log("0038 - CompanyScreen - aktiviert");
@@ -1295,6 +1341,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
                       hintText:
                           "Welche Waren sind für die Suchfunktion in der App relevant? Beispiele: Schrauben, Werkzeug, etc.?",
                       hintTextFontSize16: 12,
+                      contentPadding: const EdgeInsets.fromLTRB(0, 40, 4, 0),
                       inputTextFontSize22: 15,
                       prefixIcon: Icons.shopping_basket_outlined,
                       prefixIconSize28: 24,
@@ -1404,6 +1451,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
                       hintText:
                           "Beispiele: Hobbys, Lieblingswein, Verein, etc.",
                       hintTextFontSize16: 12,
+                      contentPadding: const EdgeInsets.fromLTRB(0, 40, 4, 0),
                       inputTextFontSize22: 14,
                       prefixIcon: Icons.shopping_basket_outlined,
                       prefixIconSize28: 24,
@@ -1975,7 +2023,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             backgroundColor: wbColorButtonGreen,
                             content: Text(
-                              "Die Daten von\n${controllerCS002.text} ${controllerCS003.text} wurden erfolgreich gespeichert!",
+                              "Die Daten von\n${controllerCS014.text} • ${controllerCS002.text} ${controllerCS003.text} • wurden erfolgreich gespeichert!",
                               style: TextStyle(
                                 fontSize: 28,
                                 fontWeight: FontWeight.bold,
@@ -1984,8 +2032,10 @@ class _CompanyScreenState extends State<CompanyScreen> {
                             ),
                           ));
                           /*--------------------------------- Speicherung in die SQL ---*/
-                          await updateData({}); // Datensatz aktualisieren
-                          log('1646 - CompanyScreen - Daten gespeichert!');
+                          await saveData(); // Datensatz speichern
+                          log('1600 - CompanyScreen - Daten gespeichert (save)!');
+                          // await updateData({}); // Datensatz aktualisieren
+                          // log('1646 - CompanyScreen - Daten aktualisiert (update)!');
                           /*--------------------------------- Navigator.push ---*/
                           Navigator.push(
                             // ignore: use_build_context_synchronously
@@ -2001,82 +2051,114 @@ class _CompanyScreenState extends State<CompanyScreen> {
                     wbSizedBoxHeight8,
                     /*--------------------------------- Button Daten LÖSCHEN ---*/
                     WbButtonUniversal2(
-                        wbColor: isButton10Clicked
-                            ? Colors.yellow
-                            : wbColorButtonDarkRed,
-                        wbOnTapDown: (details) {
-                          setState(() {
-                            isButton10Clicked = true;
-                          });
-                        },
-                        wbOnTapUp: (details) {
-                          setState(() {
-                            isButton10Clicked = false;
-                          });
-                        },
-                        wbOnTapCancel: () {
-                          setState(() {
-                            isButton10Clicked = false;
-                          });
-                        },
-                        wbIcon: Icons.delete_forever,
-                        wbIconSize40: 40,
-                        wbText: "Daten LÖSCHEN",
-                        wbFontSize24: 24,
-                        wbWidth155: 398,
-                        wbHeight60: 60,
-                        wbOnTap: () async {
-                          log("1981 - CompanyScreen - Daten LÖSCHEN - geklickt");
-                          /*--------------------------------- Sound ---*/
-                          player
-                              .play(AssetSource("sound/sound03enterprise.wav"));
-                          /*--------------------------------- Alert-Dialog ---*/
-                          showDialog(
-                            context: context,
-                            builder: (context) => WBDialog2Buttons(
-                              headLineText: 'ACHTUNG:\nDaten werden gelöscht!',
-                              descriptionText:
-/*--- Der Text muss hier genaus so formatiert werden - ANFANG ---*/
-                                  '''
-Möchtest Du jetzt die Daten von
+                      wbColor: isButton10Clicked
+                          ? Colors.yellow
+                          : wbColorButtonDarkRed,
+                      wbOnTapDown: (details) {
+                        setState(() {
+                          isButton10Clicked = true;
+                        });
+                      },
+                      wbOnTapUp: (details) {
+                        setState(() {
+                          isButton10Clicked = false;
+                        });
+                      },
+                      wbOnTapCancel: () {
+                        setState(() {
+                          isButton10Clicked = false;
+                        });
+                      },
+                      wbIcon: Icons.delete_forever,
+                      wbIconSize40: 40,
+                      wbText: "Daten LÖSCHEN",
+                      wbFontSize24: 24,
+                      wbWidth155: 398,
+                      wbHeight60: 60,
+                      wbOnTap: () {
+                        log("1981 - CompanyScreen - Daten LÖSCHEN - geklickt");
+                        /*--------------------------------- Sound abspielen ---*/
+                        player.play(AssetSource("sound/sound03enterprise.wav"));
+                        /*--------------------------------- AlertDialog - START ---*/
+                        /* Abfrage ob die App geschlossen werden soll */
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) => WBDialog2Buttons(
+                            headLineText:
+                                'ACHTUNG:\nDie Daten werden gelöscht!',
+                            descriptionText:
+                                'Möchtest Du jetzt die Daten von ${controllerCS014.text} • ${controllerCS002.text} ${controllerCS003.text} • ${controllerCS005.text} ${controllerCS006.text} ${controllerCS007.text} ${controllerCS030.text} wirklich ENDGÜLTIG löschen?\n\nDiese Aktion kann NICHT rückgängig gemacht werden!',
 
-    ${controllerCS014.text} • ${controllerCS002.text} ${controllerCS003.text} •
-    ${controllerCS005.text}
-    ${controllerCS006.text} ${controllerCS007.text}
-    ${controllerCS030.text}
+                            /*--------------------------------- Button 1 ---*/
+                            // wbText1: "Nein",
+                            wbOnTap1: () {
+                              log('2095 - CompanyScreen - "Nein" wurde angeklickt');
+                              /*--------------------------------- Sound abspielen ---*/
+                              player
+                                  .play(AssetSource("sound/sound06pling.wav"));
+                              /*--------------------------------- Dialog ausblenden ---*/
+                              Navigator.of(context).pop();
 
-wirklich endgültig löschen?
-''',
-/*--- Der Text muss bis hier genaus so formatiert sein - ENDE ---*/
-                            ),
-                          );
-                          /*--------------------------------- Navigator ---*/
-                          Navigator.pop(context);
-                          /*--------------------------------- Snackbar ---*/
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: wbColorButtonGreen,
-                            content: Text(
-                              "Die Daten von\n${controllerCS002.text} ${controllerCS003.text} wurden NICHT gelöscht!",
-                              style: TextStyle(
-                                fontSize: 28,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ));
+                              // /*--- Noch 2 Sekunden warten, bevor die Snackbar eingeblendet wird ---*/
+                              // Future.delayed(
+                              //   const Duration(seconds: 1),
+                              //   () {},
+                              // );
 
-                          /*--------------------------------- LÖSCHUNG aus der SQL ---*/
-                          // await deleteData({}); // Datensatz löschen
-                          // log('1689 - CompanyScreen - Daten GEÖSCHT!');
-                          /*--------------------------------- Navigator.push ---*/
-                          Navigator.push(
-                            // ignore: use_build_context_synchronously
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const MainSelectionScreen(),
-                            ),
-                          );
-                        }),
+                              /*--------------------------------- Snackbar einblenden funzt hier nicht! 2101 - CompanyScreen ---*/
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: wbColorOrangeDarker,
+                                  duration: Duration(milliseconds: 2000),
+                                  content: Text(
+                                    'Die Daten von ${controllerCS014.text} • ${controllerCS002.text} ${controllerCS003.text} • wurden NICHT gelöscht!',
+                                  ),
+                                ),
+                              );
+                            },
+
+                            /*--------------------------------- Button 2 ---*/
+                            wbText2: "Ja • Löschen",
+                            wbOnTap2: () async {
+                              log('2117 - CompanyScreen - "Ja • Löschen" wurde angeklickt');
+                              /*--------------------------------- Sound abspielen ---*/
+                              player
+                                  .play(AssetSource("sound/sound06pling.wav"));
+                              /*--------------------------------- Dialog ausblenden ---*/
+                              //Navigator.of(context).pop();
+                              /*--------------------------------- Snackbar einblenden ---*/
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                backgroundColor: wbColorButtonDarkRed,
+                                content: Text(
+                                  'Die Daten von ${controllerCS014.text} • ${controllerCS002.text} ${controllerCS003.text} • ${controllerCS005.text} ${controllerCS006.text} ${controllerCS007.text} ${controllerCS030.text} wurden erfolgreich GELÖSCHT!',
+                                  style: TextStyle(
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ));
+                              /*--------------------------------- LÖSCHUNG aus der SQL ---*/
+                              await deleteData({}); // Datensatz löschen
+                              log('2135 - CompanyScreen - Daten GEÖSCHT!');
+                              /*--------------------------------- Wechsel zu MainSelectionScreen ---*/
+                              log('2137 - CompanyScreen - Wechsel zu MainSelectionScreen');
+                              Navigator.push(
+                                // ignore: use_build_context_synchronously
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const MainSelectionScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                    /*--------------------------------- AlertDialog - ENDE---*/
+
                     /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight16,
                     const Divider(thickness: 3, color: wbColorLogoBlue),
@@ -2149,6 +2231,34 @@ wirklich endgültig löschen?
     controllerCS030.dispose();
     super.dispose();
   }
+}
+
+/*--------------------------------- SQL-Datenbank ---*/
+class DatabaseHelper {
+  static Database? _database;
+
+  // Singleton-Muster
+  Future<Database> get database async {
+    if (_database != null) return _database!;
+    _database = await _openDatabaseFromAssets();
+    return _database!;
+  }
+
+  Future<Database> _openDatabaseFromAssets() async {
+    log('0046 - CompanyScreen - Öffnet die Datenbank');
+    Directory documentsDir = await getApplicationDocumentsDirectory();
+    String dbPath = join(documentsDir.path, "JOTHAsoft.FiveStars.db");
+    bool dbExists = await databaseExists(dbPath);
+
+    if (!dbExists) {
+      ByteData data = await rootBundle.load("assets/JOTHAsoft.FiveStars.db");
+      List<int> bytes = data.buffer.asUint8List();
+      await File(dbPath).writeAsBytes(bytes, flush: true);
+    }
+    return openDatabase(dbPath);
+  }
+
+  // /*--------------------------------- Datensatz löschen ---*/
 }
 
               //   /*--------------------------------- Telefon ---*/

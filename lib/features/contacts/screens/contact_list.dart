@@ -108,6 +108,7 @@ class _ContactListState extends State<ContactList> {
                   controller: _searchController,
                   labelText: 'Suche Kontakte',
                   hintText: 'Suche Vorname, Nachname, Firma oder Ort',
+                  contentPadding:  const EdgeInsets.fromLTRB(8, 8, 0, 8),
                   prefixIcon: Icons.search,
                   suffixIcon: Icons.delete_forever,
                   fillColor: Colors.yellow,

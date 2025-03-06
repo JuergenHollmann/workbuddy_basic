@@ -1,4 +1,5 @@
-import 'dart:developer';
+import 'dart:developer' as developer;
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +21,7 @@ class CompanyMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log("0020 - CompanyMenu - wird benutzt");
+    developer.log("0020 - CompanyMenu - wird benutzt");
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 250, 242, 242),
@@ -112,7 +113,7 @@ class CompanyMenu extends StatelessWidget {
                       wbWidth155: 398,
                       wbHeight60: 80,
                       wbOnTap: () {
-                        log('0092 - CompanyMenu - "In allen Kontakten SUCHEN und FINDEN" - angeklickt');
+                        developer.log('0092 - CompanyMenu - "In allen Kontakten SUCHEN und FINDEN" - angeklickt');
                         /*--------------------------------- Navigator.push ---*/
                         Navigator.push(
                           context,
@@ -141,12 +142,14 @@ class CompanyMenu extends StatelessWidget {
                       wbHeight60: 80,
                       wbOnTap: () {
                         /*--------------------------------- Navigator.push ---*/
-                        log("0090 - CompanyMenu - Einen Kontakt NEU anlegen - angeklickt");
+                        developer.log("0144 - CompanyMenu - Einen Kontakt NEU anlegen - angeklickt");
+
+                        String newContactID = generateContactID(); 
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const CompanyScreen(
-                              contact: {},
+                            builder: (context) => CompanyScreen(
+                              contact: {'TKD_Feld_030': newContactID},
                             ),
                           ),
                         );
@@ -169,7 +172,7 @@ class CompanyMenu extends StatelessWidget {
                       wbWidth155: 300, // hat keine Auswirkung
                       wbHeight60: 110,
                       wbOnTap: () {
-                        log("0121 - CompanyMenu - Mehr Info? - Update-Hinweis wird angezeigt");
+                        developer.log("0121 - CompanyMenu - Mehr Info? - Update-Hinweis wird angezeigt");
                         showDialog(
                           context: context,
                           builder: (context) => WbDialogAlertUpdateComingSoon(
@@ -202,5 +205,10 @@ class CompanyMenu extends StatelessWidget {
       ),
       /*--------------------------------- *** ---*/
     );
+  }
+   String generateContactID() {
+    var rng = Random();
+    return DateTime.now().millisecondsSinceEpoch.toString() +
+        rng.nextInt(1000).toString();
   }
 }

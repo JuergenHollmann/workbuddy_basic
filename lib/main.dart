@@ -312,6 +312,8 @@ class DatabaseHelper {
   √ für iOS muss im ios/Podfile     ---> platform :ios, '13.0'  eingestellt werden √ 
   √ für macOS muss im macos/Podfile ---> platform :osx, '10.15' eingestellt werden √ 
   /*--------------------------------- *** ---
+  - Snackbar einblenden funzt hier nicht! 2101 - CompanyScreen
+  - Fehlermeldung beheben: wegen disposed() called on null - 0466 - CompanyScreen
   - CurrentUserProvider>().currentUser; // funzt nicht 0616 - P01LoginScreen
   - Klicke unten auf den E-Mail-Button - dann das E-Mail-Menü starten - CM-0121
   - dispose(); // löscht die Controller aus dem Speicher - hängt sich auf - 1652 - CompanyScreen

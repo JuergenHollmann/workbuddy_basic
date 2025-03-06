@@ -22,6 +22,7 @@ class WbTextFormField extends StatelessWidget {
     this.onChanged,
     this.initialValue,
     this.labelBackgroundColor,
+    this.contentPadding,
 
     // required Null Function(String userNameTEC) onChanged,
     // this.suffixIcon,
@@ -45,6 +46,7 @@ class WbTextFormField extends StatelessWidget {
   final TextEditingController? controller;
   final TextInputAction? textInputAction;
   final Function(String inputInWbTextFormField)? onChanged;
+  final EdgeInsets? contentPadding;
   // final IconData? suffixIcon;
   // final double? suffixIconSize48;
   // final List<String>? autofillHints;
@@ -60,26 +62,26 @@ class WbTextFormField extends StatelessWidget {
         maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
         keyboardType: textInputTypeOnKeyboard,
         textAlignVertical: TextAlignVertical.center,
+        textAlign: TextAlign.left,
+        textInputAction: textInputAction,
         maxLines: null,
         //validator: Validator.isValidEmail,
         style: TextStyle(
-          height: 1.1,
+          height: 1.1, // Zeilenhöhe
           fontSize: inputTextFontSize22,
           fontWeight: inputFontWeightW900,
           color: inputFontColor,
         ),
-        textAlign: TextAlign.left,
-        textInputAction: textInputAction,
+
         //obscureText: visibilityPassword, //Passwort sichtbar?
         /*--------------------------------- InputDecoration ---*/
         decoration: InputDecoration(
           floatingLabelAlignment: FloatingLabelAlignment.start,
           filled: true,
           fillColor: fillColor, //wbColorBackgroundBlue
-          //contentPadding: const EdgeInsets.fromLTRB(48, 16, 16, 16),
-          contentPadding: const EdgeInsets.fromLTRB(
-              16, 8, 8, 8), // für den Textinhalt im Textfeld
-
+          contentPadding: contentPadding ??
+              EdgeInsets.fromLTRB(
+                  16, 0, 8, 8), // für den Textinhalt im Textfeld
           /*--- errorStyle ---*/
           errorStyle: const TextStyle(
             fontSize: 18,
