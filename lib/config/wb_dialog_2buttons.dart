@@ -1,12 +1,13 @@
 import 'dart:developer';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:workbuddy/config/wb_button_universal_2.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
 
 class WBDialog2Buttons extends StatelessWidget {
-  const WBDialog2Buttons({
+   WBDialog2Buttons({
     super.key,
     required this.headLineText,
     required this.descriptionText,
@@ -52,6 +53,10 @@ class WBDialog2Buttons extends StatelessWidget {
   final double? wbWidth2W155;
   final double? wbHeight2H60;
   final void Function()? wbOnTap2;
+
+  /*--------------------------------- AudioPlayer ---*/
+  final AudioPlayer player = AudioPlayer();
+  /*--------------------------------- *** ---*/
 
   @override
   Widget build(BuildContext context) {
@@ -105,8 +110,10 @@ class WBDialog2Buttons extends StatelessWidget {
           wbHeight60: wbHeight1H60 ?? 60,
           wbOnTap: wbOnTap1 ??
               () {
+                /*--------------------------------- Sound abspielen ---*/
+                player.play(AssetSource("sound/sound06pling.wav"));
                 /*--------------------------------- Navigator ---*/
-                // Navigator.pop(context);
+                Navigator.pop(context);
                 /*--------------------------------- Snackbar 1 ---*/
                 // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 //   backgroundColor: wbColorButtonGreen,
@@ -138,8 +145,10 @@ class WBDialog2Buttons extends StatelessWidget {
           wbHeight60: wbHeight2H60 ?? 60,
           wbOnTap: wbOnTap2 ??
               () {
+                /*--------------------------------- Sound abspielen ---*/
+                player.play(AssetSource("sound/sound06pling.wav"));
                 /*--------------------------------- Navigator ---*/
-                // Navigator.pop(context);
+                Navigator.pop(context);
                 /*--------------------------------- Snackbar ---*/
                 //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                 //       backgroundColor: Colors.black,

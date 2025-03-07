@@ -39,6 +39,32 @@ set visibilityPassword(bool value) {
   _visibilityPassword = value;
 }
 
+Future<SharedPreferences> prefsFuture = SharedPreferences.getInstance();
+bool isWarningSoundEnabled = true;
+bool isButtonSoundEnabled = false;
+bool isPageChangeSoundEnabled = false;
+bool isTextFieldSoundEnabled = false;
+
+void initializePreferences() {
+  prefsFuture.then((prefs) {
+    isWarningSoundEnabled = prefs.getBool('warningSound') ?? true;
+    log('0052 - P01LoginScreen - Ist der Ton bei "Warnungen" eingeschaltet? ${prefs.getBool('warningSound')}');
+    isButtonSoundEnabled = prefs.getBool('buttonSound') ?? false;
+    log('0055 - P01LoginScreen - Ist der Ton bei "Buttons anklicken" eingeschaltet? ${prefs.getBool('buttonSound')}');
+    isPageChangeSoundEnabled = prefs.getBool('pageChangeSound') ?? false;
+    log('0058 - P01LoginScreen - Ist der Ton bei "Seitenwechsel" eingeschaltet? ${prefs.getBool('pageChangeSound')}');
+    isTextFieldSoundEnabled = prefs.getBool('textFieldSound') ?? false;
+    log('0062 - P01LoginScreen - Ist der Ton bei "Textfeldern" eingeschaltet? ${prefs.getBool('textFieldSound')}');
+  });
+}
+
+// class _P01LoginScreenState extends State<P01LoginScreen> {
+//   @override
+//   void initState() {
+//     super.initState();
+//     initializePreferences();
+//   }
+
 bool get visibilityPassword => _visibilityPassword;
 
 /*--------------------------------- Button-Farbe beim Anklicken ändern ---*/
@@ -51,6 +77,12 @@ bool isButton06Clicked = false; // WorkBuddy-Button
 bool isButton07Clicked = false; // Beenden-Button
 
 class _P01LoginScreenState extends State<P01LoginScreen> {
+  @override
+  void initState() {
+    super.initState();
+    initializePreferences();
+  }
+
   /*--------------------------------- AudioPlayer ---*/
   // ACHTUNG: Beim player den sound OHNE "assets/...", sondern gleich mit "sound/..." eintragen (siehe unten):
   late AudioPlayer player = AudioPlayer();
@@ -651,6 +683,11 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                 wbOnTap: () async {
                   // WBGreenButton war hier vorher mit einer Funktion "final VoidCallback onTap" definiert;
                   /* Den Zustand des CurrentUserProvider aktualisieren */
+                  /*--------------------------------- Sound abspielen ---*/
+                  if (isButtonSoundEnabled) {
+                    player.play(AssetSource("sound/sound02click.wav"));
+                  }
+                  /*--------------------------------- *** ---*/
                   context
                       .read<CurrentUserProvider>()
                       .currentUser; // funzt nicht 0616 - P01LoginScreen
@@ -737,6 +774,9 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                 wbWidth155: 155,
                 wbHeight60: 60,
                 wbOnTap: () {
+                  /*--------------------------------- Sound abspielen ---*/
+                  player.play(AssetSource("sound/sound02click.wav"));
+                  /*--------------------------------- *** ---*/
                   log('0703 - P01LoginScreen - onPressed: Reset $_counter');
                   /*--------------------------------- Navigator.push ---*/
                   Navigator.push(
@@ -1025,6 +1065,9 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                     /*--------------------------------- AlertDialog - START ---*/
                     log('0996 - P01LoginScreen - "WorkBuddy beenden" wurde angeklickt');
                     /* Abfrage ob die App geschlossen werden soll */
+                    /*--------------------------------- Sound abspielen ---*/
+                    player.play(AssetSource("sound/sound02click.wav"));
+                    /*--------------------------------- AlertDialog ---*/
                     showDialog(
                       context: context,
                       builder: (BuildContext context) => WBDialog2Buttons(
@@ -1038,7 +1081,8 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
                         wbOnTap2: () {
                           Navigator.of(context).pop();
                           log('1040 - P01LoginScreen - Button 2 wurde angeklickt');
-
+                          /*--------------------------------- Sound abspielen ---*/
+                          player.play(AssetSource("sound/sound06pling.wav"));
                           /*--------------------------------- Snackbar ---*/
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             backgroundColor: wbColorOrangeDarker,
@@ -1091,5 +1135,10 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
         ),
       ),
     );
+  }
+  @override
+  void dispose() {
+    player.dispose();
+    super.dispose();
   }
 }
