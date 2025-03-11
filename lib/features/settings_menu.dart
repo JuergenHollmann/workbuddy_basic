@@ -338,8 +338,6 @@ class _SettingsMenuState extends State<SettingsMenu> {
                 color: wbColorDrawerOrangeLight,
                 padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
                 child: DropdownButton<String>(
-                  // alignment: AlignmentDirectional.topStart,
-                  // menuWidth: 300,
                   value: _selectedLanguage,
                   icon: const Icon(Icons.arrow_downward),
                   iconSize: 32,
@@ -362,7 +360,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                           return WbDialogAlertUpdateComingSoon(
                             headlineText: 'Deine Sprachauswahl',
                             contentText:
-                                'Du hast $_selectedLanguage als Systemsprache in "WorkBuddy" ausgewählt.',
+                                'Du hast "$_selectedLanguage" als Systemsprache in "WorkBuddy" ausgewählt.',
                             actionsText: 'OK 👍',
                             onTap: () {
                               Navigator.of(context).pop();
@@ -388,7 +386,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                           return WbDialogAlertUpdateComingSoon(
                             headlineText: 'Deine Sprachauswahl',
                             contentText:
-                                'Du hast $_selectedLanguage als Systemsprache in "WorkBuddy" ausgewählt.\n\nDiese Funktion kommt bald in einem KOSTENLOSEN Update!\n\nBis dahin muss die App auf "Deutsch" eingestellt bleiben.\n\nHinweis: SM-0389',
+                                'Du hast "$_selectedLanguage" als Systemsprache in "WorkBuddy" ausgewählt.\n\nDiese Funktion kommt bald in einem KOSTENLOSEN Update!\n\nBis dahin muss die App auf "Deutsch" eingestellt bleiben.\n\nHinweis: SM-0389',
                             actionsText: 'OK 👍',
                             onTap: () {
                               // funzt hier nicht - gb
