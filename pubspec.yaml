@@ -66,6 +66,7 @@ flutter:
    - assets/
    - assets/iconbuttons/
    - assets/company_logos/
+   - assets/flags/
    - assets/sound/
    - assets/JOTHAsoft.FiveStars.db
    #- assets/JOTHAsoft.WorkBuddy.db

@@ -312,6 +312,7 @@ class DatabaseHelper {
   √ für iOS muss im ios/Podfile     ---> platform :ios, '13.0'  eingestellt werden √ 
   √ für macOS muss im macos/Podfile ---> platform :osx, '10.15' eingestellt werden √ 
   /*--------------------------------- *** ---
+  - 0402 - SettingsMenu - Sprache "Deutsch" auswählen.
   - Snackbar einblenden funzt hier nicht! 2101 - CompanyScreen
   - Fehlermeldung beheben: wegen disposed() called on null - 0466 - CompanyScreen
   - CurrentUserProvider>().currentUser; // funzt nicht 0616 - P01LoginScreen

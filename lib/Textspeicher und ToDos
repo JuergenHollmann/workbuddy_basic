@@ -28,6 +28,8 @@ Hinweis: „arm64-v8a“ ist auf dem BlackView BV9300 nicht kompatibel.
 😃 Smiley
 🔎 Lupe nach rechts
 🔍 Lupe nach links
+🇩🇪 Flagge Deutsch
+
 
                                     /*--------------------------------- mehrfach verschachtelter ternärer Operator ---*/
                                     (nextY == 0 && nextM == 0 && nextD == 0)
