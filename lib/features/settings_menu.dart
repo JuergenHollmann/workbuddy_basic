@@ -446,7 +446,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
               const Divider(thickness: 3, height: 32, color: wbColorLogoBlue),
               /*--------------------------------- Datenschutz ---*/
               WbContainerWithIconAndText(
-                containerText: 'Datenschutz',
+                containerText: 'Datenschutzerklärung',
                 containerIcon: Icons.privacy_tip_outlined,
                 onTap: () {
                   Navigator.push(
