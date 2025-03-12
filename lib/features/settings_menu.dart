@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workbuddy/config/wb_colors.dart';
+import 'package:workbuddy/config/wb_container_with_icon_and_text.dart';
 import 'package:workbuddy/shared/providers/current_app_version_provider.dart';
 import 'package:workbuddy/shared/providers/current_date_provider.dart';
 import 'package:workbuddy/shared/providers/current_day_long_provider.dart';
@@ -82,7 +83,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
     log("0057 - SettingsMenu - wird benutzt");
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 250, 242, 242),
+      backgroundColor: const Color.fromARGB(255, 241, 243, 255),
       /*--------------------------------- *** ---*/
       appBar: AppBar(
         title: const Text(
@@ -334,7 +335,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
               const Divider(thickness: 3, height: 32, color: wbColorLogoBlue),
               /*--------------------------------- *** ---*/
               Container(
-                width: 400,
+                width: double.infinity, // maximale Breite
                 color: wbColorDrawerOrangeLight,
                 padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
                 child: DropdownButton<String>(
@@ -344,7 +345,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                   elevation: 16,
                   style: const TextStyle(
                     color: Colors.black,
-                    fontSize: 28,
+                    fontSize: 26,
                     fontWeight: FontWeight.bold,
                   ),
                   onChanged: (String? newValue) {
@@ -435,257 +436,40 @@ class _SettingsMenuState extends State<SettingsMenu> {
               Text('Kalender-Einstellungen'),
               /*--------------------------------- Divider ---*/
               const Divider(thickness: 3, height: 32, color: wbColorLogoBlue),
-              /*--------------------------------- *** ---*/
-              Text('Datenschutz'),
+              /*--------------------------------- Über uns ---*/
+              WbContainerWithIconAndText(
+                containerText: 'Über uns',
+                containerIcon: Icons.diversity_3_outlined,
+              ),
+              /*--------------------------------- Divider ---*/
+              const Divider(thickness: 3, height: 32, color: wbColorLogoBlue),
+              /*--------------------------------- Datenschutz ---*/
+              WbContainerWithIconAndText(
+                containerText: 'Datenschutz',
+                containerIcon: Icons.privacy_tip_outlined,
+              ),
+              /*--------------------------------- Divider ---*/
+              const Divider(thickness: 3, height: 32, color: wbColorLogoBlue),
+              /*--------------------------------- Nutzungsbedingungen ---*/
+              WbContainerWithIconAndText(
+                containerText: 'Nutzungsbedingungen',
+                containerIcon: Icons.rule_folder_outlined,
+              ),
+              /*--------------------------------- Divider ---*/
+              const Divider(thickness: 3, height: 32, color: wbColorLogoBlue),
+              /*--------------------------------- Impressum ---*/
+              WbContainerWithIconAndText(
+                containerText: 'Impressum',
+                containerIcon: Icons.info_outline,
+              ),
               /*--------------------------------- Divider ---*/
               const Divider(thickness: 3, height: 32, color: wbColorLogoBlue),
               /*--------------------------------- *** ---*/
-              Text('Nutzungsbedingugen'),
-              /*--------------------------------- Divider ---*/
-              const Divider(thickness: 3, height: 32, color: wbColorLogoBlue),
-              /*--------------------------------- *** ---*/
-              Text('Impressum'),
-              /*--------------------------------- Divider ---*/
-              const Divider(thickness: 3, height: 32, color: wbColorLogoBlue),
-              /*--------------------------------- *** ---*/
-              Text('Über uns'),
-              /*--------------------------------- Divider ---*/
-              const Divider(thickness: 3, height: 32, color: wbColorLogoBlue),
-              /*--------------------------------- *** ---*/
+              SizedBox(height: 80),
             ],
           ),
         ),
       ),
-
-      //       /*--------------------------------- Listview mit AuswahlButtons ---*/
-      //       Expanded(
-      //         child: ListView(
-      //           padding: const EdgeInsets.all(8),
-      //           children: [
-      //             Text(
-      //               'Diese Seite wird gerade NEU programmiert ...',
-      //               style: TextStyle(
-      //                 fontSize: 24,
-      //                 fontWeight: FontWeight.bold,
-      //               ),
-      //             ),
-
-      //             /*--------------------------------- WhatsApp ---*/
-
-      //             Text('Sprache'),
-
-      //             Text('Sound an/aus'),
-      //             Text('Designauswahl Dark/Light'),
-      //             Text('Erinnerungen'),
-      //             Text('Kalender-Einstellungen'),
-      //             Text('Datenschutz'),
-      //             Text('Nutzungsbedingugen'),
-      //             Text('Impressum'),
-      //             Text('Über uns'),
-
-      //             // /*--------------------------------- WbButtonsUniWithImageButton - Telefonanruf ---*/
-      //             // WbButtonsUniWithImageButton(
-      //             //   wbColor: wbColorButtonDarkRed,
-      //             //   wbIcon: Icons.phone_forwarded,
-      //             //   wbIconSize40: 40,
-      //             //   wbText: "Kontakt anrufen",
-      //             //   wbFontSize24: 22,
-      //             //   wbWidth276: 276,
-      //             //   wbHeight90: 90,
-      //             //   wbHeightAssetImage90: 90,
-      //             //   wbImageAssetImage: const AssetImage(
-      //             //     "assets/iconbuttons/icon_button_kontakte.png",
-      //             //   ),
-      //             //   wbImageButtonRadius12: 12,
-      //             //   wbOnTapTextButton: () {
-      //             //     log("0069 - SettingsMenu - großer roter Button angeklickt"); // nur das Smartphone starten
-      //             //     showDialog(
-      //             //       context: context,
-      //             //       builder: (context) =>
-      //             //           const WbDialogAlertUpdateComingSoon(
-      //             //         headlineText: "Kontakt anrufen?",
-      //             //         contentText:
-      //             //             "Diese Funktion kommt bald in einem KOSTENLOSEN Update!\n\nHinweis: CM-0090",
-      //             //         actionsText: "OK 👍",
-      //             //       ),
-      //             //     );
-      //             //     /*--------------------------------- *** ---*/
-      //             //     // Navigator.push(
-      //             //     //   context,
-      //             //     //   MaterialPageRoute(
-      //             //     //     builder: (context) => const ContactScreen(),
-      //             //     //   ),
-      //             //     // );
-      //             //   },
-      //             //   wbOnTapImageButton: () {
-      //             //     log("0069 - SettingsMenu - Icon Kontakt anrufen angeklickt"); // erst Kontakt auswählen, dann anrufen:
-      //             //     showDialog(
-      //             //       context: context,
-      //             //       builder: (context) =>
-      //             //           const WbDialogAlertUpdateComingSoon(
-      //             //         headlineText: "Kontakt anrufen?",
-      //             //         contentText:
-      //             //             "Diese Funktion kommt bald in einem KOSTENLOSEN Update!\n\nHinweis: CM-0090",
-      //             //         actionsText: "OK 👍",
-      //             //       ),
-      //             //     );
-      //             //     /*--------------------------------- *** ---*/
-      //             //     // Navigator.push(
-      //             //     //   context,
-      //             //     //   MaterialPageRoute(
-      //             //     //     builder: (context) => const ContactScreen(),
-      //             //     //   ),
-      //             //     // );
-      //             //   },
-      //             // ),
-      //             // /*--------------------------------- *** ---*/
-      //             // wbSizedBoxHeight8,
-      //             // /*--------------------------------- *** ---*/
-      //             // const Divider(
-      //             //     thickness: 3, height: 32, color: wbColorLogoBlue),
-      //             // /*--------------------------------- WhatsApp ---*/
-      //             // WbButtonsUniWithImageButton(
-      //             //   wbColor: wbColorButtonGreen,
-      //             //   wbIcon: Icons.phonelink_ring_outlined,
-      //             //   wbIconSize40: 40,
-      //             //   wbText: "WhatsApp versenden",
-      //             //   wbFontSize24: 22,
-      //             //   wbWidth276: 276,
-      //             //   wbHeight90: 90,
-      //             //   wbHeightAssetImage90: 90,
-      //             //   wbImageAssetImage: const AssetImage(
-      //             //     "assets/icon_button_whatsapp.png",
-      //             //   ),
-      //             //   wbImageButtonRadius12: 12,
-      //             //   wbOnTapTextButton: () {
-      //             //     log("0031 - SettingsMenu - großer grüner WhatsApp Button angeklickt");
-      //             //     showDialog(
-      //             //       context: context,
-      //             //       builder: (context) =>
-      //             //           const WbDialogAlertUpdateComingSoon(
-      //             //         headlineText: "WhatsApp versenden?",
-      //             //         contentText:
-      //             //             "Diese Funktion kommt bald in einem KOSTENLOSEN Update!\n\nHinweis: CM-0136",
-      //             //         actionsText: "OK 👍",
-      //             //       ),
-      //             //     );
-      //             //     /*--------------------------------- *** ---*/
-      //             //     // Navigator.push(
-      //             //     //   context,
-      //             //     //   MaterialPageRoute(
-      //             //     //     builder: (context) => const ContactScreen(),
-      //             //     //   ),
-      //             //     // );
-      //             //   },
-      //             //   wbOnTapImageButton: () {
-      //             //     log("0150 - SettingsMenu - großer grüner WhatsApp Button angeklickt");
-      //             //     showDialog(
-      //             //       context: context,
-      //             //       builder: (context) =>
-      //             //           const WbDialogAlertUpdateComingSoon(
-      //             //         headlineText: "WhatsApp versenden?",
-      //             //         contentText:
-      //             //             "Diese Funktion kommt bald in einem KOSTENLOSEN Update!\n\nHinweis: CM-0150",
-      //             //         actionsText: "OK 👍",
-      //             //       ),
-      //             //     );
-      //             //     /*--------------------------------- *** ---*/
-      //             //     // Navigator.push(
-      //             //     //   context,
-      //             //     //   MaterialPageRoute(
-      //             //     //     builder: (context) => const ContactScreen(),
-      //             //     //   ),
-      //             //     // );
-      //             //   },
-      //             // ),
-      //             // /*--------------------------------- *** ---*/
-      //             // wbSizedBoxHeight8,
-      //             // /*--------------------------------- Divider ---*/
-      //             // const Divider(
-      //             //     thickness: 3, height: 32, color: wbColorLogoBlue),
-      //             // /*--------------------------------- E-Mail senden ---*/
-      //             // WbButtonsUniWithImageButton(
-      //             //   wbColor: wbColorButtonBlue,
-      //             //   wbIcon: Icons.forward_to_inbox_outlined,
-      //             //   wbIconSize40: 40,
-      //             //   wbText: "E-Mail versenden",
-      //             //   wbFontSize24: 22,
-      //             //   wbWidth276: 276,
-      //             //   wbHeight90: 90,
-      //             //   wbHeightAssetImage90: 90,
-      //             //   wbImageAssetImage: const AssetImage(
-      //             //     "assets/iconbuttons/icon_button_email.png",
-      //             //   ),
-      //             //   wbImageButtonRadius12: 12,
-      //             //   wbOnTapTextButton: () {
-      //             //     log("0190 - SettingsMenu - zeige EMailScreenP043");
-      //             //     Navigator.push(
-      //             //       context,
-      //             //       MaterialPageRoute(
-      //             //         // builder: (context) => const EMailScreenP043(),
-      //             //         // direkten Weg finden:
-      //             //         builder: (context) => const EMailScreenP043(
-      //             //           emailUserModel: '',
-      //             //         ), // EmailUserSelection(), // funzt noch nicht
-      //             //       ),
-      //             //     );
-      //             //   },
-      //             //   wbOnTapImageButton: () {
-      //             //     log("0199 - SettingsMenu - zeige EMailScreenP043");
-      //             //     Navigator.push(
-      //             //       context,
-      //             //       MaterialPageRoute(
-      //             //         builder: (context) => const EMailScreenP043(
-      //             //           emailUserModel: 'aa@aa.de',
-      //             //         ),
-      //             //       ),
-      //             //     );
-      //             //   },
-      //             // ),
-      //             /*--------------------------------- Abstand ---*/
-      //             // wbSizedBoxHeight16,
-      //             /*--------------------------------- Divider ---*/
-      //             const Divider(
-      //                 thickness: 3, height: 32, color: wbColorLogoBlue),
-      //             /*--------------------------------- WbButtonUniversal2 - Neue Funktionen? ---*/
-      //             WbButtonUniversal2(
-      //               wbColor: const Color.fromARGB(255, 255, 102, 219),
-      //               wbIcon: Icons.forward_to_inbox_outlined,
-      //               wbIconSize40: 40,
-      //               wbText:
-      //                   "Möchtest Du\nMEHR Funktionen?\nSchreibe einfach eine\nE-Mail an den Entwickler.",
-      //               wbFontSize24: 14,
-      //               wbWidth155: 398,
-      //               wbHeight60: 110,
-      //               wbOnTap: () {
-      //                 log("0249 - SettingsMenu - großer rosa Entwickler Button angeklickt");
-      //                 showDialog(
-      //                   context: context,
-      //                   builder: (context) =>
-      //                       const WbDialogAlertUpdateComingSoon(
-      //                     headlineText: "Mehr Funktionen?",
-      //                     contentText:
-      //                         "Diese Funktion kommt bald in einem KOSTENLOSEN Update!\n\nHinweis: SM-0263",
-      //                     actionsText: "OK 👍",
-      //                   ),
-      //                 );
-      //               },
-      //             ),
-      //             /*--------------------------------- Abstand ---*/
-      //             wbSizedBoxHeight8,
-      //             /*--------------------------------- Divider ---*/
-      //             const Divider(
-      //                 thickness: 3, height: 32, color: wbColorLogoBlue),
-      //             /*--------------------------------- Abstand ---*/
-      //             wbSizedBoxHeight32,
-      //             wbSizedBoxHeight32,
-      //             /*--------------------------------- *** ---*/
-      //           ],
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
       /*--------------------------------- WbInfoContainer ---*/
       bottomSheet: WbInfoContainer(
         infoText:
