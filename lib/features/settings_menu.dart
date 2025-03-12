@@ -13,6 +13,7 @@ import 'package:workbuddy/shared/providers/current_user_provider.dart';
 import 'package:workbuddy/shared/widgets/wb_dialog_alert_update_coming_soon.dart';
 import 'package:workbuddy/shared/widgets/wb_divider_with_text_in_center.dart';
 import 'package:workbuddy/shared/widgets/wb_info_container.dart';
+import 'package:workbuddy/wb_privacy_policy_dsgvo.dart';
 
 class SettingsMenu extends StatefulWidget {
   const SettingsMenu({super.key});
@@ -333,7 +334,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
               ),
               /*--------------------------------- Divider ---*/
               const Divider(thickness: 3, height: 32, color: wbColorLogoBlue),
-              /*--------------------------------- *** ---*/
+              /*--------------------------------- Sprache auswählen ---*/
               Container(
                 width: double.infinity, // maximale Breite
                 color: wbColorDrawerOrangeLight,
@@ -342,10 +343,10 @@ class _SettingsMenuState extends State<SettingsMenu> {
                   value: _selectedLanguage,
                   icon: const Icon(Icons.arrow_downward),
                   iconSize: 32,
-                  elevation: 16,
+                  elevation: 166,
                   style: const TextStyle(
                     color: Colors.black,
-                    fontSize: 26,
+                    fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
                   onChanged: (String? newValue) {
@@ -447,6 +448,15 @@ class _SettingsMenuState extends State<SettingsMenu> {
               WbContainerWithIconAndText(
                 containerText: 'Datenschutz',
                 containerIcon: Icons.privacy_tip_outlined,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const WbPrivacyPolicyDSGVO(),
+                    ),
+                  );
+                },
+
               ),
               /*--------------------------------- Divider ---*/
               const Divider(thickness: 3, height: 32, color: wbColorLogoBlue),
@@ -465,7 +475,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
               /*--------------------------------- Divider ---*/
               const Divider(thickness: 3, height: 32, color: wbColorLogoBlue),
               /*--------------------------------- *** ---*/
-              SizedBox(height: 80),
+              SizedBox(height: 68),
             ],
           ),
         ),

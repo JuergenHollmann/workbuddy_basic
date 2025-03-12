@@ -1,7 +1,7 @@
 name: workbuddy
 description: "save time and money"
 publish_to: 'none'
-version: 0.03.11+1
+version: 0.03.12+1
 
 environment:
   sdk: '>=3.4.3 <4.0.0'
@@ -31,6 +31,8 @@ dependencies:
   money2: ^5.4.6
   url_launcher: ^6.3.1
   path_provider: ^2.1.5
+  pdf: ^3.11.3
+  printing: ^5.14.2
 
 cupertino_icons: ^1.0.6
 

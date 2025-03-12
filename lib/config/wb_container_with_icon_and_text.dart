@@ -12,8 +12,9 @@ class WbContainerWithIconAndText extends StatefulWidget {
     this.containerIcon,
     this.containerIconSize32,
     this.containerIconColor,
-    this.containerTextSize26,
+    this.containerTextSize22,
     this.containerTextColor,
+    this.onTap,
   });
 
   final String containerText;
@@ -21,8 +22,9 @@ class WbContainerWithIconAndText extends StatefulWidget {
   final IconData? containerIcon;
   final double? containerIconSize32;
   final Color? containerIconColor;
-  final double? containerTextSize26;
+  final double? containerTextSize22;
   final Color? containerTextColor;
+  final VoidCallback? onTap;
 
   @override
   State<WbContainerWithIconAndText> createState() =>
@@ -31,52 +33,26 @@ class WbContainerWithIconAndText extends StatefulWidget {
 
 class _WbContainerWithIconAndTextState
     extends State<WbContainerWithIconAndText> {
-  /*--------------------------------- AudioPlayer ---*/
+  /*--------------------------------- WbAudioSoundManager ---*/
   final WbAudioSoundManager audioSoundManager = WbAudioSoundManager();
   @override
   void initState() {
     super.initState();
     audioSoundManager.initializePreferences();
   }
-  // /*--------------------------------- AudioPlayer ---*/
-  // final AudioPlayer player = AudioPlayer();
-
-  // final Future<SharedPreferences> prefsFuture = SharedPreferences.getInstance();
-  // bool isWarningSoundEnabled = true;
-  // bool isButtonSoundEnabled = false;
-  // bool isPageChangeSoundEnabled = false;
-  // bool isTextFieldSoundEnabled = false;
-
-  //   @override
-  // void initState() {
-  //   super.initState();
-  //   initializePreferences();
-  // }
-
-  // void initializePreferences() {
-  //   prefsFuture.then((prefs) {
-  //     isWarningSoundEnabled = prefs.getBool('warningSound') ?? true;
-  //     log('0052 - P01LoginScreen - Ist der Ton bei "Warnungen" eingeschaltet? ${prefs.getBool('warningSound')}');
-  //     isButtonSoundEnabled = prefs.getBool('buttonSound') ?? false;
-  //     log('0055 - P01LoginScreen - Ist der Ton bei "Buttons anklicken" eingeschaltet? ${prefs.getBool('buttonSound')}');
-  //     isPageChangeSoundEnabled = prefs.getBool('pageChangeSound') ?? false;
-  //     log('0058 - P01LoginScreen - Ist der Ton bei "Seitenwechsel" eingeschaltet? ${prefs.getBool('pageChangeSound')}');
-  //     isTextFieldSoundEnabled = prefs.getBool('textFieldSound') ?? false;
-  //     log('0062 - P01LoginScreen - Ist der Ton bei "Textfeldern" eingeschaltet? ${prefs.getBool('textFieldSound')}');
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
     return /*--------------------------------- *** ---*/
         GestureDetector(
       onTap: () {
-        log('0031 - WbContainerWithIconAndText - "${widget.containerText}" angeklickt');
+        log('0047 - WbContainerWithIconAndText - "${widget.containerText}" angeklickt');
         /*--------------------------------- Sound abspielen ---*/
         audioSoundManager.playButtonSound();
-        // if (isButtonSoundEnabled) {
-        //   player.play(AssetSource("sound/sound02click.wav"));
-        // }
+        /*--------------------------------- *** ---*/
+        if (widget.onTap != null) {
+          widget.onTap!();
+        }
         /*--------------------------------- *** ---*/
       },
       child: Container(
@@ -103,7 +79,7 @@ class _WbContainerWithIconAndTextState
             Text(
               widget.containerText,
               style: TextStyle(
-                fontSize: widget.containerTextSize26 ?? 26,
+                fontSize: widget.containerTextSize22 ?? 22,
                 fontWeight: FontWeight.bold,
                 color: widget.containerTextColor ?? wbColorLogoBlue,
               ),
