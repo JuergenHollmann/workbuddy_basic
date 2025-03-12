@@ -1,9 +1,8 @@
 import 'dart:developer';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workbuddy/config/wb_colors.dart';
+import 'package:workbuddy/shared/widgets/wb_audio_sound_manager.dart';
 
 class WbContainerWithIconAndText extends StatefulWidget {
   const WbContainerWithIconAndText({
@@ -26,37 +25,46 @@ class WbContainerWithIconAndText extends StatefulWidget {
   final Color? containerTextColor;
 
   @override
-  State<WbContainerWithIconAndText> createState() => _WbContainerWithIconAndTextState();
+  State<WbContainerWithIconAndText> createState() =>
+      _WbContainerWithIconAndTextState();
 }
 
-class _WbContainerWithIconAndTextState extends State<WbContainerWithIconAndText> {
+class _WbContainerWithIconAndTextState
+    extends State<WbContainerWithIconAndText> {
   /*--------------------------------- AudioPlayer ---*/
-  final AudioPlayer player = AudioPlayer();
-
-  final Future<SharedPreferences> prefsFuture = SharedPreferences.getInstance();
-  bool isWarningSoundEnabled = true;
-  bool isButtonSoundEnabled = false;
-  bool isPageChangeSoundEnabled = false;
-  bool isTextFieldSoundEnabled = false;
-
-    @override
+  final WbAudioSoundManager audioSoundManager = WbAudioSoundManager();
+  @override
   void initState() {
     super.initState();
-    initializePreferences();
+    audioSoundManager.initializePreferences();
   }
+  // /*--------------------------------- AudioPlayer ---*/
+  // final AudioPlayer player = AudioPlayer();
 
-  void initializePreferences() {
-    prefsFuture.then((prefs) {
-      isWarningSoundEnabled = prefs.getBool('warningSound') ?? true;
-      log('0052 - P01LoginScreen - Ist der Ton bei "Warnungen" eingeschaltet? ${prefs.getBool('warningSound')}');
-      isButtonSoundEnabled = prefs.getBool('buttonSound') ?? false;
-      log('0055 - P01LoginScreen - Ist der Ton bei "Buttons anklicken" eingeschaltet? ${prefs.getBool('buttonSound')}');
-      isPageChangeSoundEnabled = prefs.getBool('pageChangeSound') ?? false;
-      log('0058 - P01LoginScreen - Ist der Ton bei "Seitenwechsel" eingeschaltet? ${prefs.getBool('pageChangeSound')}');
-      isTextFieldSoundEnabled = prefs.getBool('textFieldSound') ?? false;
-      log('0062 - P01LoginScreen - Ist der Ton bei "Textfeldern" eingeschaltet? ${prefs.getBool('textFieldSound')}');
-    });
-  }
+  // final Future<SharedPreferences> prefsFuture = SharedPreferences.getInstance();
+  // bool isWarningSoundEnabled = true;
+  // bool isButtonSoundEnabled = false;
+  // bool isPageChangeSoundEnabled = false;
+  // bool isTextFieldSoundEnabled = false;
+
+  //   @override
+  // void initState() {
+  //   super.initState();
+  //   initializePreferences();
+  // }
+
+  // void initializePreferences() {
+  //   prefsFuture.then((prefs) {
+  //     isWarningSoundEnabled = prefs.getBool('warningSound') ?? true;
+  //     log('0052 - P01LoginScreen - Ist der Ton bei "Warnungen" eingeschaltet? ${prefs.getBool('warningSound')}');
+  //     isButtonSoundEnabled = prefs.getBool('buttonSound') ?? false;
+  //     log('0055 - P01LoginScreen - Ist der Ton bei "Buttons anklicken" eingeschaltet? ${prefs.getBool('buttonSound')}');
+  //     isPageChangeSoundEnabled = prefs.getBool('pageChangeSound') ?? false;
+  //     log('0058 - P01LoginScreen - Ist der Ton bei "Seitenwechsel" eingeschaltet? ${prefs.getBool('pageChangeSound')}');
+  //     isTextFieldSoundEnabled = prefs.getBool('textFieldSound') ?? false;
+  //     log('0062 - P01LoginScreen - Ist der Ton bei "Textfeldern" eingeschaltet? ${prefs.getBool('textFieldSound')}');
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -65,9 +73,10 @@ class _WbContainerWithIconAndTextState extends State<WbContainerWithIconAndText>
       onTap: () {
         log('0031 - WbContainerWithIconAndText - "${widget.containerText}" angeklickt');
         /*--------------------------------- Sound abspielen ---*/
-        if (isButtonSoundEnabled) {
-          player.play(AssetSource("sound/sound02click.wav"));
-        }
+        audioSoundManager.playButtonSound();
+        // if (isButtonSoundEnabled) {
+        //   player.play(AssetSource("sound/sound02click.wav"));
+        // }
         /*--------------------------------- *** ---*/
       },
       child: Container(
