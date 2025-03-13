@@ -7,6 +7,7 @@ import 'package:workbuddy/config/wb_button_universal_2.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
 import 'package:workbuddy/features/contacts/screens/contact_list.dart';
+import 'package:workbuddy/features/contacts/screens/contact_list_from_device.dart';
 import 'package:workbuddy/features/contacts/screens/contact_screen.dart';
 import 'package:workbuddy/shared/providers/current_app_version_provider.dart';
 import 'package:workbuddy/shared/providers/current_user_provider.dart';
@@ -144,13 +145,17 @@ class ContactMenu extends StatelessWidget {
                       wbOnTap: () {
                         developer.log(
                             '0146 - ContactMenu - "Kontakte aus dem Smartphone holen" - angeklickt');
+
+                        /*--------------------------------- Navigator.push ---*/
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                ContactList(), // vorher: SmartphoneContactsScreen(),
+                                ContactListFromDevice(), // ContactScreen
                           ),
                         );
+
+                        /*--------------------------------- *** ---*/
                       },
                     ),
                     /*--------------------------------- Abstand ---*/
@@ -215,8 +220,13 @@ class ContactMenu extends StatelessWidget {
                     ),
                     /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight8,
+
+                    /*--------------------------------- Divider ---*/
                     const Divider(
                         thickness: 3, height: 32, color: wbColorLogoBlue),
+
+                    /*--------------------------------- Abstand ---*/
+                    SizedBox(height: 40),
                     /*--------------------------------- ENDE ---*/
                   ],
                 ),

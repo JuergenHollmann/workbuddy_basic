@@ -146,7 +146,7 @@ class WbPrivacyPolicyDSGVO extends StatelessWidget {
 
             /*--------------------------------- Änderungsdatum ---*/
             const Text(
-              'Diese Datenschutzerklärung wurde zuletzt aktualisiert am 15.03.2025.',
+              'Diese Datenschutzerklärung wurde zuletzt aktualisiert am 13.03.2025.',
             ),
 
             /*--------------------------------- Abstand ---*/

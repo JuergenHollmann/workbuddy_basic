@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
     <key>NSContactsUsageDescription</key>  
-    <string>Diese App benötigt Zugriff auf Deine Kontakte, um sie anzuzeigen.</string>
+    <string>Diese App benötigt die Berechtigung zum Lesen deiner Kontakte um perfekt zu funktionieren!</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

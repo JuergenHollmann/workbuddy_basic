@@ -139,7 +139,7 @@ class WbTermsOfService extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             const Text(
-              'Diese Nutzungsbedingungen wurden zuletzt aktualisiert am 15.03.2025.',
+              'Diese Nutzungsbedingungen wurden zuletzt aktualisiert am 13.03.2025.',
             ),
 
             /*--------------------------------- Abstand ---*/
