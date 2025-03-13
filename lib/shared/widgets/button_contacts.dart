@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:workbuddy/features/companies/screens/company_menu.dart';
+import 'package:workbuddy/features/contacts/screens/contact_menu.dart';
 
 class ButtonContacts extends StatelessWidget {
   const ButtonContacts({super.key});
@@ -10,11 +10,11 @@ class ButtonContacts extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        log("0015 - ButtonContacts - wechsle zur Seite CompanyScreen");
+        log("0015 - ButtonContacts - wechsle zur Seite ContactScreen");
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const CompanyMenu(),
+            builder: (context) => const ContactMenu(),
           ),
         );
       },

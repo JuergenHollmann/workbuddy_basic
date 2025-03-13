@@ -99,7 +99,7 @@ class MainApp extends StatelessWidget {
         title: appTitle,
         preferencesRepository: SharedPreferencesRepository(),
       ),
-            routes: {
+      routes: {
         '/terms': (context) =>
             const WbTermsOfService(), // Route für die Nutzungsbedingungen-Seite
       },
@@ -318,14 +318,14 @@ class DatabaseHelper {
   √ für macOS muss im macos/Podfile ---> platform :osx, '10.15' eingestellt werden √ 
   /*--------------------------------- *** ---
   - 0402 - SettingsMenu - Sprache "Deutsch" auswählen.
-  - Snackbar einblenden funzt hier nicht! 2101 - CompanyScreen
-  - Fehlermeldung beheben: wegen disposed() called on null - 0466 - CompanyScreen
+  - Snackbar einblenden funzt hier nicht! 2101 - ContactScreen
+  - Fehlermeldung beheben: wegen disposed() called on null - 0466 - ContactScreen
   - CurrentUserProvider>().currentUser; // funzt nicht 0616 - P01LoginScreen
   - Klicke unten auf den E-Mail-Button - dann das E-Mail-Menü starten - CM-0121
-  - dispose(); // löscht die Controller aus dem Speicher - hängt sich auf - 1652 - CompanyScreen
-  - Automatisch das Alter berechnen mit "age_calculator" 0785 - CompanyScreen
-  - Zeitstempel formatieren - 01441 - CompanyScreen
-  - Geburtstag ist ein Datum und kein String - wie kann ich das mit einem Controller verarbeiten? - 0146 - CompanyScreen
+  - dispose(); // löscht die Controller aus dem Speicher - hängt sich auf - 1652 - ContactScreen
+  - Automatisch das Alter berechnen mit "age_calculator" 0785 - ContactScreen
+  - Zeitstempel formatieren - 01441 - ContactScreen
+  - Geburtstag ist ein Datum und kein String - wie kann ich das mit einem Controller verarbeiten? - 0146 - ContactScreen
   - Die Farbe mit "focusNode" in Textformfield ändern - todo 0267 - P01LoginScreen
   - "WbTextFormFieldSHADOWContour" - lib/config/wb_textformfield_shadow_contour.dart als Widget erstellen
   - Mit Provider im Feld "Wer hat eingekauft?" den angemeldeten User automatisch eintragen.
@@ -344,7 +344,7 @@ class DatabaseHelper {
 
   - Allgemein überall "TextEditingController.dispose" einbauen.
   - Nützliche Funktion für den User vorschlagen - E-Mail DIREKT an den Entwickler senden - "Support-E-Mail" eintragen - CM-0121
-  - "WbInfoContainer" im CompanyScreen ist teilweise noch festverdrahtet - 1030
+  - "WbInfoContainer" im ContactScreen ist teilweise noch festverdrahtet - 1030
   - "WbInfoContainer" im ContactScreen ist teilweise noch festverdrahtet - 1030
 
   - In Chrome gibt es keine SharedPreferences, deshalb muss ich das auf "null" setzen? oder woanders (SQL) speichern?
@@ -367,7 +367,7 @@ class DatabaseHelper {
   √ Mit "$formatWeekday" gibt es eine Fehlermeldung - main - CurrentDateProvider - 0071 √
   √ WbHomePage: WbInfoContainer als "Footer" programmieren √
   √ Icons sollen beim Aussuchen sichtbar sein (Einstellungen in VSCode) √
-  √ CompanyScreen: Logo und Bild oben sind noch zu groß für SamsungA05 √
+  √ ContactScreen: Logo und Bild oben sind noch zu groß für SamsungA05 √
   √ GestureDetector in allen Button-Widgets fixen √
   √ WBGreenButton - Beispiel: Login-Button √
   √ WbButtonsUniWithImageButton √
@@ -401,7 +401,7 @@ class DatabaseHelper {
   √ wurde gelöscht: "WbButtonUniShadow" √
 
   - Hier besser eine Map erstellen - ExpenseWidget - 0033
-  - CompanyScreen: leadingIconsInMenu hat hier keine Auswikung // todo 0233 + 0406
+  - ContactScreen: leadingIconsInMenu hat hier keine Auswikung // todo 0233 + 0406
 
 - Updates:
   - Aufgaben anlegen, bearbeiten, delegieren ...  - Update AM-0019
@@ -425,7 +425,7 @@ class DatabaseHelper {
     x - flutter_rounded_date_picker: ^3.0.4 (nicht installiert, ist aber umfangreicher)
     x - flutter_holo_date_picker: ^2.0.0    (nur für Datumseinstellungen - nicht installiert)
     x - progressive_time_picker: ^1.0.1     (nur Zeitspanne, aber gut aussehend - nicht installiert)
-  √ Alter anhand vom Geburtstag automatisch berechnen und im Feld eintragen - 0491 - CompanyScreen √ 
+  √ Alter anhand vom Geburtstag automatisch berechnen und im Feld eintragen - 0491 - ContactScreen √ 
   - Checklisten-App in WorkBuddy einbauen - ToDo-Liste (Aufgaben)
   - Im Validator "Die Paßwörter sind NICHT gleich!" funzt so nicht! 0050 - Validator
   - App-Icon neu erstellen (Android-Bug? - in Android nur schwarz)
@@ -462,10 +462,10 @@ class DatabaseHelper {
   git rm --cached ios/Runner/GoogleService-Info.plist
 
   - ANDERE Schriftgrößen automatisch einstellen? Beispiel: iOS = 20 | Pixel8 = 27 | SamsungA05 = 21 (0513)
-  √ CompanyScreen: Button "Firma speichern" auf dynamische Größe ändern √
-  √ CompanyScreen: DropDown Lieferant / Kunde / etc. anstatt "CompanyRadioButton1" = deaktiviert - 0193 √
-  √ CompanyScreen: Name der Firma unter dem Logo automatisch eintragen √
-  √ CompanyScreen: Name des Kunden unter dem Bild automatisch eintragen √
+  √ ContactScreen: Button "Firma speichern" auf dynamische Größe ändern √
+  √ ContactScreen: DropDown Lieferant / Kunde / etc. anstatt "CompanyRadioButton1" = deaktiviert - 0193 √
+  √ ContactScreen: Name der Firma unter dem Logo automatisch eintragen √
+  √ ContactScreen: Name des Kunden unter dem Bild automatisch eintragen √
   √ ContactScreen: lässt sich nicht mehr starten - gelöst, Seite komplett neu aufgebaut √
   - WbButtonUniversal: Warum hat "width" keine Auswirkung?
   - WbHomePage: Drawer fertig programmieren
@@ -473,7 +473,7 @@ class DatabaseHelper {
   - P01LoginScreen: Info-Leiste auf dem Startbildschirm unten einbauen
   - P01LoginScreen: Login mit SQFlite-DB verbinden
   - P01LoginScreen: Passwort gleich von Anfang an ausblenden (mit State?)
-  - CompanyScreen: Telefonanruf starten - 0513 - company_screen - Anruf starten
+  - ContactScreen: Telefonanruf starten - 0513 - company_screen - Anruf starten
   - autofillHints: autofillHints, // wie funzt das?
   - PRODUCT_BUNDLE_IDENTIFIER = com.example.widgetsIntroductionLiveCoding umbenennen
 

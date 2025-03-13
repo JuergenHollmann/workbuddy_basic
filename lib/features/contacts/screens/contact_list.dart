@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_textformfield_shadow_with_2_icons.dart';
-import 'package:workbuddy/features/companies/screens/company_screen.dart';
+import 'package:workbuddy/features/contacts/screens/contact_screen.dart';
 import 'package:workbuddy/shared/widgets/wb_navigationbar.dart';
 
 class DatabaseHelper {
@@ -22,7 +22,7 @@ class DatabaseHelper {
   }
 
   Future<Database> _openDatabaseFromAssets() async {
-    log('0046 - CompanyScreen - Öffnet die Datenbank');
+    log('0046 - ContactScreen - Öffnet die Datenbank');
     Directory documentsDir = await getApplicationDocumentsDirectory();
     String dbPath = join(documentsDir.path, "JOTHAsoft.FiveStars.db");
     bool dbExists = await databaseExists(dbPath);
@@ -108,7 +108,7 @@ class _ContactListState extends State<ContactList> {
                   controller: _searchController,
                   labelText: 'Suche Kontakte',
                   hintText: 'Suche Vorname, Nachname, Firma oder Ort',
-                  contentPadding:  const EdgeInsets.fromLTRB(8, 8, 0, 8),
+                  contentPadding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
                   prefixIcon: Icons.search,
                   suffixIcon: Icons.delete_forever,
                   fillColor: Colors.yellow,
@@ -158,7 +158,7 @@ class _ContactListState extends State<ContactList> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => CompanyScreen(
+                            builder: (context) => ContactScreen(
                                 contact:
                                     contact), // später umbenennen in ContactScreen?
                           ),
