@@ -17,6 +17,8 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
   List<Contact> _contacts = [];
   List<Contact> _filteredContacts = [];
   bool _permissionDenied = false;
+    bool _isLoading = true;
+  final double _progress = 0.0;
 
   final TextEditingController _searchController = TextEditingController();
 
@@ -33,11 +35,15 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
       return;
     }
 
-    final contacts = await FlutterContacts.getContacts(withProperties: true);
+    final contacts = await FlutterContacts.getContacts(
+      withProperties: true,
+      withPhoto: true,
+    );
+
     setState(() {
-      // _permissionDenied = true; // überbrückt die Berechtigungsabfrage
       _contacts = contacts;
       _filteredContacts = contacts;
+      _isLoading = false;
     });
   }
 
@@ -72,7 +78,29 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
           ),
         ),
       ),
-      body: Column(
+      
+      body: _isLoading
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(
+                    value: _progress,
+                    color: wbColorBackgroundBlue,
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'Bitte warten ... ${(_progress * 100).toStringAsFixed(0)}%',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : 
+      Column(
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
