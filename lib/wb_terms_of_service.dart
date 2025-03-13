@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -26,8 +27,8 @@ class WbTermsOfService extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Nutzungsbedingungen',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              'Nutzungsbedingungen von "WorkBuddy"',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             const Text(
@@ -111,8 +112,19 @@ class WbTermsOfService extends StatelessWidget {
               'Diese Nutzungsbedingungen unterliegen den Gesetzen der Bundesrepublik Deutschland. Gerichtsstand für alle Streitigkeiten aus oder im Zusammenhang mit diesen Nutzungsbedingungen ist, soweit gesetzlich zulässig, der Sitz von JOTHAsoft und WorkBuddy.',
             ),
             const SizedBox(height: 16),
+
+            /*--------------------------------- Salvatorische Klausel ---*/
             const Text(
-              '10. Kontakt',
+              '10. Salvatorische Klausel',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const Text(
+                'Sollte eine Bestimmung dieser Nutzungsbedingungen unwirksam oder undurchführbar sein oder werden, so wird hierdurch die Gültigkeit der übrigen Bestimmungen nicht berührt. Anstelle der unwirksamen oder undurchführbaren Bestimmung soll eine angemessene Regelung gelten, die dem wirtschaftlichen Zweck der unwirksamen oder undurchführbaren Bestimmung möglichst nahekommt. Die Vertragsparteien verpflichten sich, in einem solchen Fall eine angemessene und rechtlich zulässige Ersatzregelung zu vereinbaren, die der unwirksamen oder undurchführbaren Bestimmung im wirtschaftlichen Ergebnis möglichst nahekommt.'),
+            const SizedBox(height: 16),
+
+            /*--------------------------------- Kontakt ---*/
+            const Text(
+              '11. Kontakt',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             const Text(
@@ -152,6 +164,7 @@ class WbTermsOfService extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                     backgroundColor: wbColorBackgroundBlue),
                 onPressed: () async {
+                  log('0167 - WbTermsOfService - Nutzungsbedingungen - PDF-Datei erstellen und drucken');
                   final pdf = pw.Document();
 
                   /*--------------------------------- Image 1 laden ---*/
@@ -176,43 +189,53 @@ class WbTermsOfService extends StatelessWidget {
                       maxPages: 20,
 
                       /*--------------------------------- Header = Kopfzeile ---*/
-                      header: (context) => pw.Stack(
+                      header: (context) => pw.Column(
                         children: [
-                          /*--------------------------------- Image 1 ---*/
-                          pw.Positioned(
-                            top: 0,
-                            right: 0,
-                            child: pw.Image(image1,
-                                width: 2 * PdfPageFormat.cm,
-                                height: 2 * PdfPageFormat.cm),
-                          ),
-                          /*--------------------------------- Image 2 ---*/
-                          pw.Positioned(
-                            top: 0,
-                            right: 2.5 * PdfPageFormat.cm,
-                            child: pw.Image(image2,
-                                width: 2 * PdfPageFormat.cm,
-                                height: 2 * PdfPageFormat.cm),
-                          ),
-                          /*--------------------------------- Text ---*/
-                          pw.Row(
+                          pw.Stack(
                             children: [
-                              pw.Text(
-                                'Nutzungsbedingungen',
-                                style: pw.TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: pw.FontWeight.bold,
-                                ),
+                              /*--------------------------------- Image 1 - WorkBuddy ---*/
+                              pw.Positioned(
+                                top: 0,
+                                right: 2.5 * PdfPageFormat.cm,
+                                child: pw.Image(image1,
+                                    width: 2 * PdfPageFormat.cm,
+                                    height: 2 * PdfPageFormat.cm),
                               ),
-                              pw.SizedBox(width: 60),
-                              pw.Text(
-                                'Seite ${context.pageNumber} von ${context.pagesCount}',
-                                style: pw.TextStyle(
-                                  fontSize: 12,
-                                ),
+                              /*--------------------------------- Image 2 - JOTHAsoft ---*/
+                              pw.Positioned(
+                                top: 0,
+                                right: 0,
+                                child: pw.Image(image2,
+                                    width: 2 * PdfPageFormat.cm,
+                                    height: 2 * PdfPageFormat.cm),
                               ),
-                              pw.SizedBox(height: 60),
+                              /*--------------------------------- Text ---*/
+                              pw.Row(
+                                children: [
+                                  pw.Text(
+                                    'Nutzungsbedingungen von "WorkBuddy"',
+                                    style: pw.TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: pw.FontWeight.bold,
+                                    ),
+                                  ),
+                                  // pw.SizedBox(width: 60),
+                                  // pw.Text(
+                                  //   'Seite ${context.pageNumber} von ${context.pagesCount}',
+                                  //   style: pw.TextStyle(
+                                  //     fontSize: 12,
+                                  //   ),
+                                  // ),
+                                  pw.SizedBox(height: 60),
+                                ],
+                              ),
                             ],
+                          ),
+
+                          /*--------------------------------- Divider ---*/
+                          pw.Divider(
+                            color: PdfColors.black,
+                            thickness: 1,
                           ),
                         ],
                       ),
@@ -220,26 +243,40 @@ class WbTermsOfService extends StatelessWidget {
                       /*--------------------------------- Footer = Fußzeile ---*/
                       footer: (context) => pw.Container(
                         alignment: pw.Alignment.bottomRight,
-                        margin: const pw.EdgeInsets.only(
-                            top: 1.0 * PdfPageFormat.cm),
-                        child: pw.Text(
-                          '© JOTHAsoft.de • Mobile Apps + Software • Nutzungsbedingungen • Seite ${context.pageNumber} von ${context.pagesCount}',
-                          style: pw.TextStyle(
-                            fontSize: 10,
-                            color: PdfColors.black,
-                          ),
+                        // margin: const pw.EdgeInsets.only(top: 1.0 * PdfPageFormat.cm),
+
+                        /*--------------------------------- Divider ---*/
+                        child: pw.Column(
+                          crossAxisAlignment: pw.CrossAxisAlignment.end,
+                          mainAxisSize: pw.MainAxisSize.min,
+                          children: [
+                            pw.Divider(
+                              color: PdfColors.black,
+                              thickness: 1,
+                            ),
+
+                            /*--------------------------------- Text ---*/
+                            pw.Text(
+                              '© JOTHAsoft.de - Mobile Apps + Software - Nutzungsbedingungen - Seite ${context.pageNumber} von ${context.pagesCount}',
+                              style: pw.TextStyle(
+                                fontSize: 10,
+                                color: PdfColors.black,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
 
                       /*--------------------------------- DIN-A4-Format und Margin ---*/
                       pageFormat: PdfPageFormat.a4,
-                      margin: pw.EdgeInsets.fromLTRB(64, 24, 24, 32),
+                      margin: pw.EdgeInsets.fromLTRB(64, 24, 24, 8),
                       build: (pw.Context context) => [
                         /*--------------------------------- Text ---*/
                         pw.Container(
                           child: pw.Column(
                             crossAxisAlignment: pw.CrossAxisAlignment.start,
                             children: [
+                              /*--------------------------------- Einleitung ---*/
                               pw.Text(
                                 '1. Einleitung\n',
                                 style: pw.TextStyle(
@@ -248,6 +285,8 @@ class WbTermsOfService extends StatelessWidget {
                               pw.Text(
                                 'Willkommen bei WorkBuddy!\nDiese Nutzungsbedingungen regeln deine Nutzung unserer mobilen Anwendung ("App"). Durch die Nutzung der App erklärst du dich mit diesen Bedingungen einverstanden. Wenn du nicht einverstanden bist, darfst du die App nicht nutzen.\n\n',
                               ),
+
+                              /*--------------------------------- Nutzung der App ---*/
                               pw.Text(
                                 '2. Nutzung der App\n',
                                 style: pw.TextStyle(
@@ -259,6 +298,8 @@ class WbTermsOfService extends StatelessWidget {
                                 '2.2. Registrierung\n'
                                 'Die App ist in der Version "WorkBuddy-Basic" kostenfrei und Du kannst diese Version auch ohne Registrierung nutzen. Alle Daten, die Du in dieser Version speicherst, werden nur auf deinem Device (Smartphone, Tablet, etc.) gespeichert und auf keine Server übermittelt. Um aber bestimmte (kostenlose oder kostenpflichtige) Funktionen der App nutzen zu können, musst du dich registrieren und ein Konto erstellen. Du bist dafür verantwortlich, die Vertraulichkeit deiner Kontoinformationen zu wahren und alle Aktivitäten, die unter deinem Konto stattfinden, zu überwachen.\n\n',
                               ),
+
+                              /*--------------------------------- Datenschutz ---*/
                               pw.Text(
                                 '3. Datenschutz\n',
                                 style: pw.TextStyle(
@@ -267,6 +308,8 @@ class WbTermsOfService extends StatelessWidget {
                               pw.Text(
                                 'Deine Privatsphäre ist uns wichtig. Bitte lies unsere Datenschutzerklärung, um zu erfahren, ob und wie wir deine persönlichen Daten sammeln, verwenden und schützen.\n\n',
                               ),
+
+                              /*--------------------------------- Inhalte und geistiges Eigentum ---*/
                               pw.Text(
                                 '4. Inhalte und geistiges Eigentum\n',
                                 style: pw.TextStyle(
@@ -278,6 +321,8 @@ class WbTermsOfService extends StatelessWidget {
                                 '4.2. Lizenz\n'
                                 'Wir gewähren dir eine beschränkte, nicht exklusive, nicht übertragbare Lizenz zur Nutzung der App für persönliche und geschäftliche Zwecke. Du darfst die App nicht ohne unsere ausdrückliche schriftliche Genehmigung modifizieren, kopieren, vertreiben, übertragen, anzeigen, aufführen, reproduzieren, veröffentlichen, lizenzieren, abgeleitete Werke erstellen oder verkaufen.\n\n',
                               ),
+
+                              /*--------------------------------- Verbotene Aktivitäten ---*/
                               pw.Text(
                                 '5. Verbotene Aktivitäten\n',
                                 style: pw.TextStyle(
@@ -290,11 +335,13 @@ class WbTermsOfService extends StatelessWidget {
                                 '- Das Stören oder Unterbrechen der App oder der mit der App verbundenen Server oder Netzwerke\n\n',
                               ),
 
-                              /*--------------------------------- Neue Seite ---*/
-                              pw.NewPage(), // Neue Seite erzwingen funzt nicht
-                              pw.SizedBox(height: 54),
+                              /*--------------------------------- Neue Seite erzwingen - funzt nicht ---*/
+                              // pw.NewPage(), // funzt nicht
+                              // pw.PageBreak(), // gibt es anscheinend nicht?
+                              pw.SizedBox(height: 72),
+                              /*--------------------------------- *** ---*/
 
-                              /*--------------------------------- Text auf Seite 2 ---*/
+                              /*--------------------------------- Haftungsausschluss ---*/
                               pw.Text(
                                 '6. Haftungsausschluss\n',
                                 style: pw.TextStyle(
@@ -303,6 +350,8 @@ class WbTermsOfService extends StatelessWidget {
                               pw.Text(
                                 'Die App wird "wie besehen" und "wie verfügbar" bereitgestellt. Wir übernehmen keine Gewährleistung, weder ausdrücklich noch stillschweigend, hinsichtlich der App oder ihrer Inhalte. Wir haften nicht für Schäden, die aus der Nutzung oder Unmöglichkeit der Nutzung der App entstehen.\n\n',
                               ),
+
+                              /*--------------------------------- Änderungen der Nutzungsbedingungen ---*/
                               pw.Text(
                                 '7. Änderungen der Nutzungsbedingungen\n',
                                 style: pw.TextStyle(
@@ -311,6 +360,8 @@ class WbTermsOfService extends StatelessWidget {
                               pw.Text(
                                 'Wir behalten uns das Recht vor, diese Nutzungsbedingungen jederzeit zu ändern. Änderungen werden in der App veröffentlicht und treten sofort in Kraft. Deine fortgesetzte Nutzung der App nach der Veröffentlichung der Änderungen gilt als Zustimmung zu den geänderten Bedingungen.\n\n',
                               ),
+
+                              /*--------------------------------- Beendigung ---*/
                               pw.Text(
                                 '8. Beendigung\n',
                                 style: pw.TextStyle(
@@ -319,6 +370,8 @@ class WbTermsOfService extends StatelessWidget {
                               pw.Text(
                                 'Wir können dein Konto und deinen Zugang zur App jederzeit und ohne Vorankündigung aus beliebigem Grund beenden oder aussetzen, einschließlich, aber nicht beschränkt auf Verstöße gegen diese Nutzungsbedingungen.\n\n',
                               ),
+
+                              /*--------------------------------- Anwendbares Recht ---*/
                               pw.Text(
                                 '9. Anwendbares Recht\n',
                                 style: pw.TextStyle(
@@ -327,14 +380,26 @@ class WbTermsOfService extends StatelessWidget {
                               pw.Text(
                                 'Diese Nutzungsbedingungen unterliegen den Gesetzen der Bundesrepublik Deutschland. Gerichtsstand für alle Streitigkeiten aus oder im Zusammenhang mit diesen Nutzungsbedingungen ist, soweit gesetzlich zulässig, der Sitz von JOTHAsoft und WorkBuddy.\n\n',
                               ),
+
+                              /*--------------------------------- Salvatorische Klausel ---*/
                               pw.Text(
-                                '10. Kontakt\n',
+                                '10. Salvatorische Klausel',
+                                style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold),
+                              ),
+                              pw.Text(
+                                'Sollte eine Bestimmung dieser Nutzungsbedingungen unwirksam oder undurchführbar sein oder werden, so wird hierdurch die Gültigkeit der übrigen Bestimmungen nicht berührt. Anstelle der unwirksamen oder undurchführbaren Bestimmung soll eine angemessene Regelung gelten, die dem wirtschaftlichen Zweck der unwirksamen oder undurchführbaren Bestimmung möglichst nahekommt. Die Vertragsparteien verpflichten sich, in einem solchen Fall eine angemessene und rechtlich zulässige Ersatzregelung zu vereinbaren, die der unwirksamen oder undurchführbaren Bestimmung im wirtschaftlichen Ergebnis möglichst nahekommt.\n\n',
+                              ),
+
+                              /*--------------------------------- Kontakt ---*/
+                              pw.Text(
+                                '11. Kontakt\n',
                                 style: pw.TextStyle(
                                     fontWeight: pw.FontWeight.bold),
                               ),
                               pw.Text(
                                 'Wenn du Fragen oder Bedenken zu diesen Nutzungsbedingungen hast, kontaktiere uns bitte unter:\n\n'
-                                'JOTHAsoft.de • Mobile Apps + Software\n'
+                                'JOTHAsoft.de - Mobile Apps + Software\n'
                                 'Jürgen Hollmann\n'
                                 'Leutzestraße 64\n'
                                 '73525 Schwäbisch Gmünd\n'
@@ -342,10 +407,17 @@ class WbTermsOfService extends StatelessWidget {
                                 'E-Mail: JOTHAsoft@gmail.com\n'
                                 'Telefon: +49-178-9697-193\n\n',
                               ),
+
+                              /*--------------------------------- Aktualisierungsdatum ---*/
                               pw.Text(
-                                'Diese Nutzungsbedingungen wurden zuletzt aktualisiert am 15.03.2025.\n\n'
-                                'Druckdatum: Am ${DateTime.now().day}.${DateTime.now().month}.${DateTime.now().year} um ${DateTime.now().hour}:${DateTime.now().minute} Uhr',
+                                'Diese Nutzungsbedingungen wurden zuletzt aktualisiert am 13.03.2025.',
                               ),
+
+                              /*--------------------------------- Druckdatum ---*/
+                              pw.Text(
+                                'Diese Nutzungsbedingungen wurden ausgedruckt am ${DateTime.now().day}.${DateTime.now().month}.${DateTime.now().year} um ${DateTime.now().hour}:${DateTime.now().minute} Uhr',
+                              ),
+                              /*--------------------------------- *** ---*/
                             ],
                           ),
                         ),
@@ -353,15 +425,16 @@ class WbTermsOfService extends StatelessWidget {
                     ),
                   );
 
-                  // Speichern der PDF-Datei im lokalen Speicher
+                  /*--------------------------------- Speichern der PDF-Datei im lokalen Speicher ---*/
                   final output = await getTemporaryDirectory();
                   final file = File("${output.path}/Nutzungsbedingungen.pdf");
                   await file.writeAsBytes(await pdf.save());
 
-                  // Öffnen und Drucken der PDF-Datei
+                  /*--------------------------------- Öffnen und Drucken der PDF-Datei ---*/
                   await Printing.layoutPdf(
                     onLayout: (PdfPageFormat format) async => pdf.save(),
                   );
+                  /*--------------------------------- Text im ElevatedButton ---*/
                 },
                 child: const Text(
                   'Eine PDF-Datei erstellen und drucken',
