@@ -229,7 +229,7 @@ class WbPrivacyPolicyDSGVO extends StatelessWidget {
 
                     /*--------------------------------- DIN-A4-Format und Margin ---*/
                     pageFormat: PdfPageFormat.a4,
-                    margin: pw.EdgeInsets.fromLTRB(64, 24, 24, 24),
+                    margin: pw.EdgeInsets.fromLTRB(64, 24, 24, 32),
                     build: (pw.Context context) => [
                       /*--------------------------------- Text ---*/
 
@@ -254,7 +254,7 @@ class WbPrivacyPolicyDSGVO extends StatelessWidget {
                             // ),
                             // /*--------------------------------- *** ---*/
 
-                            pw.SizedBox(height: 16),
+                            //pw.SizedBox(height: 16),
 
                             pw.Text(
                               '1. Verantwortlicher\n',
@@ -336,6 +336,8 @@ class WbPrivacyPolicyDSGVO extends StatelessWidget {
                             // Neue Seite erzwingen
                             pw.NewPage(), // funzt nicht
 
+                            pw.SizedBox(height: 80),
+                            
                             pw.Text(
                               '8. Rechte der betroffenen Personen\n',
                               style:
