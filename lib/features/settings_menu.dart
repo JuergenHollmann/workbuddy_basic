@@ -456,7 +456,6 @@ class _SettingsMenuState extends State<SettingsMenu> {
                     ),
                   );
                 },
-
               ),
               /*--------------------------------- Divider ---*/
               const Divider(thickness: 3, height: 32, color: wbColorLogoBlue),
@@ -464,6 +463,9 @@ class _SettingsMenuState extends State<SettingsMenu> {
               WbContainerWithIconAndText(
                 containerText: 'Nutzungsbedingungen',
                 containerIcon: Icons.rule_folder_outlined,
+                onTap: () {
+                  Navigator.pushNamed(context, '/terms');
+                },
               ),
               /*--------------------------------- Divider ---*/
               const Divider(thickness: 3, height: 32, color: wbColorLogoBlue),

@@ -25,6 +25,7 @@ import 'package:workbuddy/shared/repositories/database_setup.dart';
 import 'package:workbuddy/shared/repositories/firebase_auth_repository.dart';
 import 'package:workbuddy/shared/repositories/mock_database.dart';
 import 'package:workbuddy/shared/repositories/shared_preferences_repository.dart';
+import 'package:workbuddy/wb_terms_of_service.dart'; // Import der Nutzungsbedingungen-Seite
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -98,6 +99,10 @@ class MainApp extends StatelessWidget {
         title: appTitle,
         preferencesRepository: SharedPreferencesRepository(),
       ),
+            routes: {
+        '/terms': (context) =>
+            const WbTermsOfService(), // Route für die Nutzungsbedingungen-Seite
+      },
     );
   }
 }
