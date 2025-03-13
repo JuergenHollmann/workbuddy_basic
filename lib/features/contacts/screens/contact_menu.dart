@@ -109,7 +109,7 @@ class ContactMenu extends StatelessWidget {
                       wbIconSize40: 40,
                       wbText: 'In allen Kontakten\nSUCHEN und FINDEN',
                       wbFontSize24: 20,
-                      wbWidth155: 398,
+                      wbWidth155: double.infinity, // maximale Breite
                       wbHeight60: 80,
                       wbOnTap: () {
                         developer.log(
@@ -131,6 +131,32 @@ class ContactMenu extends StatelessWidget {
                       height: 32,
                       color: wbColorLogoBlue,
                     ),
+
+                    /*--------------------------------- Kontakte aus dem Smartphone holen ---*/
+                    WbButtonUniversal2(
+                      wbColor: wbColorOrangeDarker,
+                      wbIcon: Icons.person_search_outlined,
+                      wbIconSize40: 40,
+                      wbText: 'Kontakte aus dem\nSmartphone holen',
+                      wbFontSize24: 20,
+                      wbWidth155: double.infinity, // maximale Breite
+                      wbHeight60: 80,
+                      wbOnTap: () {
+                        developer.log(
+                            '0146 - ContactMenu - "Kontakte aus dem Smartphone holen" - angeklickt');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ContactList(), // vorher: SmartphoneContactsScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    /*--------------------------------- Abstand ---*/
+                    wbSizedBoxHeight8,
+                    const Divider(
+                        thickness: 3, height: 32, color: wbColorLogoBlue),
                     /*--------------------------------- Kontakt NEU anlegen ---*/
                     WbButtonUniversal2(
                       wbColor: wbColorAppBarBlue,
