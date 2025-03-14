@@ -6,6 +6,9 @@ import 'package:workbuddy/config/wb_colors.dart';
 // import 'package:workbuddy/config/wb_colors.dart';
 // import 'package:workbuddy/config/wb_dialog_2buttons.dart';
 
+/*--- FlutterContacts ---*/
+/*--- https://pub.dev/packages/flutter_contacts ---*/
+
 class ContactListFromDevice extends StatefulWidget {
   const ContactListFromDevice({super.key});
 
@@ -33,7 +36,15 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
       log('0033 - ContactListFromDevice - Zugriff auf Kontakte erlaubt');
 
       // Alle Kontakte laden
-      allContacts = await FlutterContacts.getContacts(withGroups: true);
+      allContacts = await FlutterContacts.getContacts(
+        withProperties: true,
+        withThumbnail: true,
+        withPhoto: true,
+        withGroups: true,
+        withAccounts: true,
+        sorted: true,
+        deduplicateProperties: true,
+      );
       setState(() {
         filteredContacts = allContacts.take(currentMax).toList();
         filteredContacts.sort((a, b) => a.displayName.compareTo(b.displayName));
@@ -85,9 +96,9 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
               child: Text(
-                'Gefunden: ${filteredContacts.length} von insgesamt ${allContacts.length}',
+                'Gefunden: ${filteredContacts.length} von ${allContacts.length} Kontakten',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -157,7 +168,6 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                   }
                   return true;
                 },
-                
                 child: ListView.builder(
                   itemCount: filteredContacts.length < currentMax
                       ? filteredContacts.length
@@ -218,15 +228,36 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                                 fontWeight: FontWeight.bold,
                                 color: wbColorLogoBlue,
                               )),
-                          subtitle: Text(
-                            contact.phones.isNotEmpty
-                                ? contact.phones.first.number
-                                : 'Keine Telefonnummer',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: wbColorLogoBlue,
-                            ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (contact.phones.isNotEmpty)
+                                Text('Telefon: ${contact.phones.first.number}'),
+                              if (contact.emails.isNotEmpty)
+                                Text('E-Mail: ${contact.emails.first.address}'),
+                              if (contact.addresses.isNotEmpty)
+                                Text(
+                                    'Adresse: ${contact.addresses.first.address}'),
+                              if (contact.organizations.isNotEmpty)
+                                Text(
+                                    'Firma: ${contact.organizations.first.company}'),
+
+                              // if (contact.birthday != null)
+                              //   Text(
+                              //       'Geburtstag: ${contact.birthday!.day}.${contact.birthday!.month}.${contact.birthday!.year}'),
+
+                              if (contact.notes.isNotEmpty)
+                                Text('Notiz: ${contact.notes.first}'),
+                              if (contact.websites.isNotEmpty)
+                                Text('Webseite: ${contact.websites.first.url}'),
+
+                              // if (contact.socialMedias.isNotEmpty)
+                              //   Text(
+                              //       'Social Media: ${contact.socialMedias.first.username}'),
+
+                              if (contact.events.isNotEmpty)
+                                Text('Event: ${contact.events.first.label}'),
+                            ],
                           ),
                         ),
                       ),
