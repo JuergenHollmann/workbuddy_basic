@@ -54,7 +54,7 @@ class ContactMenu extends StatelessWidget {
                 wbFontSize12: 28,
                 wbHeight3: 3,
               ),
-              // --------------------------------------- Listview mit AuswahlButtons ---
+              /*--------------------------------- Listview mit AuswahlButtons ---*/
               Expanded(
                 child: ListView(
                   padding: const EdgeInsets.all(8),
