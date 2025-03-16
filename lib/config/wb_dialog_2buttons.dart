@@ -61,6 +61,14 @@ class WBDialog2Buttons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     log('0058 - WBDialog2Buttons - gestartet ...');
+
+
+    /*--- Das muss zum Aufrufen des AlertDialogs vorangestellt werden ---*/
+    // showDialog(
+    // context: context,
+    // builder: (BuildContext context) => 
+    /*--------------------------------- AlertDialog ---*/
+
     return AlertDialog(
       backgroundColor: wbColorButtonBlue,
       scrollable: true,

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:workbuddy/config/wb_colors.dart';
+import 'package:workbuddy/config/wb_dialog_2buttons.dart';
 // import 'package:workbuddy/config/wb_colors.dart';
 // import 'package:workbuddy/config/wb_dialog_2buttons.dart';
 
@@ -20,44 +21,66 @@ class ContactListFromDevice extends StatefulWidget {
 class _ContactListFromDeviceState extends State<ContactListFromDevice> {
   List<Contact> filteredContacts = [];
   List<Contact> allContacts = [];
-  int currentMax = 10;
+  int currentMax = 20; // Initiale Anzahl der geladenen Kontakte
   final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    loadContacts();
+    loadInitialContacts();
     _searchController.addListener(_filterContacts);
   }
 
-  Future<void> loadContacts() async {
+  Future<void> loadInitialContacts() async {
     // Berechtigungen anfordern
     if (await FlutterContacts.requestPermission()) {
       log('0033 - ContactListFromDevice - Zugriff auf Kontakte erlaubt');
 
-      // Alle Kontakte laden
+      // Die ersten zwanzig Kontakte ohne zusätzliche Details laden
       allContacts = await FlutterContacts.getContacts(
-        withProperties: true,
+        withProperties: false,
         withThumbnail: true,
         withPhoto: true,
-        withGroups: true,
-        withAccounts: true,
+        withGroups: false,
+        withAccounts: false,
         sorted: true,
-        deduplicateProperties: true,
-      );
+        deduplicateProperties: false,
+      ).then((contacts) => contacts.take(20).toList());
+
       setState(() {
-        filteredContacts = allContacts.take(currentMax).toList();
-        filteredContacts.sort((a, b) => a.displayName.compareTo(b.displayName));
+        filteredContacts = allContacts;
       });
+
+      // Die restlichen Kontakte mit allen Details laden
+      loadAllContacts();
     } else {
       // Berechtigung verweigert
       log('0042 - ContactListFromDevice - Zugriff auf Kontakte verweigert');
     }
   }
 
+  Future<void> loadAllContacts() async {
+    // Alle Kontakte mit allen Details laden
+    allContacts = await FlutterContacts.getContacts(
+      withProperties: true,
+      withThumbnail: true,
+      withPhoto: true,
+      withGroups: true,
+      withAccounts: true,
+      sorted: true,
+      deduplicateProperties: true,
+    );
+
+    setState(() {
+      filteredContacts = allContacts.take(currentMax).toList();
+      filteredContacts.sort((a, b) => a.displayName.compareTo(b.displayName));
+    });
+  }
+
   void loadMoreContacts() {
     setState(() {
-      currentMax = currentMax + 10;
+      currentMax = currentMax + 20; // Lade weitere 20 Kontakte
+      filteredContacts = allContacts.take(currentMax).toList();
     });
   }
 
@@ -92,18 +115,19 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
         child: Column(
           children: [
-            // Anzeige der Anzahl der Kontakte
+            /*--- Anzeige der Anzahl der Kontakte ---*/
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
               child: Text(
                 'Gefunden: ${filteredContacts.length} von ${allContacts.length} Kontakten',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 17,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-            // Suchfeld
+
+            /*--- Suchfeld ---*/
             TextField(
               controller: _searchController,
               style: TextStyle(
@@ -133,7 +157,7 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                   fontWeight: FontWeight.w900,
                 ),
                 filled: true,
-                fillColor: Colors.yellow, // Innere Gelb färben
+                fillColor: Colors.yellow, // Innen gelb färben
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
                   borderSide: BorderSide(
@@ -157,8 +181,8 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
               color: Colors.black,
               thickness: 2,
             ),
-            // wbSizedBoxHeight8,
-            // Liste der gefilterten Kontakte
+
+            /*--- Liste der Kontakte ---*/
             Expanded(
               child: NotificationListener<ScrollNotification>(
                 onNotification: (ScrollNotification scrollInfo) {
@@ -175,13 +199,15 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                   itemBuilder: (context, index) {
                     final contact = filteredContacts[index];
                     return Container(
+                      /*--- Container für den Schatten um die Card herum ---*/
+                      width: double.infinity, // maximale Breite
                       margin: EdgeInsets.fromLTRB(0, 0, 0, 16),
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 10,
-                            offset: Offset(0, 5),
+                            color: Colors.black54,
+                            blurRadius: 4,
+                            offset: Offset(0, 4),
                           ),
                         ],
                         border: Border.all(
@@ -190,39 +216,50 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                         borderRadius:
                             BorderRadius.circular(16), // Radius von 16
                       ),
+
+                      /*--- Card für die Anzeige der Kontakte ---*/
                       child: Card(
-                        color: wbColorBackgroundBlue, // Card rosa einfärben
+                        color: wbColorBackgroundBlue, // Card blau einfärben
                         shape: RoundedRectangleBorder(
                           borderRadius:
-                              BorderRadius.circular(16), // Radius von 16
+                              BorderRadius.circular(12), // Eckenradius derCard
                         ),
-                        elevation: 10, // 3-D-Effekt
-                        shadowColor: Colors.black54, // Schattenfarbe
+                        elevation: 10, // für den 3-D-Effekt
+                        shadowColor: Colors.black, // Schattenfarbe
+
+                        /*--- ListTile für die Anzeige der Kontakte ---*/
                         child: ListTile(
-                          leading: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black,
-                                  blurRadius: 2,
-                                  offset: Offset(4, 4),
-                                ),
-                              ],
-                            ),
-                            child: CircleAvatar(
-                              backgroundColor: Colors.white, // Hintergrund weiß
-                              backgroundImage: contact.photo != null &&
-                                      contact.photo!.isNotEmpty
-                                  ? MemoryImage(contact.photo!)
-                                  : null,
-                              radius: 30,
-                              child: contact.photo == null ||
-                                      contact.photo!.isEmpty
-                                  ? Icon(Icons.person, size: 30)
-                                  : null,
-                            ),
-                          ),
+                          // /*--------------------------------- Container für das Bild---*/
+                          // leading: Padding(
+                          //   padding: const EdgeInsets.fromLTRB(0, 0, 16, 8),
+                          //   child: Container(
+                          //     decoration: BoxDecoration(
+                          //       shape: BoxShape.circle,
+                          //       boxShadow: [
+                          //         BoxShadow(
+                          //           color: Colors.black,
+                          //           blurRadius: 2,
+                          //           offset: Offset(3, 3),
+                          //         ),
+                          //       ],
+                          //     ),
+
+                          //     /*--------------------------------- Bild ---*/
+                          //     child: CircleAvatar(
+                          //       backgroundColor:
+                          //           Colors.white, // Hintergrund weiß
+                          //       backgroundImage: contact.photo != null &&
+                          //               contact.photo!.isNotEmpty
+                          //           ? MemoryImage(contact.photo!)
+                          //           : null,
+                          //       radius: 30,
+                          //       child: contact.photo == null ||
+                          //               contact.photo!.isEmpty
+                          //           ? Icon(Icons.person, size: 30)
+                          //           : null,
+                          //     ),
+                          //   ),
+                          // ),
 
                           /*--------------------------------- Kontaktinformationen - Name ---*/
                           title: Text(
@@ -238,14 +275,19 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              /*--------------------------------- Telefon ---*/
-                              if (contact.phones.isNotEmpty)
-                                Text('Telefon: ${contact.phones.first.number}'),
-                              // 'Telefon: ${contact.phones.isNotEmpty ? contact.phones.first.number : 'Keine Telefonnummer'}'),
+                              // /*--------------------------------- Geburtstag ---*/
+                              // if (contact.events.isNotEmpty)
+                              //   Text(
+                              //       'Geburtstag: ${contact.events.first.day.toString().padLeft(2, '0')}.${contact.events.first.month.toString().padLeft(2, '0')}.${contact.events.first.year}'),
 
-                              /*--------------------------------- E-Mail ---*/
-                              if (contact.emails.isNotEmpty)
-                                Text('E-Mail: ${contact.emails.first.address}'),
+                              // /*--------------------------------- Telefon ---*/
+                              // if (contact.phones.isNotEmpty)
+                              // Text('Telefon: ${contact.phones.first.number}'),
+                              // // 'Telefon: ${contact.phones.isNotEmpty ? contact.phones.first.number : 'Keine Telefonnummer'}'),
+
+                              // /*--------------------------------- E-Mail ---*/
+                              // if (contact.emails.isNotEmpty)
+                              //   Text('E-Mail: ${contact.emails.first.address}'),
 
                               // /*--- Adresse - hier deaktiviert wegen schnellerem Seitenaufbau ---*/
                               // if (contact.addresses.isNotEmpty)
@@ -256,11 +298,6 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                               // if (contact.organizations.isNotEmpty)
                               //   Text(
                               //       'Firma: ${contact.organizations.first.company}'),
-
-                              /*--- Geburtstag - funzt nicht richtig ---*/
-                              // if (contact.birthday != null)
-                              //   Text(
-                              //       'Geburtstag: ${contact.birthday!.day}.${contact.birthday!.month}.${contact.birthday!.year}'),
 
                               // /*--- Notiz - hier deaktiviert wegen schnellerem Seitenaufbau ---*/
                               // if (contact.notes.isNotEmpty)
@@ -274,10 +311,6 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                               // if (contact.socialMedias.isNotEmpty)
                               //   Text(
                               //       'Social Media: ${contact.socialMedias.first.username}'),
-
-                              // /*--- Event - funzt nicht richtig ---*/
-                              // if (contact.events.isNotEmpty)
-                              //   Text('Event: ${contact.events.first.label}'),
 
                               // /*--- Gruppen - hier deaktiviert wegen schnellerem Seitenaufbau ---*/
                               // if (contact.groups.isNotEmpty)
@@ -371,7 +404,7 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                               // ],
                               // // ---> es gibt auch noch "contact.emails.single" und "contact.emails.last"
 
-                              /*--------------------------------- Auflistungen - Ereignisse - Geburtstag ---*/
+                              /*--------------------------------- Auflistungen - Events - Geburtstag ---*/
                               // Text('Geburtstag: ${contact.events}'),
                               // if (contact.events.isNotEmpty) ...[
                               //   Text(
@@ -490,21 +523,34 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                               /*--------------------------------- Auflistungen - Webseiten ---*/
                               // Text('Webseiten: ${contact.websites}'),
                               // if (contact.websites.isNotEmpty) ...[
-                                // Text(
-                                //     'Webseiten first.customLabel: ${contact.websites.first.customLabel}'),
-                                // Text(
-                                //     'Webseiten first.label: ${contact.websites.first.label}'),
-                                // Text(
-                                //     'Webseite: ${contact.websites.first.url}'),
-                                // Text(
-                                //     'Webseiten first.toString: ${contact.websites.first.toString()}'),
-                                // Text(
-                                //     'Webseiten first.toVCard: ${contact.websites.first.toVCard()}'),
+                              // Text(
+                              //     'Webseiten first.customLabel: ${contact.websites.first.customLabel}'),
+                              // Text(
+                              //     'Webseiten first.label: ${contact.websites.first.label}'),
+                              // Text(
+                              //     'Webseite: ${contact.websites.first.url}'),
+                              // Text(
+                              //     'Webseiten first.toString: ${contact.websites.first.toString()}'),
+                              // Text(
+                              //     'Webseiten first.toVCard: ${contact.websites.first.toVCard()}'),
                               // ]
                               // // ---> es gibt auch noch "contact.websites.single" und "contact.websites.last"
                               /*--------------------------------- Kontaktinformationen - ENDE ---*/
                             ],
                           ),
+                          onTap: () {
+                            log('0203 - ContactListFromDevice - Kontakt "${contact.displayName}" angeklickt');
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  WBDialog2Buttons(
+                                headLineText:
+                                    'Möchtest Du die Daten von ${contact.displayName} in "WorkBuddy" übertragen?',
+                                descriptionText:
+                                    'Name: ${contact.displayName}\nTelefon: ${contact.phones.isNotEmpty ? contact.phones.first.number : 'Keine Telefonnummer'}\nE-Mail: ${contact.emails.isNotEmpty ? contact.emails.first.address : 'Keine E-Mail-Adresse'}\nAdresse: ${contact.addresses.isNotEmpty ? contact.addresses.first.address : 'Keine Adresse'}\nFirma: ${contact.organizations.isNotEmpty ? contact.organizations.first.company : 'Keine Firma'}\nNotiz: ${contact.notes.isNotEmpty ? contact.notes.first : 'Keine Notiz'}\nWebseite: ${contact.websites.isNotEmpty ? contact.websites.first.url : 'Keine Webseite'}\nEvent: ${contact.events.isNotEmpty ? contact.events.first.label : 'Kein Event'}\nGruppen: ${contact.groups.isNotEmpty ? contact.groups.first.name : 'Keine Gruppen'}\nAccounts: ${contact.accounts.isNotEmpty ? contact.accounts.first.name : 'Keine Accounts'}\nContactID: ${contact.id.isNotEmpty ? contact.id : 'Keine ContactID'}',
+                              ),
+                            );
+                          },
                         ),
                       ),
                     );
@@ -519,7 +565,7 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
   }
 }
 
-/*--- Mögliche Datenabfrage-Möglichkeiten des Packages "FlutterContacts" ---*/
+/*--- Mögliche Datenabfragen des Packages "FlutterContacts" ---*/
 // contact.phones
 // contact.emails
 // contact.addresses

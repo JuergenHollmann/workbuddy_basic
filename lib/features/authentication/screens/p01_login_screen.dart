@@ -649,7 +649,7 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
             /*--------------------------------- Divider ---*/
             const Divider(thickness: 4, color: wbColorButtonGreen),
             /*--------------------------------- Abstand ---*/
-            wbSizedBoxHeight8,
+            // wbSizedBoxHeight8,
             /*--------------------------------- Login-Button ---*/
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 8, 12, 8),
@@ -744,7 +744,7 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
               ),
             ),
             /*--------------------------------- Abstand ---*/
-            wbSizedBoxHeight8,
+            // wbSizedBoxHeight8,
             /*--------------------------------- Refresh / Reset = Login "NEU" starten ---*/
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 8, 12, 8),
@@ -1136,6 +1136,7 @@ class _P01LoginScreenState extends State<P01LoginScreen> {
       ),
     );
   }
+
   @override
   void dispose() {
     player.dispose();
