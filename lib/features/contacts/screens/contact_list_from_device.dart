@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:sqflite/sqflite.dart';
@@ -24,6 +25,7 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
   int currentMax = 20; // Initiale Anzahl der geladenen Kontakte
   final TextEditingController _searchController = TextEditingController();
   List<Contact> displayedContacts = [];
+  final AudioPlayer player = AudioPlayer();
 
   @override
   void initState() {
@@ -106,16 +108,19 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
         contact.name.first,
         contact.name.last,
         contact.events.isNotEmpty
-            ? '${contact.events.first.year}-${contact.events.first.month.toString().padLeft(2, '0')}-${contact.events.first.day.toString().padLeft(2, '0')}'
+            ? '${contact.events.first.day.toString().padLeft(2, '0')}.${contact.events.first.month.toString().padLeft(2, '0')}.${contact.events.first.year}'
             : null,
       ],
     );
     return result.isNotEmpty;
   }
 
+  // ? '${contact.events.first.year}-${contact.events.first.month.toString().padLeft(2, '0')}-${contact.events.first.day.toString().padLeft(2, '0')}'
+
   @override
   void dispose() {
     _searchController.dispose();
+    player.dispose();
     super.dispose();
   }
 
@@ -587,6 +592,29 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                                       await isContactInDatabase(contact);
                                   if (exists) {
                                     log('0588 - ContactListFromDevice - Der Kontakt ist bereits in der Datenbank vorhanden.');
+
+                                    // ignore: use_build_context_synchronously
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Der Kontakt "${contact.displayName}" ist bereits in der Datenbank vorhanden und wird deshalb nicht übertragen!.',
+                                          style: TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        backgroundColor: wbColorButtonDarkRed,
+                                        duration: Duration(milliseconds: 2000),
+                                      ),
+                                    );
+
+                                    // Sound abspielen
+                                    player.play(AssetSource(
+                                        "sound/sound03enterprise.wav"));
+
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.pop(context);
                                   } else {
                                     log('0590 - ContactListFromDevice - Der Kontakt wird jetzt in "WorkBuddy" übertragen.');
 

@@ -74,8 +74,48 @@ final controllerCS030 = TextEditingController(); // KontaktID
 // }
 
 /*--------------------------------- Daten speichern ---*/
-Future<void> saveData() async {
+Future<void> saveData(BuildContext context) async {
   var db = await DatabaseHelper().database;
+
+  // Überprüfen, ob ein Datensatz mit der gleichen KundenID bereits existiert
+  final List<Map<String, dynamic>> result = await db.query(
+    'KundenDaten',
+    where: 'TKD_Feld_030 = ?',
+    whereArgs: [controllerCS030.text],
+  );
+
+  if (result.isNotEmpty) {
+    log('Daten mit der KundenID ${controllerCS030.text} existieren bereits.');
+    // Optional: Zeige eine Nachricht an, dass die Daten bereits existieren
+    // ignore: use_build_context_synchronously
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+        'Ein Datensatz mit der KundenID ${controllerCS030.text} existiert bereits!',
+        style: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
+      backgroundColor: wbColorButtonDarkRed,
+      duration: Duration(milliseconds: 2000),
+    ));
+    // ignore: use_build_context_synchronously
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+        'Ein Datensatz mit der KundenID ${controllerCS030.text} existiert bereits!',
+        style: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
+      backgroundColor: wbColorButtonDarkRed,
+      duration: Duration(milliseconds: 2000),
+    ));
+    return;
+  }
+
   await db.insert('KundenDaten', {
     'TKD_Feld_001': controllerCS001.text,
     'TKD_Feld_002': controllerCS002.text,
@@ -519,7 +559,7 @@ class _ContactScreenState extends State<ContactScreen> {
           controllerCS026.text = widget.contact['TKD_Feld_026'] ?? ''; //
           controllerCS027.text =
               widget.contact['TKD_Feld_027'] ?? ''; // letzte_Aenderung_am_um
-          controllerCS028.text =
+      updateData({});
               widget.contact['TKD_Feld_028'] ?? ''; // Betreuer
           controllerCS029.text =
               widget.contact['TKD_Feld_029'] ?? ''; // Betreuer_Job
@@ -2032,7 +2072,7 @@ class _ContactScreenState extends State<ContactScreen> {
                             ),
                           ));
                           /*--------------------------------- Speicherung in die SQL ---*/
-                          await saveData(); // Datensatz speichern
+                          await saveData(context); // Datensatz speichern
                           log('1600 - ContactScreen - Daten gespeichert (save)!');
                           // await updateData({}); // Datensatz aktualisieren
                           // log('1646 - ContactScreen - Daten aktualisiert (update)!');
