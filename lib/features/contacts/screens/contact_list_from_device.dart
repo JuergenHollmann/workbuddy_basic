@@ -2,10 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_dialog_2buttons.dart';
-// import 'package:workbuddy/config/wb_colors.dart';
-// import 'package:workbuddy/config/wb_dialog_2buttons.dart';
+import 'package:workbuddy/features/contacts/screens/contact_screen.dart';
 
 /*--- FlutterContacts ---*/
 /*--- https://pub.dev/packages/flutter_contacts ---*/
@@ -23,6 +23,7 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
   List<Contact> allContacts = [];
   int currentMax = 20; // Initiale Anzahl der geladenen Kontakte
   final TextEditingController _searchController = TextEditingController();
+  List<Contact> displayedContacts = [];
 
   @override
   void initState() {
@@ -49,6 +50,7 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
 
       setState(() {
         filteredContacts = allContacts;
+        displayedContacts = filteredContacts.take(currentMax).toList();
       });
 
       // Die restlichen Kontakte mit allen Details laden
@@ -72,7 +74,8 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
     );
 
     setState(() {
-      filteredContacts = allContacts.take(currentMax).toList();
+      filteredContacts = allContacts;
+      displayedContacts = filteredContacts.take(currentMax).toList();
       filteredContacts.sort((a, b) => a.displayName.compareTo(b.displayName));
     });
   }
@@ -80,7 +83,7 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
   void loadMoreContacts() {
     setState(() {
       currentMax = currentMax + 20; // Lade weitere 20 Kontakte
-      filteredContacts = allContacts.take(currentMax).toList();
+      displayedContacts = filteredContacts.take(currentMax).toList();
     });
   }
 
@@ -90,7 +93,24 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
       filteredContacts = allContacts
           .where((contact) => contact.displayName.toLowerCase().contains(query))
           .toList();
+      displayedContacts = filteredContacts.take(currentMax).toList();
     });
+  }
+
+  Future<bool> isContactInDatabase(Contact contact) async {
+    final Database db = await openDatabase('JOTHAsoft.FiveStars.db');
+    final List<Map<String, dynamic>> result = await db.query(
+      'KundenDaten',
+      where: 'TKD_Feld_002 = ? AND TKD_Feld_003 = ? AND TKD_Feld_004 = ?',
+      whereArgs: [
+        contact.name.first,
+        contact.name.last,
+        contact.events.isNotEmpty
+            ? '${contact.events.first.year}-${contact.events.first.month.toString().padLeft(2, '0')}-${contact.events.first.day.toString().padLeft(2, '0')}'
+            : null,
+      ],
+    );
+    return result.isNotEmpty;
   }
 
   @override
@@ -193,11 +213,9 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                   return true;
                 },
                 child: ListView.builder(
-                  itemCount: filteredContacts.length < currentMax
-                      ? filteredContacts.length
-                      : currentMax,
+                  itemCount: displayedContacts.length,
                   itemBuilder: (context, index) {
-                    final contact = filteredContacts[index];
+                    final contact = displayedContacts[index];
                     return Container(
                       /*--- Container für den Schatten um die Card herum ---*/
                       width: double.infinity, // maximale Breite
@@ -275,10 +293,10 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              // /*--------------------------------- Geburtstag ---*/
-                              // if (contact.events.isNotEmpty)
-                              //   Text(
-                              //       'Geburtstag: ${contact.events.first.day.toString().padLeft(2, '0')}.${contact.events.first.month.toString().padLeft(2, '0')}.${contact.events.first.year}'),
+                              /*--------------------------------- Geburtstag ---*/
+                              if (contact.events.isNotEmpty)
+                                Text(
+                                    'Geburtstag: ${contact.events.first.day.toString().padLeft(2, '0')}.${contact.events.first.month.toString().padLeft(2, '0')}.${contact.events.first.year}'),
 
                               // /*--------------------------------- Telefon ---*/
                               // if (contact.phones.isNotEmpty)
@@ -547,7 +565,195 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                                 headLineText:
                                     'Möchtest Du die Daten von ${contact.displayName} in "WorkBuddy" übertragen?',
                                 descriptionText:
-                                    'Name: ${contact.displayName}\nTelefon: ${contact.phones.isNotEmpty ? contact.phones.first.number : 'Keine Telefonnummer'}\nE-Mail: ${contact.emails.isNotEmpty ? contact.emails.first.address : 'Keine E-Mail-Adresse'}\nAdresse: ${contact.addresses.isNotEmpty ? contact.addresses.first.address : 'Keine Adresse'}\nFirma: ${contact.organizations.isNotEmpty ? contact.organizations.first.company : 'Keine Firma'}\nNotiz: ${contact.notes.isNotEmpty ? contact.notes.first : 'Keine Notiz'}\nWebseite: ${contact.websites.isNotEmpty ? contact.websites.first.url : 'Keine Webseite'}\nEvent: ${contact.events.isNotEmpty ? contact.events.first.label : 'Kein Event'}\nGruppen: ${contact.groups.isNotEmpty ? contact.groups.first.name : 'Keine Gruppen'}\nAccounts: ${contact.accounts.isNotEmpty ? contact.accounts.first.name : 'Keine Accounts'}\nContactID: ${contact.id.isNotEmpty ? contact.id : 'Keine ContactID'}',
+                                    'Name: ${contact.displayName}\nGeburtstag: ${contact.events.isNotEmpty ? '${contact.events.first.day.toString().padLeft(2, '0')}.${contact.events.first.month.toString().padLeft(2, '0')}.${contact.events.first.year}' : 'Kein Datum vorhanden!'}\n\nTelefon: ${contact.phones.isNotEmpty ? contact.phones.first.number : 'Keine Telefonnummer'}\nE-Mail: ${contact.emails.isNotEmpty ? contact.emails.first.address : 'Keine E-Mail-Adresse'}\n\nAdresse: ${contact.addresses.isNotEmpty ? contact.addresses.first.address : 'Keine Adresse'}\n\nFirma: ${contact.organizations.isNotEmpty ? contact.organizations.first.company : 'Keine Firma'}\nNotizen: ${contact.notes.isNotEmpty ? contact.notes.first.note : 'Keine Notiz'}\nWebseite: ${contact.websites.isNotEmpty ? contact.websites.first.url : 'Keine Webseite'}\nGruppen: ${contact.groups.isNotEmpty ? contact.groups.first.name : 'Keine Gruppen'}\n\nContactID: ${contact.id.isNotEmpty ? contact.id : 'Keine ContactID'}',
+
+                                /*--------------------------------- Button 1 ---*/
+                                wbText1: 'Nein', // es passiert nichts weiter
+                                wbIcon1: Icons.cancel,
+                                wbColor1: wbColorButtonDarkRed,
+
+                                /*--------------------------------- Button 2 ---*/
+                                wbText2: 'Ja • Übertragen',
+                                wbIcon2: Icons.save,
+                                wbColor2: wbColorButtonGreen,
+                                wbWidth2W155:
+                                    double.infinity, // maximale Breite
+
+                                /*--------------------------------- Button 2 - Aktion ---*/
+                                wbOnTap2: () async {
+                                  log('0225 - ContactListFromDevice - Kontakt "${contact.displayName}" wird in "WorkBuddy" übertragen');
+
+                                  bool exists =
+                                      await isContactInDatabase(contact);
+                                  if (exists) {
+                                    log('0588 - ContactListFromDevice - Der Kontakt ist bereits in der Datenbank vorhanden.');
+                                  } else {
+                                    log('0590 - ContactListFromDevice - Der Kontakt wird jetzt in "WorkBuddy" übertragen.');
+
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.pop(context);
+
+                                    // ignore: use_build_context_synchronously
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Der Kontakt "${contact.displayName}" wird in "WorkBuddy" übertragen.',
+                                          style: TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        backgroundColor: wbColorButtonGreen,
+                                        duration: Duration(milliseconds: 2000),
+                                      ),
+                                    );
+
+                                    /*--- Öffne den ContactScreen wie mit dem Button "Einen Kontakt NEU anlegen" und übergebe die Kontaktdaten an den ContactScreen ---*/
+                                    Navigator.push(
+                                      // ignore: use_build_context_synchronously
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ContactScreen(
+                                          contact: {
+                                            /*---------------------------------- Kontakt-Status ---*/
+                                            'TKD_Feld_019':
+                                                contact.groups.isNotEmpty
+                                                    ? contact.groups.first.name
+                                                    : '',
+                                            /*---------------------------------- Anrede ---*/
+                                            'TKD_Feld_001':
+                                                contact.name.prefix.isNotEmpty
+                                                    ? contact.name.prefix
+                                                    : '',
+                                            /*---------------------------------- Vorname ---*/
+                                            'TKD_Feld_002':
+                                                contact.name.first.isNotEmpty
+                                                    ? contact.name.first
+                                                    : '',
+                                            /*---------------------------------- Nachname ---*/
+                                            'TKD_Feld_003':
+                                                contact.name.last.isNotEmpty
+                                                    ? contact.name.last
+                                                    : '',
+                                            /*---------------------------------- Geburtstag ---*/
+                                            'TKD_Feld_004': contact
+                                                    .events.isNotEmpty
+                                                ? '${contact.events.first.day.toString().padLeft(2, '0')}.${contact.events.first.month.toString().padLeft(2, '0')}.${contact.events.first.year}'
+                                                : '',
+
+                                            /*---------------------------------- Adresse 1 komplett ---*/
+                                            'TKD_Feld_018': // stimmt noch nicht
+                                                contact.addresses.isNotEmpty
+                                                    ? contact
+                                                        .addresses.first.address
+                                                    : '',
+
+                                            /*---------------------------------- Adresse 2 komplett ---*/
+                                            'TKD_Feld_027': // stimmt noch nicht
+                                                contact.addresses.isNotEmpty
+                                                    ? contact
+                                                        .addresses.last.address
+                                                    : '',
+
+                                            /*---------------------------------- Straße ---*/
+                                            'TKD_Feld_005': contact
+                                                    .addresses.isNotEmpty
+                                                ? contact.addresses.first.street
+                                                : '',
+                                            /*---------------------------------- PLZ ---*/
+                                            'TKD_Feld_006':
+                                                contact.addresses.isNotEmpty
+                                                    ? contact.addresses.first
+                                                        .postalCode
+                                                    : '',
+
+                                            /*---------------------------------- Stadt ---*/
+                                            'TKD_Feld_007': contact
+                                                    .addresses.isNotEmpty
+                                                ? contact.addresses.first.city
+                                                : '',
+
+                                            /*---------------------------------- Webseite ---*/
+                                            'TKD_Feld_012':
+                                                contact.websites.isNotEmpty
+                                                    ? contact.websites.first.url
+                                                    : '',
+
+                                            //       // country: contact.addresses.isNotEmpty ? contact.addresses.first.country : '',
+                                            //       // customLabel: contact.addresses.isNotEmpty
+                                            //       //     ? contact.addresses.first.customLabel
+                                            //       //     : '',
+                                            //       // isoCountry: contact.addresses.isNotEmpty
+                                            //       //     ? contact.addresses.first.isoCountry
+                                            //       //     : '',
+                                            //       // label: contact.addresses.isNotEmpty
+                                            //       //     ? contact.addresses.first.label
+                                            //       //     : '',
+                                            //       // neighborhood: contact.addresses.isNotEmpty
+                                            //       //     ? contact.addresses.first.neighborhood
+                                            //       //     : '',
+                                            //       // pobox: contact.addresses.isNotEmpty
+                                            //       //     ? contact.addresses.first.pobox
+                                            //       //     : '',
+                                            //       // state: contact.addresses.isNotEmpty
+                                            //       //     ? contact.addresses.first.state
+                                            //       //     : '',
+                                            //       // subAdminArea: contact.addresses.isNotEmpty
+                                            //       //     ? contact.addresses.first.subAdminArea
+                                            //       //     : '',
+                                            //       // subLocality: contact.addresses.isNotEmpty
+                                            //       //     ? contact.addresses.first.subLocality
+                                            //       //     : '',
+                                            //       // toVCard: contact.addresses.isNotEmpty   ? contact.addresses.first.toVCard()    : '',
+                                            /*---------------------------------- Telefon ---*/
+                                            'TKD_Feld_008': contact
+                                                    .phones.isNotEmpty
+                                                ? contact.phones.first.number
+                                                : '',
+                                            /*---------------------------------- E-Mail ---*/
+                                            'TKD_Feld_009': contact
+                                                    .emails.isNotEmpty
+                                                ? contact.emails.first.address
+                                                : '',
+
+                                            /*---------------------------------- Firma ---*/
+                                            'TKD_Feld_014':
+                                                contact.organizations.isNotEmpty
+                                                    ? contact.organizations
+                                                        .first.company
+                                                    : '',
+
+                                            /*---------------------------------- Notiz ---*/
+                                            'TKD_Feld_016':
+                                                contact.notes.isNotEmpty
+                                                    ? contact.notes.first
+                                                    : '',
+
+                                            //       /*---------------------------------- Kategorien ---*/
+                                            //       // group: contact.groups.isNotEmpty
+                                            //       //     ? contact.groups.first.name
+                                            //       //     : '',
+
+                                            /*---------------------------------- ContactID ---*/
+                                            'TKD_Feld_030':
+                                                contact.id.isNotEmpty
+                                                    ? contact.id
+                                                    : '',
+                                          },
+                                        ),
+                                      ),
+                                    );
+
+                                    //       /*--------------------------------- Kontakt-Status ---*/
+
+                                    //       /*--------------------------------- Einträge in die ContactScreen - ENDE ---*/
+                                    //     ),
+                                    //   ),
+                                    // );
+                                  }
+                                },
+                                /*--------------------------------- Button 2 - ENDE ---*/
                               ),
                             );
                           },
@@ -564,6 +770,10 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
     );
   }
 }
+
+// extension on Contact {
+//   toMap() {}
+// }
 
 /*--- Mögliche Datenabfragen des Packages "FlutterContacts" ---*/
 // contact.phones
