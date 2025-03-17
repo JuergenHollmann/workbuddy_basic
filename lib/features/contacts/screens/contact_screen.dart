@@ -689,75 +689,110 @@ class _ContactScreenState extends State<ContactScreen> {
     return Scaffold(
       backgroundColor: wbColorBackgroundBlue,
       appBar: AppBar(
-        /*--- "toolbarHeight" wird hier nicht mehr benötigt, weil jetzt "WbInfoContainer" die Daten anzeigt ---*/
-        // toolbarHeight: 100,
-        title: Text(
-          'Firma zeigen   |   bearbeiten', // oder NEU anlegen
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w900,
-            color: Colors.yellow,
+          /*--- "toolbarHeight" wird hier nicht mehr benötigt, weil jetzt "WbInfoContainer" die Daten anzeigt ---*/
+          // toolbarHeight: 100,
+          title: Text(
+            'Kontakt zeigen   |   bearbeiten', // oder NEU anlegen
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w900,
+              color: Colors.yellow,
+            ),
           ),
-        ),
-        centerTitle: true,
-        backgroundColor: wbColorLogoBlue, // Hintergrundfarbe
-        foregroundColor: Colors.white, // Icon-/Button-/Chevron-Farbe
-        shadowColor: Colors.black,
-        //elevation: 10,
-        //scrolledUnderElevation: 10,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            log('0561 - ContactScreen - "arrow_back" wurde angeklickt');
-            /*--- Daten direkt nach dem "arrow_back" speichern ---*/
-            updateData({}); // Datensatz aktualisieren
-            log('0564 - ContactScreen - Daten gespeichert!');
-            /*--------------------------------- Navigator.push ---*/
-            Navigator.push(
-              // ignore: use_build_context_synchronously
-              context,
-              MaterialPageRoute(
-                builder: (context) => const MainSelectionScreen(),
-              ),
-            );
+          centerTitle: true,
+          backgroundColor: wbColorLogoBlue, // Hintergrundfarbe
+          foregroundColor: Colors.white, // Icon-/Button-/Chevron-Farbe
+          shadowColor: Colors.black,
+          //elevation: 10,
+          //scrolledUnderElevation: 10,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              if (isDataChanged) {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text("Datenänderungen wurden nicht gespeichert!"),
+                      content: Text(
+                          "Es gibt ungespeicherte Änderungen. Möchtest du die Daten speichern, bevor du zurückgehst?"),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const MainSelectionScreen(),
+                              ),
+                            );
+                          },
+                          child: Text("Die Daten nicht speichern"),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            Navigator.of(context).pop();
+                            await saveData(context);
+                            Navigator.push(
+                              // ignore: use_build_context_synchronously
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const MainSelectionScreen(),
+                              ),
+                            );
+                          },
+                          child: Text("Die geänderten Daten speichern"),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MainSelectionScreen(),
+                  ),
+                );
+              }
+            },
+          )
 
-            // Navigator.pop(context);
-          },
-        ),
-
-        /*--------------------------------- *** ---*/
-        /*--- "RichText" wird hier nicht mehr benötigt, weil jetzt "WbInfoContainer" die Daten anzeigt ---*/
-        // title: RichText(
-        //   textAlign: TextAlign.center,
-        //   text: TextSpan(
-        //     text: "Firma bearbeiten\n",
-        //     style: TextStyle(
-        //       fontSize: 28,
-        //       fontWeight: FontWeight.w900,
-        //       color: Colors.yellow,
-        //     ),
-        //     children: <TextSpan>[
-        //       // children: [
-        //       TextSpan(
-        //         text:
-        //             "• $inputCompanyName\n• $inputCompanyVNContactPerson $inputCompanyNNContactPerson",
-        //         style: TextStyle(
-        //           fontSize: 18,
-        //           fontWeight: FontWeight.w900,
-        //           color: Colors.white,
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-        // /*--------------------------------- *** ---*/
-        // shape: Border.symmetric(
-        //   horizontal: BorderSide(
-        //     width: 3,
-        //   ),
-        // ),
-        // /*--------------------------------- *** ---*/
-      ),
+          /*--------------------------------- *** ---*/
+          /*--- "RichText" wird hier nicht mehr benötigt, weil jetzt "WbInfoContainer" die Daten anzeigt ---*/
+          // title: RichText(
+          //   textAlign: TextAlign.center,
+          //   text: TextSpan(
+          //     text: "Firma bearbeiten\n",
+          //     style: TextStyle(
+          //       fontSize: 28,
+          //       fontWeight: FontWeight.w900,
+          //       color: Colors.yellow,
+          //     ),
+          //     children: <TextSpan>[
+          //       // children: [
+          //       TextSpan(
+          //         text:
+          //             "• $inputCompanyName\n• $inputCompanyVNContactPerson $inputCompanyNNContactPerson",
+          //         style: TextStyle(
+          //           fontSize: 18,
+          //           fontWeight: FontWeight.w900,
+          //           color: Colors.white,
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
+          // /*--------------------------------- *** ---*/
+          // shape: Border.symmetric(
+          //   horizontal: BorderSide(
+          //     width: 3,
+          //   ),
+          // ),
+          // /*--------------------------------- *** ---*/
+          ),
       /*--------------------------------- *** ---*/
       body: SingleChildScrollView(
         child: Center(
