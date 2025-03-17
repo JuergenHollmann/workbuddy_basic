@@ -619,18 +619,21 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
 
                                 /*--------------------------------- Button 2 - Aktion ---*/
                                 wbOnTap2: () async {
-                                  log('0225 - ContactListFromDevice - Kontakt "${contact.displayName}" wird in "WorkBuddy" übertragen');
+                                  log('0622 - ContactListFromDevice - Kontakt "${contact.displayName}" soll in "WorkBuddy" übertragen werden');
 
                                   bool exists =
                                       await isContactInDatabase(contact);
                                   if (exists) {
-                                    log('0588 - ContactListFromDevice - Der Kontakt ist bereits in der Datenbank vorhanden.');
+                                    log('0588 - ContactListFromDevice - Ergebnis der Abfrage: "Der Kontakt ist bereits in der Datenbank vorhanden."');
+
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.pop(context);
 
                                     // ignore: use_build_context_synchronously
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
-                                          'Der Kontakt "${contact.displayName}" ist bereits in der Datenbank vorhanden und wird deshalb nicht übertragen!.',
+                                          '🟡 Der Kontakt "${contact.displayName}" ist bereits in der Datenbank vorhanden und wird deshalb NICHT übertragen! ⛔',
                                           style: TextStyle(
                                             fontSize: 24,
                                             fontWeight: FontWeight.bold,
@@ -645,9 +648,6 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                                     // Sound abspielen
                                     player.play(AssetSource(
                                         "sound/sound03enterprise.wav"));
-
-                                    // ignore: use_build_context_synchronously
-                                    Navigator.pop(context);
                                   } else {
                                     log('0590 - ContactListFromDevice - Der Kontakt wird jetzt in "WorkBuddy" übertragen.');
 
@@ -658,7 +658,7 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
-                                          'Der Kontakt "${contact.displayName}" wird in "WorkBuddy" übertragen.',
+                                          'Der Kontakt "${contact.displayName}" wurde in "WorkBuddy" übertragen. ✅\n\nDu kannst jetzt die Daten bearbeiten und musst am Ende die Daten noch speichern!',
                                           style: TextStyle(
                                             fontSize: 24,
                                             fontWeight: FontWeight.bold,
