@@ -488,8 +488,12 @@ class _ContactScreenState extends State<ContactScreen> {
   bool isDataChanged = false;
 
   void _onDataChanged() {
-    setState(() {
-      isDataChanged = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        setState(() {
+          isDataChanged = true;
+        });
+      }
     });
   }
 
@@ -706,59 +710,55 @@ class _ContactScreenState extends State<ContactScreen> {
           //elevation: 10,
           //scrolledUnderElevation: 10,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              if (isDataChanged) {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text("Datenänderungen wurden nicht gespeichert!"),
-                      content: Text(
-                          "Es gibt ungespeicherte Änderungen. Möchtest du die Daten speichern, bevor du zurückgehst?"),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const MainSelectionScreen(),
-                              ),
-                            );
-                          },
-                          child: Text("Die Daten nicht speichern"),
-                        ),
-                        TextButton(
-                          onPressed: () async {
-                            Navigator.of(context).pop();
-                            await saveData(context);
-                            Navigator.push(
-                              // ignore: use_build_context_synchronously
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const MainSelectionScreen(),
-                              ),
-                            );
-                          },
-                          child: Text("Die geänderten Daten speichern"),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              } else {
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                // if (isDataChanged) {
+                //   showDialog(
+                //     context: context,
+                //     builder: (BuildContext context) {
+                //       return AlertDialog(
+                //         title: Text("Datenänderungen wurden nicht gespeichert!"),
+                //         content: Text(
+                //             "Es gibt ungespeicherte Änderungen. Möchtest du die Daten speichern, bevor du zurückgehst?"),
+                //         actions: [
+                //           TextButton(
+                //             onPressed: () {
+                //               Navigator.of(context).pop();
+                //               Navigator.push(
+                //                 context,
+                //                 MaterialPageRoute(
+                //                   builder: (context) => const MainSelectionScreen(),
+                //                 ),
+                //               );
+                //             },
+                //             child: Text("Die Daten nicht speichern"),
+                //           ),
+                //           TextButton(
+                //             onPressed: () async {
+                //               Navigator.of(context).pop();
+                //               await saveData(context);
+                //               Navigator.push(
+                //                 // ignore: use_build_context_synchronously
+                //                 context,
+                //                 MaterialPageRoute(
+                //                   builder: (context) => const MainSelectionScreen(),
+                //                 ),
+                //               );
+                //             },
+                //             child: Text("Die geänderten Daten speichern"),
+                //           ),
+                //         ],
+                //       );
+                //     },
+                //   );
+                // } else {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => const MainSelectionScreen(),
                   ),
                 );
-              }
-            },
-          )
+              })
 
           /*--------------------------------- *** ---*/
           /*--- "RichText" wird hier nicht mehr benötigt, weil jetzt "WbInfoContainer" die Daten anzeigt ---*/
