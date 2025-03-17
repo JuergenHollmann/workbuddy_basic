@@ -398,7 +398,7 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                                     /*--------------------------------- Telefon ---*/
                                     if (contact.phones.isNotEmpty)
                                       Text(
-                                        'Telefon: ${contact.phones.first.number}',
+                                        'Tel: ${contact.phones.first.number}',
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold),
