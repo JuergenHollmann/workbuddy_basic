@@ -100,19 +100,6 @@ Future<void> saveData(BuildContext context) async {
       backgroundColor: wbColorButtonDarkRed,
       duration: Duration(milliseconds: 2000),
     ));
-    // ignore: use_build_context_synchronously
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(
-        'Ein Datensatz mit der KundenID ${controllerCS030.text} existiert bereits!',
-        style: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
-      ),
-      backgroundColor: wbColorButtonDarkRed,
-      duration: Duration(milliseconds: 2000),
-    ));
     return;
   }
 
@@ -148,7 +135,7 @@ Future<void> saveData(BuildContext context) async {
     'TKD_Feld_029': controllerCS029.text,
     'TKD_Feld_030': controllerCS030.text,
   });
-  log('Daten gespeichert: ${controllerCS030.text}');
+  log('0138 - ContactScreen - Daten gespeichert von ${controllerCS001.text} ${controllerCS002.text} ${controllerCS003.text} / KontaktID: ${controllerCS030.text}');
 }
 
 /*--------------------------------- Button-Farbe beim Anklicken ändern ---*/
@@ -498,7 +485,14 @@ class _ContactScreenState extends State<ContactScreen> {
   late String _phone = '';
   Future<void>? _launched;
 
-  /*--------------------------------- initState ---*/
+  bool isDataChanged = false;
+
+  void _onDataChanged() {
+    setState(() {
+      isDataChanged = true;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -559,8 +553,8 @@ class _ContactScreenState extends State<ContactScreen> {
           controllerCS026.text = widget.contact['TKD_Feld_026'] ?? ''; //
           controllerCS027.text =
               widget.contact['TKD_Feld_027'] ?? ''; // letzte_Aenderung_am_um
-      updateData({});
-              widget.contact['TKD_Feld_028'] ?? ''; // Betreuer
+          updateData({});
+          widget.contact['TKD_Feld_028'] ?? ''; // Betreuer
           controllerCS029.text =
               widget.contact['TKD_Feld_029'] ?? ''; // Betreuer_Job
           controllerCS030.text =
@@ -623,6 +617,40 @@ class _ContactScreenState extends State<ContactScreen> {
     calculateAgeFromBirthday();
     //dispose();
     //updateData();
+    _addListeners();
+  }
+
+  void _addListeners() {
+    controllerCS001.addListener(_onDataChanged);
+    controllerCS002.addListener(_onDataChanged);
+    controllerCS003.addListener(_onDataChanged);
+    controllerCS004.addListener(_onDataChanged);
+    controllerCS005.addListener(_onDataChanged);
+    controllerCS006.addListener(_onDataChanged);
+    controllerCS007.addListener(_onDataChanged);
+    controllerCS008.addListener(_onDataChanged);
+    controllerCS009.addListener(_onDataChanged);
+    controllerCS010.addListener(_onDataChanged);
+    controllerCS011.addListener(_onDataChanged);
+    controllerCS012.addListener(_onDataChanged);
+    controllerCS013.addListener(_onDataChanged);
+    controllerCS014.addListener(_onDataChanged);
+    controllerCS015.addListener(_onDataChanged);
+    controllerCS016.addListener(_onDataChanged);
+    controllerCS017.addListener(_onDataChanged);
+    controllerCS018.addListener(_onDataChanged);
+    controllerCS019.addListener(_onDataChanged);
+    controllerCS020.addListener(_onDataChanged);
+    controllerCS021.addListener(_onDataChanged);
+    controllerCS022.addListener(_onDataChanged);
+    controllerCS023.addListener(_onDataChanged);
+    controllerCS024.addListener(_onDataChanged);
+    controllerCS025.addListener(_onDataChanged);
+    controllerCS026.addListener(_onDataChanged);
+    controllerCS027.addListener(_onDataChanged);
+    controllerCS028.addListener(_onDataChanged);
+    controllerCS029.addListener(_onDataChanged);
+    controllerCS030.addListener(_onDataChanged);
   }
 
   /*--------------------------------- Telefon-Anruf-Funktionen ---*/
@@ -1194,27 +1222,10 @@ class _ContactScreenState extends State<ContactScreen> {
                                     // /*--------------------------------- mehrfach verschachtelter ternärer Operator ---*/
                                     // (nextY == 0 && nextM == 0 && nextD == 0)
                                     //     ? '---> ist UNBEKANNT!'
-                                    //     : (nextY == 1)
-                                    //         ? '$ageY Jahr + $nextM Monate + $nextD Tage'
-                                    //         : (nextY == 0)
-                                    //             ? '$nextM Monate + $nextD Tage'
-                                    //             : (nextM == 1)
-                                    //                 ? '$ageY Jahr + $nextM Monat + $nextD Tage'
-                                    //                 : (nextM == 0)
-                                    //                     ? '$nextY Jahre + $nextD Tage'
-                                    //                     : (nextD == 1)
-                                    //                         ? '$ageY Jahr + $nextM Monat + $nextD Tag'
-                                    //                         : (nextD == 0)
-                                    //                             ? '$nextY Jahre + $nextM Monate'
-                                    //                             : '$ageY Jahre + $nextM Monate + $nextD Tage',
-                                    // /*--------------------------------- *** ---*/
-
-                                    // (nextY == 0 && nextM == 0 && nextD == 0)
-                                    //     ? '---> ist UNBEKANNT!'
                                     //     // : (nextY == 1 &&
                                     //     //         nextM == 1 &&
                                     //     //         nextD == 1)
-                                    //     //     ? '$ageY Jahr + $ageM Monat + $ageD Tag'
+                                    //     //     ? '$ageY Jahr + $nextM Monate + $nextD Tage'
                                     //     //     : (nextY == 0 &&
                                     //     //             nextM == 0 &&
                                     //     //             nextD == 1)
@@ -2029,62 +2040,117 @@ class _ContactScreenState extends State<ContactScreen> {
                     wbSizedBoxHeight8,
                     const Divider(thickness: 3, color: wbColorLogoBlue),
                     wbSizedBoxHeight8,
-                    /*--------------------------------- Button Daten speichern ---*/
-                    WbButtonUniversal2(
-                        wbColor: isButton09Clicked
-                            ? wbColorButtonDarkRed
-                            : wbColorButtonGreen,
-                        wbOnTapDown: (details) {
-                          setState(() {
-                            isButton09Clicked = true;
-                          });
-                        },
-                        wbOnTapUp: (details) {
-                          setState(() {
-                            isButton09Clicked = false;
-                          });
-                        },
-                        wbOnTapCancel: () {
-                          setState(() {
-                            isButton09Clicked = false;
-                          });
-                        },
-                        wbIcon: Icons.save_rounded,
-                        wbIconSize40: 40,
-                        wbText: "Daten SPEICHERN",
-                        wbFontSize24: 24,
-                        wbWidth155: 398,
-                        wbHeight60: 60,
-                        wbOnTap: () async {
-                          log("1584 - ContactScreen - Daten speichern - geklickt");
-                          /*--------------------------------- Sound ---*/
-                          player.play(AssetSource("sound/sound06pling.wav"));
-                          /*--------------------------------- Snackbar ---*/
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: wbColorButtonGreen,
-                            content: Text(
-                              "Die Daten von\n${controllerCS014.text} • ${controllerCS002.text} ${controllerCS003.text} • wurden erfolgreich gespeichert!",
-                              style: TextStyle(
-                                fontSize: 28,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                    /*--------------------------------- if-else Button ---*/
+                    if (!isDataChanged)
+                      WbButtonUniversal2(
+                          wbColor: isButton09Clicked
+                              ? wbColorButtonDarkRed
+                              : wbColorButtonGreen,
+                          wbOnTapDown: (details) {
+                            setState(() {
+                              isButton09Clicked = true;
+                            });
+                          },
+                          wbOnTapUp: (details) {
+                            setState(() {
+                              isButton09Clicked = false;
+                            });
+                          },
+                          wbOnTapCancel: () {
+                            setState(() {
+                              isButton09Clicked = false;
+                            });
+                          },
+                          wbIcon: Icons.save_rounded,
+                          wbIconSize40: 40,
+                          wbText: "Daten SPEICHERN",
+                          wbFontSize24: 24,
+                          wbWidth155: 398,
+                          wbHeight60: 60,
+                          wbOnTap: () async {
+                            log("1584 - ContactScreen - Daten speichern - geklickt");
+                            /*--------------------------------- Sound ---*/
+                            player.play(AssetSource("sound/sound06pling.wav"));
+                            /*--------------------------------- Snackbar ---*/
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              backgroundColor: wbColorButtonGreen,
+                              content: Text(
+                                "Die Daten von\n${controllerCS014.text} • ${controllerCS002.text} ${controllerCS003.text} • wurden erfolgreich gespeichert! 😃👍",
+                                style: TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                          ));
-                          /*--------------------------------- Speicherung in die SQL ---*/
-                          await saveData(context); // Datensatz speichern
-                          log('1600 - ContactScreen - Daten gespeichert (save)!');
-                          // await updateData({}); // Datensatz aktualisieren
-                          // log('1646 - ContactScreen - Daten aktualisiert (update)!');
-                          /*--------------------------------- Navigator.push ---*/
-                          Navigator.push(
-                            // ignore: use_build_context_synchronously
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const MainSelectionScreen(),
-                            ),
-                          );
-                        }),
+                            ));
+                            /*--------------------------------- Speicherung in die SQL ---*/
+                            await saveData(context); // Datensatz speichern
+                            log('1600 - ContactScreen - Daten gespeichert (save)!');
+                            // await updateData({}); // Datensatz aktualisieren
+                            // log('1646 - ContactScreen - Daten aktualisiert (update)!');
+                            /*--------------------------------- Navigator.push ---*/
+                            Navigator.push(
+                              // ignore: use_build_context_synchronously
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const MainSelectionScreen(),
+                              ),
+                            );
+                          })
+                    else
+                      WbButtonUniversal2(
+                          wbColor: wbColorOrangeDarker,
+                          wbOnTapDown: (details) {
+                            setState(() {
+                              isButton09Clicked = true;
+                            });
+                          },
+                          wbOnTapUp: (details) {
+                            setState(() {
+                              isButton09Clicked = false;
+                            });
+                          },
+                          wbOnTapCancel: () {
+                            setState(() {
+                              isButton09Clicked = false;
+                            });
+                          },
+                          wbIcon: Icons.update,
+                          wbIconSize40: 40,
+                          wbText: "Daten UPDATE",
+                          wbFontSize24: 24,
+                          wbWidth155: 398,
+                          wbHeight60: 60,
+                          wbOnTap: () async {
+                            log("1584 - ContactScreen - Daten UPDATE - geklickt");
+                            /*--------------------------------- Sound ---*/
+                            player.play(AssetSource("sound/sound06pling.wav"));
+                            /*--------------------------------- Snackbar ---*/
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              backgroundColor: wbColorOrangeDarker,
+                              content: Text(
+                                "Die Daten von\n${controllerCS014.text} • ${controllerCS002.text} ${controllerCS003.text} • wurden erfolgreich aktualisiert! 😃👍",
+                                style: TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ));
+                            /*--------------------------------- Speicherung in die SQL ---*/
+                            await updateData({}); // Datensatz aktualisieren
+                            log('1600 - ContactScreen - Daten aktualisiert (update)!');
+                            /*--------------------------------- Navigator.push ---*/
+                            Navigator.push(
+                              // ignore: use_build_context_synchronously
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const MainSelectionScreen(),
+                              ),
+                            );
+                          }),
                     /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight16,
                     const Divider(thickness: 3, color: wbColorLogoBlue),
@@ -2295,29 +2361,41 @@ class DatabaseHelper {
       List<int> bytes = data.buffer.asUint8List();
       await File(dbPath).writeAsBytes(bytes, flush: true);
     }
-    return openDatabase(dbPath);
+    return openDatabase(dbPath, version: 1, onCreate: (db, version) async {
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS KundenDaten (
+          TKD_Feld_001 TEXT,
+          TKD_Feld_002 TEXT,
+          TKD_Feld_003 TEXT,
+          TKD_Feld_004 TEXT,
+          TKD_Feld_005 TEXT,
+          TKD_Feld_006 TEXT,
+          TKD_Feld_007 TEXT,
+          TKD_Feld_008 TEXT,
+          TKD_Feld_009 TEXT,
+          TKD_Feld_010 TEXT,
+          TKD_Feld_011 TEXT,
+          TKD_Feld_012 TEXT,
+          TKD_Feld_013 TEXT,
+          TKD_Feld_014 TEXT,
+          TKD_Feld_015 TEXT,
+          TKD_Feld_016 TEXT,
+          TKD_Feld_017 TEXT,
+          TKD_Feld_018 TEXT,
+          TKD_Feld_019 TEXT,
+          TKD_Feld_020 TEXT,
+          TKD_Feld_021 TEXT,
+          TKD_Feld_022 TEXT,
+          TKD_Feld_023 TEXT,
+          TKD_Feld_024 TEXT,
+          TKD_Feld_025 TEXT,
+          TKD_Feld_026 TEXT,
+          TKD_Feld_027 TEXT,
+          TKD_Feld_028 TEXT,
+          TKD_Feld_029 TEXT,
+          TKD_Feld_030 TEXT PRIMARY KEY
+        )
+      ''');
+    });
   }
-
-  // /*--------------------------------- Datensatz löschen ---*/
 }
-
-              //   /*--------------------------------- Telefon ---*/
-              //   child: TextField(
-              //       onChanged: (String text) => _phone = text,
-              //       decoration: const InputDecoration(
-              //           hintText: 'Hier die Telefonnummer eingeben')),
-              // ),
-              // ElevatedButton(
-              //   onPressed: _hasCallSupport
-              //       ? () => setState(() {
-              //             _launched = _makePhoneCall(_phone);
-              //           })
-              //       : null,
-              //   child: _hasCallSupport
-              //       ? const Text('Rufe diese Nummer an')
-              //       : const Text('Anrufe sind zur Zeit nicht möglich'),
-              // ),
-              // /*--------------------------------- *** ---*/
-              // FutureBuilder<void>(future: _launched, builder: _launchStatus),
-              // /*--------------------------------- *** ---*/
-

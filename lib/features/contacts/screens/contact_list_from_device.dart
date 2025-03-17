@@ -100,16 +100,49 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
   }
 
   Future<bool> isContactInDatabase(Contact contact) async {
-    final Database db = await openDatabase('JOTHAsoft.FiveStars.db');
+    final Database db = await openDatabase('JOTHAsoft.FiveStars.db', version: 1,
+        onCreate: (db, version) async {
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS KundenDaten (
+          TKD_Feld_001 TEXT,
+          TKD_Feld_002 TEXT,
+          TKD_Feld_003 TEXT,
+          TKD_Feld_004 TEXT,
+          TKD_Feld_005 TEXT,
+          TKD_Feld_006 TEXT,
+          TKD_Feld_007 TEXT,
+          TKD_Feld_008 TEXT,
+          TKD_Feld_009 TEXT,
+          TKD_Feld_010 TEXT,
+          TKD_Feld_011 TEXT,
+          TKD_Feld_012 TEXT,
+          TKD_Feld_013 TEXT,
+          TKD_Feld_014 TEXT,
+          TKD_Feld_015 TEXT,
+          TKD_Feld_016 TEXT,
+          TKD_Feld_017 TEXT,
+          TKD_Feld_018 TEXT,
+          TKD_Feld_019 TEXT,
+          TKD_Feld_020 TEXT,
+          TKD_Feld_021 TEXT,
+          TKD_Feld_022 TEXT,
+          TKD_Feld_023 TEXT,
+          TKD_Feld_024 TEXT,
+          TKD_Feld_025 TEXT,
+          TKD_Feld_026 TEXT,
+          TKD_Feld_027 TEXT,
+          TKD_Feld_028 TEXT,
+          TKD_Feld_029 TEXT,
+          TKD_Feld_030 TEXT PRIMARY KEY
+        )
+      ''');
+    });
     final List<Map<String, dynamic>> result = await db.query(
       'KundenDaten',
-      where: 'TKD_Feld_002 = ? AND TKD_Feld_003 = ? AND TKD_Feld_004 = ?',
+      where: 'TKD_Feld_002 = ? AND TKD_Feld_003 = ?',
       whereArgs: [
-        contact.name.first,
-        contact.name.last,
-        contact.events.isNotEmpty
-            ? '${contact.events.first.day.toString().padLeft(2, '0')}.${contact.events.first.month.toString().padLeft(2, '0')}.${contact.events.first.year}'
-            : null,
+        contact.name.first.isNotEmpty ? contact.name.first : '',
+        contact.name.last.isNotEmpty ? contact.name.last : '',
       ],
     );
     return result.isNotEmpty;
@@ -252,37 +285,37 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
 
                         /*--- ListTile für die Anzeige der Kontakte ---*/
                         child: ListTile(
-                          // /*--------------------------------- Container für das Bild---*/
-                          // leading: Padding(
-                          //   padding: const EdgeInsets.fromLTRB(0, 0, 16, 8),
-                          //   child: Container(
-                          //     decoration: BoxDecoration(
-                          //       shape: BoxShape.circle,
-                          //       boxShadow: [
-                          //         BoxShadow(
-                          //           color: Colors.black,
-                          //           blurRadius: 2,
-                          //           offset: Offset(3, 3),
-                          //         ),
-                          //       ],
-                          //     ),
+                          /*--------------------------------- Container für das Bild---*/
+                          leading: Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 16, 8),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black,
+                                    blurRadius: 2,
+                                    offset: Offset(3, 3),
+                                  ),
+                                ],
+                              ),
 
-                          //     /*--------------------------------- Bild ---*/
-                          //     child: CircleAvatar(
-                          //       backgroundColor:
-                          //           Colors.white, // Hintergrund weiß
-                          //       backgroundImage: contact.photo != null &&
-                          //               contact.photo!.isNotEmpty
-                          //           ? MemoryImage(contact.photo!)
-                          //           : null,
-                          //       radius: 30,
-                          //       child: contact.photo == null ||
-                          //               contact.photo!.isEmpty
-                          //           ? Icon(Icons.person, size: 30)
-                          //           : null,
-                          //     ),
-                          //   ),
-                          // ),
+                              /*--------------------------------- Bild ---*/
+                              child: CircleAvatar(
+                                backgroundColor:
+                                    Colors.white, // Hintergrund weiß
+                                backgroundImage: contact.photo != null &&
+                                        contact.photo!.isNotEmpty
+                                    ? MemoryImage(contact.photo!)
+                                    : null,
+                                radius: 30,
+                                child: contact.photo == null ||
+                                        contact.photo!.isEmpty
+                                    ? Icon(Icons.person, size: 30)
+                                    : null,
+                              ),
+                            ),
+                          ),
 
                           /*--------------------------------- Kontaktinformationen - Name ---*/
                           title: Text(
