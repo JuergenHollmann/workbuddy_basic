@@ -619,6 +619,16 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
         children: [
           /*--------------------------------- Abstand ---*/
           // wbSizedBoxHeight8,
+
+
+
+
+
+
+          /*--------------------------------- Abstand ---*/
+          wbSizedBoxHeight8,
+
+          //Hier
           /*--------------------------------- Wo eingekauft? ---*/
           WbDropDownMenu(
             /* Hier besser eine Map erstellen - ExpenseWidget - 0033 - todo */
