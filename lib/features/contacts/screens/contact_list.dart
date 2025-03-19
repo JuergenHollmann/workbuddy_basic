@@ -160,7 +160,7 @@ class _ContactListState extends State<ContactList> {
                           MaterialPageRoute(
                             builder: (context) => ContactScreen(
                                 contact:
-                                    contact), // später umbenennen in ContactScreen?
+                                    contact, isNewContact: false,), // später umbenennen in ContactScreen?
                           ),
                         );
                       },

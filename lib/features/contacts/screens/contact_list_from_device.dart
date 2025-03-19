@@ -606,7 +606,7 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                                                       contact.id.isNotEmpty
                                                           ? contact.id
                                                           : '',
-                                                },
+                                                }, isNewContact: true,
                                               ),
                                             ),
                                           );

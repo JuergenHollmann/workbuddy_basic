@@ -253,3 +253,35 @@
                                     //     'Webseiten first.toVCard: ${contact.websites.first.toVCard()}'),
                                     // ]
                                     // // ---> es gibt auch noch "contact.websites.single" und "contact.websites.last"
+
+
+        //   if (controllerCS001.text != widget.contact['TKD_Feld_001'] ||
+        //       controllerCS002.text != widget.contact['TKD_Feld_002'] ||
+        //       controllerCS003.text != widget.contact['TKD_Feld_003'] ||
+        //       controllerCS004.text != widget.contact['TKD_Feld_004'] ||
+        //       controllerCS005.text != widget.contact['TKD_Feld_005'] ||
+        //       controllerCS006.text != widget.contact['TKD_Feld_006'] ||
+        //       controllerCS007.text != widget.contact['TKD_Feld_007'] ||
+        //       controllerCS008.text != widget.contact['TKD_Feld_008'] ||
+        //       controllerCS009.text != widget.contact['TKD_Feld_009'] ||
+        //       controllerCS010.text != widget.contact['TKD_Feld_010'] ||
+        //       controllerCS011.text != widget.contact['TKD_Feld_011'] ||
+        //       controllerCS012.text != widget.contact['TKD_Feld_012'] ||
+        //       controllerCS013.text != widget.contact['TKD_Feld_013'] ||
+        //       controllerCS014.text != widget.contact['TKD_Feld_014'] ||
+        //       controllerCS015.text != widget.contact['TKD_Feld_015'] ||
+        //       controllerCS016.text != widget.contact['TKD_Feld_016'] ||
+        //       controllerCS017.text != widget.contact['TKD_Feld_017'] ||
+        //       controllerCS018.text != widget.contact['TKD_Feld_018'] ||
+        //       controllerCS019.text != widget.contact['TKD_Feld_019'] ||
+        //       controllerCS020.text != widget.contact['TKD_Feld_020'] ||
+        //       controllerCS021.text != widget.contact['TKD_Feld_021'] ||
+        //       controllerCS022.text != widget.contact['TKD_Feld_022'] ||
+        //       controllerCS023.text != widget.contact['TKD_Feld_023'] ||
+        //       controllerCS024.text != widget.contact['TKD_Feld_024'] ||
+        //       controllerCS025.text != widget.contact['TKD_Feld_025'] ||
+        //       controllerCS026.text != widget.contact['TKD_Feld_026'] ||
+        //       controllerCS027.text != widget.contact['TKD_Feld_027'] ||
+        //       controllerCS028.text != widget.contact['TKD_Feld_028'] ||
+        //       controllerCS029.text != widget.contact['TKD_Feld_029'] ||
+        //       controllerCS030.text != widget.contact['TKD_Feld_030']) {

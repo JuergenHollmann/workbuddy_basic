@@ -27,7 +27,8 @@ import 'package:workbuddy/shared/widgets/wb_info_container.dart';
 
 class ContactScreen extends StatefulWidget {
   final Map<String, dynamic> contact;
-  const ContactScreen({super.key, required this.contact});
+  const ContactScreen(
+      {super.key, required this.contact, required bool isNewContact});
 
   @override
   State<ContactScreen> createState() => _ContactScreenState();
@@ -491,7 +492,70 @@ class _ContactScreenState extends State<ContactScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         setState(() {
-          isDataChanged = true;
+          // if (controllerCS001.text.isNotEmpty ||
+          //     controllerCS002.text.isNotEmpty ||
+          //     controllerCS003.text.isNotEmpty ||
+          //     controllerCS004.text.isNotEmpty ||
+          //     controllerCS005.text.isNotEmpty ||
+          //     controllerCS006.text.isNotEmpty ||
+          //     controllerCS007.text.isNotEmpty ||
+          //     controllerCS008.text.isNotEmpty ||
+          //     controllerCS009.text.isNotEmpty ||
+          //     controllerCS010.text.isNotEmpty ||
+          //     controllerCS011.text.isNotEmpty ||
+          //     controllerCS012.text.isNotEmpty ||
+          //     controllerCS013.text.isNotEmpty ||
+          //     controllerCS014.text.isNotEmpty ||
+          //     controllerCS015.text.isNotEmpty ||
+          //     controllerCS016.text.isNotEmpty ||
+          //     controllerCS017.text.isNotEmpty ||
+          //     controllerCS018.text.isNotEmpty ||
+          //     controllerCS019.text.isNotEmpty ||
+          //     controllerCS020.text.isNotEmpty ||
+          //     controllerCS021.text.isNotEmpty ||
+          //     controllerCS022.text.isNotEmpty ||
+          //     controllerCS023.text.isNotEmpty ||
+          //     controllerCS024.text.isNotEmpty ||
+          //     controllerCS025.text.isNotEmpty ||
+          //     controllerCS026.text.isNotEmpty ||
+          //     controllerCS027.text.isNotEmpty ||
+          //     controllerCS028.text.isNotEmpty ||
+          //     controllerCS029.text.isNotEmpty ||
+          //     controllerCS030.text.isNotEmpty) {
+
+          if (controllerCS001.text != widget.contact['TKD_Feld_001'] ||
+              controllerCS002.text != widget.contact['TKD_Feld_002'] ||
+              controllerCS003.text != widget.contact['TKD_Feld_003'] ||
+              controllerCS004.text != widget.contact['TKD_Feld_004'] ||
+              controllerCS005.text != widget.contact['TKD_Feld_005'] ||
+              controllerCS006.text != widget.contact['TKD_Feld_006'] ||
+              controllerCS007.text != widget.contact['TKD_Feld_007'] ||
+              controllerCS008.text != widget.contact['TKD_Feld_008'] ||
+              controllerCS009.text != widget.contact['TKD_Feld_009'] ||
+              controllerCS010.text != widget.contact['TKD_Feld_010'] ||
+              controllerCS011.text != widget.contact['TKD_Feld_011'] ||
+              controllerCS012.text != widget.contact['TKD_Feld_012'] ||
+              controllerCS013.text != widget.contact['TKD_Feld_013'] ||
+              controllerCS014.text != widget.contact['TKD_Feld_014'] ||
+              controllerCS015.text != widget.contact['TKD_Feld_015'] ||
+              controllerCS016.text != widget.contact['TKD_Feld_016'] ||
+              controllerCS017.text != widget.contact['TKD_Feld_017'] ||
+              controllerCS018.text != widget.contact['TKD_Feld_018'] ||
+              controllerCS019.text != widget.contact['TKD_Feld_019'] ||
+              controllerCS020.text != widget.contact['TKD_Feld_020'] ||
+              controllerCS021.text != widget.contact['TKD_Feld_021'] ||
+              controllerCS022.text != widget.contact['TKD_Feld_022'] ||
+              controllerCS023.text != widget.contact['TKD_Feld_023'] ||
+              controllerCS024.text != widget.contact['TKD_Feld_024'] ||
+              controllerCS025.text != widget.contact['TKD_Feld_025'] ||
+              controllerCS026.text != widget.contact['TKD_Feld_026'] ||
+              controllerCS027.text != widget.contact['TKD_Feld_027'] ||
+              controllerCS028.text != widget.contact['TKD_Feld_028'] ||
+              controllerCS029.text != widget.contact['TKD_Feld_029'] ||
+              controllerCS030.text != widget.contact['TKD_Feld_030']) {
+            isDataChanged = true;
+          }
+          log('0558 - ContactScreen - Daten wurden geändert - isDataChanged: $isDataChanged');
         });
       }
     });
@@ -712,87 +776,95 @@ class _ContactScreenState extends State<ContactScreen> {
           leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
-                // if (isDataChanged) {
-                //   showDialog(
-                //     context: context,
-                //     builder: (BuildContext context) {
-                //       return AlertDialog(
-                //         title: Text("Datenänderungen wurden nicht gespeichert!"),
-                //         content: Text(
-                //             "Es gibt ungespeicherte Änderungen. Möchtest du die Daten speichern, bevor du zurückgehst?"),
-                //         actions: [
-                //           TextButton(
-                //             onPressed: () {
-                //               Navigator.of(context).pop();
-                //               Navigator.push(
-                //                 context,
-                //                 MaterialPageRoute(
-                //                   builder: (context) => const MainSelectionScreen(),
-                //                 ),
-                //               );
-                //             },
-                //             child: Text("Die Daten nicht speichern"),
-                //           ),
-                //           TextButton(
-                //             onPressed: () async {
-                //               Navigator.of(context).pop();
-                //               await saveData(context);
-                //               Navigator.push(
-                //                 // ignore: use_build_context_synchronously
-                //                 context,
-                //                 MaterialPageRoute(
-                //                   builder: (context) => const MainSelectionScreen(),
-                //                 ),
-                //               );
-                //             },
-                //             child: Text("Die geänderten Daten speichern"),
-                //           ),
-                //         ],
-                //       );
-                //     },
-                //   );
-                // } else {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MainSelectionScreen(),
-                  ),
-                );
-              })
+                if (isDataChanged) {
+                  //0715 - ContactScreen - nur wenn Daten geändert wurden
+                  /*--------------------------------- Sound ---*/
+                  player.play(AssetSource("sound/sound05xylophon.wav"));
+                  /*--------------------------------- AlertDialog ---*/
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text(
+                            'Deine Datenänderungen bei ${controllerCS002.text} ${controllerCS003.text} wurden NICHT aktualisiert!',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: wbColorLogoBlue)),
+                        content: Text(
+                          "Es gibt ungespeicherte Änderungen!\n\nMöchtest du die Daten aktualisieren, bevor du zurückgehst?",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const MainSelectionScreen(),
+                                ),
+                              );
+                            },
+                            child: Text('Die Daten NICHT aktualisieren',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: wbColorLogoBlue)),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              /*--------------------------------- Sound ---*/
+                              player
+                                  .play(AssetSource("sound/sound06pling.wav"));
+                              /*--------------------------------- Snackbar ---*/
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                backgroundColor: wbColorOrangeDarker,
+                                content: Text(
+                                  "Die Daten von\n${controllerCS014.text} • ${controllerCS002.text} ${controllerCS003.text} • wurden erfolgreich aktualisiert! 😃👍",
+                                  style: TextStyle(
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ));
+                              /*--------------------------------- Snackbar ENDE ---*/
 
-          /*--------------------------------- *** ---*/
-          /*--- "RichText" wird hier nicht mehr benötigt, weil jetzt "WbInfoContainer" die Daten anzeigt ---*/
-          // title: RichText(
-          //   textAlign: TextAlign.center,
-          //   text: TextSpan(
-          //     text: "Firma bearbeiten\n",
-          //     style: TextStyle(
-          //       fontSize: 28,
-          //       fontWeight: FontWeight.w900,
-          //       color: Colors.yellow,
-          //     ),
-          //     children: <TextSpan>[
-          //       // children: [
-          //       TextSpan(
-          //         text:
-          //             "• $inputCompanyName\n• $inputCompanyVNContactPerson $inputCompanyNNContactPerson",
-          //         style: TextStyle(
-          //           fontSize: 18,
-          //           fontWeight: FontWeight.w900,
-          //           color: Colors.white,
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-          // /*--------------------------------- *** ---*/
-          // shape: Border.symmetric(
-          //   horizontal: BorderSide(
-          //     width: 3,
-          //   ),
-          // ),
-          // /*--------------------------------- *** ---*/
-          ),
+                              Navigator.of(context).pop();
+                              // await saveData(context);
+                              await updateData({});
+                              Navigator.push(
+                                // ignore: use_build_context_synchronously
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const MainSelectionScreen(),
+                                ),
+                              );
+                            },
+                            child: Text(
+                                'Die geänderten Daten jetzt AKTUALISIEREN! 😃👍',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: wbColorLogoBlue)),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MainSelectionScreen(),
+                    ),
+                  );
+                }
+              })),
       /*--------------------------------- *** ---*/
       body: SingleChildScrollView(
         child: Center(
@@ -1247,13 +1319,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                     ? '$ageY Jahr'
                                                                                     : (ageM == 1)
                                                                                         ? '$ageM Monat'
-                                                                                        : (ageD == 1)
-                                                                                            ? '$ageD Tag'
-                                                                                            : (ageY == 0)
-                                                                                                ? '$ageY Jahr'
-                                                                                                : (ageM == 0)
-                                                                                                    ? '$ageM Monat'
-                                                                                                    : '$ageY Jahre + $ageM Monate + $ageD Tage',
+                                                                                        : '$ageY Jahre + $ageM Monate + $ageD Tage',
                                     // /*--------------------------------- mehrfach verschachtelter ternärer Operator ---*/
                                     // (nextY == 0 && nextM == 0 && nextD == 0)
                                     //     ? '---> ist UNBEKANNT!'
