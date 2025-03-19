@@ -141,7 +141,7 @@ class _ContactMenuState extends State<ContactMenu> {
                         String newContactID = generateContactID();
                         setState(() {
                           isNewContact = true;
-                        });
+                                       });
                         Navigator.push(
                           context,
                           MaterialPageRoute(

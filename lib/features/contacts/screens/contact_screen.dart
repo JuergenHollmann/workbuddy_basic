@@ -27,8 +27,13 @@ import 'package:workbuddy/shared/widgets/wb_info_container.dart';
 
 class ContactScreen extends StatefulWidget {
   final Map<String, dynamic> contact;
+  final bool isNewContact; 
+
   const ContactScreen(
-      {super.key, required this.contact, required bool isNewContact});
+      {super.key,
+      required this.contact,
+      required this.isNewContact 
+      });
 
   @override
   State<ContactScreen> createState() => _ContactScreenState();
@@ -2142,7 +2147,7 @@ class _ContactScreenState extends State<ContactScreen> {
                     const Divider(thickness: 3, color: wbColorLogoBlue),
                     wbSizedBoxHeight8,
                     /*--------------------------------- if-else Button ---*/
-                    if (!isDataChanged)
+                    if (!isDataChanged || widget.isNewContact)
                       WbButtonUniversal2(
                           wbColor: isButton09Clicked
                               ? wbColorButtonDarkRed
