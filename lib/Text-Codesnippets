@@ -285,3 +285,89 @@
         //       controllerCS028.text != widget.contact['TKD_Feld_028'] ||
         //       controllerCS029.text != widget.contact['TKD_Feld_029'] ||
         //       controllerCS030.text != widget.contact['TKD_Feld_030']) {
+
+
+// 0242
+/*--------------------------------- Daten aktualisieren ---*/
+Future<void> updateData(Map<String, dynamic> row) async {
+  if (controllerCS002.text.isEmpty || controllerCS003.text.isEmpty) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Fehler"),
+        content: Text("Vorname und Nachname dürfen nicht leer sein."),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text("OK"),
+          ),
+        ],
+      ),
+    );
+    return;
+  }
+
+
+//0082
+/*--------------------------------- Daten speichern ---*/
+Future<void> saveData(BuildContext context) async {
+  if (controllerCS002.text.isEmpty || controllerCS003.text.isEmpty) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Fehler"),
+        content: Text("Vorname und Nachname dürfen nicht leer sein."),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text("OK"),
+          ),
+        ],
+      ),
+    );
+    return;
+  }
+
+                            // log("1584 - ContactScreen - Daten speichern - geklickt");
+                            // if (controllerCS002.text.isEmpty || controllerCS003.text.isEmpty) {
+                            //   showDialog(
+                            //     context: context,
+                            //     builder: (context) => AlertDialog(
+                            //       title: Text("Fehler"),
+                            //       content: Text("Vorname und Nachname dürfen nicht leer sein."),
+                            //       actions: [
+                            //         TextButton(
+                            //           onPressed: () {
+                            //             Navigator.of(context).pop();
+                            //           },
+                            //           child: Text("OK"),
+                            //         ),
+                            //       ],
+                            //     ),
+                            //   );
+                            //   return;
+                            // }
+
+    // Setze den Fokus auf das leere Feld und scrolle zu dieser Position
+    if (controllerCS002.text.isEmpty) {
+      FocusScope.of(context).requestFocus(controllerCS002);
+      Scrollable.ensureVisible(
+        context,
+        duration: Duration(milliseconds: 300),
+        alignment: 0.5,
+      );
+    } else {
+      FocusScope.of(context).requestFocus(controllerCS003);
+      Scrollable.ensureVisible(
+        context,
+        duration: Duration(milliseconds: 300),
+        alignment: 0.5,
+      );
+    }
+
+      final FocusNode focusNodeCS002 = FocusNode();
+

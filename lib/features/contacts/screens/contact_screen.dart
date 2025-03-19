@@ -27,19 +27,17 @@ import 'package:workbuddy/shared/widgets/wb_info_container.dart';
 
 class ContactScreen extends StatefulWidget {
   final Map<String, dynamic> contact;
-  final bool isNewContact; 
+  final bool isNewContact;
 
   const ContactScreen(
-      {super.key,
-      required this.contact,
-      required this.isNewContact 
-      });
+      {super.key, required this.contact, required this.isNewContact});
 
   @override
   State<ContactScreen> createState() => _ContactScreenState();
 }
 
 /*--------------------------------- Controller ---*/
+final scrollController = ScrollController();
 final compPersonAge = TextEditingController();
 final controllerCS001 = TextEditingController(); // Anrede
 final controllerCS002 = TextEditingController(); // Vorname
@@ -79,8 +77,27 @@ final controllerCS030 = TextEditingController(); // KontaktID
 //   controllerCS030.text = widget.contact['TKD_Feld_030'] ?? '';
 // }
 
-/*--------------------------------- Daten speichern ---*/
+/*--------------------------------- Daten speichern 0082 ---*/
 Future<void> saveData(BuildContext context) async {
+  if (controllerCS002.text.isEmpty || controllerCS003.text.isEmpty) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Fehler"),
+        content: Text("Vorname und Nachname dürfen nicht leer sein."),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text("OK 👍"),
+          ),
+        ],
+      ),
+    );
+    return;
+  }
+
   var db = await DatabaseHelper().database;
 
   // Überprüfen, ob ein Datensatz mit der gleichen KundenID bereits existiert
@@ -223,9 +240,28 @@ Future<void> fetchData() async {
 
 /*--------------------------------- Daten aktualisieren ---*/
 Future<void> updateData(Map<String, dynamic> row) async {
+  // if (controllerCS002.text.isEmpty || controllerCS003.text.isEmpty) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) => AlertDialog(
+  //       title: Text("Fehler"),
+  //       content: Text("Vorname und Nachname dürfen nicht leer sein."),
+  //       actions: [
+  //         TextButton(
+  //           onPressed: () {
+  //             Navigator.of(context).pop();
+  //           },
+  //           child: Text("OK"),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  //   return;
+  // }
+
   var db = await DatabaseHelper().database;
 
-  /*--- Ändere den Kontakt mit der KundenID: 1683296820166 ---*/
+  /*--- Daten im Kontakt updaten ---*/
   var query = await db.rawUpdate('''
     UPDATE KundenDaten SET
       TKD_Feld_001 = ?,
@@ -326,6 +362,30 @@ Future<void> deleteData(Map<String, dynamic> row) async {
 
 /*--------------------------------- State ---*/
 class _ContactScreenState extends State<ContactScreen> {
+  //final FocusNode focusNodeCS003 = FocusNode();
+  // final FocusNode focusNodeCS002 = FocusNode();
+
+  void _checkAndScrollToEmptyField() {
+    if (controllerCS002.text.isEmpty) {
+      log('0373 - ContactScreen - Ist controllerCS002 leer? ${controllerCS002.text.isEmpty}');
+      // Setze den Fokus auf das erste Feld
+      FocusScope.of(this.context).requestFocus(FocusNode());
+      Future.delayed(Duration.zero, () {
+        log('0379 - ContactScreen - Fokus auf Feld 002 gesetzt');
+        Scrollable.ensureVisible(
+          // ignore: use_build_context_synchronously
+          this.context,
+          alignment: 0.5, // Scrollt zur Mitte des Bildschirms
+          duration: Duration(milliseconds: 500),
+        );
+        log('0381 - ContactScreen - Scrollt zur Mitte des Bildschirms');
+        scrollController.animateTo(0,
+            duration: Duration(milliseconds: 500), curve: Curves.easeIn);
+        log('0384 - ContactScreen - Scrollt nach oben');
+      });
+    }
+  }
+
   /*--------------------------------- AudioPlayer ---*/
   late AudioPlayer player = AudioPlayer();
 
@@ -872,6 +932,7 @@ class _ContactScreenState extends State<ContactScreen> {
               })),
       /*--------------------------------- *** ---*/
       body: SingleChildScrollView(
+        controller: scrollController,
         child: Center(
           child: Column(
             children: [
@@ -2174,7 +2235,31 @@ class _ContactScreenState extends State<ContactScreen> {
                           wbWidth155: 398,
                           wbHeight60: 60,
                           wbOnTap: () async {
-                            log("1584 - ContactScreen - Daten speichern - geklickt");
+                            log("2199 - ContactScreen - Daten speichern - geklickt");
+                            // _checkAndScrollToEmptyField();
+                            if (controllerCS002.text.isEmpty &&
+                                controllerCS003.text.isEmpty) {
+                              /*--------------------------------- Sound ---*/
+                              player.play(
+                                  AssetSource("sound/sound05xylophon.wav"));
+
+                              /*--------------------------------- AlertDialog ---*/
+                              showDialog(
+                                context: context,
+                                builder: (context) =>
+                                    WbDialogAlertUpdateComingSoon(
+                                  headlineText: 'Zum Speichern fehlen Daten!',
+                                  contentText:
+                                      'BEIDE Felder für "Vorname" und "Nachname" sind leer.\n\nMindestens 1 Feld muss entweder "Vorname" oder "Nachname" enthalten.\n\nBitte fülle MINDESTENS eines der beiden Felder aus.',
+                                  actionsText: 'OK 👍',
+                                ),
+                              );
+
+                              _checkAndScrollToEmptyField();
+
+                              return;
+                            }
+
                             /*--------------------------------- Sound ---*/
                             player.play(AssetSource("sound/sound06pling.wav"));
                             /*--------------------------------- Snackbar ---*/
