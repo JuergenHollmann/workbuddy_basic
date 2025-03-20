@@ -9,7 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_typeahead: ^4.0.0
+  #flutter_typeahead: ^4.0.0
+  #flutter_keyboard_visibility: ^5.0.0
   audioplayers: ^6.1.0
   flutter_exit_app: ^1.1.4
   dropdown_search: ^6.0.1

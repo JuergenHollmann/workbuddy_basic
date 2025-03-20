@@ -37,8 +37,6 @@ PODS:
     - Flutter
   - flutter_exit_app (1.1.4):
     - Flutter
-  - flutter_keyboard_visibility (0.0.1):
-    - Flutter
   - flutter_native_splash (2.4.3):
     - Flutter
   - GoogleUtilities/AppDelegateSwizzler (8.0.2):
@@ -87,7 +85,6 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_contacts (from `.symlinks/plugins/flutter_contacts/ios`)
   - flutter_exit_app (from `.symlinks/plugins/flutter_exit_app/ios`)
-  - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
@@ -122,8 +119,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_contacts/ios"
   flutter_exit_app:
     :path: ".symlinks/plugins/flutter_exit_app/ios"
-  flutter_keyboard_visibility:
-    :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
   flutter_native_splash:
     :path: ".symlinks/plugins/flutter_native_splash/ios"
   package_info_plus:
@@ -153,7 +148,6 @@ SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_contacts: 5383945387e7ca37cf963d4be57c21f2fc15ca9f
   flutter_exit_app: 6958fed84b2c563b034e147ec23e30db0112eb64
-  flutter_keyboard_visibility: 4625131e43015dbbe759d9b20daaf77e0e3f6619
   flutter_native_splash: c32d145d68aeda5502d5f543ee38c192065986cf
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
   GTMSessionFetcher: 75b671f9e551e4c49153d4c4f8659ef4f559b970

@@ -1,3 +1,18 @@
+/*--------------------------------- Problem mit TypeAheadField ---*/
+/// in "Pubspeck.yaml" deaktiviert:
+/// flutter_typeahead: ^4.0.0
+// flutter_keyboard_visibility: ^5.0.0
+
+// das ganze Widget "WbTypeAheadField" deaktiviert:
+// import 'package:flutter_typeahead/flutter_typeahead.dart';
+
+// in "ExpenseWidget" deaktiviert:
+// WbTypeAheadField "Was wurde eingekauft?"
+
+/*--------------------------------- *** ---*/
+ 
+ 
+ 
                                     // /*--------------------------------- E-Mail ---*/
                                     // if (contact.emails.isNotEmpty)
                                     //   Text('E-Mail: ${contact.emails.first.address}'),
