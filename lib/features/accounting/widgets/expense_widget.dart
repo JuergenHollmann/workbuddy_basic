@@ -10,6 +10,7 @@ import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
 import 'package:workbuddy/config/wb_text_form_field.dart';
 import 'package:workbuddy/config/wb_text_form_field_text_only.dart';
+import 'package:workbuddy/config/wb_typeaheadfield.dart';
 import 'package:workbuddy/features/accounting/screens/accounting_menu.dart';
 import 'package:workbuddy/shared/widgets/wb_dialog_alert_update_coming_soon.dart';
 import 'package:workbuddy/shared/widgets/wb_divider_with_text_in_center.dart';
@@ -31,6 +32,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
 // ScrollController _scrollcontroller = ScrollController();
 
 /*--------------------------------- Controller ---*/
+  final shopController = TextEditingController();
   final quantityController = TextEditingController();
   final itemController = TextEditingController();
   final taxPercentController = TextEditingController();
@@ -620,6 +622,25 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
           /*--------------------------------- Abstand ---*/
           // wbSizedBoxHeight8,
 
+          /*--------------------------------- Was wurde eingekauft? ---*/
+          WbTypeAheadField(
+            controller: shopController,
+            labelText: 'Wo wurde eingekauft?',
+            hintText: 'In welchem Geschäft eingekauft?',
+            prefixIcon: Icons.house_outlined,
+            suffixIcon: Icons.delete_forever,
+            fillColor: wbColorBackgroundRed,
+            borderColor: wbColorButtonDarkRed,
+            suggestionsBoxColor: wbColorLogoBlue,
+            listTileTextColor: Colors.white,
+            listTileTextStyle: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+            tableName: 'KundenDaten',
+            tableColumnName: 'TKD_Feld_014', // Firma
+          ),
 
 
 

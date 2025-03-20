@@ -1,7 +1,7 @@
 name: workbuddy
 description: "save time and money"
 publish_to: 'none'
-version: 0.03.202+1
+version: 0.03.203+1
 
 environment:
   sdk: '>=3.4.3 <4.0.0'
@@ -9,6 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_typeahead: ^4.0.0
   audioplayers: ^6.1.0
   flutter_exit_app: ^1.1.4
   dropdown_search: ^6.0.1
@@ -34,7 +35,7 @@ dependencies:
   pdf: ^3.11.3
   printing: ^5.14.2
   flutter_contacts: ^1.1.9+2
-  flutter_typeahead: ^5.2.0
+  #flutter_typeahead: ^5.2.0
   #contacts_service: ^0.6.3
   #permission_handler: ^11.4.0
 

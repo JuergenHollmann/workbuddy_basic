@@ -339,13 +339,12 @@ class DatabaseHelper {
   - Im ExpenseWidget bleiben die Einträge noch der Berechnung nicht im Textfeld mit dem Wert stehen.
 
 - Datenschutz und Rechtliches:  
-  - Zustimmung zu Datenschutz + Textvorlage einpflegen.
-  - Zustimmung zu Nutzungsbedingungen + Textvorlage einpflegen.
+  √ Zustimmung zu Datenschutz + Textvorlage einpflegen √
+  √ Zustimmung zu Nutzungsbedingungen + Textvorlage einpflegen √
   - Impressum + Textvorlage einpflegen.
 
   - Allgemein überall "TextEditingController.dispose" einbauen.
   - Nützliche Funktion für den User vorschlagen - E-Mail DIREKT an den Entwickler senden - "Support-E-Mail" eintragen - CM-0121
-  - "WbInfoContainer" im ContactScreen ist teilweise noch festverdrahtet - 1030
   - "WbInfoContainer" im ContactScreen ist teilweise noch festverdrahtet - 1030
 
   - In Chrome gibt es keine SharedPreferences, deshalb muss ich das auf "null" setzen? oder woanders (SQL) speichern?
