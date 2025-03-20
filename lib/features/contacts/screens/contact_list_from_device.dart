@@ -23,7 +23,7 @@ class ContactListFromDevice extends StatefulWidget {
 class _ContactListFromDeviceState extends State<ContactListFromDevice> {
   List<Contact> filteredContacts = [];
   List<Contact> allContacts = [];
-  int currentMax = 20; // Initiale Anzahl der geladenen Kontakte
+  int currentMax = 10; // Initiale Anzahl der am Anfang geladenen Kontakte wegen schnellerem Laden des Screens
   final TextEditingController _searchController = TextEditingController();
   List<Contact> displayedContacts = [];
   final AudioPlayer player = AudioPlayer();
@@ -36,36 +36,36 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
   }
 
   Future<void> loadInitialContacts() async {
-    // Berechtigungen anfordern
+    /*--- Berechtigungen anfordern ---*/
     if (await FlutterContacts.requestPermission()) {
       log('0033 - ContactListFromDevice - Zugriff auf Kontakte erlaubt');
 
-      // Die ersten zwanzig Kontakte ohne zusätzliche Details laden
+      /*--- Die ersten 10 Kontakte mit allen Details laden ---*/
       allContacts = await FlutterContacts.getContacts(
-        withProperties: false,
+        withProperties: true,
         withThumbnail: true,
         withPhoto: true,
-        withGroups: false,
-        withAccounts: false,
+        withGroups: true,
+        withAccounts: true,
         sorted: true,
-        deduplicateProperties: false,
-      ).then((contacts) => contacts.take(20).toList());
+        deduplicateProperties: true,
+      ).then((contacts) => contacts.take(10).toList());
 
       setState(() {
         filteredContacts = allContacts;
         displayedContacts = filteredContacts.take(currentMax).toList();
       });
 
-      // Die restlichen Kontakte mit allen Details laden
+      /*--- Die restlichen Kontakte mit allen Details laden ---*/
       loadAllContacts();
     } else {
-      // Berechtigung verweigert
+      /*--- Berechtigung verweigert ---*/
       log('0042 - ContactListFromDevice - Zugriff auf Kontakte verweigert');
     }
   }
 
   Future<void> loadAllContacts() async {
-    // Alle Kontakte mit allen Details laden
+    /*--- Die restlichen Kontakte mit allen Details laden ---*/
     allContacts = await FlutterContacts.getContacts(
       withProperties: true,
       withThumbnail: true,
@@ -83,9 +83,10 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
     });
   }
 
+  /*--- Lade weitere Kontakte beim Scrollen ---*/
   void loadMoreContacts() {
     setState(() {
-      currentMax = currentMax + 20; // Lade weitere 20 Kontakte
+      currentMax = currentMax + 10; // Lade weitere 10 Kontakte
       displayedContacts = filteredContacts.take(currentMax).toList();
     });
   }
