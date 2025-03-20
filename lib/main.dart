@@ -317,6 +317,7 @@ class DatabaseHelper {
   √ für iOS muss im ios/Podfile     ---> platform :ios, '13.0'  eingestellt werden √ 
   √ für macOS muss im macos/Podfile ---> platform :osx, '10.15' eingestellt werden √ 
   /*--------------------------------- *** ---
+  - SnackBar - Kontakt wird überprüft 0535 - ContactListFromDevice todo
   - 0402 - SettingsMenu - Sprache "Deutsch" auswählen.
   - Snackbar einblenden funzt hier nicht! 2101 - ContactScreen
   - Fehlermeldung beheben: wegen disposed() called on null - 0466 - ContactScreen
