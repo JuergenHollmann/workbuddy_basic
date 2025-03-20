@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:audioplayers/audioplayers.dart';
@@ -408,8 +409,13 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                                     /*--------------------------------- Kontaktinformationen - ENDE ---*/
                                   ],
                                 ),
-                                onTap: () {
+                                onTap: () async {
+                                  // /*--------------------------------- Sound abspielen ---*/ // funzt hier nicht
+                                  // player.play(
+                                  //     AssetSource("sound/sound01click.wav"));
                                   log('0203 - ContactListFromDevice - Kontakt "${contact.displayName}" angeklickt');
+
+                                  /*--------------------------------- Dialog - Kontakt übertragen ---*/
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) =>
@@ -436,6 +442,7 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                                       wbOnTap2: () async {
                                         log('0622 - ContactListFromDevice - Kontakt "${contact.displayName}" soll in "WorkBuddy" übertragen werden');
 
+                                        /*--------------------------------- Dialog - Kontakt bereits vorhanden ---*/
                                         bool exists =
                                             await isContactInDatabase(contact);
                                         if (exists) {
@@ -443,6 +450,10 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
 
                                           // ignore: use_build_context_synchronously
                                           Navigator.pop(context);
+
+                                          // Sound abspielen
+                                          player.play(AssetSource(
+                                              "sound/sound03enterprise.wav"));
 
                                           // ignore: use_build_context_synchronously
                                           ScaffoldMessenger.of(context)
@@ -463,10 +474,104 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                                             ),
                                           );
 
-                                          // Sound abspielen
-                                          player.play(AssetSource(
-                                              "sound/sound03enterprise.wav"));
+                                          // /*--------------------------------- 2 Sekunden Pause einfügen ---*/
+                                          //Future.delayed(Duration.zero, () {});
+
+                                          Future.delayed(
+                                            Duration(seconds: 2),
+                                          );
+                                          /*--------------------------------- Dialog - Geburtsdatum überprüfen ---*/
+                                          showDialog(
+                                              // ignore: use_build_context_synchronously
+                                              context: context,
+                                              builder: (BuildContext context) =>
+                                                  WBDialog2Buttons(
+                                                      headLineText:
+                                                          'Der Kontakt "${contact.displayName}" ist bereits in der Datenbank vorhanden.\n\n🟡  Soll jetzt das Geburtsdatum überprüft werden?',
+                                                      descriptionText:
+                                                          'Es könnte sein, dass 2 Personen gleichen Namens, aber mit einem unterschiedlichen Geburtsdatum in der Datenbank vorhanden sind.',
+
+                                                      /*--------------------------------- Button 1 'Nein' ---*/
+                                                      wbText1: 'Nein',
+                                                      wbIcon1: Icons.cancel,
+                                                      wbColor1:
+                                                          wbColorButtonDarkRed,
+                                                      wbOnTap1: () {
+                                                        /*--------------------------------- SnackBar - Kontakt wird nicht überprüft ---*/
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                                SnackBar(
+                                                          content: Text(
+                                                            '🟡 Der Kontakt "${contact.displayName}" wurde nicht weiter überprüft und auch NICHT zusätzlich in WorkBuddy übertragen! ⛔',
+                                                            style: TextStyle(
+                                                              fontSize: 24,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          ),
+                                                          backgroundColor:
+                                                              wbColorButtonDarkRed,
+                                                          duration: Duration(
+                                                              milliseconds:
+                                                                  2000),
+                                                        ));
+
+                                                        /*--------------------------------- Sound abspielen ---*/
+                                                        player.play(AssetSource(
+                                                            "sound/sound06pling.wav"));
+
+                                                        /*--------------------------------- Navigator ausblenden ---*/
+                                                        Navigator.pop(context);
+                                                      },
+
+                                                      /*--------------------------------- Button 2 'Ja • Überprüfen' ---*/
+                                                      wbText2:
+                                                          'Ja • Überprüfen',
+                                                      wbIcon2: Icons.save,
+                                                      wbColor2:
+                                                          wbColorButtonGreen,
+                                                      wbWidth2W155:
+                                                          double.infinity,
+                                                      wbOnTap2: () {
+                                                        /*--------------------------------- SnackBar - Kontakt wird überprüft 0541 - ContactListFromDevice todo ---*/
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                                SnackBar(
+                                                          content: Text(
+                                                            '🟡 Diese Funktion kommt in einem Update!\n\nUpdate CLFD-0541 ⛔',
+                                                            // '🟡 Der Kontakt "${contact.displayName}" wird jetzt überprüft und auch NICHT zusätzlich in WorkBuddy übertragen! ⛔',
+                                                            style: TextStyle(
+                                                              fontSize: 24,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          ),
+                                                          backgroundColor:
+                                                              wbColorOrangeDarker,
+                                                          duration: Duration(
+                                                              milliseconds:
+                                                                  2000),
+                                                        )); // SnackBar
+
+                                                        /*--------------------------------- Sound abspielen ---*/
+                                                        player.play(AssetSource(
+                                                            "sound/sound06pling.wav"));
+
+                                                        /*--------------------------------- Navigator ausblenden ---*/
+                                                        Navigator.pop(context);
+                                                      }));
+
+                                          /*--------------------------------- ... wenn der Kontakt noch NICHT vorhanden ist ... ---*/
                                         } else {
+                                          /*--------------------------------- SnackBar - Kontakt wird übertragen ---*/
                                           log('0590 - ContactListFromDevice - Der Kontakt wird jetzt in "WorkBuddy" übertragen.');
 
                                           // ignore: use_build_context_synchronously
@@ -606,7 +711,8 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                                                       contact.id.isNotEmpty
                                                           ? contact.id
                                                           : '',
-                                                }, isNewContact: true,
+                                                },
+                                                isNewContact: true,
                                               ),
                                             ),
                                           );
@@ -627,9 +733,8 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                             ),
                           ),
                         ),
-                        SizedBox(
-                            height:
-                                16), // Abstand von 8 Pixeln zwischen den Cards
+
+                        SizedBox(height: 16), // Abstand zwischen den Cards
                       ],
                     );
                   },

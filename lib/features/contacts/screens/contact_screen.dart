@@ -79,7 +79,7 @@ final controllerCS030 = TextEditingController(); // KontaktID
 
 /*--------------------------------- Daten speichern 0082 ---*/
 Future<void> saveData(BuildContext context) async {
-  if (controllerCS002.text.isEmpty || controllerCS003.text.isEmpty) {
+  if (controllerCS002.text.isEmpty && controllerCS003.text.isEmpty) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -2262,11 +2262,12 @@ class _ContactScreenState extends State<ContactScreen> {
 
                             /*--------------------------------- Sound ---*/
                             player.play(AssetSource("sound/sound06pling.wav"));
+                            
                             /*--------------------------------- Snackbar ---*/
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               backgroundColor: wbColorButtonGreen,
                               content: Text(
-                                "Die Daten von\n${controllerCS014.text} • ${controllerCS002.text} ${controllerCS003.text} • wurden erfolgreich gespeichert! 😃👍",
+                                "Die Daten von\n${controllerCS014.text} • ${controllerCS002.text} ${controllerCS003.text} • wurden unter der ID ${controllerCS030.text} erfolgreich gespeichert! 😃👍",
                                 style: TextStyle(
                                   fontSize: 28,
                                   fontWeight: FontWeight.bold,
@@ -2276,7 +2277,7 @@ class _ContactScreenState extends State<ContactScreen> {
                             ));
                             /*--------------------------------- Speicherung in die SQL ---*/
                             await saveData(context); // Datensatz speichern
-                            log('1600 - ContactScreen - Daten gespeichert (save)!');
+                            log('2280 - ContactScreen - Daten gespeichert (save)!');
                             // await updateData({}); // Datensatz aktualisieren
                             // log('1646 - ContactScreen - Daten aktualisiert (update)!');
                             /*--------------------------------- Navigator.push ---*/
@@ -2314,7 +2315,7 @@ class _ContactScreenState extends State<ContactScreen> {
                           wbWidth155: 398,
                           wbHeight60: 60,
                           wbOnTap: () async {
-                            log("1584 - ContactScreen - Daten UPDATE - geklickt");
+                            log("2318 - ContactScreen - Daten UPDATE - geklickt");
                             /*--------------------------------- Sound ---*/
                             player.play(AssetSource("sound/sound06pling.wav"));
                             /*--------------------------------- Snackbar ---*/
@@ -2331,7 +2332,7 @@ class _ContactScreenState extends State<ContactScreen> {
                             ));
                             /*--------------------------------- Speicherung in die SQL ---*/
                             await updateData({}); // Datensatz aktualisieren
-                            log('1600 - ContactScreen - Daten aktualisiert (update)!');
+                            log('2335 - ContactScreen - Daten aktualisiert (update)!');
                             /*--------------------------------- Navigator.push ---*/
                             Navigator.push(
                               // ignore: use_build_context_synchronously
