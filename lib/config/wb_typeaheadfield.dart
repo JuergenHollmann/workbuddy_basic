@@ -1,7 +1,7 @@
 // import 'dart:developer';
 
 // import 'package:flutter/material.dart';
-// //import 'package:flutter_typeahead/flutter_typeahead.dart';
+// import 'package:flutter_typeahead/flutter_typeahead.dart';
 // import 'package:sqflite/sqflite.dart';
 
 // class WbTypeAheadField extends StatelessWidget {
@@ -44,6 +44,11 @@
 //   Widget build(BuildContext context) {
 //     log('0035 - WbTypeAheadField - aktiviert');
 //     return TypeAheadField(
+//       onSelected: (suggestion) {
+//         log('0058 - WbTypeAheadField - Ausgewählt: $suggestion');
+//         controller.text = suggestion.toString();
+//         log('0060 - WbTypeAheadField - itemController.text: ${controller.text}');
+//       },
 //       suggestionsBoxDecoration: SuggestionsBoxDecoration(
 //         /*--- Hintergrundfarbe des Auswahlmenüs ---*/
 //         color: suggestionsBoxColor, // Hintergrundfarbe des Auswahlmenüs

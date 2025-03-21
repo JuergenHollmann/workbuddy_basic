@@ -21,7 +21,6 @@ import 'package:workbuddy/shared/repositories/auth_repository.dart';
 // import 'package:workbuddy/shared/repositories/database_helper.dart';
 import 'package:workbuddy/shared/repositories/database_repository.dart';
 import 'package:workbuddy/shared/repositories/database_setup.dart';
-
 // import 'package:workbuddy/shared/repositories/database_setup.dart';
 import 'package:workbuddy/shared/repositories/firebase_auth_repository.dart';
 import 'package:workbuddy/shared/repositories/mock_database.dart';

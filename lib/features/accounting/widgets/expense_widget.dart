@@ -2,15 +2,19 @@ import 'dart:developer';
 
 // import 'dart:math';
 
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+// import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:money2/money2.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:workbuddy/config/wb_button_universal_2.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_sizes.dart';
 import 'package:workbuddy/config/wb_text_form_field.dart';
 import 'package:workbuddy/config/wb_text_form_field_text_only.dart';
 //import 'package:workbuddy/config/wb_typeaheadfield.dart';
+//import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:workbuddy/features/accounting/screens/accounting_menu.dart';
 import 'package:workbuddy/shared/widgets/wb_dialog_alert_update_coming_soon.dart';
 import 'package:workbuddy/shared/widgets/wb_divider_with_text_in_center.dart';
@@ -25,8 +29,9 @@ class ExpenseWidget extends StatefulWidget {
 }
 
 class _ExpenseWidgetState extends State<ExpenseWidget> {
-  /*--------------------------------- Scroll-Controller ---*/
+  /*--------------------------------- GlobalKeys ---*/
   final _formKey = GlobalKey<FormState>();
+  final dropDownKey = GlobalKey<DropdownSearchState>();
 
 // /*--------------------------------- Scroll-Controller ---*/
 // ScrollController _scrollcontroller = ScrollController();
@@ -619,10 +624,64 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /*--------------------------------- Abstand ---*/
-          // wbSizedBoxHeight8,
+          /*--------------------------------- Wo wurde eingekauft? 0631 ---*/
+          DropdownSearch<String> (
+            key: dropDownKey,
+            items:(filter, loadProps) => [
+              'JOTHAsoft.de • Schwäbisch Gmünd',
+              'OBI • Schwäbisch Gmünd',
+              'Kaufland • Schwäbisch Gmünd',
+              'Toom • Schwäbisch Gmünd',
+              'ACTION • Schwäbisch Gmünd',
+              'WOOLWORTH • Schwäbisch Gmünd',
+              'ARAL-Tankstelle • Schwäbisch Gmünd',   
+            ],
+            // items: (String? filter) {
+            //   return ["Menu", "Dialog", "Modal", "BottomSheet"];
+            // },
+            // dropdownDecoratorProps: DropDownDecoratorProps(
+            //   dropdownSearchDecoration: InputDecoration(
+            //     labelText: 'Wo wurde eingekauft? ',
+            //     border: OutlineInputBorder(),
+            //   ),
+            // ),
+            popupProps: PopupProps.menu(
+              showSearchBox: true,
+              searchFieldProps: TextFieldProps(
+                decoration: InputDecoration(
+                  labelText: 'Suche',
+                ),
+              ),
+            ),
+            onChanged: (String? newValue) {
+              log('Ausgewählt: $newValue');
+            },
+            selectedItem: "Menu",
+          ),
 
-          /*--------------------------------- Was wurde eingekauft? ---*/
+          // DropdownSearch<String>(
+          //   dropdownBuilder: (context, selectedItem) =>
+          //       Text("Wo wurde eingekauft?"),
+          //   items: (String? filter) async {
+          //     return [
+          //       'JOTHAsoft.de • Schwäbisch Gmünd',
+          //       'OBI • Schwäbisch Gmünd',
+          //       'Kaufland • Schwäbisch Gmünd',
+          //       'Toom • Schwäbisch Gmünd',
+          //       'ACTION • Schwäbisch Gmünd',
+          //       'WOOLWORTH • Schwäbisch Gmünd',
+          //       'ARAL-Tankstelle • Schwäbisch Gmünd',
+          //     ];
+          //   },
+          //   onSaved: (String? filter) {
+          //     return;
+          //   },
+          //   onChanged: (String? selectedItem) {
+          //     log('$selectedItem');
+          //   },
+          //   selectedItem: "JOTHAsoft.de • Schwäbisch Gmünd",
+          // ),
+
           // WbTypeAheadField(
           //   controller: shopController,
           //   labelText: 'Wo wurde eingekauft?',
@@ -642,9 +701,110 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
           //   tableColumnName: 'TKD_Feld_014', // Firma
           // ),
 
+          // // /*--------------------------------- Was wurde eingekauft? ---*/
+          // TypeAheadField(
+          //   suggestionsBoxDecoration: SuggestionsBoxDecoration(
+          //     /*--- Hintergrundfarbe des Auswahlmenüs ---*/
+          //     color: wbColorLogoBlue,
+          //   ),
+          //   /*--------------------------------- Wo wurde eingekauft? ---*/
+          //   itemBuilder: (context, suggestion) {
+          //     /*--------------------------------- ListTile = Auswahl-Liste---*/
+          //     return Column(
+          //       children: [
+          //         ListTile(
+          //           title: Text(
+          //             suggestion.toString(),
+          //             style: TextStyle(
+          //               fontSize: 20, // Schriftgröße
+          //               fontWeight: FontWeight.bold,
+          //               color: Colors.white, // Schriftfarbe
+          //             ),
+          //           ),
+          //         ),
+          //         /*--------------------------------- Divider ---*/
+          //         Divider(color: Colors.white),
+          //       ],
+          //     );
+          //   },
+          //   onSuggestionSelected: (suggestion) {
+          //     log('0632 - ExpenseWidget - "Wo wurde eingekauft?" - Ausgewählt: $suggestion');
+          //     setState(() {
+          //       shopController.text = suggestion.toString();
+          //       log('0634 - ExpenseWidget - "Wo wurde eingekauft?" - itemController.text: ${itemController.text}');
+          //     });
+          //   },
+          //   suggestionsCallback: (pattern) async {
+          //     /*--- Hier wird die Datenbankabfrage hinzugefügt ---*/
+          //     final databaseSuggestions =
+          //         await fetchDatabaseSuggestions(pattern);
+          //     final staticSuggestions = [
+          //       'JOTHAsoft.de • Schwäbisch Gmünd',
+          //       'OBI • Schwäbisch Gmünd',
+          //       'Kaufland • Schwäbisch Gmünd',
+          //       'Toom • Schwäbisch Gmünd',
+          //       'ACTION • Schwäbisch Gmünd',
+          //       'WOOLWORTH • Schwäbisch Gmünd',
+          //       'ARAL-Tankstelle • Schwäbisch Gmünd',
+          //     ];
 
+          //     return [
+          //       ...staticSuggestions,
+          //       ...databaseSuggestions,
+          //     ]
+          //         .where((item) =>
+          //             item.toLowerCase().contains(pattern.toLowerCase()))
+          //         .toList();
+          //   },
 
+          //   /*--------------------------------- TextFieldConfiguration ---*/
+          //   textFieldConfiguration: TextFieldConfiguration(
+          //     controller: shopController,
+          //     maxLines: null,
+          //     style: TextStyle(
+          //         fontSize: 20,
+          //         fontWeight: FontWeight.w900,
+          //         height:
+          //             1.1), // Zeilenabstand wenn mehrere Zeilen gezeigt werden.
+          //     decoration: InputDecoration(
+          //       fillColor: wbColorBackgroundRed,
+          //       filled: true,
+          //       labelText: 'Wo wurde eingekauft?',
+          //       labelStyle:
+          //           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          //       hintText: 'In welchem Geschäft eingekauft?',
+          //       hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          //       contentPadding: EdgeInsets.symmetric(
+          //           vertical: 8, horizontal: 8), // Innenabstand
 
+          //       /*--------------------------------- prefixIcon - Icon ---*/
+          //       prefixIcon: Icon(
+          //         Icons.house_outlined, //send_rounded,
+          //         color: wbColorButtonDarkRed,
+          //         size: 32,
+          //       ),
+
+          //       /*--------------------------------- suffixIcon - IconButton ---*/
+          //       suffixIcon: IconButton(
+          //         icon: Icon(Icons.delete_forever),
+          //         iconSize: 32, //cancel_outlined),
+          //         onPressed: () {
+          //           shopController.clear();
+          //         },
+          //       ),
+
+          //       /*--------------------------------- Border ---*/
+          //       border: OutlineInputBorder(
+          //         borderRadius: BorderRadius.circular(16),
+          //         borderSide: BorderSide(
+          //           color: wbColorButtonDarkRed,
+          //           width: 10,
+          //           style: BorderStyle.solid,
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
 
           /*--------------------------------- Abstand ---*/
           wbSizedBoxHeight8,
@@ -1449,4 +1609,20 @@ class OnePointLimit extends TextInputFormatter {
     }
     return newValue;
   }
+}
+
+Future<List<String>> fetchDatabaseSuggestions(String pattern) async {
+  /*--- Hier wird die Datenbankabfrage durchgeführt ---*/
+  final database = await openDatabase('JOTHAsoft.FiveStars.db');
+  final results = await database.rawQuery(
+      'SELECT TKD_Feld_014, TKD_Feld_006, TKD_Feld_007, TKD_Feld_005 FROM KundenDaten WHERE TKD_Feld_014 LIKE ?',
+      ['%$pattern%']);
+
+  return results
+      .where((row) =>
+          row['TKD_Feld_014'] != null &&
+          row['TKD_Feld_014'].toString().trim().isNotEmpty)
+      .map((row) =>
+          '${row['TKD_Feld_014']} • ${row['TKD_Feld_006']} ${row['TKD_Feld_007']} • ${row['TKD_Feld_005']}')
+      .toList();
 }
