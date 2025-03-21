@@ -592,34 +592,12 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
 //   log("----------------------------------------------------------------------------------------------------------------");
 // }
 
-// class _ExpenseWidgetState extends State<ExpenseWidget> {
-  /*--------------------------------- GlobalKey ---*/
-
+  /*--------------------------------- *** ---*/
   @override
   Widget build(BuildContext context) {
     log("0024 - ExpenseWidget - wird benutzt");
 
-    return
-        // Scaffold(
-        //   backgroundColor: const Color.fromARGB(255, 250, 242, 242),
-        //   /*--------------------------------- AppBar ---*/
-        //   appBar:
-
-        //  AppBar(
-        //   title: const Text(
-        //     'Beleg erfassen',
-        //     style: TextStyle(
-        //       fontSize: 20,
-        //       fontWeight: FontWeight.w900,
-        //       color: Colors.white, // Schriftfarbe
-        //     ),
-        //   ),
-        //   backgroundColor: wbColorButtonDarkRed, // Hintergrundfarbe
-        //   foregroundColor: Colors.white, // Icon-/Button-/Chevron-Farbe
-        // ),
-        // /*--------------------------------- *** ---*/
-        // body:
-        Form(
+    return Form(
       key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -627,60 +605,123 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
           /*--------------------------------- Wo wurde eingekauft? 0631 ---*/
           DropdownSearch<String>(
             key: dropDownKey,
-            items: (filter, loadProps) => [
-              'JOTHAsoft.de • Schwäbisch Gmünd',
-              'OBI • Schwäbisch Gmünd',
-              'Kaufland • Schwäbisch Gmünd',
-              'Toom • Schwäbisch Gmünd',
-              'ACTION • Schwäbisch Gmünd',
-              'WOOLWORTH • Schwäbisch Gmünd',
-              'ARAL-Tankstelle • Schwäbisch Gmünd',
-            ],
 
-            /*--------------------------------- DropdownBuilder mit einem Icon ---*/
-            // dropdownBuilder: (context, selectedItem) => Row(
-            //   children: [
-            //     Icon(Icons.house_outlined),
-            //     SizedBox(width: 8),
-            //     Text(
-            //       selectedItem ?? "Bitte ein Geschäft auswählen",
-            //       style: TextStyle(
-            //         fontSize: 20,
-            //         fontWeight: FontWeight.bold,
-            //       ),
-            //       maxLines: 2, // Zeilenumbruch ermöglichen
-            //       overflow: TextOverflow.ellipsis, // Textüberlauf handhaben
-            //     ),
-            //   ],
-            // ),
+            /*--------------------------------- decoratorProps ---*/
+            decoratorProps: DropDownDecoratorProps(
+              decoration: InputDecoration(
+                labelText: 'Wo wurde eingekauft?',
+                labelStyle: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: wbColorButtonBlue,
+                ),
 
-            dropdownBuilder:(context, selectedItem) {
-              return Container(color: wbColorBackgroundRed,
-                //           decoration: ShapeDecoration(
-                //   color: wbColorBackgroundRed,
-                //   shape: RoundedRectangleBorder(
-                //     side: const BorderSide(
-                //       width: 1,
-                //       color: Colors.black,
-                //     ),
-                //     borderRadius: BorderRadius.only(
-                //       topLeft: Radius.circular(16),
-                //       topRight: Radius.circular(16),
-                //     ),
+                // hintText: 'Geschäft / Lieferant',
+                // hintStyle: TextStyle(
+                //   fontSize: 12,
+                //   fontWeight: FontWeight.bold,
+                //   color: wbColorButtonBlue,
+                // ),
+
+                filled: true,
+                fillColor: wbColorBackgroundRed,
+
+                // border: OutlineInputBorder(
+                //   borderRadius: BorderRadius.circular(16),
+                //   borderSide: BorderSide(
+                //     color: Colors.black,
+                //     width: 1,
                 //   ),
                 // ),
-                child: Text(
-                  selectedItem ?? "Bitte ein Geschäft auswählen",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  maxLines: 2, // Zeilenumbruch ermöglichen
-                  //overflow: TextOverflow.ellipsis, // Textüberlauf handhaben
-                ),
-              );
-            }, 
 
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide(
+                    color: Colors.black,
+                    width: 1,
+                  ),
+                ),
+
+                // focusedBorder: OutlineInputBorder(
+                //   borderRadius: BorderRadius.circular(16),
+                //   borderSide: BorderSide(
+                //     color: wbColorButtonBlue,
+                //     width: 1,
+                //   ),
+                // ),
+
+                // errorBorder: OutlineInputBorder(
+                //   borderRadius: BorderRadius.circular(16),
+                //   borderSide: BorderSide(
+                //     color: wbColorButtonBlue,
+                //     width: 1,
+                //   ),
+                // ),
+
+                // focusedErrorBorder: OutlineInputBorder(
+                //   borderRadius: BorderRadius.circular(16),
+                //   borderSide: BorderSide(
+                //     color: wbColorButtonBlue,
+                //     width: 1,
+                //   ),
+                // ),
+
+                /*--------------------------------- Icon im Suchfeld des Auswahlmenüs ---*/
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                  child: Icon(
+                    Icons.shopping_cart_outlined,
+                    color: Colors.black,
+                    size: 32,
+                  ),
+                ),
+
+                // /*--------------------------------- IconButton für "Neues Geschäft hinzufügen" im Suchfeld des Auswahlmenüs ---*/
+                // suffixIcon: IconButton(
+                //   icon: Icon(
+                //     Icons.add_circle, //delete_forever,
+                //     color: wbColorButtonBlue,
+                //     size: 52,
+                //     semanticLabel: 'Neues Geschäft hinzufügen',
+                //   ),
+                //   onPressed: () {
+                //     log('0700 - ExpenseWidget - "Wo wurde eingekauft?" - Neues Geschäft hinzufügen');
+                //     //shopController.clear();
+                //   },
+              ),
+            ),
+
+            /*--------------------------------- dropdownBuilder ---*/
+            dropdownBuilder: (context, selectedItem) {
+              return Text(
+                selectedItem ?? "Bitte ein Geschäft auswählen",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+                maxLines: null, // Zeilenumbruch ermöglichen
+                // overflow: TextOverflow.ellipsis, // Textüberlauf zeigt "..." an
+              );
+            },
+
+            /*--------------------------------- selectedItem ---*/
+            selectedItem: shopController.text.isEmpty
+                ? "Bitte ein Geschäft auswählen"
+                : shopController.text,
+            items: (filter, loadProps) async {
+              /*--------------------------------- Datenbank öffnen ---*/
+              final database = await openDatabase('JOTHAsoft.FiveStars.db');
+
+              /*--------------------------------- Datenbankabfrage ---*/
+              final results = await database.rawQuery(
+                  'SELECT TKD_Feld_014, TKD_Feld_006, TKD_Feld_007, TKD_Feld_005 FROM KundenDaten WHERE TKD_Feld_014 IS NOT NULL AND TRIM(TKD_Feld_014) != ""');
+
+              /*--------------------------------- Ergebnisse übermitteln ---*/
+              return results
+                  .map((row) =>
+                      '${row['TKD_Feld_014']} • ${row['TKD_Feld_006']} ${row['TKD_Feld_007']} • ${row['TKD_Feld_005']}')
+                  .toList();
+            },
 
             /*--------------------------------- PopupProps ---*/
             popupProps: PopupProps.menu(
@@ -691,26 +732,18 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
               searchFieldProps: TextFieldProps(
                 /*--------------------------------- Auswahlmenü - InputDecoration ---*/
                 decoration: InputDecoration(
-                  // border: OutlineInputBorder(
-                  //   borderRadius: BorderRadius.circular(16),
-                  //   borderSide: BorderSide(
-                  //     color: wbColorButtonDarkRed,
-                  //     width: 2,
-                  //   ),
-                  // ),
-
                   /*--- Hintergrundfarbe des Suchfeldes im Auswahlmenü ---*/
                   filled: true,
                   fillColor: wbColorButtonDarkRed,
 
                   /*--- Textfarbe des Suchfeldes im Auswahlmenü ---*/
-                  labelText: 'Hier suchen:',
+                  labelText: 'Suche (anklicken):',
                   labelStyle: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
-                  hintText: 'Geschäft oder Lieferant suchen',
+                  hintText: 'Geschäft / Lieferant',
                   hintStyle: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
@@ -718,18 +751,25 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                   ),
 
                   /*--- Icon im Suchfeld des Auswahlmenüs ---*/
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: Colors.white,
-                    size: 32,
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                    child: Icon(
+                      Icons.search,
+                      color: Colors.white,
+                      size: 52,
+                    ),
                   ),
 
-                  /*--- IconButton zum Löschen im Suchfeld des Auswahlmenüs ---*/
+                  /*--- IconButton für "Neues Geschäft hinzufügen" im Suchfeld des Auswahlmenüs ---*/
                   suffixIcon: IconButton(
-                    icon: Icon(Icons.delete_forever, color: Colors.white),
+                    icon: Icon(
+                      Icons.add_circle, //delete_forever,
+                      color: Colors.white, size: 52,
+                      semanticLabel: 'Neues Geschäft hinzufügen',
+                    ),
                     onPressed: () {
-                      log('0700 - ExpenseWidget - "Wo wurde eingekauft?" - Löschen');
-                      shopController.clear();
+                      log('0700 - ExpenseWidget - "Wo wurde eingekauft?" - Neues Geschäft hinzufügen');
+                      //shopController.clear();
                     },
                   ),
                 ),
@@ -747,24 +787,45 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                 ),
               ),
               /*--------------------------------- TextFieldProps - ENDE ---*/
-            ),
+              menuProps: MenuProps(
+                borderRadius: BorderRadius.circular(0),
+                backgroundColor: wbColorLogoBlue,
 
-            // /*--------------------------------- DropdownBuilder ---*/
-            // dropdownBuilder: (context, selectedItem) => Row(
-            //   children: [
-            //     Icon(Icons.house_outlined),
-            //     SizedBox(width: 8),
-            //     Text(
-            //       selectedItem ?? "Bitte ein Geschäft auswählen",
-            //       style: TextStyle(
-            //         fontSize: 20,
-            //         fontWeight: FontWeight.bold,
-            //       ),
-            //       maxLines: 2, // Zeilenumbruch ermöglichen
-            //       overflow: TextOverflow.ellipsis, // Textüberlauf handhaben
-            //     ),
-            //   ],
-            // ),
+                /*--- Schriftfarbe des Auswahlmenüs ---*/
+
+                /*--- Schatten des Auswahlmenüs ---*/
+                shadowColor: Colors.black,
+                elevation: 12,
+
+                /*--- Der Seiten-Hintergrund wird eingefärbt, solange das Menü geöffnet ist ---*/
+                // barrierColor: wbColorLogoBlue,
+                // barrierLabel: 'Suchfeld schließen',
+                // semanticLabel: 'Suchfeld schließen',
+                // barrierDismissible: true,
+                // clipBehavior: Clip.none,
+                // borderOnForeground: true,
+                // color: Colors.yellow,
+                // surfaceTintColor: Colors.yellow,
+                // margin: EdgeInsets.all(0),
+              ),
+
+              /*--------------------------------- itemBuilder ---*/
+              itemBuilder: (context, item, isDisabled, isSelected) => Column(
+                children: [
+                  ListTile(
+                    title: Text(
+                      item,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  Divider(color: Colors.white), // Divider hinzugefügt
+                ],
+              ),
+            ),
 
             /*--------------------------------- onChanged ---*/
             onChanged: (String? newValue) {
@@ -773,11 +834,6 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                 shopController.text = newValue ?? '';
               });
             },
-
-            /*--------------------------------- selectedItem ---*/
-            selectedItem: shopController.text.isEmpty
-                ? "Bitte auswählen"
-                : shopController.text,
           ),
 
           // /*--------------------------------- Wo wurde eingekauft? 0662 ---*/
@@ -908,33 +964,32 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
           /*--------------------------------- Abstand ---*/
           wbSizedBoxHeight8,
 
-          //Hier
-          /*--------------------------------- Wo eingekauft? ---*/
-          WbDropDownMenu(
-            /* Hier besser eine Map erstellen - ExpenseWidget - 0033 - todo */
-            label: "Wo wurde eingekauft?",
-            dropdownItems: [
-              "OBI",
-              "Kaufland",
-              "Toom",
-              "ACTION",
-              "WOOLWORTH",
-              "Tankstelle",
-            ],
-            leadingIconsInMenu: [
-              Icons.send_rounded,
-              Icons.cancel_outlined,
-              Icons.handyman_outlined,
-              Icons.cable_outlined,
-              Icons.pending_actions_outlined,
-              Icons.car_repair_outlined,
-            ],
-            leadingIconInTextField: Icons.house_outlined,
-            backgroundColor: wbColorBackgroundRed,
-            width: 400,
-          ),
+          // /*--------------------------------- Wo eingekauft? ---*/
+          // WbDropDownMenu(
+          //   /* Hier besser eine Map erstellen - ExpenseWidget - 0033 - todo */
+          //   label: "Wo wurde eingekauft?",
+          //   dropdownItems: [
+          //     "OBI",
+          //     "Kaufland",
+          //     "Toom",
+          //     "ACTION",
+          //     "WOOLWORTH",
+          //     "Tankstelle",
+          //   ],
+          //   leadingIconsInMenu: [
+          //     Icons.send_rounded,
+          //     Icons.cancel_outlined,
+          //     Icons.handyman_outlined,
+          //     Icons.cable_outlined,
+          //     Icons.pending_actions_outlined,
+          //     Icons.car_repair_outlined,
+          //   ],
+          //   leadingIconInTextField: Icons.house_outlined,
+          //   backgroundColor: wbColorBackgroundRed,
+          //   width: 400,
+          // ),
           /*--------------------------------- Abstand ---*/
-          wbSizedBoxHeight16,
+          wbSizedBoxHeight8,
           /*--------------------------------- Was eingekauft? ---*/
           WbDropDownMenu(
             label: "Was wurde eingekauft?",

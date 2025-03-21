@@ -20,7 +20,277 @@
             ),
 
  /*--------------------------------- *** ---*/
+ Decoration in einem Container:
+             decoration: BoxDecoration(
+              color: wbColorBackgroundRed,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: wbColorLogoBlue,
+                width: 1,
+              ),
+            ),
+ /*--------------------------------- *** ---*/
+          /*--------------------------------- Wo wurde eingekauft? 0631 ---*/
+          Container(
+            decoration: BoxDecoration(
+              color: wbColorBackgroundRed,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: wbColorLogoBlue,
+                width: 1,
+              ),
+            ),
 
+            /*--------------------------------- DropdownSearch ---*/
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                  child: Icon(
+                    Icons.shopping_cart_outlined,
+                    size: 28,
+                  ),
+                ),
+                Expanded(
+                  child: DropdownSearch<String>(
+                    key: dropDownKey,
+
+                    /*--------------------------------- decoratorProps ---*/
+                    decoratorProps: DropDownDecoratorProps(
+                      decoration: InputDecoration(
+                        labelText: 'Wo wurde eingekauft?',
+                        labelStyle: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: wbColorButtonBlue,
+                        ),
+
+                        hintText: 'Geschäft / Lieferant',
+                        hintStyle: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: wbColorButtonBlue,
+                        ),
+
+                        filled: true,
+                        fillColor: wbColorBackgroundRed,
+
+                        // border: OutlineInputBorder(
+                        //   borderRadius: BorderRadius.circular(16),
+                        //   borderSide: BorderSide(
+                        //     color: Colors.black,
+                        //     width: 1,
+                        //   ),
+                        // ),
+
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(
+                            color: Colors.black,
+                            width: 1,
+                          ),
+                        ),
+
+                        // focusedBorder: OutlineInputBorder(
+                        //   borderRadius: BorderRadius.circular(16),
+                        //   borderSide: BorderSide(
+                        //     color: wbColorButtonBlue,
+                        //     width: 1,
+                        //   ),
+                        // ),
+
+                        // errorBorder: OutlineInputBorder(
+                        //   borderRadius: BorderRadius.circular(16),
+                        //   borderSide: BorderSide(
+                        //     color: wbColorButtonBlue,
+                        //     width: 1,
+                        //   ),
+                        // ),
+
+                        // focusedErrorBorder: OutlineInputBorder(
+                        //   borderRadius: BorderRadius.circular(16),
+                        //   borderSide: BorderSide(
+                        //     color: wbColorButtonBlue,
+                        //     width: 1,
+                        //   ),
+                        // ),
+
+                        /*--------------------------------- Icon im Suchfeld des Auswahlmenüs ---*/
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                          child: Icon(
+                            Icons.shopping_cart_outlined,
+                            color: Colors.black,
+                            size: 32,
+                          ),
+                        ),
+
+                        // /*--------------------------------- IconButton für "Neues Geschäft hinzufügen" im Suchfeld des Auswahlmenüs ---*/
+                        // suffixIcon: IconButton(
+                        //   icon: Icon(
+                        //     Icons.add_circle, //delete_forever,
+                        //     color: wbColorButtonBlue,
+                        //     size: 52,
+                        //     semanticLabel: 'Neues Geschäft hinzufügen',
+                        //   ),
+                        //   onPressed: () {
+                        //     log('0700 - ExpenseWidget - "Wo wurde eingekauft?" - Neues Geschäft hinzufügen');
+                        //     //shopController.clear();
+                        //   },
+
+                      ),
+                    ),
+                    /*--------------------------------- dropdownBuilder ---*/
+                    dropdownBuilder: (context, selectedItem) {
+                      return Text(
+                        selectedItem ?? "Bitte ein Geschäft auswählen",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: null, // Zeilenumbruch ermöglichen
+                        // overflow: TextOverflow.ellipsis, // Textüberlauf zeigt "..." an
+                      );
+                    },
+
+                    /*--------------------------------- selectedItem ---*/
+                    selectedItem: shopController.text.isEmpty
+                        ? "Bitte ein Geschäft auswählen"
+                        : shopController.text,
+                    items: (filter, loadProps) async {
+                      /*--------------------------------- Datenbank öffnen ---*/
+                      final database =
+                          await openDatabase('JOTHAsoft.FiveStars.db');
+
+                      /*--------------------------------- Datenbankabfrage ---*/
+                      final results = await database.rawQuery(
+                          'SELECT TKD_Feld_014, TKD_Feld_006, TKD_Feld_007, TKD_Feld_005 FROM KundenDaten WHERE TKD_Feld_014 IS NOT NULL AND TRIM(TKD_Feld_014) != ""');
+
+                      /*--------------------------------- Ergebnisse übermitteln ---*/
+                      return results
+                          .map((row) =>
+                              '${row['TKD_Feld_014']} • ${row['TKD_Feld_006']} ${row['TKD_Feld_007']} • ${row['TKD_Feld_005']}')
+                          .toList();
+                    },
+
+                    /*--------------------------------- PopupProps ---*/
+                    popupProps: PopupProps.menu(
+                      showSelectedItems: true,
+                      /*--------------------------------- Suchfunktion ---*/
+                      showSearchBox: true,
+                      /*--------------------------------- TextFieldProps - ANFANG ---*/
+                      searchFieldProps: TextFieldProps(
+                        /*--------------------------------- Auswahlmenü - InputDecoration ---*/
+                        decoration: InputDecoration(
+                          /*--- Hintergrundfarbe des Suchfeldes im Auswahlmenü ---*/
+                          filled: true,
+                          fillColor: wbColorButtonDarkRed,
+
+                          /*--- Textfarbe des Suchfeldes im Auswahlmenü ---*/
+                          labelText: 'Hier suchen:',
+                          labelStyle: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                          hintText: 'Geschäft / Lieferant',
+                          hintStyle: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+
+                          /*--- Icon im Suchfeld des Auswahlmenüs ---*/
+                          prefixIcon: Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                            child: Icon(
+                              Icons.search,
+                              color: Colors.white,
+                              size: 52,
+                            ),
+                          ),
+
+                          /*--- IconButton für "Neues Geschäft hinzufügen" im Suchfeld des Auswahlmenüs ---*/
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              Icons.add_circle, //delete_forever,
+                              color: Colors.white, size: 52,
+                              semanticLabel: 'Neues Geschäft hinzufügen',
+                            ),
+                            onPressed: () {
+                              log('0700 - ExpenseWidget - "Wo wurde eingekauft?" - Neues Geschäft hinzufügen');
+                              //shopController.clear();
+                            },
+                          ),
+                        ),
+
+                        /*--- Cursor im Suchfeld des Auswahlmenüs ---*/
+                        cursorColor: Colors.yellow,
+                        cursorWidth: 5.0,
+                        cursorHeight: 30.0,
+
+                        /*--- Text im Suchfeld des Auswahlmenüs ---*/
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.yellow,
+                        ),
+                      ),
+                      /*--------------------------------- TextFieldProps - ENDE ---*/
+                      menuProps: MenuProps(
+                        borderRadius: BorderRadius.circular(0),
+                        backgroundColor: wbColorLogoBlue,
+
+                        /*--- Schriftfarbe des Auswahlmenüs ---*/
+
+                        /*--- Schatten des Auswahlmenüs ---*/
+                        shadowColor: Colors.black,
+                        elevation: 12,
+
+                        /*--- Der Seiten-Hintergrund wird eingefärbt, solange das Menü geöffnet ist ---*/
+                        // barrierColor: wbColorLogoBlue,
+                        // barrierLabel: 'Suchfeld schließen',
+                        // semanticLabel: 'Suchfeld schließen',
+                        // barrierDismissible: true,
+                        // clipBehavior: Clip.none,
+                        // borderOnForeground: true,
+                        // color: Colors.yellow,
+                        // surfaceTintColor: Colors.yellow,
+                        // margin: EdgeInsets.all(0),
+                      ),
+
+                      /*--------------------------------- itemBuilder ---*/
+                      itemBuilder: (context, item, isDisabled, isSelected) =>
+                          Column(
+                        children: [
+                          ListTile(
+                            title: Text(
+                              item,
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          Divider(color: Colors.white), // Divider hinzugefügt
+                        ],
+                      ),
+                    ),
+
+                    /*--------------------------------- onChanged ---*/
+                    onChanged: (String? newValue) {
+                      log('0659 - ExpenseWidget - "Wo wurde eingekauft?" - Ausgewählt: $newValue');
+                      setState(() {
+                        shopController.text = newValue ?? '';
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          /*--------------------------------- Wo wurde eingekauft? - ENDE ---*/
  
                                     // /*--------------------------------- E-Mail ---*/
                                     // if (contact.emails.isNotEmpty)
