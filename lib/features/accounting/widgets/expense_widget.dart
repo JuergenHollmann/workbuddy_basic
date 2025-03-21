@@ -625,63 +625,162 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           /*--------------------------------- Wo wurde eingekauft? 0631 ---*/
-          DropdownSearch<String> (
+          DropdownSearch<String>(
             key: dropDownKey,
-            items:(filter, loadProps) => [
+            items: (filter, loadProps) => [
               'JOTHAsoft.de • Schwäbisch Gmünd',
               'OBI • Schwäbisch Gmünd',
               'Kaufland • Schwäbisch Gmünd',
               'Toom • Schwäbisch Gmünd',
               'ACTION • Schwäbisch Gmünd',
               'WOOLWORTH • Schwäbisch Gmünd',
-              'ARAL-Tankstelle • Schwäbisch Gmünd',   
+              'ARAL-Tankstelle • Schwäbisch Gmünd',
             ],
-            // items: (String? filter) {
-            //   return ["Menu", "Dialog", "Modal", "BottomSheet"];
-            // },
-            // dropdownDecoratorProps: DropDownDecoratorProps(
-            //   dropdownSearchDecoration: InputDecoration(
-            //     labelText: 'Wo wurde eingekauft? ',
-            //     border: OutlineInputBorder(),
-            //   ),
+
+            /*--------------------------------- DropdownBuilder mit einem Icon ---*/
+            // dropdownBuilder: (context, selectedItem) => Row(
+            //   children: [
+            //     Icon(Icons.house_outlined),
+            //     SizedBox(width: 8),
+            //     Text(
+            //       selectedItem ?? "Bitte ein Geschäft auswählen",
+            //       style: TextStyle(
+            //         fontSize: 20,
+            //         fontWeight: FontWeight.bold,
+            //       ),
+            //       maxLines: 2, // Zeilenumbruch ermöglichen
+            //       overflow: TextOverflow.ellipsis, // Textüberlauf handhaben
+            //     ),
+            //   ],
             // ),
+
+            dropdownBuilder:(context, selectedItem) {
+              return Container(color: wbColorBackgroundRed,
+                //           decoration: ShapeDecoration(
+                //   color: wbColorBackgroundRed,
+                //   shape: RoundedRectangleBorder(
+                //     side: const BorderSide(
+                //       width: 1,
+                //       color: Colors.black,
+                //     ),
+                //     borderRadius: BorderRadius.only(
+                //       topLeft: Radius.circular(16),
+                //       topRight: Radius.circular(16),
+                //     ),
+                //   ),
+                // ),
+                child: Text(
+                  selectedItem ?? "Bitte ein Geschäft auswählen",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  maxLines: 2, // Zeilenumbruch ermöglichen
+                  //overflow: TextOverflow.ellipsis, // Textüberlauf handhaben
+                ),
+              );
+            }, 
+
+
+            /*--------------------------------- PopupProps ---*/
             popupProps: PopupProps.menu(
+              showSelectedItems: true,
+              /*--------------------------------- Suchfunktion ---*/
               showSearchBox: true,
+              /*--------------------------------- TextFieldProps - ANFANG ---*/
               searchFieldProps: TextFieldProps(
+                /*--------------------------------- Auswahlmenü - InputDecoration ---*/
                 decoration: InputDecoration(
-                  labelText: 'Suche',
+                  // border: OutlineInputBorder(
+                  //   borderRadius: BorderRadius.circular(16),
+                  //   borderSide: BorderSide(
+                  //     color: wbColorButtonDarkRed,
+                  //     width: 2,
+                  //   ),
+                  // ),
+
+                  /*--- Hintergrundfarbe des Suchfeldes im Auswahlmenü ---*/
+                  filled: true,
+                  fillColor: wbColorButtonDarkRed,
+
+                  /*--- Textfarbe des Suchfeldes im Auswahlmenü ---*/
+                  labelText: 'Hier suchen:',
+                  labelStyle: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                  hintText: 'Geschäft oder Lieferant suchen',
+                  hintStyle: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+
+                  /*--- Icon im Suchfeld des Auswahlmenüs ---*/
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: Colors.white,
+                    size: 32,
+                  ),
+
+                  /*--- IconButton zum Löschen im Suchfeld des Auswahlmenüs ---*/
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.delete_forever, color: Colors.white),
+                    onPressed: () {
+                      log('0700 - ExpenseWidget - "Wo wurde eingekauft?" - Löschen');
+                      shopController.clear();
+                    },
+                  ),
+                ),
+
+                /*--- Cursor im Suchfeld des Auswahlmenüs ---*/
+                cursorColor: Colors.yellow,
+                cursorWidth: 5.0,
+                cursorHeight: 30.0,
+
+                /*--- Text im Suchfeld des Auswahlmenüs ---*/
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.yellow,
                 ),
               ),
+              /*--------------------------------- TextFieldProps - ENDE ---*/
             ),
+
+            // /*--------------------------------- DropdownBuilder ---*/
+            // dropdownBuilder: (context, selectedItem) => Row(
+            //   children: [
+            //     Icon(Icons.house_outlined),
+            //     SizedBox(width: 8),
+            //     Text(
+            //       selectedItem ?? "Bitte ein Geschäft auswählen",
+            //       style: TextStyle(
+            //         fontSize: 20,
+            //         fontWeight: FontWeight.bold,
+            //       ),
+            //       maxLines: 2, // Zeilenumbruch ermöglichen
+            //       overflow: TextOverflow.ellipsis, // Textüberlauf handhaben
+            //     ),
+            //   ],
+            // ),
+
+            /*--------------------------------- onChanged ---*/
             onChanged: (String? newValue) {
-              log('Ausgewählt: $newValue');
+              log('0659 - ExpenseWidget - "Wo wurde eingekauft?" - Ausgewählt: $newValue');
+              setState(() {
+                shopController.text = newValue ?? '';
+              });
             },
-            selectedItem: "Menu",
+
+            /*--------------------------------- selectedItem ---*/
+            selectedItem: shopController.text.isEmpty
+                ? "Bitte auswählen"
+                : shopController.text,
           ),
 
-          // DropdownSearch<String>(
-          //   dropdownBuilder: (context, selectedItem) =>
-          //       Text("Wo wurde eingekauft?"),
-          //   items: (String? filter) async {
-          //     return [
-          //       'JOTHAsoft.de • Schwäbisch Gmünd',
-          //       'OBI • Schwäbisch Gmünd',
-          //       'Kaufland • Schwäbisch Gmünd',
-          //       'Toom • Schwäbisch Gmünd',
-          //       'ACTION • Schwäbisch Gmünd',
-          //       'WOOLWORTH • Schwäbisch Gmünd',
-          //       'ARAL-Tankstelle • Schwäbisch Gmünd',
-          //     ];
-          //   },
-          //   onSaved: (String? filter) {
-          //     return;
-          //   },
-          //   onChanged: (String? selectedItem) {
-          //     log('$selectedItem');
-          //   },
-          //   selectedItem: "JOTHAsoft.de • Schwäbisch Gmünd",
-          // ),
-
+          // /*--------------------------------- Wo wurde eingekauft? 0662 ---*/
           // WbTypeAheadField(
           //   controller: shopController,
           //   labelText: 'Wo wurde eingekauft?',
@@ -1602,7 +1701,9 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
 class OnePointLimit extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+      // TextEditingValue oldValue, TextEditingValue newValue) {
+      TextEditingValue oldValue,
+      TextEditingValue newValue) {
     int punkte = newValue.text.split('.').length - 1;
     if (punkte > 1) {
       return oldValue; // Verhindert die Eingabe eines weiteren Punktes
