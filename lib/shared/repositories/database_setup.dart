@@ -26,7 +26,7 @@ class _DatabaseSetupState extends State<DatabaseSetup> {
   Future<void> _initializeDatabase() async {
     // Pfad zur Datenbank im lokalen Speicher
     final String dbPath =
-        join(await getDatabasesPath(), 'JOTHAsoft.WorkBuddy.db');
+        join(await getDatabasesPath(), 'JOTHAsoft.FiveStars.db');
     log('0030 - DatasbaseSetup - dbPath: $dbPath');
 
     // Überprüfen, ob die Datenbank bereits existiert
@@ -36,7 +36,7 @@ class _DatabaseSetupState extends State<DatabaseSetup> {
     if (!dbExists) {
       log('0037 - DatasbaseSetup - Datenbank existiert nicht, erstelle eine leere Kopie');
       // Datenbank aus dem Assets-Ordner kopieren
-      ByteData data = await rootBundle.load('assets/JOTHAsoft.WorkBuddy.db');
+      ByteData data = await rootBundle.load('assets/JOTHAsoft.FiveStars.db');
       List<int> bytes = data.buffer.asUint8List();
       await File(dbPath).writeAsBytes(bytes);
       log('0042 - DatasbaseSetup - Datenbank aus dem Assets-Ordner kopiert');

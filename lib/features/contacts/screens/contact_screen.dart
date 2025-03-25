@@ -79,7 +79,9 @@ final controllerCS030 = TextEditingController(); // KontaktID
 
 /*--------------------------------- Daten speichern 0082 ---*/
 Future<void> saveData(BuildContext context) async {
-  if (controllerCS002.text.isEmpty && controllerCS003.text.isEmpty) {
+  if (controllerCS002.text.isEmpty &&
+      controllerCS003.text.isEmpty &&
+      controllerCS014.text.isEmpty) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -108,8 +110,8 @@ Future<void> saveData(BuildContext context) async {
   );
 
   if (result.isNotEmpty) {
-    log('Daten mit der KundenID ${controllerCS030.text} existieren bereits.');
-    // Optional: Zeige eine Nachricht an, dass die Daten bereits existieren
+    log('0113 - ContactScreen - Daten mit der KundenID ${controllerCS030.text} existieren bereits.');
+    /*--- Zeige eine SnackBar an, wenn die Daten bereits existieren ---*/
     // ignore: use_build_context_synchronously
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
@@ -127,6 +129,7 @@ Future<void> saveData(BuildContext context) async {
   }
 
   await db.insert('KundenDaten', {
+    'TKD_Feld_000': 'KontaktID: ${controllerCS030.text}',
     'TKD_Feld_001': controllerCS001.text,
     'TKD_Feld_002': controllerCS002.text,
     'TKD_Feld_003': controllerCS003.text,
@@ -158,7 +161,7 @@ Future<void> saveData(BuildContext context) async {
     'TKD_Feld_029': controllerCS029.text,
     'TKD_Feld_030': controllerCS030.text,
   });
-  log('0138 - ContactScreen - Daten gespeichert von ${controllerCS001.text} ${controllerCS002.text} ${controllerCS003.text} / KontaktID: ${controllerCS030.text}');
+  log('0164 - ContactScreen - Daten gespeichert von ${controllerCS001.text} ${controllerCS002.text} ${controllerCS003.text} / KontaktID: ${controllerCS030.text}');
 }
 
 /*--------------------------------- Button-Farbe beim Anklicken ändern ---*/
@@ -495,27 +498,27 @@ class _ContactScreenState extends State<ContactScreen> {
 
   /*--------------------------------- getNextBirthdayText ---*/
   String getNextBirthdayText() {
-    log('0314 - ContactScreen - Abfrage Ergebnis: ${controllerCS004.text}'); // Geburtstag als Datum (oder leer)
+    log('0500 - ContactScreen - Geburtstag - Abfrage Ergebnis: ${controllerCS004.text}'); // Geburtstag als Datum (oder leer)
 
     /*--- Wenn das Geburtsdatum leer ist, dann ist das Alter und die Zeit bis zum nächsten Geburtstag unbekannt ---*/
     if (controllerCS004.text.isEmpty) {
-      log('0318 - ContactScreen ---> controllerCS004.text.isEmpty: ${controllerCS004.text.isEmpty} <---');
+      log('0504 - ContactScreen ---> Geburtstag - controllerCS004.text.isEmpty: ${controllerCS004.text.isEmpty} <---');
       return '---> ist UNBEKANNT!';
     }
     if (nextD == 0 && nextM == 0) {
-      log('0322 - ContactScreen - .... ist wieder in 1 Jahr 😃');
+      log('0508 - ContactScreen - .... ist wieder in 1 Jahr 😃');
       return '... ist wieder in 1 Jahr 😃';
     }
     if (nextD == 1 && nextM == 0) {
-      log('0326 - ContactScreen - ... ist schon MORGEN 🚀');
+      log('0512 - ContactScreen - ... ist schon MORGEN 🚀');
       return '... ist schon MORGEN 🚀';
     }
     if (nextD == 2 && nextM == 0) {
-      log('0330 - ContactScreen - ... ist schon ÜBERMORGEN!');
+      log('0516 - ContactScreen - ... ist schon ÜBERMORGEN!');
       return '... ist schon ÜBERMORGEN!';
     }
     if (nextD >= 3 && nextM == 0) {
-      log('0334 - ContactScreen - .. ist schon in $nextD Tagen!');
+      log('0520 - ContactScreen - .. ist schon in $nextD Tagen!');
       return '... ist schon in $nextD Tagen!';
     }
 
@@ -630,8 +633,10 @@ class _ContactScreenState extends State<ContactScreen> {
   void initState() {
     super.initState();
     log("0344 - ContactScreen - initState - aktiviert");
-    controllerCS030.text = widget.contact['TKD_Feld_030'] ??
-        ''; // Fehlermeldung: disposed() called on null - 0466 - ContactScreen
+
+    /*--- Controller hier initialisieren ---*/
+    controllerCS030.text = widget.contact['TKD_Feld_030'] ?? '';
+    // Fehlermeldung: disposed() called on null - 0466 - ContactScreen
 
     /*--- Den Zustand (State) erst nach dem Build ändern.
           Diese Methode wird verwendet, um eine Aktion auszuführen, nachdem das Widget vollständig aufgebaut wurde. 
@@ -817,7 +822,7 @@ class _ContactScreenState extends State<ContactScreen> {
   /*--------------------------------- *** ---*/ // 0619 - ContactScreen
   @override
   Widget build(BuildContext context) {
-    log("0038 - ContactScreen - aktiviert");
+    log("0824 - ContactScreen - aktiviert");
 
     return Scaffold(
       backgroundColor: wbColorBackgroundBlue,
@@ -2235,10 +2240,11 @@ class _ContactScreenState extends State<ContactScreen> {
                           wbWidth155: 398,
                           wbHeight60: 60,
                           wbOnTap: () async {
-                            log("2199 - ContactScreen - Daten speichern - geklickt");
+                            log("2240 - ContactScreen - Daten speichern - geklickt");
                             // _checkAndScrollToEmptyField();
                             if (controllerCS002.text.isEmpty &&
-                                controllerCS003.text.isEmpty) {
+                                controllerCS003.text.isEmpty &&
+                                controllerCS014.text.isEmpty) {
                               /*--------------------------------- Sound ---*/
                               player.play(
                                   AssetSource("sound/sound05xylophon.wav"));
@@ -2250,7 +2256,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                     WbDialogAlertUpdateComingSoon(
                                   headlineText: 'Zum Speichern fehlen Daten!',
                                   contentText:
-                                      'BEIDE Felder für "Vorname" und "Nachname" sind leer.\n\nMindestens 1 Feld muss entweder "Vorname" oder "Nachname" enthalten.\n\nBitte fülle MINDESTENS eines der beiden Felder aus.',
+                                      'BEIDE Felder für "Vorname" und "Nachname" sind leer.\n\nMindestens 1 Feld muss entweder "Vorname" oder "Nachname" enthalten, oder das Feld "Firma" muss ausgefüllt sein.\n\nBitte fülle MINDESTENS eines der drei Felder aus.',
                                   actionsText: 'OK 👍',
                                 ),
                               );
@@ -2262,7 +2268,7 @@ class _ContactScreenState extends State<ContactScreen> {
 
                             /*--------------------------------- Sound ---*/
                             player.play(AssetSource("sound/sound06pling.wav"));
-                            
+
                             /*--------------------------------- Snackbar ---*/
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               backgroundColor: wbColorButtonGreen,

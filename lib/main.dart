@@ -1,3 +1,5 @@
+/*--- Erstellen einer APK-Datei (im Terminal eingeben): "flutter build apk --split-per-abi" ---*/
+
 import 'dart:developer';
 import 'dart:io';
 
@@ -9,6 +11,7 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/features/home/screens/home_screen.dart';
 import 'package:workbuddy/firebase_options.dart';
 import 'package:workbuddy/shared/providers/current_app_version_provider.dart';
@@ -30,6 +33,11 @@ import 'package:workbuddy/wb_terms_of_service.dart'; // Import der Nutzungsbedin
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DatabaseHelper().database;
+
+  // Überprüfen, ob die Datenbank vorhanden ist
+  Directory documentsDir = await getApplicationDocumentsDirectory();
+  String dbPath = join(documentsDir.path, "JOTHAsoft.FiveStars.db");
+  bool dbExists = await File(dbPath).exists();
 
   log('0028 - MainApp - DatabaseHelper() wird gestartet');
   await Firebase.initializeApp(
@@ -58,6 +66,7 @@ void main() async {
     child: MainApp(
       databaseRepository: databaseRepository,
       authRepository: authRepository,
+      dbExists: dbExists,
     ),
   ));
 }
@@ -68,10 +77,12 @@ class MainApp extends StatelessWidget {
     super.key,
     required this.databaseRepository,
     required this.authRepository,
+    required this.dbExists,
   });
 
   final DatabaseRepository databaseRepository;
   final AuthRepository authRepository;
+  final bool dbExists;
 
   /*--------------------------------- *** ---*/
   final String appTitle = 'WorkBuddy • save time and money!';
@@ -90,14 +101,36 @@ class MainApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      // supportedLocales: <Locale>[
-      //   Locale('de', 'DE'),
-      // ],
+      supportedLocales: <Locale>[
+        Locale('de', 'DE'),
+      ],
       debugShowCheckedModeBanner: false,
       title: appTitle,
-      home: WbHomePage(
-        title: appTitle,
-        preferencesRepository: SharedPreferencesRepository(),
+      home: Builder(
+        builder: (context) {
+          // Snackbar anzeigen
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  dbExists
+                      ? 'Die Datenbank wurde geladen ...'
+                      : 'Es ist KEINE interne Datenbank vorhanden!',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                backgroundColor:
+                    dbExists ? wbColorButtonGreen : wbColorButtonDarkRed,
+              ),
+            );
+          });
+          return WbHomePage(
+            title: appTitle,
+            preferencesRepository: SharedPreferencesRepository(),
+          );
+        },
       ),
       routes: {
         '/terms': (context) =>
@@ -119,7 +152,7 @@ class DatabaseHelper {
 
   Future<Database> _initDatabase() async {
     Directory documentsDir = await getApplicationDocumentsDirectory();
-    String dbPath = join(documentsDir.path, "JOTHAsoft.WorkBuddy.db");
+    String dbPath = join(documentsDir.path, "JOTHAsoft.FiveStars.db");
 
     return await openDatabase(
       dbPath,

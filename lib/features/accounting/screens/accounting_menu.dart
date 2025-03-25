@@ -54,23 +54,27 @@ class AccountingMenu extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(2, 0, 12, 0),
                 children: [
                   /*--------------------------------- Ausgabe buchen ---*/
-                  WbButtonUniversal2(
-                      wbColor: wbColorButtonDarkRed,
-                      wbIcon: Icons.payments_outlined,
-                      wbIconSize40: 40,
-                      wbText: "Ausgabe buchen",
-                      wbFontSize24: 22,
-                      wbWidth155: 398, // hat hier keine Auswirkung
-                      wbHeight60: 80,
-                      wbOnTap: () {
-                        log("0064 - AccountingMenu - Eine Ausgabe buchen - angeklickt");
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const AccountingScreen(
-                                  startGroupValue: "Ausgabe"),
-                            ));
-                      }),
+                  Semantics(
+                    label:
+                        'Eine Ausgabe buchen', // für Screenreader (liest Texte vor), funktioniert nur mit "TalkBack" für Android oder "VoiceOver" für iOS
+                    child: WbButtonUniversal2(
+                        wbColor: wbColorButtonDarkRed,
+                        wbIcon: Icons.payments_outlined,
+                        wbIconSize40: 40,
+                        wbText: "Ausgabe buchen",
+                        wbFontSize24: 22,
+                        wbWidth155: 398, // hat hier keine Auswirkung
+                        wbHeight60: 80,
+                        wbOnTap: () {
+                          log("0064 - AccountingMenu - Eine Ausgabe buchen - angeklickt");
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const AccountingScreen(
+                                    startGroupValue: "Ausgabe"),
+                              ));
+                        }),
+                  ),
                   /*--------------------------------- Abstand ---*/
                   wbSizedBoxHeight16,
                   /*--------------------------------- Einnahme buchen ---*/

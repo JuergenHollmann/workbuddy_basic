@@ -9,288 +9,345 @@
 // in "ExpenseWidget" deaktiviert:
 // WbTypeAheadField "Was wurde eingekauft?"
 
-/*--------------------------------- *** ---*/
+// /*--------------------------------- *** ---*/
  
-             decoration: BoxDecoration(
-              border: Border.all(
-                color: wbColorLogoBlue,
-                width: 1,
-              ),
-              borderRadius: BorderRadius.circular(16),
-            ),
+//              decoration: BoxDecoration(
+//               border: Border.all(
+//                 color: wbColorLogoBlue,
+//                 width: 1,
+//               ),
+//               borderRadius: BorderRadius.circular(16),
+//             ),
 
- /*--------------------------------- *** ---*/
- Decoration in einem Container:
-             decoration: BoxDecoration(
-              color: wbColorBackgroundRed,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: wbColorLogoBlue,
-                width: 1,
-              ),
-            ),
- /*--------------------------------- *** ---*/
-          /*--------------------------------- Wo wurde eingekauft? 0631 ---*/
-          Container(
-            decoration: BoxDecoration(
-              color: wbColorBackgroundRed,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: wbColorLogoBlue,
-                width: 1,
-              ),
-            ),
+//  /*--------------------------------- *** ---*/
+//  Decoration in einem Container:
+//              decoration: BoxDecoration(
+//               color: wbColorBackgroundRed,
+//               borderRadius: BorderRadius.circular(16),
+//               border: Border.all(
+//                 color: wbColorLogoBlue,
+//                 width: 1,
+//               ),
+//             ),
+//  /*--------------------------------- *** ---*/
+//           /*--------------------------------- Wo wurde eingekauft? 0631 ---*/
+//           Container(
+//             decoration: BoxDecoration(
+//               color: wbColorBackgroundRed,
+//               borderRadius: BorderRadius.circular(16),
+//               border: Border.all(
+//                 color: wbColorLogoBlue,
+//                 width: 1,
+//               ),
+//             ),
 
-            /*--------------------------------- DropdownSearch ---*/
-            child: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                  child: Icon(
-                    Icons.shopping_cart_outlined,
-                    size: 28,
-                  ),
-                ),
-                Expanded(
-                  child: DropdownSearch<String>(
-                    key: dropDownKey,
+//             /*--------------------------------- DropdownSearch ---*/
+//             child: Row(
+//               children: [
+//                 Padding(
+//                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+//                   child: Icon(
+//                     Icons.shopping_cart_outlined,
+//                     size: 28,
+//                   ),
+//                 ),
+//                 Expanded(
+//                   child: DropdownSearch<String>(
+//                     key: dropDownKey,
 
-                    /*--------------------------------- decoratorProps ---*/
-                    decoratorProps: DropDownDecoratorProps(
-                      decoration: InputDecoration(
-                        labelText: 'Wo wurde eingekauft?',
-                        labelStyle: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: wbColorButtonBlue,
-                        ),
+//                     /*--------------------------------- decoratorProps ---*/
+//                     decoratorProps: DropDownDecoratorProps(
+//                       decoration: InputDecoration(
+//                         labelText: 'Wo wurde eingekauft?',
+//                         labelStyle: TextStyle(
+//                           fontSize: 20,
+//                           fontWeight: FontWeight.bold,
+//                           color: wbColorButtonBlue,
+//                         ),
 
-                        hintText: 'Geschäft / Lieferant',
-                        hintStyle: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: wbColorButtonBlue,
-                        ),
+//                         hintText: 'Geschäft / Lieferant',
+//                         hintStyle: TextStyle(
+//                           fontSize: 12,
+//                           fontWeight: FontWeight.bold,
+//                           color: wbColorButtonBlue,
+//                         ),
 
-                        filled: true,
-                        fillColor: wbColorBackgroundRed,
+//                         filled: true,
+//                         fillColor: wbColorBackgroundRed,
 
-                        // border: OutlineInputBorder(
-                        //   borderRadius: BorderRadius.circular(16),
-                        //   borderSide: BorderSide(
-                        //     color: Colors.black,
-                        //     width: 1,
-                        //   ),
-                        // ),
+//                         // border: OutlineInputBorder(
+//                         //   borderRadius: BorderRadius.circular(16),
+//                         //   borderSide: BorderSide(
+//                         //     color: Colors.black,
+//                         //     width: 1,
+//                         //   ),
+//                         // ),
 
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide(
-                            color: Colors.black,
-                            width: 1,
-                          ),
-                        ),
+//                         enabledBorder: OutlineInputBorder(
+//                           borderRadius: BorderRadius.circular(16),
+//                           borderSide: BorderSide(
+//                             color: Colors.black,
+//                             width: 1,
+//                           ),
+//                         ),
 
-                        // focusedBorder: OutlineInputBorder(
-                        //   borderRadius: BorderRadius.circular(16),
-                        //   borderSide: BorderSide(
-                        //     color: wbColorButtonBlue,
-                        //     width: 1,
-                        //   ),
-                        // ),
+//                         // focusedBorder: OutlineInputBorder(
+//                         //   borderRadius: BorderRadius.circular(16),
+//                         //   borderSide: BorderSide(
+//                         //     color: wbColorButtonBlue,
+//                         //     width: 1,
+//                         //   ),
+//                         // ),
 
-                        // errorBorder: OutlineInputBorder(
-                        //   borderRadius: BorderRadius.circular(16),
-                        //   borderSide: BorderSide(
-                        //     color: wbColorButtonBlue,
-                        //     width: 1,
-                        //   ),
-                        // ),
+//                         // errorBorder: OutlineInputBorder(
+//                         //   borderRadius: BorderRadius.circular(16),
+//                         //   borderSide: BorderSide(
+//                         //     color: wbColorButtonBlue,
+//                         //     width: 1,
+//                         //   ),
+//                         // ),
 
-                        // focusedErrorBorder: OutlineInputBorder(
-                        //   borderRadius: BorderRadius.circular(16),
-                        //   borderSide: BorderSide(
-                        //     color: wbColorButtonBlue,
-                        //     width: 1,
-                        //   ),
-                        // ),
+//                         // focusedErrorBorder: OutlineInputBorder(
+//                         //   borderRadius: BorderRadius.circular(16),
+//                         //   borderSide: BorderSide(
+//                         //     color: wbColorButtonBlue,
+//                         //     width: 1,
+//                         //   ),
+//                         // ),
 
-                        /*--------------------------------- Icon im Suchfeld des Auswahlmenüs ---*/
-                        prefixIcon: Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                          child: Icon(
-                            Icons.shopping_cart_outlined,
-                            color: Colors.black,
-                            size: 32,
-                          ),
-                        ),
+//                         /*--------------------------------- Icon im Suchfeld des Auswahlmenüs ---*/
+//                         prefixIcon: Padding(
+//                           padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+//                           child: Icon(
+//                             Icons.shopping_cart_outlined,
+//                             color: Colors.black,
+//                             size: 32,
+//                           ),
+//                         ),
 
-                        // /*--------------------------------- IconButton für "Neues Geschäft hinzufügen" im Suchfeld des Auswahlmenüs ---*/
-                        // suffixIcon: IconButton(
-                        //   icon: Icon(
-                        //     Icons.add_circle, //delete_forever,
-                        //     color: wbColorButtonBlue,
-                        //     size: 52,
-                        //     semanticLabel: 'Neues Geschäft hinzufügen',
-                        //   ),
-                        //   onPressed: () {
-                        //     log('0700 - ExpenseWidget - "Wo wurde eingekauft?" - Neues Geschäft hinzufügen');
-                        //     //shopController.clear();
-                        //   },
+//                         // /*--------------------------------- IconButton für "Neues Geschäft hinzufügen" im Suchfeld des Auswahlmenüs ---*/
+//                         // suffixIcon: IconButton(
+//                         //   icon: Icon(
+//                         //     Icons.add_circle, //delete_forever,
+//                         //     color: wbColorButtonBlue,
+//                         //     size: 52,
+//                         //     semanticLabel: 'Neues Geschäft hinzufügen',
+//                         //   ),
+//                         //   onPressed: () {
+//                         //     log('0700 - ExpenseWidget - "Wo wurde eingekauft?" - Neues Geschäft hinzufügen');
+//                         //     //shopController.clear();
+//                         //   },
 
-                      ),
-                    ),
-                    /*--------------------------------- dropdownBuilder ---*/
-                    dropdownBuilder: (context, selectedItem) {
-                      return Text(
-                        selectedItem ?? "Bitte ein Geschäft auswählen",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        maxLines: null, // Zeilenumbruch ermöglichen
-                        // overflow: TextOverflow.ellipsis, // Textüberlauf zeigt "..." an
-                      );
-                    },
+//                       ),
+//                     ),
+//                     /*--------------------------------- dropdownBuilder ---*/
+//                     dropdownBuilder: (context, selectedItem) {
+//                       return Text(
+//                         selectedItem ?? "Bitte ein Geschäft auswählen",
+//                         style: TextStyle(
+//                           fontSize: 20,
+//                           fontWeight: FontWeight.bold,
+//                         ),
+//                         maxLines: null, // Zeilenumbruch ermöglichen
+//                         // overflow: TextOverflow.ellipsis, // Textüberlauf zeigt "..." an
+//                       );
+//                     },
 
-                    /*--------------------------------- selectedItem ---*/
-                    selectedItem: shopController.text.isEmpty
-                        ? "Bitte ein Geschäft auswählen"
-                        : shopController.text,
-                    items: (filter, loadProps) async {
-                      /*--------------------------------- Datenbank öffnen ---*/
-                      final database =
-                          await openDatabase('JOTHAsoft.FiveStars.db');
+//                     /*--------------------------------- selectedItem ---*/
+//                     selectedItem: shopController.text.isEmpty
+//                         ? "Bitte ein Geschäft auswählen"
+//                         : shopController.text,
+//                     items: (filter, loadProps) async {
+//                       /*--------------------------------- Datenbank öffnen ---*/
+//                       final database =
+//                           await openDatabase('JOTHAsoft.FiveStars.db');
 
-                      /*--------------------------------- Datenbankabfrage ---*/
-                      final results = await database.rawQuery(
-                          'SELECT TKD_Feld_014, TKD_Feld_006, TKD_Feld_007, TKD_Feld_005 FROM KundenDaten WHERE TKD_Feld_014 IS NOT NULL AND TRIM(TKD_Feld_014) != ""');
+//                       /*--------------------------------- Datenbankabfrage ---*/
+//                       final results = await database.rawQuery(
+//                           'SELECT TKD_Feld_014, TKD_Feld_006, TKD_Feld_007, TKD_Feld_005 FROM KundenDaten WHERE TKD_Feld_014 IS NOT NULL AND TRIM(TKD_Feld_014) != ""');
 
-                      /*--------------------------------- Ergebnisse übermitteln ---*/
-                      return results
-                          .map((row) =>
-                              '${row['TKD_Feld_014']} • ${row['TKD_Feld_006']} ${row['TKD_Feld_007']} • ${row['TKD_Feld_005']}')
-                          .toList();
-                    },
+//                       /*--------------------------------- Ergebnisse übermitteln ---*/
+//                       return results
+//                           .map((row) =>
+//                               '${row['TKD_Feld_014']} • ${row['TKD_Feld_006']} ${row['TKD_Feld_007']} • ${row['TKD_Feld_005']}')
+//                           .toList();
+//                     },
 
-                    /*--------------------------------- PopupProps ---*/
-                    popupProps: PopupProps.menu(
-                      showSelectedItems: true,
-                      /*--------------------------------- Suchfunktion ---*/
-                      showSearchBox: true,
-                      /*--------------------------------- TextFieldProps - ANFANG ---*/
-                      searchFieldProps: TextFieldProps(
-                        /*--------------------------------- Auswahlmenü - InputDecoration ---*/
-                        decoration: InputDecoration(
-                          /*--- Hintergrundfarbe des Suchfeldes im Auswahlmenü ---*/
-                          filled: true,
-                          fillColor: wbColorButtonDarkRed,
+//                     /*--------------------------------- PopupProps ---*/
+//                     popupProps: PopupProps.menu(
+//                       showSelectedItems: true,
+//                       /*--------------------------------- Suchfunktion ---*/
+//                       showSearchBox: true,
+//                       /*--------------------------------- TextFieldProps - ANFANG ---*/
+//                       searchFieldProps: TextFieldProps(
+//                         /*--------------------------------- Auswahlmenü - InputDecoration ---*/
+//                         decoration: InputDecoration(
+//                           /*--- Hintergrundfarbe des Suchfeldes im Auswahlmenü ---*/
+//                           filled: true,
+//                           fillColor: wbColorButtonDarkRed,
 
-                          /*--- Textfarbe des Suchfeldes im Auswahlmenü ---*/
-                          labelText: 'Hier suchen:',
-                          labelStyle: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                          hintText: 'Geschäft / Lieferant',
-                          hintStyle: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+//                           /*--- Textfarbe des Suchfeldes im Auswahlmenü ---*/
+//                           labelText: 'Hier suchen:',
+//                           labelStyle: TextStyle(
+//                             fontSize: 20,
+//                             fontWeight: FontWeight.bold,
+//                             color: Colors.white,
+//                           ),
+//                           hintText: 'Geschäft / Lieferant',
+//                           hintStyle: TextStyle(
+//                             fontSize: 12,
+//                             fontWeight: FontWeight.bold,
+//                             color: Colors.white,
+//                           ),
 
-                          /*--- Icon im Suchfeld des Auswahlmenüs ---*/
-                          prefixIcon: Padding(
-                            padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                            child: Icon(
-                              Icons.search,
-                              color: Colors.white,
-                              size: 52,
-                            ),
-                          ),
+//                           /*--- Icon im Suchfeld des Auswahlmenüs ---*/
+//                           prefixIcon: Padding(
+//                             padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+//                             child: Icon(
+//                               Icons.search,
+//                               color: Colors.white,
+//                               size: 52,
+//                             ),
+//                           ),
 
-                          /*--- IconButton für "Neues Geschäft hinzufügen" im Suchfeld des Auswahlmenüs ---*/
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              Icons.add_circle, //delete_forever,
-                              color: Colors.white, size: 52,
-                              semanticLabel: 'Neues Geschäft hinzufügen',
-                            ),
-                            onPressed: () {
-                              log('0700 - ExpenseWidget - "Wo wurde eingekauft?" - Neues Geschäft hinzufügen');
-                              //shopController.clear();
-                            },
-                          ),
-                        ),
+//                           /*--- IconButton für "Neues Geschäft hinzufügen" im Suchfeld des Auswahlmenüs ---*/
+//                           suffixIcon: IconButton(
+//                             icon: Icon(
+//                               Icons.add_circle, //delete_forever,
+//                               color: Colors.white, size: 52,
+//                               semanticLabel: 'Neues Geschäft hinzufügen',
+//                             ),
+//                             onPressed: () {
+//                               log('0700 - ExpenseWidget - "Wo wurde eingekauft?" - Neues Geschäft hinzufügen');
+//                               //shopController.clear();
+//                             },
+//                           ),
+//                         ),
 
-                        /*--- Cursor im Suchfeld des Auswahlmenüs ---*/
-                        cursorColor: Colors.yellow,
-                        cursorWidth: 5.0,
-                        cursorHeight: 30.0,
+//                         /*--- Cursor im Suchfeld des Auswahlmenüs ---*/
+//                         cursorColor: Colors.yellow,
+//                         cursorWidth: 5.0,
+//                         cursorHeight: 30.0,
 
-                        /*--- Text im Suchfeld des Auswahlmenüs ---*/
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.yellow,
-                        ),
-                      ),
-                      /*--------------------------------- TextFieldProps - ENDE ---*/
-                      menuProps: MenuProps(
-                        borderRadius: BorderRadius.circular(0),
-                        backgroundColor: wbColorLogoBlue,
+//                         /*--- Text im Suchfeld des Auswahlmenüs ---*/
+//                         style: TextStyle(
+//                           fontSize: 28,
+//                           fontWeight: FontWeight.bold,
+//                           color: Colors.yellow,
+//                         ),
+//                       ),
+//                       /*--------------------------------- TextFieldProps - ENDE ---*/
+//                       menuProps: MenuProps(
+//                         borderRadius: BorderRadius.circular(0),
+//                         backgroundColor: wbColorLogoBlue,
 
-                        /*--- Schriftfarbe des Auswahlmenüs ---*/
+//                         /*--- Schriftfarbe des Auswahlmenüs ---*/
 
-                        /*--- Schatten des Auswahlmenüs ---*/
-                        shadowColor: Colors.black,
-                        elevation: 12,
+//                         /*--- Schatten des Auswahlmenüs ---*/
+//                         shadowColor: Colors.black,
+//                         elevation: 12,
 
-                        /*--- Der Seiten-Hintergrund wird eingefärbt, solange das Menü geöffnet ist ---*/
-                        // barrierColor: wbColorLogoBlue,
-                        // barrierLabel: 'Suchfeld schließen',
-                        // semanticLabel: 'Suchfeld schließen',
-                        // barrierDismissible: true,
-                        // clipBehavior: Clip.none,
-                        // borderOnForeground: true,
-                        // color: Colors.yellow,
-                        // surfaceTintColor: Colors.yellow,
-                        // margin: EdgeInsets.all(0),
-                      ),
+//                         /*--- Der Seiten-Hintergrund wird eingefärbt, solange das Menü geöffnet ist ---*/
+//                         // barrierColor: wbColorLogoBlue,
+//                         // barrierLabel: 'Suchfeld schließen',
+//                         // semanticLabel: 'Suchfeld schließen',
+//                         // barrierDismissible: true,
+//                         // clipBehavior: Clip.none,
+//                         // borderOnForeground: true,
+//                         // color: Colors.yellow,
+//                         // surfaceTintColor: Colors.yellow,
+//                         // margin: EdgeInsets.all(0),
+//                       ),
 
-                      /*--------------------------------- itemBuilder ---*/
-                      itemBuilder: (context, item, isDisabled, isSelected) =>
-                          Column(
-                        children: [
-                          ListTile(
-                            title: Text(
-                              item,
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                          Divider(color: Colors.white), // Divider hinzugefügt
-                        ],
-                      ),
-                    ),
+//                       /*--------------------------------- itemBuilder ---*/
+//                       itemBuilder: (context, item, isDisabled, isSelected) =>
+//                           Column(
+//                         children: [
+//                           ListTile(
+//                             title: Text(
+//                               item,
+//                               style: TextStyle(
+//                                 fontSize: 20,
+//                                 fontWeight: FontWeight.bold,
+//                                 color: Colors.white,
+//                               ),
+//                             ),
+//                           ),
+//                           Divider(color: Colors.white), // Divider hinzugefügt
+//                         ],
+//                       ),
+//                     ),
 
-                    /*--------------------------------- onChanged ---*/
-                    onChanged: (String? newValue) {
-                      log('0659 - ExpenseWidget - "Wo wurde eingekauft?" - Ausgewählt: $newValue');
-                      setState(() {
-                        shopController.text = newValue ?? '';
-                      });
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-          /*--------------------------------- Wo wurde eingekauft? - ENDE ---*/
+//                     /*--------------------------------- onChanged ---*/
+//                     onChanged: (String? newValue) {
+//                       log('0659 - ExpenseWidget - "Wo wurde eingekauft?" - Ausgewählt: $newValue');
+//                       setState(() {
+//                         shopController.text = newValue ?? '';
+//                       });
+//                     },
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+// /*--------------------------------- Wo wurde eingekauft? - ENDE ---*/
+          
+// /*--------------------------------- Daten in Datenbank einfügen auf Knopfdruck ---*/
+//                                           TextButton(
+//                                             child: Text('Ja'),
+//                                             onPressed: () async {
+//                                               final database =
+//                                                   await openDatabase(
+//                                                       'JOTHAsoft.FiveStars.db');
+//                                               String newContactID =
+//                                                   await generateContactID();
+//                                               await database.insert(
+//                                                 'KundenDaten',
+//                                                 {
+//                                                   /*--- Vorname ---*/
+//                                                   'TKD_Feld_002':
+//                                                       newShopController
+//                                                               .text.isEmpty
+//                                                           ? ''
+//                                                           : newShopController
+//                                                               .text,
+
+//                                                   /*--- Nachname ---*/
+//                                                   'TKD_Feld_003':
+//                                                       newShopController
+//                                                               .text.isEmpty
+//                                                           ? ''
+//                                                           : newShopController
+//                                                               .text,
+
+//                                                   /*--- Telefon ---*/
+//                                                   'TKD_Feld_008':
+//                                                       newShopController
+//                                                               .text.isEmpty
+//                                                           ? ''
+//                                                           : newShopController
+//                                                               .text,
+
+//                                                   /*--- Firma ---*/
+//                                                   'TKD_Feld_014':
+//                                                       newShopController
+//                                                               .text.isEmpty
+//                                                           ? ''
+//                                                           : newShopController
+//                                                               .text,
+
+//                                                   /*--- Kontakt-ID ---*/
+//                                                   'TKD_Feld_030':
+//                                                       newContactID,
+//                                                 },
+//                                                 conflictAlgorithm:
+//                                                     ConflictAlgorithm.replace,
+//                                               );
+//                                               // ignore: use_build_context_synchronously
+//                                               Navigator.of(context).pop();
+//                                             },
+//                                           ),
+// /*--------------------------------- Daten in Datenbank einfügen auf Knopfdruck - ENDE ---*/
  
                                     // /*--------------------------------- E-Mail ---*/
                                     // if (contact.emails.isNotEmpty)
@@ -582,86 +639,107 @@
 
 
 // 0242
-/*--------------------------------- Daten aktualisieren ---*/
-Future<void> updateData(Map<String, dynamic> row) async {
-  if (controllerCS002.text.isEmpty || controllerCS003.text.isEmpty) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Fehler"),
-        content: Text("Vorname und Nachname dürfen nicht leer sein."),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text("OK"),
-          ),
-        ],
-      ),
-    );
-    return;
-  }
+// /*--------------------------------- Daten aktualisieren ---*/
+// Future<void> updateData(Map<String, dynamic> row) async {
+//   if (controllerCS002.text.isEmpty || controllerCS003.text.isEmpty) {
+//     showDialog(
+//       context: context,
+//       builder: (context) => AlertDialog(
+//         title: Text("Fehler"),
+//         content: Text("Vorname und Nachname dürfen nicht leer sein."),
+//         actions: [
+//           TextButton(
+//             onPressed: () {
+//               Navigator.of(context).pop();
+//             },
+//             child: Text("OK"),
+//           ),
+//         ],
+//       ),
+//     );
+//     return;
+//   }
 
 
-//0082
-/*--------------------------------- Daten speichern ---*/
-Future<void> saveData(BuildContext context) async {
-  if (controllerCS002.text.isEmpty || controllerCS003.text.isEmpty) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Fehler"),
-        content: Text("Vorname und Nachname dürfen nicht leer sein."),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text("OK"),
-          ),
-        ],
-      ),
-    );
-    return;
-  }
+// //0082
+// /*--------------------------------- Daten speichern ---*/
+// Future<void> saveData(BuildContext context) async {
+//   if (controllerCS002.text.isEmpty || controllerCS003.text.isEmpty) {
+//     showDialog(
+//       context: context,
+//       builder: (context) => AlertDialog(
+//         title: Text("Fehler"),
+//         content: Text("Vorname und Nachname dürfen nicht leer sein."),
+//         actions: [
+//           TextButton(
+//             onPressed: () {
+//               Navigator.of(context).pop();
+//             },
+//             child: Text("OK"),
+//           ),
+//         ],
+//       ),
+//     );
+//     return;
+//   }
 
-                            // log("1584 - ContactScreen - Daten speichern - geklickt");
-                            // if (controllerCS002.text.isEmpty || controllerCS003.text.isEmpty) {
-                            //   showDialog(
-                            //     context: context,
-                            //     builder: (context) => AlertDialog(
-                            //       title: Text("Fehler"),
-                            //       content: Text("Vorname und Nachname dürfen nicht leer sein."),
-                            //       actions: [
-                            //         TextButton(
-                            //           onPressed: () {
-                            //             Navigator.of(context).pop();
-                            //           },
-                            //           child: Text("OK"),
-                            //         ),
-                            //       ],
-                            //     ),
-                            //   );
-                            //   return;
-                            // }
+//                             // log("1584 - ContactScreen - Daten speichern - geklickt");
+//                             // if (controllerCS002.text.isEmpty || controllerCS003.text.isEmpty) {
+//                             //   showDialog(
+//                             //     context: context,
+//                             //     builder: (context) => AlertDialog(
+//                             //       title: Text("Fehler"),
+//                             //       content: Text("Vorname und Nachname dürfen nicht leer sein."),
+//                             //       actions: [
+//                             //         TextButton(
+//                             //           onPressed: () {
+//                             //             Navigator.of(context).pop();
+//                             //           },
+//                             //           child: Text("OK"),
+//                             //         ),
+//                             //       ],
+//                             //     ),
+//                             //   );
+//                             //   return;
+//                             // }
 
-    // Setze den Fokus auf das leere Feld und scrolle zu dieser Position
-    if (controllerCS002.text.isEmpty) {
-      FocusScope.of(context).requestFocus(controllerCS002);
-      Scrollable.ensureVisible(
-        context,
-        duration: Duration(milliseconds: 300),
-        alignment: 0.5,
-      );
-    } else {
-      FocusScope.of(context).requestFocus(controllerCS003);
-      Scrollable.ensureVisible(
-        context,
-        duration: Duration(milliseconds: 300),
-        alignment: 0.5,
-      );
-    }
+//     // Setze den Fokus auf das leere Feld und scrolle zu dieser Position
+//     if (controllerCS002.text.isEmpty) {
+//       FocusScope.of(context).requestFocus(controllerCS002);
+//       Scrollable.ensureVisible(
+//         context,
+//         duration: Duration(milliseconds: 300),
+//         alignment: 0.5,
+//       );
+//     } else {
+//       FocusScope.of(context).requestFocus(controllerCS003);
+//       Scrollable.ensureVisible(
+//         context,
+//         duration: Duration(milliseconds: 300),
+//         alignment: 0.5,
+//       );
+//     }
 
-      final FocusNode focusNodeCS002 = FocusNode();
+//       final FocusNode focusNodeCS002 = FocusNode();
 
+/*--------------------------------- Firmendaten speichern ---*/
+                                                  // 'TKD_Feld_013': '', // USt-IdNr.
+                                                  // 'TKD_Feld_015': '', // IBAN
+                                                  // 'TKD_Feld_016': '', // BIC
+                                                  // 'TKD_Feld_017': '', // Bank
+                                                  // 'TKD_Feld_018': '', // Kontoinhaber
+                                                  // 'TKD_Feld_019': '', // Zahlungsbedingungen
+                                                  // 'TKD_Feld_020': '', // Skonto
+                                                  // 'TKD_Feld_021': '', // Lieferbedingungen
+                                                  // 'TKD_Feld_022': '', // Lieferzeit
+                                                  // 'TKD_Feld_023': '', // Lieferkosten
+                                                  // 'TKD_Feld_024': '', // Lieferkostenfrei ab
+                                                  // 'TKD_Feld_025': '', // Rabatt
+                                                  // 'TKD_Feld_026': '', // Rabattgrund
+                                                  // 'TKD_Feld_027': '', // Rabatt bis
+                                                  // 'TKD_Feld_028': '', // Rabattgrund bis
+                                                  // 'TKD_Feld_029': '', // Rabatt ab
+                                                  // 'TKD_Feld_030': '', // Rabattgrund ab
+                                                  // 'TKD_Feld_031': '', // Rabatt ab
+                                                  // 'TKD_Feld_032': '', // Rabattgrund ab
+                                                  // 'TKD_Feld_033': '', // Rabatt ab

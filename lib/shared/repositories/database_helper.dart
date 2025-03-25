@@ -16,7 +16,7 @@
 
 //   Future<Database> _initDatabase() async {
 //     Directory documentsDir = await getApplicationDocumentsDirectory();
-//     String dbPath = join(documentsDir.path, "JOTHAsoft.WorkBuddy.db");
+//     String dbPath = join(documentsDir.path, "JOTHAsoft.FiveStars.db");
 
 //     return await openDatabase(
 //       dbPath,

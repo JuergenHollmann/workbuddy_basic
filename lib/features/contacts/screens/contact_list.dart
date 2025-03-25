@@ -31,7 +31,56 @@ class DatabaseHelper {
       List<int> bytes = data.buffer.asUint8List();
       await File(dbPath).writeAsBytes(bytes, flush: true);
     }
-    return openDatabase(dbPath);
+    Database db = await openDatabase(dbPath);
+    log('0035 - ContactList - Die Datenbank wurde geöffnet: $dbPath');
+
+    /*--- Überprüfe, ob die Tabelle existiert ---*/
+    var result = await db.rawQuery(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='KundenDaten'");
+    if (result.isEmpty) {
+      log('0041 - ContactList - Die Tabelle KundenDaten existiert NICHT in der Datenbank!');
+      /*--- Erstelle die Tabelle ---*/
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS KundenDaten (
+          TKD_Feld_000 TEXT,
+          TKD_Feld_001 TEXT,
+          TKD_Feld_002 TEXT,
+          TKD_Feld_003 TEXT,
+          TKD_Feld_004 TEXT,
+          TKD_Feld_005 TEXT,
+          TKD_Feld_006 TEXT,
+          TKD_Feld_007 TEXT,
+          TKD_Feld_008 TEXT,
+          TKD_Feld_009 TEXT,
+          TKD_Feld_010 TEXT,
+          TKD_Feld_011 TEXT,
+          TKD_Feld_012 TEXT,
+          TKD_Feld_013 TEXT,
+          TKD_Feld_014 TEXT,
+          TKD_Feld_015 TEXT,
+          TKD_Feld_016 TEXT,
+          TKD_Feld_017 TEXT,
+          TKD_Feld_018 TEXT,
+          TKD_Feld_019 TEXT,
+          TKD_Feld_020 TEXT,
+          TKD_Feld_021 TEXT,
+          TKD_Feld_022 TEXT,
+          TKD_Feld_023 TEXT,
+          TKD_Feld_024 TEXT,
+          TKD_Feld_025 TEXT,
+          TKD_Feld_026 TEXT,
+          TKD_Feld_027 TEXT,
+          TKD_Feld_028 TEXT,
+          TKD_Feld_029 TEXT,
+          TKD_Feld_030 TEXT PRIMARY KEY
+        )
+      ''');
+      log('0077 - ContactList - Die Tabelle KundenDaten wurde erstellt!');
+    } else {
+      log('0079 - ContactList - Die Tabelle KundenDaten wurde gefunden!');
+    }
+
+    return db;
   }
 }
 
@@ -63,7 +112,7 @@ class _ContactListState extends State<ContactList> {
   }
 
   Future<void> fetchData() async {
-    var db = await DatabaseHelper().database;
+    // var db = await DatabaseHelper().database;
 
     /*--- Zeige den Kontakt mit der KundenID: 1683296820166' ---*/
     // var query = await db.rawQuery(
@@ -75,7 +124,7 @@ class _ContactListState extends State<ContactList> {
 
     /*--- Zeige alle Kunden mit allen Daten ---*/
     var query = await db.rawQuery(
-        "SELECT * FROM KundenDaten ORDER BY TKD_Feld_003 ASC, TKD_Feld_003 ASC");
+        "SELECT * FROM KundenDaten ORDER BY TKD_Feld_003 ASC, TKD_Feld_002 ASC");
     log('0062 - ContactList - Abfrage '); //Ergebnis: $query');
 
     setState(() {
@@ -159,8 +208,9 @@ class _ContactListState extends State<ContactList> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => ContactScreen(
-                                contact:
-                                    contact, isNewContact: false,), // später umbenennen in ContactScreen?
+                              contact: contact,
+                              isNewContact: false,
+                            ), // später umbenennen in ContactScreen?
                           ),
                         );
                       },
@@ -255,7 +305,8 @@ class _ContactListState extends State<ContactList> {
                                             ),
                                           ),
                                       /*--------------------------------- Telefon ---*/
-                                      if (contact['TKD_Feld_008'] != '')
+                                      if (contact['TKD_Feld_008'] != null &&
+                                          contact['TKD_Feld_008'].isNotEmpty)
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(top: 8),
@@ -278,19 +329,21 @@ class _ContactListState extends State<ContactList> {
                                 ),
                               ),
                             ),
-                            /*--------------------------------- Privat oder Firma? ---*/
-                            Positioned(
-                              top: 14,
-                              left: 20,
-                              child: Text(
-                                textAlign: TextAlign.center,
-                                contact['TKD_Feld_030'],
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.w900,
+                            /*--------------------------------- KontaktID ---*/
+                            if (contact['TKD_Feld_030'] != null &&
+                                contact['TKD_Feld_030'].isNotEmpty)
+                              Positioned(
+                                top: 14,
+                                left: 20,
+                                child: Text(
+                                  textAlign: TextAlign.center,
+                                  contact['TKD_Feld_030'],
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.w900,
+                                  ),
                                 ),
                               ),
-                            ),
                             /*--------------------------------- Privat oder Firma? ---*/
                             Positioned(
                               top: 14,
@@ -309,14 +362,16 @@ class _ContactListState extends State<ContactList> {
                                         offset: Offset(2, 2),
                                         spreadRadius: 0),
                                   ],
-                                  color: contact['TKD_Feld_001'] == 'Herr'
+                                  color: contact['TKD_Feld_014'] != null &&
+                                          contact['TKD_Feld_014'].isNotEmpty
                                       ? Colors.green
                                       : Colors.blue,
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Text(
                                   textAlign: TextAlign.center,
-                                  contact['TKD_Feld_001'] == 'Herr'
+                                  contact['TKD_Feld_014'] != null &&
+                                          contact['TKD_Feld_014'].isNotEmpty
                                       ? 'Firma'
                                       : 'Privat',
                                   style: TextStyle(

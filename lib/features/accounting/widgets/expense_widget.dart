@@ -1,7 +1,7 @@
-import 'dart:developer';
+import 'dart:developer' as dev;
+import 'dart:math';
 
-// import 'dart:math';
-
+import 'package:audioplayers/audioplayers.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,6 +29,9 @@ class ExpenseWidget extends StatefulWidget {
 }
 
 class _ExpenseWidgetState extends State<ExpenseWidget> {
+  /*--------------------------------- AudioPlayer ---*/
+  late AudioPlayer player = AudioPlayer();
+
   /*--------------------------------- GlobalKeys ---*/
   final _formKey = GlobalKey<FormState>();
   final dropDownKey = GlobalKey<DropdownSearchState>();
@@ -71,83 +74,94 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
   /*-------------------------------------------------------------------------------------------------------------------*/
   void getCalculationResult() {
     /* Die einzelnen Positionen berechnen */
-    // log("----------------------------------------------------------------------------------------------------------------");
+    // dev.log("----------------------------------------------------------------------------------------------------------------");
     // /* Vor der Berechnung müssen alle Zahlen in das Rechenformat mit Punkt vor den Dezimalzahlen umgestellt werden */
     // /*-------------------------------------------------------------------------------------------------------------------*/
-    // log('0078 √ getCalculationResult - Anzahl als Text:                ${quantityController.text} --> ist keine Währung');
+    // dev.log('0078 √ getCalculationResult - Anzahl als Text:                ${quantityController.text} --> ist keine Währung');
     // /* (1) alle Komma durch "x" ersetzen */
     // quantityController.text =
     //     quantityController.text.replaceAll(RegExp(r'[,]'), 'x');
-    // log('0082 √ getCalculationResult - Anzahl als Text:                ${quantityController.text} --> Komma durch x ersetzt');
+    // dev.log('0082 √ getCalculationResult - Anzahl als Text:                ${quantityController.text} --> Komma durch x ersetzt');
 
     // /* (2) alle Punkte entfernen */
     // quantityController.text =
     //     quantityController.text.replaceAll(RegExp(r'[.]'), '');
-    // log('0087 √ getCalculationResult - Anzahl als Text:                ${quantityController.text} --> Punkte gelöscht');
+    // dev.log('0087 √ getCalculationResult - Anzahl als Text:                ${quantityController.text} --> Punkte gelöscht');
 
     // /* (3) alle "x" durch Punkte ersetzen */
     // quantityController.text =
     //     quantityController.text.replaceAll(RegExp(r'[x]'), '.');
-    // log('0092 √ getCalculationResult - Anzahl als double:              ${quantityController.text} --> x durch Punkt ersetzt');
-    // log("----------------------------------------------------------------------------------------------------------------");
-    // log('0094 √ getCalculationResult - Einheiten als Text:             ${itemController.text} --> wird nicht umgestellt');
-    // log("----------------------------------------------------------------------------------------------------------------");
-    // log('0096 √ getCalculationResult - MwSt. als Prozentsatz:          ${taxPercentController.text}');
+    // dev.log('0092 √ getCalculationResult - Anzahl als double:              ${quantityController.text} --> x durch Punkt ersetzt');
+    // dev.log("----------------------------------------------------------------------------------------------------------------");
+    // dev.log('0094 √ getCalculationResult - Einheiten als Text:             ${itemController.text} --> wird nicht umgestellt');
+    // dev.log("----------------------------------------------------------------------------------------------------------------");
+    // dev.log('0096 √ getCalculationResult - MwSt. als Prozentsatz:          ${taxPercentController.text}');
     // taxPercentController.text =
     //     taxPercentController.text.replaceAll(RegExp(r'[ %,]'), '');
-    // log('0095 √ getCalculationResult - MwSt. als double:               ${taxPercentController.text}');
-    // log("----------------------------------------------------------------------------------------------------------------");
-    // log('0097 - getCalculationResult - Brutto-Einzel als Text:         ${bruttoItemPriceController.text} €');
+    // dev.log('0095 √ getCalculationResult - MwSt. als double:               ${taxPercentController.text}');
+    // dev.log("----------------------------------------------------------------------------------------------------------------");
+    // dev.log('0097 - getCalculationResult - Brutto-Einzel als Text:         ${bruttoItemPriceController.text} €');
     // bruttoItemPriceController.text =
     //     bruttoItemPriceController.text.replaceAll(RegExp(r'[ €,]'), '');
 
-    // log('0078 - getCalculationResult - Brutto-Einzel als double:       ${bruttoItemPriceController.text}');
-    // log("----------------------------------------------------------------------------------------------------------------");
-    // log('0079 - getCalculationResult - Brutto-Gesamt als Text:         ${bruttoQuantityPriceController.text} €');
+    // dev.log('0078 - getCalculationResult - Brutto-Einzel als double:       ${bruttoItemPriceController.text}');
+    // dev.log("----------------------------------------------------------------------------------------------------------------");
+    // dev.log('0079 - getCalculationResult - Brutto-Gesamt als Text:         ${bruttoQuantityPriceController.text} €');
     // bruttoQuantityPriceController.text =
     //     bruttoQuantityPriceController.text.replaceAll(RegExp(r'[ €,]'), '');
 
-    // log('0079 - getCalculationResult - Brutto-Gesamt als double:       ${bruttoQuantityPriceController.text}');
-    // log("----------------------------------------------------------------------------------------------------------------");
-    // log('0080 - getCalculationResult - Netto-Einzel als Text:          ${nettoItemPriceController.text} €');
+    // dev.log('0079 - getCalculationResult - Brutto-Gesamt als double:       ${bruttoQuantityPriceController.text}');
+    // dev.log("----------------------------------------------------------------------------------------------------------------");
+    // dev.log('0080 - getCalculationResult - Netto-Einzel als Text:          ${nettoItemPriceController.text} €');
     // nettoItemPriceController.text =
     //     nettoItemPriceController.text.replaceAll(RegExp(r'[ €,]'), '');
 
-    // log('0080 - getCalculationResult - Netto-Einzel als double:        ${nettoItemPriceController.text}');
-    // log("----------------------------------------------------------------------------------------------------------------");
-    // log('0081 - getCalculationResult - Brutto-Gesamt als Text:         ${nettoQuantityPriceController.text} €');
+    // dev.log('0080 - getCalculationResult - Netto-Einzel als double:        ${nettoItemPriceController.text}');
+    // dev.log("----------------------------------------------------------------------------------------------------------------");
+    // dev.log('0081 - getCalculationResult - Brutto-Gesamt als Text:         ${nettoQuantityPriceController.text} €');
     // nettoQuantityPriceController.text =
     //     nettoQuantityPriceController.text.replaceAll(RegExp(r'[ €,]'), '');
 
-    // log('0081 - getCalculationResult - Brutto-Gesamt als double:       ${nettoQuantityPriceController.text}');
-    // log("----------------------------------------------------------------------------------------------------------------");
-    // log('0082 - getCalculationResult - Brutto-Einzel-MwSt. als Text:   ${taxOnBruttoItemPriceController.text} €');
+    // dev.log('0081 - getCalculationResult - Brutto-Gesamt als double:       ${nettoQuantityPriceController.text}');
+    // dev.log("----------------------------------------------------------------------------------------------------------------");
+    // dev.log('0082 - getCalculationResult - Brutto-Einzel-MwSt. als Text:   ${taxOnBruttoItemPriceController.text} €');
     // taxOnBruttoItemPriceController.text =
     //     taxOnBruttoItemPriceController.text.replaceAll(RegExp(r'[ €,]'), '');
 
-    // log('0082 - getCalculationResult - Brutto-Einzel-MwSt. als double: ${taxOnBruttoItemPriceController.text}');
-    // log("----------------------------------------------------------------------------------------------------------------");
-    // log('0083 - getCalculationResult - Brutto-Gesamt-MwSt. als Text: ${taxOnBruttoQuantityPriceController.text} €');
+    // dev.log('0082 - getCalculationResult - Brutto-Einzel-MwSt. als double: ${taxOnBruttoItemPriceController.text}');
+    // dev.log("----------------------------------------------------------------------------------------------------------------");
+    // dev.log('0083 - getCalculationResult - Brutto-Gesamt-MwSt. als Text: ${taxOnBruttoQuantityPriceController.text} €');
     // taxOnBruttoQuantityPriceController.text = taxOnBruttoQuantityPriceController
     //     .text
     //     .replaceAll(RegExp(r'[ €,]'), '');
 
-    // log('0083 - getCalculationResult - Brutto-Gesamt-MwSt. als double: ${taxOnBruttoQuantityPriceController.text}');
-    log("----------------------------------------------------------------------------------------------------------------");
-    log('0075 - getCalculationResult - Anzahl als double:              ${quantityController.text}');
-    log('0076 - getCalculationResult - Einheiten als Text:             ${itemController.text}');
-    log('0077 - getCalculationResult - MwSt. als Prozentsatz:          ${taxPercentController.text}');
-    log('0078 - getCalculationResult - Brutto-Einzel als double:       ${bruttoItemPriceController.text} €');
-    log('0079 - getCalculationResult - Brutto-Gesamt als double:       ${bruttoQuantityPriceController.text} €');
-    log('0080 - getCalculationResult - Netto-Einzel als double:        ${nettoItemPriceController.text} €');
-    log('0081 - getCalculationResult - Brutto-Gesamt als double:       ${nettoQuantityPriceController.text} €');
-    log('0082 - getCalculationResult - Brutto-Einzel-MwSt. als double: ${taxOnBruttoItemPriceController.text} €');
-    log('0083 - getCalculationResult - Brutto-Gesamt-MwSt. als double: ${taxOnBruttoQuantityPriceController.text} €');
-    log("----------------------------------------------------------------------------------------------------------------");
+    // dev.log('0083 - getCalculationResult - Brutto-Gesamt-MwSt. als double: ${taxOnBruttoQuantityPriceController.text}');
+    dev.log(
+        '----------------------------------------------------------------------------------------------------------------');
+    dev.log(
+        '0075 - getCalculationResult - Anzahl als double:              ${quantityController.text}');
+    dev.log(
+        '0076 - getCalculationResult - Einheiten als Text:             ${itemController.text}');
+    dev.log(
+        '0077 - getCalculationResult - MwSt. als Prozentsatz:          ${taxPercentController.text}');
+    dev.log(
+        '0078 - getCalculationResult - Brutto-Einzel als double:       ${bruttoItemPriceController.text} €');
+    dev.log(
+        '0079 - getCalculationResult - Brutto-Gesamt als double:       ${bruttoQuantityPriceController.text} €');
+    dev.log(
+        '0080 - getCalculationResult - Netto-Einzel als double:        ${nettoItemPriceController.text} €');
+    dev.log(
+        '0081 - getCalculationResult - Brutto-Gesamt als double:       ${nettoQuantityPriceController.text} €');
+    dev.log(
+        '0082 - getCalculationResult - Brutto-Einzel-MwSt. als double: ${taxOnBruttoItemPriceController.text} €');
+    dev.log(
+        '0083 - getCalculationResult - Brutto-Gesamt-MwSt. als double: ${taxOnBruttoQuantityPriceController.text} €');
+    dev.log(
+        '----------------------------------------------------------------------------------------------------------------');
 
     /* Netto-Einzelpreis - Umrechnung in Cent für genauere Berechnungen */
     // final nettoItemPriceInCent = nettoItemPrice * 100;
-    // log('0080 - getCalculationResult - double: $nettoItemPriceInCent ==> Cent Netto-Einzelpreis');
+    // dev.log('0080 - getCalculationResult - double: $nettoItemPriceInCent ==> Cent Netto-Einzelpreis');
 
     // /* überprüfen ob das Feld "Anzahl" gefüllt ist */
     // if (quantityController.text.isEmpty || quantityController.text == "") {
@@ -158,13 +172,15 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
     //           headlineText: "Zur Berechnung fehlen noch Daten!",
     //           contentText: 'Bitte noch das Feld "Anzahl" ergänzen.',
     //           actionsText: "OK 👍"));
-    //   log('0093 --> Eingabe "Angabe" fehlt! <---');
+    //   dev.log('0093 --> Eingabe "Angabe" fehlt! <---');
 
     /*--- Wenn das Feld "Einheiten" leer ist ---*/
     if (itemController.text == "") {
-      log('0091 - ExpenseWidget - itemController - Eingabe gelöscht: "${itemController.text}" ---> als String');
+      dev.log(
+          '0091 - ExpenseWidget - itemController - Eingabe gelöscht: "${itemController.text}" ---> als String');
       itemController.text = "Stk";
-      log('0093 - ExpenseWidget - itemController - umgewandelt in "${itemController.text}" ---> als String');
+      dev.log(
+          '0093 - ExpenseWidget - itemController - umgewandelt in "${itemController.text}" ---> als String');
     }
 
     //   /* überprüfen ob das Feld "Brutto-Einzelpreis" gefüllt ist */
@@ -177,7 +193,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
     //           headlineText: "Zur Berechnung fehlen noch Daten!",
     //           contentText: 'Bitte noch das Feld "Brutto-Einzelpreis" ergänzen.',
     //           actionsText: "OK 👍"));
-    //   log('0105 --> Eingabe "Brutto-Einzelpreis" fehlt! <---');
+    //   dev.log('0105 --> Eingabe "Brutto-Einzelpreis" fehlt! <---');
 
     //   /* überprüfen ob das Feld "Brutto-Gesamtpreis" gefüllt ist */
     // } else if (bruttoQuantityPriceController.text.isEmpty ||
@@ -189,13 +205,13 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
     //           headlineText: "Zur Berechnung fehlen noch Daten!",
     //           contentText: 'Bitte noch das Feld "Brutto-Gesamtpreis" ergänzen.',
     //           actionsText: "OK 👍"));
-    //   log('0117 --> Eingabe "Brutto-Gesamtpreis" fehlt! <---');
+    //   dev.log('0117 --> Eingabe "Brutto-Gesamtpreis" fehlt! <---');
     // }
 
     /*--- Anzahl - Umformatierung in double ---*/
     quantity = double.tryParse(quantityController.text) ??
         1.00; // wenn keine Zahl vorhanden ist, dann Zahl = 1.00
-    log('0128 -----> Anzahl:           quantity =          $quantity');
+    dev.log('0128 -----> Anzahl:           quantity =          $quantity');
 
     /*--- taxPercent - Umformatierung in double ---*/
     /*--- taxOnNettoItemPrice - Umformatierung in double ---*/
@@ -203,7 +219,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
 
     // taxOnBruttoQuantityPrice =
     //     double.tryParse(taxOnBruttoQuantityPriceController.text) ?? 1.0;
-    // log('0136 -----> Anzahl:           quantity =          $taxOnBruttoQuantityPriceController');
+    // dev.log('0136 -----> Anzahl:           quantity =          $taxOnBruttoQuantityPriceController');
 
     /*--- taxOnBruttoItemPrice - Umformatierung in double ---*/
     /*--- taxOnBruttoQuantityPrice - Umformatierung in double ---*/
@@ -214,20 +230,25 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
     // nettoQuantityPrice =
     //     double.tryParse(nettoQuantityPriceController.text) ?? 1.0;
 
-    log("----------------------------------------------------------------------------------------------------------------");
+    dev.log(
+        "----------------------------------------------------------------------------------------------------------------");
 
     /* Netto-Einzelpreis - Berechnung + Umrechnung in Cent für genauere Berechnungen*/
     nettoItemPrice = nettoItemPrice * 0.840336134 * 100;
     final nettoItemPriceInCent = nettoItemPrice.roundToDouble();
-    log('0143 - getCalculationResult - double: $nettoItemPriceInCent ==> Cent Netto-Einzelpreis');
+    dev.log(
+        '0143 - getCalculationResult - double: $nettoItemPriceInCent ==> Cent Netto-Einzelpreis');
 
     /* Netto-Gesamtpreis =  Brutto-Einzelpreis * Anzahl */
     final nettoQuantityPriceInCent = nettoItemPrice.roundToDouble() *
         quantity *
         100; // * 100 = Umrechnung in Cent für genauere Berechnungen
-    log('0149 --> Berechnung: [Netto-Gesamtpreis in Cent] $nettoQuantityPriceInCent = [Netto-Einzelpreis] ${nettoItemPrice.roundToDouble()} * [Anzahl] $quantity * 100');
-    log('0150 - getCalculationResult - double: $nettoQuantityPriceInCent ==> Cent Netto-Gesamtpreis');
-    log("----------------------------------------------------------------------------------------------------------------");
+    dev.log(
+        '0149 --> Berechnung: [Netto-Gesamtpreis in Cent] $nettoQuantityPriceInCent = [Netto-Einzelpreis] ${nettoItemPrice.roundToDouble()} * [Anzahl] $quantity * 100');
+    dev.log(
+        '0150 - getCalculationResult - double: $nettoQuantityPriceInCent ==> Cent Netto-Gesamtpreis');
+    dev.log(
+        "----------------------------------------------------------------------------------------------------------------");
 
     // /* überprüfen ob das Feld "Brutto-Gesamtpreis" gefüllt ist */
     // if (taxPercentController.text.isEmpty || taxPercentController.text == "") {
@@ -237,26 +258,31 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
     //           headlineText: "Zur Berechnung fehlen noch Daten!",
     //           contentText: 'Bitte noch das Feld "Mehrwertsteuersatz" ergänzen.',
     //           actionsText: "OK 👍"));
-    //   log('0250 --> Eingabe "Angabe" fehlt! <---');
+    //   dev.log('0250 --> Eingabe "Angabe" fehlt! <---');
     // } else {}
 
     /* Brutto-Einzelpreis = Umformatierung in double */
     bruttoItemPrice = double.tryParse(bruttoItemPriceController.text) ?? 1.0;
-    log('0155 -----> Brutto-Einzeln: bruttoItemPrice =     $bruttoItemPrice');
+    dev.log(
+        '0155 -----> Brutto-Einzeln: bruttoItemPrice =     $bruttoItemPrice');
 
     /* Brutto-Gesamtpreis = Brutto-Einzelpreis * Anzahl */
     final bruttoQuantityPriceInCent = bruttoItemPrice *
         quantity *
         100; // * 100 = Umrechnung in Cent für genauere Berechnungen
-    log('0161 --> Berechnung: [Brutto-Gesamtpreis in Cent] $bruttoQuantityPriceInCent = [Brutto-Einzelpreis] $bruttoItemPrice * [Anzahl] $quantity * 100');
-    log('0162 - getCalculationResult - double: $bruttoQuantityPriceInCent ==> Cent Brutto-Gesamtpreis');
+    dev.log(
+        '0161 --> Berechnung: [Brutto-Gesamtpreis in Cent] $bruttoQuantityPriceInCent = [Brutto-Einzelpreis] $bruttoItemPrice * [Anzahl] $quantity * 100');
+    dev.log(
+        '0162 - getCalculationResult - double: $bruttoQuantityPriceInCent ==> Cent Brutto-Gesamtpreis');
     bruttoQuantityPrice = bruttoQuantityPriceInCent / 100;
     /*--- bruttoQuantityPrice - Umformatierung in double ---*/
     // bruttoQuantityPrice =
     //     double.tryParse(bruttoQuantityPriceController.text) ?? 1.0;
     bruttoQuantityPriceController.text = bruttoQuantityPrice.toStringAsFixed(2);
-    log('0170 -----> Brutto-Gesamt:  bruttoQuantityPrice = ${bruttoQuantityPrice.toStringAsFixed(2)} €');
-    log("----------------------------------------------------------------------------------------------------------------");
+    dev.log(
+        '0170 -----> Brutto-Gesamt:  bruttoQuantityPrice = ${bruttoQuantityPrice.toStringAsFixed(2)} €');
+    dev.log(
+        "----------------------------------------------------------------------------------------------------------------");
 
     /* überprüfen ob das Feld "Mehrwertsteuersatz" gefüllt ist */
     if (taxPercentController.text.isEmpty || taxPercentController.text == "") {
@@ -266,17 +292,19 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
               headlineText: "Zur Berechnung fehlen noch Daten!",
               contentText: 'Bitte noch das Feld "Mehrwertsteuersatz" ergänzen.',
               actionsText: "OK 👍"));
-      log('0250 --> Eingabe "Angabe" fehlt! <---');
+      dev.log('0250 --> Eingabe "Angabe" fehlt! <---');
       FocusScope.of(context).requestFocus(FocusNode());
     } else {
       /* Mehrwertsteuersatz - Berechnung */
       taxPercentController.text = taxPercentController.text
           .replaceAll(RegExp(r' %'), ''); // das Prozentzeichen entfernen
-      log('0174 √ getCalculationResult - Mehrwertsteuersatz: ${taxPercentController.text} %'); //
+      dev.log(
+          '0174 √ getCalculationResult - Mehrwertsteuersatz: ${taxPercentController.text} %'); //
 
       taxPercent = double.tryParse(taxPercentController.text) ?? 0.0;
       final taxPercentSet = taxPercent / 100;
-      log('0178 √ getCalculationResult - Mehrwertsteuersatz zum Rechnen: $taxPercentSet ==> als double');
+      dev.log(
+          '0178 √ getCalculationResult - Mehrwertsteuersatz zum Rechnen: $taxPercentSet ==> als double');
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -305,12 +333,13 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
             quantity;
     taxOnBruttoItemPriceController.text =
         taxOnBruttoItemPrice.toStringAsFixed(2);
-    log('0210 √ getCalculationResult - Mehrwertsteuer für 1 Artikel ${taxOnBruttoItemPrice.toStringAsFixed(2)} €');
+    dev.log(
+        '0210 √ getCalculationResult - Mehrwertsteuer für 1 Artikel ${taxOnBruttoItemPrice.toStringAsFixed(2)} €');
 
     // /* Gesamt-Mehrwertsteuer der Einzel-Mwst. * Anzahl berechnen */
     // //taxOnBruttoItemPrice = taxOnBruttoItemPrice * quantity;
     //     taxOnBruttoItemPrice = bruttoItemPrice * (taxPercent / 100) * quantity;
-    // log('0214 √ getCalculationResult - Mehrwertsteuer für 1 Artikel gerundet auf double: $taxOnBruttoItemPrice €');
+    // dev.log('0214 √ getCalculationResult - Mehrwertsteuer für 1 Artikel gerundet auf double: $taxOnBruttoItemPrice €');
 
     // //taxOnBruttoQuantityPrice = taxOnBruttoItemPrice * quantity;
     // /* Gesamt-Mehrwertsteuer aus dem Brutto-Gesamtpreis berechnen */
@@ -318,61 +347,64 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
     // //     bruttoQuantityPrice - (bruttoQuantityPrice / (1 + (taxPercentSet)));
     // taxOnBruttoQuantityPriceController.text =
     //     taxOnBruttoQuantityPrice.toStringAsFixed(2);
-    // log('0220 √ getCalculationResult - Gesamt-Mehrwertsteuer aus dem Brutto-Gesamtpreis ${taxOnBruttoQuantityPrice.toStringAsFixed(2)} €');
-    // log("----------------------------------------------------------------------------------------------------------------");
+    // dev.log('0220 √ getCalculationResult - Gesamt-Mehrwertsteuer aus dem Brutto-Gesamtpreis ${taxOnBruttoQuantityPrice.toStringAsFixed(2)} €');
+    // dev.log("----------------------------------------------------------------------------------------------------------------");
 
     // // final taxOnBruttoQuantityPriceInCent =
     // //     bruttoQuantityPriceInCent * (taxPercent / 100);
-    // // log('0183 --> Berechnung: [Brutto-Gesamtpreis in Cent] $bruttoQuantityPriceInCent * [MwSt.-Satz] $taxPercent / 100 = [Brutto-Gesamt-MwSt. in Cent] $taxOnBruttoQuantityPriceInCent');
+    // // dev.log('0183 --> Berechnung: [Brutto-Gesamtpreis in Cent] $bruttoQuantityPriceInCent * [MwSt.-Satz] $taxPercent / 100 = [Brutto-Gesamt-MwSt. in Cent] $taxOnBruttoQuantityPriceInCent');
     // // taxOnBruttoQuantityPrice = taxOnBruttoQuantityPriceInCent / 100;
     // // taxOnBruttoQuantityPriceController.text =
     // //     taxOnBruttoQuantityPrice.toStringAsFixed(2);
-    // // log('0190 - getCalculationResult - Brutto-Gesamt-MwSt.: ${taxOnBruttoQuantityPriceController.text} €');
-    // log("----------------------------------------------------------------------------------------------------------------");
+    // // dev.log('0190 - getCalculationResult - Brutto-Gesamt-MwSt.: ${taxOnBruttoQuantityPriceController.text} €');
+    // dev.log("----------------------------------------------------------------------------------------------------------------");
 
     // /* MwSt. aus dem Brutto-Einzelpreis berechnen (für 1 Artikel) */
     // taxOnBruttoItemPrice = bruttoItemPrice * (taxPercent / 100);
-    // log('235 √ getCalculationResult - Mwst. aus dem Brutto-Einzelpreis berechnet: ${taxOnBruttoItemPrice.toStringAsFixed(2)} €');
+    // dev.log('235 √ getCalculationResult - Mwst. aus dem Brutto-Einzelpreis berechnet: ${taxOnBruttoItemPrice.toStringAsFixed(2)} €');
 
     // /* Mehrwertsteuer auf den Netto-Einzelpreis - Berechnung: (Netto-Einzelpreis / (100 + Mehrwertsteuersatz)) • Mehrwertsteuersatz */
     // final taxOnNettoItemPrice = nettoItemPriceInCent * taxPercentSet;
     // // final taxOnNettoItemPrice =
     // //     (nettoItemPriceInCent / (100 + taxPercentSet)) * taxPercentSet * 100;
 
-    // log('0216 - getCalculationResult - double: $taxOnNettoItemPrice ==> Cent Mehrwertsteuer auf den Netto-Einzelpreis');
+    // dev.log('0216 - getCalculationResult - double: $taxOnNettoItemPrice ==> Cent Mehrwertsteuer auf den Netto-Einzelpreis');
 
     // /* Mehrwertsteuer auf den Netto-Gesamtpreis - Berechnung */
     // final taxOnNettoQuantityPrice = taxOnNettoItemPrice * quantity;
-    // log('0220 - getCalculationResult - double: $taxOnNettoQuantityPrice ==> Cent Mehrwertsteuer auf den Netto-Gesamtpreis');
+    // dev.log('0220 - getCalculationResult - double: $taxOnNettoQuantityPrice ==> Cent Mehrwertsteuer auf den Netto-Gesamtpreis');
 
     // /* Netto-Gesamtpreis - Berechnung */
     // final nettoQuantityPrice = nettoItemPrice * quantity;
-    // log('0224 - getCalculationResult - double: $nettoQuantityPrice ==> Cent Netto-Gesamtpreis (falsch)');
+    // dev.log('0224 - getCalculationResult - double: $nettoQuantityPrice ==> Cent Netto-Gesamtpreis (falsch)');
 
     /* Brutto-Einzelpreis - Berechnung aus dem Netto-Einzelpreis */
 
     //     /* den Brutto-Einzelpreis aus dem Netto-Einzelpreis berechnen */
 //     // bruttoItemPrice = nettoItemPrice / 1.19;
-//     log('0079 - getCalculationResult ---> bruttoItemPrice: $bruttoItemPrice - OHNE "NumberFormat"');
+//     dev.log('0079 - getCalculationResult ---> bruttoItemPrice: $bruttoItemPrice - OHNE "NumberFormat"');
 
-    log("----------------------------------------------------------------------------------------------------------------");
+    dev.log(
+        "----------------------------------------------------------------------------------------------------------------");
 
     /*-------------------------------------------------------------------------------*/
     /* Die Ergebnisse umformatieren oder im "Money-Währungsformat" darstellen */
     /*-------------------------------------------------------------------------------*/
-    log('---- Anzeigen im Display: ----');
+    dev.log('---- Anzeigen im Display: ----');
     /*--- Anzahl ---*/
     Money quantityAsFormat =
         Money.fromInt((quantity * 100).toInt(), isoCode: 'EUR');
     quantityController.text = quantityAsFormat.format('###,###.#0');
-    log('√ ---> 0336 - ExpenseWidget - Eintrag im Textfeld "Anzahl":        ${quantityAsFormat.format('###,###.#0')}');
+    dev.log(
+        '√ ---> 0336 - ExpenseWidget - Eintrag im Textfeld "Anzahl":        ${quantityAsFormat.format('###,###.#0')}');
 
     /*--- Brutto-Einzelpreis ---*/
     Money bruttoItemPriceAsMoney =
         Money.fromInt((bruttoItemPrice * 100).toInt(), isoCode: 'EUR');
     bruttoItemPriceController.text =
         bruttoItemPriceAsMoney.format('###,###.#0 S');
-    log('√ ---> 0343 - ExpenseWidget - Eintrag "Brutto-Einzelpreis in €":   ${bruttoItemPriceAsMoney.format('###,###.#0 S')}');
+    dev.log(
+        '√ ---> 0343 - ExpenseWidget - Eintrag "Brutto-Einzelpreis in €":   ${bruttoItemPriceAsMoney.format('###,###.#0 S')}');
 
     /*--- Brutto-Gesamtpreis ---*/
     bruttoQuantityPrice = bruttoQuantityPriceInCent.roundToDouble();
@@ -380,8 +412,10 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
         Money.fromInt((bruttoQuantityPrice).toInt(), isoCode: 'EUR');
     bruttoQuantityPriceController.text =
         bruttoQuantityPriceAsMoney.format('###,###.#0 S');
-    log('√ ---> 0351 - ExpenseWidget - Eintrag "Brutto-Gesamtpreis in €":   ${bruttoQuantityPriceAsMoney.format('###,###.#0 S')}');
-    log("----------------------------------------------------------------------------------------------------------------");
+    dev.log(
+        '√ ---> 0351 - ExpenseWidget - Eintrag "Brutto-Gesamtpreis in €":   ${bruttoQuantityPriceAsMoney.format('###,###.#0 S')}');
+    dev.log(
+        "----------------------------------------------------------------------------------------------------------------");
 
     setState(() {
       nettoItemPrice = nettoItemPriceInCent / 100;
@@ -396,7 +430,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
 // //           quantityController != null &&
 // //           bruttoQuantityPriceController == null) {
 // //         double result = bruttoItemPriceController * quantityController;
-// //         log('0083 - calculatePrice - $result');
+// //         dev.log('0083 - calculatePrice - $result');
 // //         return result;
 // //       }
 // //       return 0.0; // Default return value
@@ -408,8 +442,8 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
 //     //   symbol: '  €  ',
 //     //   // customPattern: '#.###,## €',
 //     // ).format(bruttoQuantityPrice);
-//     // log('0078 - getCalculationResult - bruttoQuantityPriceController.text = ${bruttoQuantityPriceController.text}');
-//     // log('0079 - getCalculationResult - bruttoQuantityPrice.text = $bruttoQuantityPrice');
+//     // dev.log('0078 - getCalculationResult - bruttoQuantityPriceController.text = ${bruttoQuantityPriceController.text}');
+//     // dev.log('0079 - getCalculationResult - bruttoQuantityPrice.text = $bruttoQuantityPrice');
 
 // // String bruttoItemPriceController.text =
 
@@ -417,136 +451,149 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
 
 //     /* Anzahl * Brutto-Einzelpreis = Brutto-Gesamtpreis berechnen */
 //     // bruttoQuantityPrice = bruttoItemPrice * quantity;
-//     // log('0076 - getCalculationResult - Gesamtpreis berechnet: ${bruttoQuantityPrice.toStringAsFixed(2)} €');
+//     // dev.log('0076 - getCalculationResult - Gesamtpreis berechnet: ${bruttoQuantityPrice.toStringAsFixed(2)} €');
 
 //     bruttoQuantityPriceController.text = '101' * 10;
-//     log('0076 - getCalculationResult - Gesamtpreis berechnet: $bruttoQuantityPrice €');
+//     dev.log('0076 - getCalculationResult - Gesamtpreis berechnet: $bruttoQuantityPrice €');
 
 //     /* Zahlenformat mit Tausender-Trennzeichen + 2 Dezimalstellen in deutsch-locale */
 //     NumberFormat formatter = NumberFormat('#,##0.00', 'de_DE');
 //     String bruttoItemPriceX = formatter.format(bruttoItemPrice);
-//     log('0115 - getCalculationResult ---> bruttoItemPrice: $bruttoItemPriceX mit - "NumberFormat formatter = NumberFormat("#,##0.00", "de_DE")" - ');
+//     dev.log('0115 - getCalculationResult ---> bruttoItemPrice: $bruttoItemPriceX mit - "NumberFormat formatter = NumberFormat("#,##0.00", "de_DE")" - ');
 
-    log('0277 - getCalculationResult ---> Netto-Einzelpreis aus dem Brutto-Einzelpreis berechnet: ${nettoItemPrice.toStringAsFixed(2)} €');
-    log('0278 - getCalculationResult ---> Netto-Einzelpreis aus dem Brutto-Einzelpreis berechnet: $nettoItemPrice €');
-    log('0279 - getCalculationResult ---> Netto-Einzelpreis aus dem Brutto-Einzelpreis berechnet: $taxOnNettoItemPrice €');
+    dev.log(
+        '0277 - getCalculationResult ---> Netto-Einzelpreis aus dem Brutto-Einzelpreis berechnet: ${nettoItemPrice.toStringAsFixed(2)} €');
+    dev.log(
+        '0278 - getCalculationResult ---> Netto-Einzelpreis aus dem Brutto-Einzelpreis berechnet: $nettoItemPrice €');
+    dev.log(
+        '0279 - getCalculationResult ---> Netto-Einzelpreis aus dem Brutto-Einzelpreis berechnet: $taxOnNettoItemPrice €');
 
-//     log('0085 - getCalculationResult ---> Rundungsfehler wegen Rechnungszahl "nettoItemPrice": $nettoItemPrice');
-//     log('0086 - getCalculationResult ---> Rundungsfehler wegen Rechnungszahl "bruttoItemPrice": $bruttoItemPrice');
-//     log('0087 - getCalculationResult ---> Rechnungszahl "bruttoItemPriceX": $bruttoItemPriceX');
+//     dev.log('0085 - getCalculationResult ---> Rundungsfehler wegen Rechnungszahl "nettoItemPrice": $nettoItemPrice');
+//     dev.log('0086 - getCalculationResult ---> Rundungsfehler wegen Rechnungszahl "bruttoItemPrice": $bruttoItemPrice');
+//     dev.log('0087 - getCalculationResult ---> Rechnungszahl "bruttoItemPriceX": $bruttoItemPriceX');
 //     // nettoItemPrice = bruttoItemPriceX / 1.19;
 //     // nettoItemPrice = double.parse(nettoItemPrice as String);
 //     //nettoItemPrice = nettoQuantityPrice.toStringAsFixed(2);
-//     log("----------------------------------------------------------------------------------------------------------------");
+//     dev.log("----------------------------------------------------------------------------------------------------------------");
 
 //     /* den Netto-Gesamtpreis berechnen */
 //     nettoQuantityPrice = nettoItemPrice * quantity;
 
-    log('0292 - getCalculationResult - Netto-Gesamtpreis berechnet: ${nettoQuantityPrice.toStringAsFixed(2)} €');
-    log('0293 - getCalculationResult - Netto-Gesamtpreis berechnet: $nettoQuantityPrice €');
-    log('0294 - getCalculationResult - Netto-Gesamtpreis berechnet: $nettoItemPrice€');
+    dev.log(
+        '0292 - getCalculationResult - Netto-Gesamtpreis berechnet: ${nettoQuantityPrice.toStringAsFixed(2)} €');
+    dev.log(
+        '0293 - getCalculationResult - Netto-Gesamtpreis berechnet: $nettoQuantityPrice €');
+    dev.log(
+        '0294 - getCalculationResult - Netto-Gesamtpreis berechnet: $nettoItemPrice€');
 
 //     /* die MwSt. aus dem Netto-Einzelpreis berechnen */
 //     taxOnNettoItemPrice = nettoItemPrice * (taxPercent / 100);
-//     log('0097 - getCalculationResult - Mwst. aus dem Netto-Einzelpreis berechnet: ${taxOnNettoItemPrice.toStringAsFixed(2)} €');
+//     dev.log('0097 - getCalculationResult - Mwst. aus dem Netto-Einzelpreis berechnet: ${taxOnNettoItemPrice.toStringAsFixed(2)} €');
 
 //     /* die MwSt. aus dem Netto-Einzelpreis * Anzahl, Gewicht, Stück?  berechnen */
 //     taxOnNettoQuantityPrice = nettoItemPrice * quantity * (taxPercent / 100);
-//     log('0101 - getCalculationResult - Mwst. aus dem Netto-Gesamtpreis berechnet: ${taxOnNettoQuantityPrice.toStringAsFixed(2)} €');
+//     dev.log('0101 - getCalculationResult - Mwst. aus dem Netto-Gesamtpreis berechnet: ${taxOnNettoQuantityPrice.toStringAsFixed(2)} €');
 
 //     /* die MwSt. aus dem Brutto-Einzelpreis berechnen */
 //     taxOnBruttoItemPrice = bruttoItemPrice * (taxPercent / 100);
-//     log('0109 - getCalculationResult - Mwst. aus dem Brutto-Einzelpreis berechnet: ${taxOnBruttoItemPrice.toStringAsFixed(2)} €');
+//     dev.log('0109 - getCalculationResult - Mwst. aus dem Brutto-Einzelpreis berechnet: ${taxOnBruttoItemPrice.toStringAsFixed(2)} €');
 
-    log('0316 - getCalculationResult - Mwst. aus dem Brutto-Gesamtpreis berechnet: ${taxOnBruttoQuantityPrice.toStringAsFixed(2)} €');
-    log('0317 - getCalculationResult - Mwst. aus dem Brutto-Gesamtpreis berechnet: $taxOnBruttoQuantityPrice €');
-    log('0318 - getCalculationResult - Mwst. aus dem Netto-Gesamtpreis berechnet:  ${taxOnBruttoQuantityPriceController.text} €');
+    dev.log(
+        '0316 - getCalculationResult - Mwst. aus dem Brutto-Gesamtpreis berechnet: ${taxOnBruttoQuantityPrice.toStringAsFixed(2)} €');
+    dev.log(
+        '0317 - getCalculationResult - Mwst. aus dem Brutto-Gesamtpreis berechnet: $taxOnBruttoQuantityPrice €');
+    dev.log(
+        '0318 - getCalculationResult - Mwst. aus dem Netto-Gesamtpreis berechnet:  ${taxOnBruttoQuantityPriceController.text} €');
 
-    // log("----------------------------------------------------------------------------------------------------------------");
+    // dev.log("----------------------------------------------------------------------------------------------------------------");
 
 //     taxSum = bruttoItemPrice * quantity * (taxPercent / 100);
 //     totalSum = bruttoItemPrice * quantity + taxSum;
 //     nettoItemPrice = bruttoItemPrice / (1 + 0.19);
-//     log('0122 - getCalculationResult - Netto-Einzelpreis berechnet: ${nettoItemPrice.toStringAsFixed(2)} €');
-    log("----------------------------------------------------------------------------------------------------------------");
-    log("Netto-Einzelpreis:    ${nettoItemPrice.toStringAsFixed(2)} € pro Einheit");
-    log("Gekaufte Einheiten:   $quantity $item");
-    // log("Mehrwertsteuer:       ${taxSum.toStringAsFixed(2)} €");
-    // log("Gesamtsumme           ${totalSum.toStringAsFixed(2)} €");
-    log("----------------------------------------------------------------------------------------------------------------");
+//     dev.log('0122 - getCalculationResult - Netto-Einzelpreis berechnet: ${nettoItemPrice.toStringAsFixed(2)} €');
+    dev.log(
+        "----------------------------------------------------------------------------------------------------------------");
+    dev.log(
+        "Netto-Einzelpreis:    ${nettoItemPrice.toStringAsFixed(2)} € pro Einheit");
+    dev.log("Gekaufte Einheiten:   $quantity $item");
+    // dev.log("Mehrwertsteuer:       ${taxSum.toStringAsFixed(2)} €");
+    // dev.log("Gesamtsumme           ${totalSum.toStringAsFixed(2)} €");
+    dev.log(
+        "----------------------------------------------------------------------------------------------------------------");
     // /* Nach der Berechnung müssen wieder alle Zahlen in das Rechenformat mit Punkt vor den Dezimalzahlen umgestellt werden */
     // /*-------------------------------------------------------------------------------------------------------------------*/
-    // log('0078 √ getCalculationResult - Anzahl als Text:                ${quantityController.text} --> ist keine Währung');
+    // dev.log('0078 √ getCalculationResult - Anzahl als Text:                ${quantityController.text} --> ist keine Währung');
     // /* (1) alle Komma durch "x" ersetzen */
     // quantityController.text =
     //     quantityController.text.replaceAll(RegExp(r'[,]'), 'x');
-    // log('0082 √ getCalculationResult - Anzahl als Text:                ${quantityController.text} --> Komma durch x ersetzt');
+    // dev.log('0082 √ getCalculationResult - Anzahl als Text:                ${quantityController.text} --> Komma durch x ersetzt');
 
     // /* (2) alle Punkte entfernen */
     // quantityController.text =
     //     quantityController.text.replaceAll(RegExp(r'[.]'), '');
-    // log('0087 √ getCalculationResult - Anzahl als Text:                ${quantityController.text} --> Punkte gelöscht');
+    // dev.log('0087 √ getCalculationResult - Anzahl als Text:                ${quantityController.text} --> Punkte gelöscht');
 
     // /* (3) alle "x" durch Punkte ersetzen */
     // quantityController.text =
     //     quantityController.text.replaceAll(RegExp(r'[x]'), '.');
-    // log('0092 √ getCalculationResult - Anzahl als double:              ${quantityController.text} --> x durch Punkt ersetzt');
-    // log("----------------------------------------------------------------------------------------------------------------");
-    // log('0094 √ getCalculationResult - Einheiten als Text:             ${itemController.text} --> wird nicht umgestellt');
-    // log("----------------------------------------------------------------------------------------------------------------");
-    // log('0096 √ getCalculationResult - MwSt. als Prozentsatz:          ${taxPercentController.text}');
+    // dev.log('0092 √ getCalculationResult - Anzahl als double:              ${quantityController.text} --> x durch Punkt ersetzt');
+    // dev.log("----------------------------------------------------------------------------------------------------------------");
+    // dev.log('0094 √ getCalculationResult - Einheiten als Text:             ${itemController.text} --> wird nicht umgestellt');
+    // dev.log("----------------------------------------------------------------------------------------------------------------");
+    // dev.log('0096 √ getCalculationResult - MwSt. als Prozentsatz:          ${taxPercentController.text}');
     // taxPercentController.text =
     //     taxPercentController.text.replaceAll(RegExp(r'[ %,]'), '');
-    // log('0095 √ getCalculationResult - MwSt. als double:               ${taxPercentController.text}');
-    // log("----------------------------------------------------------------------------------------------------------------");
-    // log('0097 - getCalculationResult - Brutto-Einzel als Text:         ${bruttoItemPriceController.text} €');
+    // dev.log('0095 √ getCalculationResult - MwSt. als double:               ${taxPercentController.text}');
+    // dev.log("----------------------------------------------------------------------------------------------------------------");
+    // dev.log('0097 - getCalculationResult - Brutto-Einzel als Text:         ${bruttoItemPriceController.text} €');
     // bruttoItemPriceController.text =
     //     bruttoItemPriceController.text.replaceAll(RegExp(r'[ €,]'), '');
 
-    // log('0078 - getCalculationResult - Brutto-Einzel als double:       ${bruttoItemPriceController.text}');
-    // log("----------------------------------------------------------------------------------------------------------------");
-    // log('0079 - getCalculationResult - Brutto-Gesamt als Text:         ${bruttoQuantityPriceController.text} €');
+    // dev.log('0078 - getCalculationResult - Brutto-Einzel als double:       ${bruttoItemPriceController.text}');
+    // dev.log("----------------------------------------------------------------------------------------------------------------");
+    // dev.log('0079 - getCalculationResult - Brutto-Gesamt als Text:         ${bruttoQuantityPriceController.text} €');
     // bruttoQuantityPriceController.text =
     //     bruttoQuantityPriceController.text.replaceAll(RegExp(r'[ €,]'), '');
 
-    // log('0079 - getCalculationResult - Brutto-Gesamt als double:       ${bruttoQuantityPriceController.text}');
-    // log("----------------------------------------------------------------------------------------------------------------");
-    // log('0080 - getCalculationResult - Netto-Einzel als Text:          ${nettoItemPriceController.text} €');
+    // dev.log('0079 - getCalculationResult - Brutto-Gesamt als double:       ${bruttoQuantityPriceController.text}');
+    // dev.log("----------------------------------------------------------------------------------------------------------------");
+    // dev.log('0080 - getCalculationResult - Netto-Einzel als Text:          ${nettoItemPriceController.text} €');
     // nettoItemPriceController.text =
     //     nettoItemPriceController.text.replaceAll(RegExp(r'[ €,]'), '');
 
-    // log('0080 - getCalculationResult - Netto-Einzel als double:        ${nettoItemPriceController.text}');
-    // log("----------------------------------------------------------------------------------------------------------------");
-    // log('0081 - getCalculationResult - Brutto-Gesamt als Text:         ${nettoQuantityPriceController.text} €');
+    // dev.log('0080 - getCalculationResult - Netto-Einzel als double:        ${nettoItemPriceController.text}');
+    // dev.log("----------------------------------------------------------------------------------------------------------------");
+    // dev.log('0081 - getCalculationResult - Brutto-Gesamt als Text:         ${nettoQuantityPriceController.text} €');
     // nettoQuantityPriceController.text =
     //     nettoQuantityPriceController.text.replaceAll(RegExp(r'[ €,]'), '');
 
-    // log('0081 - getCalculationResult - Brutto-Gesamt als double:       ${nettoQuantityPriceController.text}');
-    // log("----------------------------------------------------------------------------------------------------------------");
-    // log('0082 - getCalculationResult - Brutto-Einzel-MwSt. als Text:   ${taxOnBruttoItemPriceController.text} €');
+    // dev.log('0081 - getCalculationResult - Brutto-Gesamt als double:       ${nettoQuantityPriceController.text}');
+    // dev.log("----------------------------------------------------------------------------------------------------------------");
+    // dev.log('0082 - getCalculationResult - Brutto-Einzel-MwSt. als Text:   ${taxOnBruttoItemPriceController.text} €');
     // taxOnBruttoItemPriceController.text =
     //     taxOnBruttoItemPriceController.text.replaceAll(RegExp(r'[ €,]'), '');
 
-    // log('0082 - getCalculationResult - Brutto-Einzel-MwSt. als double: ${taxOnBruttoItemPriceController.text}');
-    // log("----------------------------------------------------------------------------------------------------------------");
-    // log('0083 - getCalculationResult - Brutto-Gesamt-MwSt. als Text: ${taxOnBruttoQuantityPriceController.text} €');
+    // dev.log('0082 - getCalculationResult - Brutto-Einzel-MwSt. als double: ${taxOnBruttoItemPriceController.text}');
+    // dev.log("----------------------------------------------------------------------------------------------------------------");
+    // dev.log('0083 - getCalculationResult - Brutto-Gesamt-MwSt. als Text: ${taxOnBruttoQuantityPriceController.text} €');
     // taxOnBruttoQuantityPriceController.text = taxOnBruttoQuantityPriceController
     //     .text
     //     .replaceAll(RegExp(r'[ €,]'), '');
 
-    // log('0083 - getCalculationResult - Brutto-Gesamt-MwSt. als double: ${taxOnBruttoQuantityPriceController.text}');
-    log("----------------------------------------------------------------------------------------------------------------");
+    // dev.log('0083 - getCalculationResult - Brutto-Gesamt-MwSt. als double: ${taxOnBruttoQuantityPriceController.text}');
+    dev.log(
+        "----------------------------------------------------------------------------------------------------------------");
     setState(() {}); // Aktualisierung der UI
     // packageMoney2Test();
   }
 
 // /*--------------------------------- package money2 (https://pub.dev/packages/money2) ---*/
 //   void packageMoney2Test() {
-//     log("----------------------------------------------------------------------------------------------------------------");
+//     dev.log("----------------------------------------------------------------------------------------------------------------");
 //     /* Eine Währung erstellen - der Betrag wur immer als int als Cent-Betrag angegebeen, um Rundungsfehler zu vermeiden */
 //     final moneyTest1 = Money.fromInt(10025090, isoCode: 'EUR');
-//     log('0001 - moneyTest1: $moneyTest1'); // leider noch ohne Tausender-Separator und Leerzeichen beim Währungssymbol
-//     log('0002 - moneyTest2: ${moneyTest1.format('###,###.#0 S')} ---> das ist der küzeste und BESTE Code √');
+//     dev.log('0001 - moneyTest1: $moneyTest1'); // leider noch ohne Tausender-Separator und Leerzeichen beim Währungssymbol
+//     dev.log('0002 - moneyTest2: ${moneyTest1.format('###,###.#0 S')} ---> das ist der küzeste und BESTE Code √');
 
 //     /* Definiere den Tausender-Separator und das Leerzeichen beim Währungssymbol EURO */
 //     /* Benutze Kommas ',' für den integer/fractional Separator und Punkte '.' für den Tausender-Separator ---> 1.000,00 */
@@ -557,45 +604,94 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
 //         pattern: '#,##0.00 S');
 //     final moneyTest3 = Money.fromIntWithCurrency(
 //         10025090, euro); // die Zahl ist ein Cent-Betrag!
-//     log('0003 - moneyTest3: $moneyTest3'); // Ergebnis: 100.250,90 €
+//     dev.log('0003 - moneyTest3: $moneyTest3'); // Ergebnis: 100.250,90 €
 
 //     /* Eine [Money]-Instanz aus einem String mit [Currency.parse] erstellen - Währung: € - */
 //     final moneyTest4 = CommonCurrencies().euro.parse(r'10,50');
-//     log('0004 - moneyTest4: ${moneyTest4.format('0.00 S')}'); //  S = Währungszeichen
+//     dev.log('0004 - moneyTest4: ${moneyTest4.format('0.00 S')}'); //  S = Währungszeichen
 
 //     /* Die [Währung] von moneyTest3 ist USD. */
 //     final moneyTest5 = CommonCurrencies().usd.parse(r'$10.51');
-//     log('0005 - moneyTest3: ${moneyTest5.format('CCS 0.00')}'); // CC = Land / S = Währungszeichen
+//     dev.log('0005 - moneyTest3: ${moneyTest5.format('CCS 0.00')}'); // CC = Land / S = Währungszeichen
 
 //     /* Zahlenformat mit Tausender-Trennzeichen + 2 Dezimalstellen in deutsch-locale */ // funzt HIER nicht
 //     // NumberFormat formatter = NumberFormat('#,##0.00', 'de_DE');
 //     // String moneyTest2formatiert = formatter.format(moneyTest2);
-//     // log('0004 - moneyTest2 wurde formatiert: $moneyTest2formatiert');
+//     // dev.log('0004 - moneyTest2 wurde formatiert: $moneyTest2formatiert');
 //   }
 
 // void formatMoneyAfterCalculation(Money value, Money valueAsMoney) {
-//   log("----------------------------------------------------------------------------------------------------------------");
+//   dev.log("----------------------------------------------------------------------------------------------------------------");
 //   //value = bruttoItemPrice;
 //   /* Wenn die Berechnung stattgefunden hat, soll sobald das Textfeld verlassen wird, der Wert in eine Währung umgewandelt werden */
 //   /* 1) Den Wert * 100 ergibt den Wert in Cent */
 //   var valueMultiplied100 = value * 100;
-//   log('0001 - formatMoneyAfterCalculation - Wert in Cent: $valueMultiplied100');
+//   dev.log('0001 - formatMoneyAfterCalculation - Wert in Cent: $valueMultiplied100');
 
 //   /* Den Wert von "double" in einen "int" umwandeln mit ".toInt()" ---> schneidet nach dem Kamma einfach alles ab */
 //   int valueAsIntInCent = valueMultiplied100.toInt();
-//   log('0002 - formatMoneyAfterCalculation - $valueMultiplied100 = $valueAsIntInCent Cent');
+//   dev.log('0002 - formatMoneyAfterCalculation - $valueMultiplied100 = $valueAsIntInCent Cent');
 
 //   /* Den Wert als Euro-Wert darstellen */
 //   Money valueAsMoney = Money.fromInt(valueAsIntInCent, isoCode: 'EUR');
-//   log('0003 - formatMoneyAfterCalculation - Eintrag im Textfeld: $valueAsMoney');
-//   log('0004 - formatMoneyAfterCalculation - Eintrag im Textfeld: ${valueAsMoney.format('###,###.#0 S')}');
-//   log("----------------------------------------------------------------------------------------------------------------");
+//   dev.log('0003 - formatMoneyAfterCalculation - Eintrag im Textfeld: $valueAsMoney');
+//   dev.log('0004 - formatMoneyAfterCalculation - Eintrag im Textfeld: ${valueAsMoney.format('###,###.#0 S')}');
+//   dev.log("----------------------------------------------------------------------------------------------------------------");
 // }
 
-  /*--------------------------------- *** ---*/
+  /*--------------------------------- Kontakt-ID generieren ---*/
+  Future<String> generateContactID() async {
+    dev.log('0599 - ExpenseWidget - ContactID wird generiert');
+    var rng = Random();
+    return DateTime.now().millisecondsSinceEpoch.toString() +
+        rng.nextInt(1000).toString();
+  }
+
+  Future<void> insertNewShop(String newShopText, String newContactID) async {
+    final database = await openDatabase('JOTHAsoft.FiveStars.db');
+    await database.insert(
+      'KundenDaten',
+      {
+        /*--- Die leeren Felder unbedingt mit einem leerem String initialisieren, sonst wird "null" eingetragen! ---*/
+        'TKD_Feld_000': '',
+        'TKD_Feld_001': '',
+        'TKD_Feld_002': '',
+        'TKD_Feld_003': '',
+        'TKD_Feld_004': '',
+        'TKD_Feld_005': '',
+        'TKD_Feld_006': '',
+        'TKD_Feld_007': '',
+        'TKD_Feld_008': '',
+        'TKD_Feld_009': '',
+        'TKD_Feld_010': '',
+        'TKD_Feld_011': '',
+        'TKD_Feld_012': '',
+        'TKD_Feld_013': '',
+        'TKD_Feld_014': newShopText,
+        'TKD_Feld_015': '',
+        'TKD_Feld_016': '',
+        'TKD_Feld_017': '',
+        'TKD_Feld_018': '',
+        'TKD_Feld_019': '',
+        'TKD_Feld_020': '',
+        'TKD_Feld_021': '',
+        'TKD_Feld_022': '',
+        'TKD_Feld_023': '',
+        'TKD_Feld_024': '',
+        'TKD_Feld_025': '',
+        'TKD_Feld_026': '',
+        'TKD_Feld_027': '',
+        'TKD_Feld_028': '',
+        'TKD_Feld_029': '',
+        'TKD_Feld_030': newContactID
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    log("0024 - ExpenseWidget - wird benutzt");
+    dev.log("0024 - ExpenseWidget - wird benutzt");
 
     return Form(
       key: _formKey,
@@ -605,7 +701,6 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
           /*--------------------------------- Wo wurde eingekauft? 0631 ---*/
           DropdownSearch<String>(
             key: dropDownKey,
-
             /*--------------------------------- decoratorProps ---*/
             decoratorProps: DropDownDecoratorProps(
               decoration: InputDecoration(
@@ -685,7 +780,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                 //     semanticLabel: 'Neues Geschäft hinzufügen',
                 //   ),
                 //   onPressed: () {
-                //     log('0700 - ExpenseWidget - "Wo wurde eingekauft?" - Neues Geschäft hinzufügen');
+                //     dev.log('0700 - ExpenseWidget - "Wo wurde eingekauft?" - Neues Geschäft hinzufügen');
                 //     //shopController.clear();
                 //   },
               ),
@@ -710,17 +805,34 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                 : shopController.text,
             items: (filter, loadProps) async {
               /*--------------------------------- Datenbank öffnen ---*/
+              final databasePath = await getDatabasesPath();
+              dev.log('0809 - ExpenseWidget - Datenbankpfad: $databasePath');
               final database = await openDatabase('JOTHAsoft.FiveStars.db');
 
-              /*--------------------------------- Datenbankabfrage ---*/
-              final results = await database.rawQuery(
-                  'SELECT TKD_Feld_014, TKD_Feld_006, TKD_Feld_007, TKD_Feld_005 FROM KundenDaten WHERE TKD_Feld_014 IS NOT NULL AND TRIM(TKD_Feld_014) != ""');
+              /*--------------------------------- Überprüfen, ob die Tabelle "KundenDaten" vorhanden ist ---*/
+              final tableExists = await database.rawQuery(
+                  "SELECT name FROM sqlite_master WHERE type='table' AND name='KundenDaten'");
 
-              /*--------------------------------- Ergebnisse übermitteln ---*/
-              return results
-                  .map((row) =>
-                      '${row['TKD_Feld_014']} • ${row['TKD_Feld_006']} ${row['TKD_Feld_007']} • ${row['TKD_Feld_005']}')
-                  .toList();
+              if (tableExists.isEmpty) {
+                dev.log(
+                    '0817 - ExpenseWidget - Die Tabelle "KundenDaten" existiert nicht!');
+                return [];
+              }
+
+              try {
+                /*--------------------------------- Datenbankabfrage ---*/
+                final results = await database.rawQuery(
+                    'SELECT TKD_Feld_014, TKD_Feld_006, TKD_Feld_007, TKD_Feld_005 FROM KundenDaten WHERE TKD_Feld_014 IS NOT NULL AND TRIM(TKD_Feld_014) != ""');
+
+                /*--------------------------------- Ergebnisse übermitteln • ---*/
+                return results
+                    .map((row) =>
+                        '${row['TKD_Feld_014']} • ${row['TKD_Feld_006']} ${row['TKD_Feld_007']} • ${row['TKD_Feld_005']}')
+                    .toList();
+              } catch (e) {
+                dev.log('Fehler beim Abrufen der Daten: $e');
+                return [];
+              }
             },
 
             /*--------------------------------- PopupProps ---*/
@@ -737,7 +849,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                   fillColor: wbColorButtonDarkRed,
 
                   /*--- Textfarbe des Suchfeldes im Auswahlmenü ---*/
-                  labelText: 'Suche (anklicken):',
+                  labelText: 'Suche ...',
                   labelStyle: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -764,12 +876,140 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                   suffixIcon: IconButton(
                     icon: Icon(
                       Icons.add_circle, //delete_forever,
-                      color: Colors.white, size: 52,
+                      color: Colors.yellow, size: 52,
                       semanticLabel: 'Neues Geschäft hinzufügen',
                     ),
                     onPressed: () {
-                      log('0700 - ExpenseWidget - "Wo wurde eingekauft?" - Neues Geschäft hinzufügen');
-                      //shopController.clear();
+                      dev.log(
+                          '0700 - ExpenseWidget - "Wo wurde eingekauft?" - Neues Geschäft hinzufügen');
+                      // Öffne Dialog zum Eingeben eines neuen Geschäfts
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          TextEditingController newShopController =
+                              TextEditingController();
+                          return AlertDialog(
+                            title: Text('Neues Geschäft hinzufügen'),
+                            content: TextField(
+                              controller: newShopController,
+                              decoration: InputDecoration(
+                                  hintText: "Das neue Geschäft eingeben"),
+                            ),
+                            actions: [
+                              TextButton(
+                                child: Text('Abbrechen'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              TextButton(
+                                child: Text('Hinzufügen'),
+                                onPressed: () {
+                                  dev.log(
+                                      '0851 - ExpenseWidget - "Wo wurde eingekauft?" - Neues Geschäft hinzugefügt - Eingabe: ${newShopController.text}');
+                                  setState(() {
+                                    shopController.text =
+                                        newShopController.text;
+                                  });
+                                  Navigator.of(context).pop();
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text('In Datenbank speichern?'),
+                                        content: Text(
+                                            'Möchtest Du das NEUE Geschäft auch in der Datenbank speichern?'),
+                                        actions: [
+                                          TextButton(
+                                            child: Text('Nein'),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                          TextButton(
+                                            child: Text('Ja'),
+                                            onPressed: () async {
+                                              try {
+                                                dev.log(
+                                                    '0874 - ExpenseWidget - "Wo wurde eingekauft?" - Neues Geschäft wird in Datenbank gespeichert');
+                                                String newContactID =
+                                                    await generateContactID();
+                                                String newShopText =
+                                                    newShopController
+                                                            .text.isEmpty
+                                                        ? ''
+                                                        : newShopController
+                                                            .text;
+                                                await insertNewShop(
+                                                    newShopText, newContactID);
+                                                // ignore: use_build_context_synchronously
+                                                Navigator.of(context).pop();
+
+                                                /*--------------------------------- Sound ---*/
+                                                player.play(AssetSource(
+                                                    "sound/sound06pling.wav"));
+
+                                                /*--------------------------------- Snackbar / Toast ---*/
+                                                // ignore: use_build_context_synchronously
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                        const SnackBar(
+                                                  backgroundColor:
+                                                      wbColorButtonGreen,
+                                                  content: Text(
+                                                    'Das neue Geschäft wurde erfolgreich hinzugefügt. 👍\n\nBei Bedarf kannst du nachträglich im Bereich "Kontakte" die fehlenden Daten ergänzen. 😉',
+                                                    style: TextStyle(
+                                                      fontSize: 28,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ));
+                                                /*--------------------------------- *** ---*/
+                                              } catch (e) {
+                                                /*--------------------------------- Navigator ---*/
+                                                // ignore: use_build_context_synchronously
+                                                Navigator.of(context).pop();
+
+                                                /*--------------------------------- Sound ---*/
+                                                player.play(AssetSource(
+                                                    "sound/sound03enterprise.wav"));
+
+                                                /*--------------------------------- Snackbar / Toast ---*/
+                                                // ignore: use_build_context_synchronously
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                        const SnackBar(
+                                                  backgroundColor:
+                                                      wbColorButtonDarkRed,
+                                                  content: Text(
+                                                    'Es gab einen Fehler beim Hinzufügen des neuen Geschäfts. 😟\n\nBitte versuche es später noch einmal.',
+                                                    style: TextStyle(
+                                                      fontSize: 28,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ));
+                                                /*--------------------------------- *** ---*/
+                                                dev.log(
+                                                    '0963 - ExpenseWidget - Fehler beim Hinzufügen des neuen Geschäfts: $e');
+                                                /*--------------------------------- *** ---*/
+                                              }
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
                   ),
                 ),
@@ -789,7 +1029,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
               /*--------------------------------- TextFieldProps - ENDE ---*/
               menuProps: MenuProps(
                 borderRadius: BorderRadius.circular(0),
-                backgroundColor: wbColorLogoBlue,
+                backgroundColor: wbColorButtonBlue,
 
                 /*--- Schriftfarbe des Auswahlmenüs ---*/
 
@@ -829,7 +1069,8 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
 
             /*--------------------------------- onChanged ---*/
             onChanged: (String? newValue) {
-              log('0659 - ExpenseWidget - "Wo wurde eingekauft?" - Ausgewählt: $newValue');
+              dev.log(
+                  '0659 - ExpenseWidget - "Wo wurde eingekauft?" - Ausgewählt: $newValue');
               setState(() {
                 shopController.text = newValue ?? '';
               });
@@ -883,10 +1124,10 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
           //     );
           //   },
           //   onSuggestionSelected: (suggestion) {
-          //     log('0632 - ExpenseWidget - "Wo wurde eingekauft?" - Ausgewählt: $suggestion');
+          //     dev.log('0632 - ExpenseWidget - "Wo wurde eingekauft?" - Ausgewählt: $suggestion');
           //     setState(() {
           //       shopController.text = suggestion.toString();
-          //       log('0634 - ExpenseWidget - "Wo wurde eingekauft?" - itemController.text: ${itemController.text}');
+          //       dev.log('0634 - ExpenseWidget - "Wo wurde eingekauft?" - itemController.text: ${itemController.text}');
           //     });
           //   },
           //   suggestionsCallback: (pattern) async {
@@ -1046,13 +1287,16 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                   controller: quantityController,
                   onChanged: (String value) {
                     //value
-                    log("----------------------------------------------------------------------------------------------------------------");
-                    log('0393 - ExpenseWidget - quantityController - Eingabe: "${quantityController.text}" - als String');
+                    dev.log(
+                        "----------------------------------------------------------------------------------------------------------------");
+                    dev.log(
+                        '0393 - ExpenseWidget - quantityController - Eingabe: "${quantityController.text}" - als String');
                     /* Wenn bei der Eingabe aus Versehen Buchstaben oder Sonderzeichen verwendet werden */
                     if (quantityController.text.contains(
                         RegExp(r'[a-zA-Z!"§$%&/(=?`*_:;><#+´^°@€)]'))) {
                       quantityController.text = "";
-                      log('0398 - ExpenseWidget - quantityController - umgewandelt in "${quantityController.text}" ---> als String');
+                      dev.log(
+                          '0398 - ExpenseWidget - quantityController - umgewandelt in "${quantityController.text}" ---> als String');
                       /*--------------------------------- Snackbar / Toast ---*/
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         backgroundColor: wbColorButtonDarkRed,
@@ -1071,15 +1315,21 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                       setState(() {
                         quantityController.text = quantityController.text
                             .replaceAll(RegExp(r','), '.');
-                        log('-------> text neu: ${quantityController.text}');
+                        dev.log(
+                            '-------> text neu: ${quantityController.text}');
                         quantity = double.parse(quantityController.text);
-                        log('0749 - ExpenseWidget - quantityController - in setState als double geparst: ${quantityController.text}');
-                        log("0752 - ExpenseWidget - quantityController - setState ausgeführt: $quantity ---> als double <--- ");
-                        log('0755 - ExpenseWidget - quantityController - setState ausgeführt: ${quantityController.text} ---> im TextFormField eingetragen? ---> Ja');
+                        dev.log(
+                            '0749 - ExpenseWidget - quantityController - in setState als double geparst: ${quantityController.text}');
+                        dev.log(
+                            "0752 - ExpenseWidget - quantityController - setState ausgeführt: $quantity ---> als double <--- ");
+                        dev.log(
+                            '0755 - ExpenseWidget - quantityController - setState ausgeführt: ${quantityController.text} ---> im TextFormField eingetragen? ---> Ja');
                       });
-                      log("----------------------------------------------------------------------------------------------------------------");
+                      dev.log(
+                          "----------------------------------------------------------------------------------------------------------------");
                     } catch (e) {
-                      log('0759 - ExpenseWidget - Fehlermeldung - Eingabe: ${quantityController.text} - als String');
+                      dev.log(
+                          '0759 - ExpenseWidget - Fehlermeldung - Eingabe: ${quantityController.text} - als String');
                       showDialog(
                           context: context,
                           builder: (context) =>
@@ -1175,13 +1425,16 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
             /*--------------------------------- onChanged ---*/
             controller: bruttoItemPriceController,
             onChanged: (String value) {
-              log("----------------------------------------------------------------------------------------------------------------");
-              log('0640 - ExpenseWidget - bruttoItemPriceController - Eingabe: "${bruttoItemPriceController.text}" - als String');
+              dev.log(
+                  "----------------------------------------------------------------------------------------------------------------");
+              dev.log(
+                  '0640 - ExpenseWidget - bruttoItemPriceController - Eingabe: "${bruttoItemPriceController.text}" - als String');
               /* wenn beim Eingeben aus Versehen ein falsches Zeichen benutzt wird */
               if (bruttoItemPriceController.text
                   .contains(RegExp(r'[a-zA-Z!"§$%&/(=?`*_:;><#+´^°@€)]'))) {
                 bruttoItemPriceController.text = "";
-                log('0645 - ExpenseWidget - bruttoItemPriceController - umgewandelt in "${bruttoItemPriceController.text}" ---> als String');
+                dev.log(
+                    '0645 - ExpenseWidget - bruttoItemPriceController - umgewandelt in "${bruttoItemPriceController.text}" ---> als String');
                 /*--------------------------------- Snackbar / Toast ---*/
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                   backgroundColor: wbColorButtonDarkRed,
@@ -1201,21 +1454,26 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                   bruttoItemPriceController.text = bruttoItemPriceController
                       .text
                       .replaceAll(RegExp(r','), '.');
-                  log('-------> text neu: ${bruttoItemPriceController.text}');
+                  dev.log(
+                      '-------> text neu: ${bruttoItemPriceController.text}');
 
                   // quantity = double.parse(bruttoItemPriceController.text);
 
 /*--------------------------------- *** ---*/
-                  log("0670 - ExpenseWidget - bruttoItemPriceController - setState ausgeführt: $bruttoItemPrice ---> als double <--- damit darf NICHT gerechnet werden !!!");
+                  dev.log(
+                      "0670 - ExpenseWidget - bruttoItemPriceController - setState ausgeführt: $bruttoItemPrice ---> als double <--- damit darf NICHT gerechnet werden !!!");
 /*--------------------------------- *** ---*/
 
-                  log('0673 - ExpenseWidget - quantityController - setState ausgeführt: ${bruttoItemPriceController.text} ---> im TextFormField eingetragen? ---> Ja');
+                  dev.log(
+                      '0673 - ExpenseWidget - quantityController - setState ausgeführt: ${bruttoItemPriceController.text} ---> im TextFormField eingetragen? ---> Ja');
                   // bruttoItemPriceController.text = quantity.toString();
                 });
                 // getCalculationResult();
-                log("----------------------------------------------------------------------------------------------------------------");
+                dev.log(
+                    "----------------------------------------------------------------------------------------------------------------");
               } catch (e) {
-                log('0679 - ExpenseWidget - Fehlermeldung - Eingabe: ${bruttoItemPriceController.text} - als String');
+                dev.log(
+                    '0679 - ExpenseWidget - Fehlermeldung - Eingabe: ${bruttoItemPriceController.text} - als String');
                 bruttoItemPriceController.text = '';
               }
             },
@@ -1223,31 +1481,31 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
             // /*--------------------------------- onChanged ---*/
             // controller: bruttoItemPriceController,
             // onChanged: (String value) {
-            //   log("----------------------------------------------------------------------------------------------------------------");
-            //   log("0506 - ExpenseWidget - bruttoItemPriceController - Eingabe: $bruttoItemPriceController - als String");
-            //   log("0507 - ExpenseWidget - bruttoItemPriceController - Eingabe: ${bruttoItemPriceController.text} - als String");
+            //   dev.log("----------------------------------------------------------------------------------------------------------------");
+            //   dev.log("0506 - ExpenseWidget - bruttoItemPriceController - Eingabe: $bruttoItemPriceController - als String");
+            //   dev.log("0507 - ExpenseWidget - bruttoItemPriceController - Eingabe: ${bruttoItemPriceController.text} - als String");
 
             //   /* wenn beim Löschen aus Versehen eine "null" entsehen sollte, muss die Ziffer "0" erscheinen */
             //   if (bruttoItemPriceController.text == "") {
-            //     log('0509 - ExpenseWidget - bruttoItemPriceController - Eingabe gelöscht: "$bruttoItemPriceController" ---> als String');
+            //     dev.log('0509 - ExpenseWidget - bruttoItemPriceController - Eingabe gelöscht: "$bruttoItemPriceController" ---> als String');
             //     bruttoItemPriceController.text = "0.00";
-            //     log('0512 - ExpenseWidget - bruttoItemPriceController - umgewandelt in "$bruttoItemPriceController" ---> als String');
+            //     dev.log('0512 - ExpenseWidget - bruttoItemPriceController - umgewandelt in "$bruttoItemPriceController" ---> als String');
             //   }
             //   try {
             //     setState(() {
             //       bruttoItemPrice =
             //           double.parse(bruttoItemPriceController.text);
-            //       log("0518 - ExpenseWidget - bruttoItemPriceController - setState ausgeführt: $bruttoItemPrice ---> als double");
-            //       log('0519 - ExpenseWidget - bruttoItemPriceController - setState ausgeführt: "$bruttoItemPriceController" ---> im TextFormField eingetragen? ---> Ja');
+            //       dev.log("0518 - ExpenseWidget - bruttoItemPriceController - setState ausgeführt: $bruttoItemPrice ---> als double");
+            //       dev.log('0519 - ExpenseWidget - bruttoItemPriceController - setState ausgeführt: "$bruttoItemPriceController" ---> im TextFormField eingetragen? ---> Ja');
             //     });
             //     getCalculationResult();
             //     // /* Das Ergebnis im "Money-Währungsformat" darstellen*/
             //     // Money valueAsMoney =
             //     //     Money.fromInt((bruttoItemPrice * 100).toInt(), isoCode: 'EUR',);
-            //     // log('0521 - ExpenseWidget - Eintrag im Textfeld "Einzelpreis Brutto in €": ${valueAsMoney.format('###,###.#0 S')}');
+            //     // dev.log('0521 - ExpenseWidget - Eintrag im Textfeld "Einzelpreis Brutto in €": ${valueAsMoney.format('###,###.#0 S')}');
             //     // bruttoItemPriceController.text =
             //     //     valueAsMoney.format('###,###.#0 S');
-            //     log("----------------------------------------------------------------------------------------------------------------");
+            //     dev.log("----------------------------------------------------------------------------------------------------------------");
             //   } catch (e) {
             //     bruttoItemPriceController.text = '0.00';
             //   }
@@ -1256,7 +1514,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
             //   //   (bruttoItemPrice * 100).toInt(),
             //   //   isoCode: 'EUR',
             //   // );
-            //   // log('0521 - ExpenseWidget - Eintrag im Textfeld "Einzelpreis Brutto in €": ${valueAsMoney.format('###,###.#0 S')}');
+            //   // dev.log('0521 - ExpenseWidget - Eintrag im Textfeld "Einzelpreis Brutto in €": ${valueAsMoney.format('###,###.#0 S')}');
             //   // bruttoItemPriceController.text =
             //   //     valueAsMoney.format('###,###.#0 S');
             // },
@@ -1282,13 +1540,16 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
             /*--------------------------------- onChanged ---*/
             controller: bruttoQuantityPriceController,
             onChanged: (String value) {
-              log("----------------------------------------------------------------------------------------------------------------");
-              log('0752 - ExpenseWidget - bruttoQuantityPriceController - Eingabe: "${bruttoQuantityPriceController.text}" - als String');
+              dev.log(
+                  "----------------------------------------------------------------------------------------------------------------");
+              dev.log(
+                  '0752 - ExpenseWidget - bruttoQuantityPriceController - Eingabe: "${bruttoQuantityPriceController.text}" - als String');
               /* wenn beim Eingeben aus Versehen ein falsches Zeichen benutzt wird */
               if (bruttoQuantityPriceController.text
                   .contains(RegExp(r'[a-zA-Z!"§$%&/(=?`*_:;><#+´^°@€)]'))) {
                 bruttoQuantityPriceController.text = "";
-                log('0757 - ExpenseWidget - bruttoQuantityPriceController - umgewandelt in "${bruttoQuantityPriceController.text}" ---> als String');
+                dev.log(
+                    '0757 - ExpenseWidget - bruttoQuantityPriceController - umgewandelt in "${bruttoQuantityPriceController.text}" ---> als String');
                 /*--------------------------------- Snackbar / Toast ---*/
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                   backgroundColor: wbColorButtonDarkRed,
@@ -1308,19 +1569,24 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                   bruttoQuantityPriceController.text =
                       bruttoQuantityPriceController.text
                           .replaceAll(RegExp(r','), '.');
-                  log('-------> Text neu: ${bruttoQuantityPriceController.text}');
+                  dev.log(
+                      '-------> Text neu: ${bruttoQuantityPriceController.text}');
 
                   // bruttoQuantityPrice = double.parse(bruttoQuantityPriceController.text);
 
-                  log("0781 - ExpenseWidget - bruttoQuantityPriceController - setState ausgeführt: $bruttoQuantityPrice ---> als double");
-                  log('0782 - ExpenseWidget - bruttoQuantityPriceController - setState ausgeführt: ${bruttoQuantityPriceController.text} ---> im TextFormField eingetragen? ---> Ja');
+                  dev.log(
+                      "0781 - ExpenseWidget - bruttoQuantityPriceController - setState ausgeführt: $bruttoQuantityPrice ---> als double");
+                  dev.log(
+                      '0782 - ExpenseWidget - bruttoQuantityPriceController - setState ausgeführt: ${bruttoQuantityPriceController.text} ---> im TextFormField eingetragen? ---> Ja');
                   bruttoQuantityPriceController.text =
                       bruttoQuantityPrice.toStringAsFixed(2);
                 });
                 // getCalculationResult();
-                log("----------------------------------------------------------------------------------------------------------------");
+                dev.log(
+                    "----------------------------------------------------------------------------------------------------------------");
               } catch (e) {
-                log('0788 - ExpenseWidget - Fehlermeldung - Eingabe: ${bruttoQuantityPriceController.text} - als String');
+                dev.log(
+                    '0788 - ExpenseWidget - Fehlermeldung - Eingabe: ${bruttoQuantityPriceController.text} - als String');
                 bruttoQuantityPriceController.text = '';
               }
 
@@ -1328,9 +1594,11 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                 bruttoQuantityPriceController.text =
                     bruttoQuantityPrice.toStringAsFixed(2);
                 if (bruttoQuantityPriceController.text == "") {
-                  log('0796 - ExpenseWidget - bruttoQuantityPriceController - Eingabe gelöscht: "$bruttoQuantityPriceController" ---> als String');
+                  dev.log(
+                      '0796 - ExpenseWidget - bruttoQuantityPriceController - Eingabe gelöscht: "$bruttoQuantityPriceController" ---> als String');
                   bruttoQuantityPriceController.text = "";
-                  log('0798 - ExpenseWidget - bruttoQuantityPriceController - umgewandelt in "$bruttoQuantityPriceController" ---> als String');
+                  dev.log(
+                      '0798 - ExpenseWidget - bruttoQuantityPriceController - umgewandelt in "$bruttoQuantityPriceController" ---> als String');
                 }
               });
             },
@@ -1338,22 +1606,22 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
             // /*--------------------------------- onChanged ---*/
             // controller: bruttoQuantityPriceController,
             // onChanged: (String bruttoQuantityPriceController) {
-            //   log("0457 - ExpenseWidget - bruttoQuantityPriceController - Eingabe: $bruttoQuantityPriceController - als String");
+            //   dev.log("0457 - ExpenseWidget - bruttoQuantityPriceController - Eingabe: $bruttoQuantityPriceController - als String");
             //   /* wenn beim Löschen aus Versehen eine "null" entsehen sollte, muss die Ziffer "0" erscheinen */
             //   if (bruttoQuantityPriceController == "") {
-            //     log('0460 - ExpenseWidget - bruttoItemPriceController - Eingabe gelöscht: "$bruttoQuantityPriceController" ---> als String');
+            //     dev.log('0460 - ExpenseWidget - bruttoItemPriceController - Eingabe gelöscht: "$bruttoQuantityPriceController" ---> als String');
             //     bruttoQuantityPriceController = "0.00";
-            //     log('0462 - ExpenseWidget - bruttoItemPriceController - umgewandelt in "$bruttoQuantityPriceController" ---> als String');
+            //     dev.log('0462 - ExpenseWidget - bruttoItemPriceController - umgewandelt in "$bruttoQuantityPriceController" ---> als String');
             //   }
 
             //   // bruttoQuantityPrice = double.parse(bruttoQuantityPriceController);
             //   // setState(() => bruttoQuantityPrice =
             //   //     double.parse(bruttoQuantityPriceController));
-            //   // log("0297 - ExpenseWidget - bruttoItemPriceController - setState ausgeführt: $bruttoQuantityPrice ---> als double");
+            //   // dev.log("0297 - ExpenseWidget - bruttoItemPriceController - setState ausgeführt: $bruttoQuantityPrice ---> als double");
 
             //   // setState(() {
             //   //   bruttoQuantityPrice = double.parse(bruttoQuantityPriceController);
-            //   //   log('0366 - ExpenseWidget - bruttoQuantityPriceController - setState ausgeführt: "$bruttoQuantityPriceController" ---> im TextFormField eingetragen? ---> NEIN !!! todo');
+            //   //   dev.log('0366 - ExpenseWidget - bruttoQuantityPriceController - setState ausgeführt: "$bruttoQuantityPriceController" ---> im TextFormField eingetragen? ---> NEIN !!! todo');
             //   // });
 
             //   getCalculationResult();
@@ -1621,10 +1889,12 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                       color: Colors.black),
                 ),
                 onPressed: () {
-                  log("----------------------------------------------------------------------------------------------------------------");
-                  log('0714 - ExpenseWidget - ElevatedButton angeklickt');
+                  dev.log(
+                      "----------------------------------------------------------------------------------------------------------------");
+                  dev.log('0714 - ExpenseWidget - ElevatedButton angeklickt');
                   getCalculationResult();
-                  log("----------------------------------------------------------------------------------------------------------------");
+                  dev.log(
+                      "----------------------------------------------------------------------------------------------------------------");
                 },
               ),
             ),
@@ -1729,7 +1999,8 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                 wbWidth155: 398,
                 wbHeight60: 60,
                 wbOnTap: () {
-                  log("0139 - ExpenseWidget - Ausgabe SPEICHERN - geklickt");
+                  dev.log(
+                      "0139 - ExpenseWidget - Ausgabe SPEICHERN - geklickt");
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -1767,18 +2038,18 @@ class OnePointLimit extends TextInputFormatter {
   }
 }
 
-Future<List<String>> fetchDatabaseSuggestions(String pattern) async {
-  /*--- Hier wird die Datenbankabfrage durchgeführt ---*/
-  final database = await openDatabase('JOTHAsoft.FiveStars.db');
-  final results = await database.rawQuery(
-      'SELECT TKD_Feld_014, TKD_Feld_006, TKD_Feld_007, TKD_Feld_005 FROM KundenDaten WHERE TKD_Feld_014 LIKE ?',
-      ['%$pattern%']);
+// Future<List<String>> fetchDatabaseSuggestions(String pattern) async {
+//   /*--- Hier wird die Datenbankabfrage durchgeführt ---*/
+//   final database = await openDatabase('JOTHAsoft.FiveStars.db');
+//   final results = await database.rawQuery(
+//       'SELECT TKD_Feld_014, TKD_Feld_006, TKD_Feld_007, TKD_Feld_005 FROM KundenDaten WHERE TKD_Feld_014 LIKE ?',
+//       ['%$pattern%']);
 
-  return results
-      .where((row) =>
-          row['TKD_Feld_014'] != null &&
-          row['TKD_Feld_014'].toString().trim().isNotEmpty)
-      .map((row) =>
-          '${row['TKD_Feld_014']} • ${row['TKD_Feld_006']} ${row['TKD_Feld_007']} • ${row['TKD_Feld_005']}')
-      .toList();
-}
+//   return results
+//       .where((row) =>
+//           row['TKD_Feld_014'] != null &&
+//           row['TKD_Feld_014'].toString().trim().isNotEmpty)
+//       .map((row) =>
+//           '${row['TKD_Feld_014']} • ${row['TKD_Feld_006']} ${row['TKD_Feld_007']} • ${row['TKD_Feld_005']}')
+//       .toList();
+// }
