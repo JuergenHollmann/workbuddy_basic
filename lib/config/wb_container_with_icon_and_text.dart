@@ -35,6 +35,7 @@ class _WbContainerWithIconAndTextState
     extends State<WbContainerWithIconAndText> {
   /*--------------------------------- WbAudioSoundManager ---*/
   final WbAudioSoundManager audioSoundManager = WbAudioSoundManager();
+
   @override
   void initState() {
     super.initState();
@@ -46,7 +47,7 @@ class _WbContainerWithIconAndTextState
     return /*--------------------------------- *** ---*/
         GestureDetector(
       onTap: () {
-        log('0047 - WbContainerWithIconAndText - "${widget.containerText}" angeklickt');
+        log('0047 - WbContainerWithIconAndText - "${widget.containerText}" - aktiviert');
         /*--------------------------------- Sound abspielen ---*/
         audioSoundManager.playButtonSound();
         /*--------------------------------- *** ---*/

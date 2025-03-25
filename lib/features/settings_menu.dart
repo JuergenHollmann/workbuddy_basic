@@ -13,6 +13,7 @@ import 'package:workbuddy/shared/providers/current_user_provider.dart';
 import 'package:workbuddy/shared/widgets/wb_dialog_alert_update_coming_soon.dart';
 import 'package:workbuddy/shared/widgets/wb_divider_with_text_in_center.dart';
 import 'package:workbuddy/shared/widgets/wb_info_container.dart';
+import 'package:workbuddy/wb_impressum.dart';
 import 'package:workbuddy/wb_privacy_policy_dsgvo.dart';
 
 class SettingsMenu extends StatefulWidget {
@@ -449,6 +450,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                 containerText: 'Datenschutzerklärung',
                 containerIcon: Icons.privacy_tip_outlined,
                 onTap: () {
+                  log('0452 - SettingsMenu - "Datenschutzerklärung" - angeklickt');
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -464,6 +466,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                 containerText: 'Nutzungsbedingungen',
                 containerIcon: Icons.rule_folder_outlined,
                 onTap: () {
+                  log('0467 - SettingsMenu - "Nutzungsbedingungen" - angeklickt');
                   Navigator.pushNamed(context, '/terms');
                 },
               ),
@@ -472,8 +475,22 @@ class _SettingsMenuState extends State<SettingsMenu> {
               /*--------------------------------- Impressum ---*/
               WbContainerWithIconAndText(
                 containerText: 'Impressum',
-                containerIcon: Icons.info_outline,
+                containerIcon: Icons.privacy_tip_outlined,
+                onTap: () {
+                  log('0479 - SettingsMenu - "Impressum" - angeklickt');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const WbImpressum(),
+                    ),
+                  );
+                },
               ),
+
+              // WbContainerWithIconAndText(
+              //   containerText: 'Impressum',
+              //   containerIcon: Icons.info_outline,
+              // ),
               /*--------------------------------- Divider ---*/
               const Divider(thickness: 3, height: 32, color: wbColorLogoBlue),
               /*--------------------------------- *** ---*/
