@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:money2/money2.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:workbuddy/config/wb_button_universal_2.dart';
 import 'package:workbuddy/config/wb_colors.dart';
@@ -686,6 +689,397 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
         'TKD_Feld_030': newContactID
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<void> _generatePdf() async {
+    dev.log('0696 - ExpenseWidget - PDF wird generiert');
+    final pdf = pw.Document();
+
+    pdf.addPage(
+      pw.Page(
+        build: (pw.Context context) {
+          return pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              /*--- Überschrift: Ausgabe-Beleg ---*/
+              pw.Text(
+                'Ausgabe-Beleg',
+                style: pw.TextStyle(
+                  fontSize: 18,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+
+              /*--- Ausgabe der Firma ---*/
+              pw.SizedBox(height: 10),
+              pw.Text('Ausgabe der Firma MUSTERMANN'),
+              pw.SizedBox(height: 10),
+
+              /*--- Datum des Einkaufs ---*/
+              pw.Container(
+                width: 220,
+                padding: pw.EdgeInsets.all(8),
+                decoration: pw.BoxDecoration(
+                  border: pw.Border.all(),
+                ),
+                child: pw.Column(
+                  mainAxisAlignment: pw.MainAxisAlignment.start,
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text('Datum des Einkaufs:',
+                            style: pw.TextStyle(
+                              fontWeight: pw.FontWeight.bold,
+                            )),
+                        pw.Text(
+                          '25.03.2025',
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 10),
+
+              /*--- Wo eingekauft ---*/
+              pw.Container(
+                width: 220,
+                padding: pw.EdgeInsets.all(8),
+                decoration: pw.BoxDecoration(
+                  border: pw.Border.all(),
+                ),
+                child: pw.Column(
+                  mainAxisAlignment: pw.MainAxisAlignment.start,
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Text('Wo eingekauft:\n'),
+                    pw.Container(
+                      width: 200,
+                      child: pw.Text(
+                        shopController.text.replaceAll(RegExp(r'[•]'), ''),
+                        textAlign: pw.TextAlign.left,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 10),
+
+              /*--- Was eingekauft ---*/
+              pw.Container(
+                width: 220,
+                padding: pw.EdgeInsets.all(8),
+                decoration: pw.BoxDecoration(
+                  border: pw.Border.all(),
+                ),
+                child: pw.Column(
+                  mainAxisAlignment: pw.MainAxisAlignment.start,
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Text('Was eingekauft:\n'),
+                    pw.Container(
+                      width: 200,
+                      child: pw.Text(
+                        // shopController.text.replaceAll(RegExp(r'[•]'), ''),
+                        'Musterladen Schreuben und Kartoffeln ohne End, dazu noch ein Knäckebrot und das Ganze ohne Butter. Jetzt will ich es aber ganz genau wissen, wie lange das noch weitergeht.',
+                        textAlign: pw.TextAlign.left,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 10),
+
+              /*--- Menge und Einheit ---*/
+              pw.Container(
+                width: 220,
+                padding: pw.EdgeInsets.all(8),
+                decoration: pw.BoxDecoration(
+                  border: pw.Border.all(),
+                ),
+                child: pw.Column(
+                  mainAxisAlignment: pw.MainAxisAlignment.start,
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text('Menge und Einheit:'),
+                        pw.Text(
+                          '${quantityController.text} ${itemController.text}',
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 10),
+
+              /*--- Netto-Einzelpreis ---*/
+              pw.Container(
+                width: 220,
+                padding: pw.EdgeInsets.all(8),
+                decoration: pw.BoxDecoration(
+                  border: pw.Border.all(),
+                ),
+                child: pw.Column(
+                  mainAxisAlignment: pw.MainAxisAlignment.start,
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text('Netto-Einzelpreis: '),
+                        pw.Text(
+                          '${nettoItemPriceController.text.replaceAll(RegExp(r'[ €.]'), ',')} EUR',
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 10),
+
+              /*--- Netto-Gesamtpreis ---*/
+              pw.Container(
+                width: 220,
+                padding: pw.EdgeInsets.all(8),
+                decoration: pw.BoxDecoration(
+                  border: pw.Border.all(),
+                ),
+                child: pw.Column(
+                  mainAxisAlignment: pw.MainAxisAlignment.start,
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text('Netto-Gesamtpreis: '),
+                        pw.Text(
+                          '${nettoQuantityPriceController.text.replaceAll(RegExp(r'[ €.]'), ',')} EUR',
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 10),
+
+              /*--- Mehrwertsteuersatz ---*/
+              pw.Container(
+                width: 220,
+                padding: pw.EdgeInsets.all(8),
+                decoration: pw.BoxDecoration(
+                  border: pw.Border.all(),
+                ),
+                child: pw.Column(
+                  mainAxisAlignment: pw.MainAxisAlignment.start,
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text('Mehrwertsteuersatz: '),
+                        pw.Text(
+                          '${taxPercentController.text} %',
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 10),
+
+              /*--- Brutto-Einzelpreis ---*/
+              pw.Container(
+                width: 220,
+                padding: pw.EdgeInsets.all(8),
+                decoration: pw.BoxDecoration(
+                  border: pw.Border.all(),
+                ),
+                child: pw.Column(
+                  mainAxisAlignment: pw.MainAxisAlignment.start,
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text('Brutto-Einzelpreis:'),
+                        pw.Text(
+                          '${bruttoItemPriceController.text.replaceAll(RegExp(r'[ €.]'), '')} EUR',
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 10),
+
+              /*--- Mehrwertsteuer auf den Brutto-Einzelpreis ---*/
+              pw.Container(
+                width: 220,
+                padding: pw.EdgeInsets.all(8),
+                decoration: pw.BoxDecoration(
+                  border: pw.Border.all(),
+                ),
+                child: pw.Column(
+                  mainAxisAlignment: pw.MainAxisAlignment.start,
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text('MwSt. Brutto-Einzeln:'),
+                        pw.Text(
+                          '${taxOnBruttoItemPriceController.text.replaceAll(RegExp(r'[ €.]'), ',')} EUR',
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 10),
+
+              /*--- Brutto-Gesamtpreis ---*/
+              pw.Container(
+                width: 220,
+                padding: pw.EdgeInsets.all(8),
+                decoration: pw.BoxDecoration(
+                  border: pw.Border.all(),
+                ),
+                child: pw.Column(
+                  mainAxisAlignment: pw.MainAxisAlignment.start,
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text('Brutto-Gesamtpreis:'),
+                        pw.Text(
+                          '${bruttoQuantityPriceController.text.replaceAll(RegExp(r'[ €.]'), '')} EUR',
+                          style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 10),
+
+              /*--- Mehrwertsteuer auf den Brutto-Gesamtpreis ---*/
+              pw.Container(
+                width: 220,
+                padding: pw.EdgeInsets.all(8),
+                decoration: pw.BoxDecoration(
+                  border: pw.Border.all(),
+                ),
+                child: pw.Column(
+                  mainAxisAlignment: pw.MainAxisAlignment.start,
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text('MwSt. Brutto-Gesamt:',
+                            textAlign: pw.TextAlign.left),
+                        pw.Text(
+                          '${taxOnBruttoQuantityPriceController.text.replaceAll(RegExp(r'[ €.]'), ',')} EUR',
+                          style: pw.TextStyle(),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 10),
+
+              /*--- Warengruppe ---*/
+              pw.Container(
+                width: 220,
+                padding: pw.EdgeInsets.all(8),
+                decoration: pw.BoxDecoration(
+                  border: pw.Border.all(),
+                ),
+                child: pw.Column(
+                  mainAxisAlignment: pw.MainAxisAlignment.start,
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text('Warengruppe:'),
+                        pw.Text(
+                          '${bruttoQuantityPriceController.text.replaceAll(RegExp(r'[ €.]'), ',')} EUR',
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 10),
+
+              /*--- Einkäufer ---*/
+              pw.Container(
+                width: 220,
+                padding: pw.EdgeInsets.all(8),
+                decoration: pw.BoxDecoration(
+                  border: pw.Border.all(),
+                ),
+                child: pw.Column(
+                  mainAxisAlignment: pw.MainAxisAlignment.start,
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text('Einkäufer:'),
+                        pw.Text(
+                          '${bruttoQuantityPriceController.text.replaceAll(RegExp(r'[ €.]'), ',')} EUR',
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 10),
+
+              /*--- Notizen ---*/
+              pw.Container(
+                width: 220,
+                padding: pw.EdgeInsets.all(8),
+                decoration: pw.BoxDecoration(
+                  border: pw.Border.all(),
+                ),
+                child: pw.Column(
+                  mainAxisAlignment: pw.MainAxisAlignment.start,
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text('Notizen:'),
+                        pw.Text(
+                          '${bruttoQuantityPriceController.text.replaceAll(RegExp(r'[ €.]'), ',')} EUR',
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 10),
+            ],
+          );
+        },
+      ),
+    );
+
+    await Printing.layoutPdf(
+      onLayout: (PdfPageFormat format) async => pdf.save(),
     );
   }
 
@@ -1889,13 +2283,37 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                       color: Colors.black),
                 ),
                 onPressed: () {
-                  dev.log(
-                      "----------------------------------------------------------------------------------------------------------------");
+                  dev.log("------------------------------------------------");
                   dev.log('0714 - ExpenseWidget - ElevatedButton angeklickt');
                   getCalculationResult();
-                  dev.log(
-                      "----------------------------------------------------------------------------------------------------------------");
+                  dev.log("------------------------------------------------");
                 },
+              ),
+            ),
+          ),
+          /*--------------------------------- ElevatedButton - PDF erstellen ---*/
+          Center(
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: wbColorDrawerOrangeLight,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    side: BorderSide(
+                      color: wbColorAppBarBlue,
+                      width: 2,
+                    ),
+                  ),
+                ),
+                onPressed: _generatePdf,
+                child: Text(
+                  'PDF erstellen und ggf. ausdrucken',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
               ),
             ),
           ),

@@ -742,4 +742,27 @@
                                                   // 'TKD_Feld_030': '', // Rabattgrund ab
                                                   // 'TKD_Feld_031': '', // Rabatt ab
                                                   // 'TKD_Feld_032': '', // Rabattgrund ab
-                                                  // 'TKD_Feld_033': '', // Rabatt ab
+// 'TKD_Feld_033': '', // Rabatt ab
+                                       
+// Um die fest programmierten Texte linksbündig und die Textinhalte der Controller rechtsbündig zu machen, kannst du die pw.Row - Widgets mit pw.Expanded - Widgets verwenden.
+        
+//               pw.Text('Wo eingekauft: ${shopController.text}'),
+//               pw.Text('Was eingekauft: ${itemController.text}'),
+//               pw.Text(
+//                   'Menge und Einheit: ${quantityController.text} ${itemController.text}'),
+//               pw.Text('Mehrwertsteuersatz: ${taxPercentController.text} %'),
+//               pw.Text(
+//                   'Netto Einzelpreis: ${nettoItemPriceController.text} EUR'),
+//               pw.Text(
+//                   'Netto Gesamtpreis: ${nettoQuantityPriceController.text} EUR'),
+//               pw.Text(
+//                   'MwSt. auf den Brutto-Einzelpreis: ${taxOnBruttoItemPriceController.text} EUR'),
+//               pw.Text(
+//                   'MwSt. auf den Brutto-Gesamtpreis: ${taxOnBruttoQuantityPriceController.text} EUR'),
+//               pw.Text(
+//                   'Brutto Einzelpreis: ${bruttoItemPriceController.text} EUR'),
+//               pw.Text(
+//                 'Brutto Gesamtpreis: ${bruttoQuantityPriceController.text} EUR',
+//                 style: pw.TextStyle(
+//                   fontSize: 18,
+//                   fontWeight: pw.FontWeight.bold,
