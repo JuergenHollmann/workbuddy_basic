@@ -57,6 +57,15 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
   final taxOnBruttoItemPriceController = TextEditingController();
   final taxOnBruttoQuantityPriceController = TextEditingController();
 
+  final controllerBelegnummer = TextEditingController();
+  final controllerBelegdatum = TextEditingController();
+
+  final controllerWasGekauft = TextEditingController();
+  final controllerZahlungsmittel = TextEditingController();
+  final controllerWarengruppe = TextEditingController();
+  final controllerEinkaeufer = TextEditingController();
+  final controllerNotizen = TextEditingController();
+
 /*--------------------------------- Variablen um die Preise zu berechnen ---*/
   double quantity = 0.00; // Eingabe
   String item = 'Stk'; // Eingabe
@@ -783,8 +792,8 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                     pw.Container(
                       width: 200,
                       child: pw.Text(
-                        // shopController.text.replaceAll(RegExp(r'[•]'), ''),
-                        'Musterladen Schreuben und Kartoffeln ohne End, dazu noch ein Knäckebrot und das Ganze ohne Butter. Jetzt will ich es aber ganz genau wissen, wie lange das noch weitergeht.',
+                        controllerWasGekauft.text
+                            .replaceAll(RegExp(r'[•]'), ''),
                         textAlign: pw.TextAlign.left,
                       ),
                     ),
@@ -988,8 +997,33 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                         pw.Text('MwSt. Brutto-Gesamt:',
                             textAlign: pw.TextAlign.left),
                         pw.Text(
-                          '${taxOnBruttoQuantityPriceController.text.replaceAll(RegExp(r'[ €.]'), ',')} EUR',
+                          '${taxPercentController.text.replaceAll(RegExp(r'[ €.]'), ',')} EUR', //taxOnBruttoQuantityPriceController
                           style: pw.TextStyle(),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 10),
+
+              /*--- Zahlungsmittel ---*/
+              pw.Container(
+                width: 220,
+                padding: pw.EdgeInsets.all(8),
+                decoration: pw.BoxDecoration(
+                  border: pw.Border.all(),
+                ),
+                child: pw.Column(
+                  mainAxisAlignment: pw.MainAxisAlignment.start,
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text('Zahlungsmittel:'),
+                        pw.Text(
+                          '${controllerZahlungsmittel.text.replaceAll(RegExp(r'[€]'), '')} ',
                         ),
                       ],
                     ),
@@ -1014,7 +1048,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                       children: [
                         pw.Text('Warengruppe:'),
                         pw.Text(
-                          '${bruttoQuantityPriceController.text.replaceAll(RegExp(r'[ €.]'), ',')} EUR',
+                          '${controllerWarengruppe.text.replaceAll(RegExp(r'[€]'), '')} ',
                         ),
                       ],
                     ),
@@ -1039,7 +1073,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                       children: [
                         pw.Text('Einkäufer:'),
                         pw.Text(
-                          '${bruttoQuantityPriceController.text.replaceAll(RegExp(r'[ €.]'), ',')} EUR',
+                          '${controllerEinkaeufer.text.replaceAll(RegExp(r'[€]'), '')} ',
                         ),
                       ],
                     ),
@@ -1064,7 +1098,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                       children: [
                         pw.Text('Notizen:'),
                         pw.Text(
-                          '${bruttoQuantityPriceController.text.replaceAll(RegExp(r'[ €.]'), ',')} EUR',
+                          '${controllerNotizen.text.replaceAll(RegExp(r'[€]'), '')} ',
                         ),
                       ],
                     ),
@@ -1628,6 +1662,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
           /*--------------------------------- Was eingekauft? ---*/
           WbDropDownMenu(
             label: "Was wurde eingekauft?",
+            controller: controllerWasGekauft,
             dropdownItems: [
               "Dachlatten",
               "Spax-Schrauben",
@@ -2324,6 +2359,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
           /*--------------------------------- Warengruppe ---*/
           WbDropDownMenu(
             label: 'Kategorie / Warengruppe',
+            controller: controllerWarengruppe,
             dropdownItems: [
               'Werkzeug',
               'Zubehör',
@@ -2349,6 +2385,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
           /*--------------------------------- Wer hat eingekauft? ---*/
           WbDropDownMenu(
             label: 'Wer hat eingekauft?',
+            controller: controllerEinkaeufer,
             dropdownItems: [
               'Jürgen',
               'Doris',
@@ -2384,9 +2421,51 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
           ),
           /*--------------------------------- Abstand ---*/
           wbSizedBoxHeight16,
+
+          /*--------------------------------- Zahlungsmittel ---*/
+          WbDropDownMenu(
+            label: 'Wie wurde bezahlt?',
+            dropdownItems: [
+              'Barzahlung',
+              'EC-Karte',
+              'Kreditkarte',
+              'Revolut DL',
+              'Revolut JH',
+              'PayPal',
+              'Überweisung JH',
+              'Überweisung DL',
+              'Sonstiges',
+            ],
+            controller: controllerZahlungsmittel,
+            leadingIconInTextField: Icons.person_2_outlined,
+            leadingIconsInMenu: [
+              Icons.person_2_outlined,
+              Icons.person_2_outlined,
+              Icons.person_2_outlined,
+              Icons.person_2_outlined,
+              Icons.person_2_outlined,
+              Icons.person_2_outlined,
+              Icons.person_2_outlined,
+              Icons.person_2_outlined,
+              Icons.person_2_outlined,
+              Icons.person_2_outlined,
+              Icons.person_2_outlined,
+              Icons.person_2_outlined,
+              Icons.person_2_outlined,
+              Icons.person_2_outlined,
+              Icons.person_2_outlined,
+            ],
+            backgroundColor: wbColorBackgroundRed,
+            width: 400,
+          ),
+          /*--------------------------------- Abstand ---*/
+          wbSizedBoxHeight16,
+
           /*--------------------------------- Notizen zum Einkauf ---*/
           WbTextFormField(
             labelText: "Notizen zum Einkauf",
+            controller: controllerNotizen,
+
             labelFontSize20: 18,
             hintText: "- Notizen zum Einkauf HIER eingeben -",
             hintTextFontSize16: 12,
