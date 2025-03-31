@@ -712,8 +712,9 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
               /*--- Überschrift: Ausgabe-Beleg ---*/
+              /*--- Die Ausgabe-Beleg-Nummer muss fortlaufend aus der Datenbank generiert werden - EW-2460 - todo ---*/
               pw.Text(
-                'Ausgabe-Beleg',
+                'Ausgabe-Beleg-Nr.: 2025-0001',
                 style: pw.TextStyle(
                   fontSize: 18,
                   fontWeight: pw.FontWeight.bold,
@@ -1684,7 +1685,35 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
             width: 400,
           ),
           /*--------------------------------- Abstand ---*/
+          wbSizedBoxHeight16,
+
+          /*--------------------------------- Datum des Einkaufs ---*/
+          /*--- Hier wird das Datum des Einkaufs eingetragen - Kalender einblenden - EW-1691 - todo ---*/
+          WbDropDownMenu(
+            label: "Datum des Einkaufs",
+            // controller: controllerWasGekauft,
+            dropdownItems: [
+              "heute",
+              "gestern",
+              "vorgestern",
+              "ein anderes Datum auswählen",
+            ],
+            backgroundColor: wbColorBackgroundRed,
+            leadingIconsInMenu: [
+              Icons.calendar_month_outlined,
+              Icons.calendar_month_outlined,
+              Icons.calendar_month_outlined,
+              Icons.calendar_month_outlined,
+            ],
+            leadingIconInTextField: Icons.calendar_month_outlined,
+            width: 400,
+          ),
+
+          /*--------------------------------- Abstand ---*/
           wbSizedBoxHeight8,
+
+
+
           /*--------------------------------- Divider ---*/
           WbDividerWithTextInCenter(
               wbColor: wbColorButtonDarkRed,
@@ -2284,7 +2313,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
           ),
           /*--------------------------------- Abstand ---*/
           wbSizedBoxHeight8,
-          /*--------------------------------- Divider ---*/
+          /*--------------------------------- Divider mit Text ---*/
           WbDividerWithTextInCenter(
               wbColor: wbColorButtonDarkRed,
               wbText: 'Netto-Preise - OHNE - MwSt.',
@@ -2323,32 +2352,6 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                   getCalculationResult();
                   dev.log("------------------------------------------------");
                 },
-              ),
-            ),
-          ),
-          /*--------------------------------- ElevatedButton - PDF erstellen ---*/
-          Center(
-            child: SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: wbColorDrawerOrangeLight,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    side: BorderSide(
-                      color: wbColorAppBarBlue,
-                      width: 2,
-                    ),
-                  ),
-                ),
-                onPressed: _generatePdf,
-                child: Text(
-                  'PDF erstellen und ggf. ausdrucken',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
-                ),
               ),
             ),
           ),
@@ -2460,7 +2463,6 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
           ),
           /*--------------------------------- Abstand ---*/
           wbSizedBoxHeight16,
-
           /*--------------------------------- Notizen zum Einkauf ---*/
           WbTextFormField(
             labelText: "Notizen zum Einkauf",
@@ -2479,33 +2481,58 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
             // suffixIconSize48: 28,
             textInputTypeOnKeyboard: TextInputType.multiline,
           ),
+          /*--------------------------------- Abstand ---*/
+          wbSizedBoxHeight8,
+          /*--------------------------------- Divider mit Text ---*/
+          WbDividerWithTextInCenter(
+              wbColor: wbColorButtonDarkRed,
+              /*--- Die Ausgabe-Beleg-Nummer muss fortlaufend aus der Datenbank generiert werden - EW-2460 - todo ---*/
+              wbText: 'Ausgabe-Beleg-Nr.: 2025-0001',
+              wbTextColor: wbColorButtonDarkRed,
+              wbFontSize12: 18,
+              wbHeight3: 3),
+          /*--------------------------------- Abstand ---*/
+          wbSizedBoxHeight8,
+          /*--------------------------------- PDF erstellen ---*/
+          WbButtonUniversal2(
+              wbColor: wbColorOrangeDarker,
+              wbIcon: Icons.picture_as_pdf_outlined,
+              wbIconSize40: 40,
+              wbText: 'PDF erstellen und\nggf. ausdrucken',
+              wbFontSize24: 22,
+              wbWidth155: double.infinity,
+              wbHeight60: 80,
+              wbOnTap: () {
+                dev.log("------------------------------------------------");
+                dev.log('2487 - ExpenseWidget - "PDF erstellen" angeklickt');
+                _generatePdf();
+                dev.log("------------------------------------------------");
+              }),
+          /*--------------------------------- Abstand ---*/
+          wbSizedBoxHeight8,
           /*--------------------------------- Divider ---*/
           const Divider(thickness: 3, height: 32, color: wbColorButtonDarkRed),
           /*--------------------------------- *** ---*/
           // Button aus Vorlage verwenden:
           // solange die Pflichtfelder nicht ausgefüllt sind, soll der Button rot sein und beim Anklicken einen Alert ausgeben, sonst Button grün und Daten speichern + Dialog-Bestätigung.
           /*--------------------------------- Ausgabe speichern ---*/
-          Padding(
-            padding: const EdgeInsets.fromLTRB(2, 0, 12, 0),
-            child: WbButtonUniversal2(
-                wbColor: wbColorButtonDarkRed,
-                wbIcon: Icons.payments_outlined,
-                wbIconSize40: 40,
-                wbText: 'Ausgabe SPEICHERN',
-                wbFontSize24: 19,
-                wbWidth155: 398,
-                wbHeight60: 60,
-                wbOnTap: () {
-                  dev.log(
-                      "0139 - ExpenseWidget - Ausgabe SPEICHERN - geklickt");
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AccountingMenu(),
-                    ),
-                  );
-                }),
-          )
+          WbButtonUniversal2(
+              wbColor: wbColorButtonDarkRed,
+              wbIcon: Icons.payments_outlined,
+              wbIconSize40: 40,
+              wbText: 'Ausgabe SPEICHERN',
+              wbFontSize24: 19,
+              wbWidth155: double.infinity,
+              wbHeight60: 60,
+              wbOnTap: () {
+                dev.log("0139 - ExpenseWidget - Ausgabe SPEICHERN - geklickt");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AccountingMenu(),
+                  ),
+                );
+              })
         ],
         // ),
       ),
