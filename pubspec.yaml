@@ -1,7 +1,7 @@
 name: workbuddy
 description: "save time and money"
 publish_to: 'none'
-version: 0.04.010+1
+version: 0.04.011+1
 
 environment:
   sdk: '>=3.4.3 <4.0.0'
