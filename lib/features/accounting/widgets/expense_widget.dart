@@ -2643,7 +2643,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
               wbOnTap: () {
                 dev.log("------------------------------------------------");
                 dev.log('2487 - ExpenseWidget - "PDF erstellen" angeklickt');
-                final currentAppVersion = "WorkBuddy - Free-BASIC-Version 0.04.020"; // Replace with actual version retrieval logic
+                final currentAppVersion = "WorkBuddy - Free-BASIC-Version 0.04.020"; // in eine dynamische Anzeige programmieren - EW-2646
                 _generatePdf(currentAppVersion: currentAppVersion);
                 dev.log("------------------------------------------------");
               }),

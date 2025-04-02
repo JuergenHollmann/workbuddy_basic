@@ -350,6 +350,7 @@ class DatabaseHelper {
   √ für iOS muss im ios/Podfile     ---> platform :ios, '13.0'  eingestellt werden √ 
   √ für macOS muss im macos/Podfile ---> platform :osx, '10.15' eingestellt werden √ 
   /*--------------------------------- *** ---
+  - final currentAppVersion = "WorkBuddy - Free-BASIC-Version 0.04.020"; // in eine dynamische Anzeige programmieren - EW-2646
   - Datum des Einkaufs eintragen - Kalender einblenden - EW-1691 - todo
   - Die Ausgabe-Beleg-Nummer muss fortlaufend aus der Datenbank generiert werden - EW-2460
   - SnackBar - Kontakt wird überprüft 0535 - ContactListFromDevice todo
