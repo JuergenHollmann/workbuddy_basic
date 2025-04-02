@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:money2/money2.dart';
+// import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
@@ -19,6 +20,7 @@ import 'package:workbuddy/config/wb_text_form_field_text_only.dart';
 //import 'package:workbuddy/config/wb_typeaheadfield.dart';
 //import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:workbuddy/features/accounting/screens/accounting_menu.dart';
+// import 'package:workbuddy/shared/providers/current_app_version_provider.dart';
 import 'package:workbuddy/shared/widgets/wb_dialog_alert_update_coming_soon.dart';
 import 'package:workbuddy/shared/widgets/wb_divider_with_text_in_center.dart';
 import 'package:workbuddy/shared/widgets/wb_drop_downmenu_with_0_icon.dart';
@@ -82,6 +84,22 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
 
   double bruttoItemPrice = 0.00; // Eingabe oder berechnet
   double bruttoQuantityPrice = 0.00; // Eingabe oder berechnet
+
+/*--------------------------------- App-Version aus pubspec.yaml laden ---*/
+  // String currentAppVersion = '';
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _loadAppVersion();
+  // }
+
+  // Future<void> _loadAppVersion() async {
+  //   final packageInfo = await PackageInfo.fromPlatform();
+  //   setState(() {
+  //     currentAppVersion = packageInfo.version;
+  //   });
+  // }
 
   /*-------------------------------------------------------------------------------------------------------------------*/
   void getCalculationResult() {
@@ -701,7 +719,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
     );
   }
 
-  Future<void> _generatePdf() async {
+  Future<void> _generatePdf({required String currentAppVersion}) async {
     dev.log('0696 - ExpenseWidget - PDF wird generiert');
     final pdf = pw.Document();
 
@@ -767,7 +785,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                       /*--------------------------------- Überschrift ---*/
                       pw.Text(
                         /*--- Die Ausgabe-Beleg-Nummer muss fortlaufend aus der Datenbank generiert werden - EW-2460 - todo ---*/
-                        'Ausgabe-Beleg-Nr.: _________', // 2025-0001',
+                        'Ausgabe-Beleg-Nr.: ____________', // 2025-0001',
                         style: pw.TextStyle(
                           fontSize: 16,
                           color: PdfColors.black,
@@ -788,7 +806,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
               /*--------------------------------- Divider = Trennlinie ---*/
               pw.Positioned(
                 top: 60, // Abstand vom oberen Rand
-                left: 16, // Abstand vom linken Rand // oder48
+                left: 16, // Abstand vom linken Rand // oder 48
                 right: 16, // Abstand vom rechten Rand
                 child: pw.Divider(thickness: 1, color: PdfColors.black),
               ),
@@ -802,12 +820,12 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
 
                 /*--- Container für den Body ---*/
                 child: pw.Padding(
-                  padding: pw.EdgeInsets.fromLTRB(32, 0, 16, 0),
+                  padding: pw.EdgeInsets.fromLTRB(64, 0, 16,
+                      0), // Abstand vom linken Rand = 64 wegen Lochung
                   child: pw.Column(
                     // mainAxisAlignment: pw.MainAxisAlignment.start,
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
-
                       /*--- Datum des Einkaufs ---*/
                       pw.Container(
                         width: 220,
@@ -825,7 +843,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                               children: [
                                 pw.Text('Datum des Einkaufs:'),
                                 pw.Text(
-                                  '31.03.2025',
+                                  '',
                                   style: pw.TextStyle(
                                     fontWeight: pw.FontWeight.bold,
                                   ),
@@ -1052,12 +1070,17 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                       /*--------------------------------- Abstand ---*/
                       pw.SizedBox(height: 10),
 
-                      /*--- Brutto-Gesamtpreis ---*/
+                      /*--------------------------------- Brutto-Gesamtpreis - wird extra hervorgehoben ---*/
                       pw.Container(
                         width: 220,
                         padding: pw.EdgeInsets.all(8),
                         decoration: pw.BoxDecoration(
-                          border: pw.Border.all(),
+                          color: PdfColors.grey200,
+                          borderRadius: pw.BorderRadius.circular(8),
+                          border: pw.Border.all(
+                            color: PdfColors.black,
+                            width: 2,
+                          ),
                         ),
                         child: pw.Column(
                           mainAxisAlignment: pw.MainAxisAlignment.start,
@@ -1083,7 +1106,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                       /*--------------------------------- Abstand ---*/
                       pw.SizedBox(height: 10),
 
-                      /*--- Zahlungsmittel ---*/
+                      /*--------------------------------- Zahlungsmittel ---*/
                       pw.Container(
                         width: 220,
                         padding: pw.EdgeInsets.all(8),
@@ -1107,9 +1130,10 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                           ],
                         ),
                       ),
+                      /*--------------------------------- Abstand ---*/
                       pw.SizedBox(height: 10),
 
-                      /*--- Warengruppe ---*/
+                      /*--------------------------------- Warengruppe ---*/
                       pw.Container(
                         width: 220,
                         padding: pw.EdgeInsets.all(8),
@@ -1136,7 +1160,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                       /*--------------------------------- Abstand ---*/
                       pw.SizedBox(height: 10),
 
-                      /*--- Einkäufer ---*/
+                      /*--------------------------------- Einkäufer ---*/
                       pw.Container(
                         width: 220,
                         padding: pw.EdgeInsets.all(8),
@@ -1163,7 +1187,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                       /*--------------------------------- Abstand ---*/
                       pw.SizedBox(height: 10),
 
-                      /*--- Notizen ---*/
+                      /*--------------------------------- Notizen ---*/
                       pw.Container(
                         width: 220,
                         padding: pw.EdgeInsets.all(8),
@@ -1218,7 +1242,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                     pw.Divider(thickness: 1, color: PdfColors.black),
                     pw.Text(
                       // 'Seite 1 - ${DateTime.now().day}.${DateTime.now().month}.${DateTime.now().year}',
-                      '© JOTHAsoft.de - Seite ${context.pageNumber} von ${context.pagesCount}',
+                      'Gedruckt mit der $currentAppVersion by ©JOTHAsoft.de - Seite ${context.pageNumber} von ${context.pagesCount}',
                       style: pw.TextStyle(fontSize: 10, color: PdfColors.black),
                     ),
                     // ),
@@ -2619,7 +2643,8 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
               wbOnTap: () {
                 dev.log("------------------------------------------------");
                 dev.log('2487 - ExpenseWidget - "PDF erstellen" angeklickt');
-                _generatePdf();
+                final currentAppVersion = "WorkBuddy - Free-BASIC-Version 0.04.020"; // Replace with actual version retrieval logic
+                _generatePdf(currentAppVersion: currentAppVersion);
                 dev.log("------------------------------------------------");
               }),
           /*--------------------------------- Abstand ---*/
