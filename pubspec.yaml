@@ -1,7 +1,7 @@
 name: workbuddy
 description: "save time and money"
 publish_to: 'none'
-version: 0.04.021+1
+version: 0.04.022+1
 
 environment:
   sdk: '>=3.4.3 <4.0.0'
@@ -74,5 +74,5 @@ flutter:
    - assets/company_logos/
    - assets/flags/
    - assets/sound/
-   - assets/JOTHAsoft.FiveStars.db
+   #- assets/JOTHAsoft.FiveStars.db
    #- assets/JOTHAsoft.WorkBuddy.db

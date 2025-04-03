@@ -680,7 +680,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
   Future<void> insertNewShop(String newShopText, String newContactID) async {
     final database = await openDatabase('JOTHAsoft.FiveStars.db');
     await database.insert(
-      'KundenDaten',
+      'Tabelle01',
       {
         /*--- Die leeren Felder unbedingt mit einem leerem String initialisieren, sonst wird "null" eingetragen! ---*/
         'TKD_Feld_000': '',
@@ -1378,31 +1378,34 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
             items: (filter, loadProps) async {
               /*--------------------------------- Datenbank öffnen ---*/
               final databasePath = await getDatabasesPath();
-              dev.log('0809 - ExpenseWidget - Datenbankpfad: $databasePath');
+              dev.log('1381 - ExpenseWidget - Datenbankpfad: $databasePath');
               final database = await openDatabase('JOTHAsoft.FiveStars.db');
 
-              /*--------------------------------- Überprüfen, ob die Tabelle "KundenDaten" vorhanden ist ---*/
+              /*--------------------------------- Überprüfen, ob die "Tabelle01" vorhanden ist ---*/
               final tableExists = await database.rawQuery(
-                  "SELECT name FROM sqlite_master WHERE type='table' AND name='KundenDaten'");
+                  "SELECT name FROM sqlite_master WHERE type='table' AND name='Tabelle01'");
 
               if (tableExists.isEmpty) {
                 dev.log(
-                    '0817 - ExpenseWidget - Die Tabelle "KundenDaten" existiert nicht!');
+                    '1390 - ExpenseWidget - Die "Tabelle01" ist leer!');
                 return [];
               }
 
               try {
-                /*--------------------------------- Datenbankabfrage ---*/
+                /*--------------------------------- Datenbankabfrage - EW-1395 ---*/
                 final results = await database.rawQuery(
-                    'SELECT TKD_Feld_014, TKD_Feld_006, TKD_Feld_007, TKD_Feld_005 FROM KundenDaten WHERE TKD_Feld_014 IS NOT NULL AND TRIM(TKD_Feld_014) != ""');
+                    // 'SELECT TKD_Feld_014, TKD_Feld_006, TKD_Feld_007, TKD_Feld_005 FROM Tabelle01 WHERE TKD_Feld_014 IS NOT NULL AND TRIM(TKD_Feld_014) != ""'); // alte Suche
+
+                    'SELECT Tabelle01_014, Tabelle01_006, Tabelle01_007, Tabelle01_005 FROM Tabelle01 WHERE Tabelle01_014 IS NOT NULL AND TRIM(Tabelle01_014) != ""');
 
                 /*--------------------------------- Ergebnisse übermitteln • ---*/
                 return results
                     .map((row) =>
-                        '${row['TKD_Feld_014']} • ${row['TKD_Feld_006']} ${row['TKD_Feld_007']} • ${row['TKD_Feld_005']}')
+                        '${row['Tabelle01_014']} • ${row['Tabelle01_006']} ${row['Tabelle01_007']} • ${row['Tabelle01_005']}')
                     .toList();
               } catch (e) {
-                dev.log('Fehler beim Abrufen der Daten: $e');
+                dev.log(
+                    '1408 - ExpenseWidget - Fehler beim Abrufen der Daten: $e');
                 return [];
               }
             },
@@ -1453,7 +1456,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
                     ),
                     onPressed: () {
                       dev.log(
-                          '0700 - ExpenseWidget - "Wo wurde eingekauft?" - Neues Geschäft hinzufügen');
+                          '1459 - ExpenseWidget - "Wo wurde eingekauft?" - Neues Geschäft hinzufügen');
                       // Öffne Dialog zum Eingeben eines neuen Geschäfts
                       showDialog(
                         context: context,
@@ -1665,7 +1668,7 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
           //     fontWeight: FontWeight.bold,
           //     color: Colors.white,
           //   ),
-          //   tableName: 'KundenDaten',
+          //   tableName: 'Tabelle01',
           //   tableColumnName: 'TKD_Feld_014', // Firma
           // ),
 
@@ -2643,7 +2646,8 @@ class _ExpenseWidgetState extends State<ExpenseWidget> {
               wbOnTap: () {
                 dev.log("------------------------------------------------");
                 dev.log('2487 - ExpenseWidget - "PDF erstellen" angeklickt');
-                final currentAppVersion = "WorkBuddy - Free-BASIC-Version 0.04.020"; // in eine dynamische Anzeige programmieren - EW-2646
+                final currentAppVersion =
+                    "WorkBuddy - Free-BASIC-Version 0.04.020"; // in eine dynamische Anzeige programmieren - EW-2646
                 _generatePdf(currentAppVersion: currentAppVersion);
                 dev.log("------------------------------------------------");
               }),
@@ -2705,7 +2709,7 @@ class OnePointLimit extends TextInputFormatter {
 //   /*--- Hier wird die Datenbankabfrage durchgeführt ---*/
 //   final database = await openDatabase('JOTHAsoft.FiveStars.db');
 //   final results = await database.rawQuery(
-//       'SELECT TKD_Feld_014, TKD_Feld_006, TKD_Feld_007, TKD_Feld_005 FROM KundenDaten WHERE TKD_Feld_014 LIKE ?',
+//       'SELECT TKD_Feld_014, TKD_Feld_006, TKD_Feld_007, TKD_Feld_005 FROM Tabelle01 WHERE TKD_Feld_014 LIKE ?',
 //       ['%$pattern%']);
 
 //   return results

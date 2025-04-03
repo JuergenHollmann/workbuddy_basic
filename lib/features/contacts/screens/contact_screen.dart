@@ -1,15 +1,10 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:age_calculator/age_calculator.dart' show AgeCalculator;
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:workbuddy/config/wb_button_universal_2.dart';
 import 'package:workbuddy/config/wb_colors.dart';
@@ -20,6 +15,7 @@ import 'package:workbuddy/config/wb_text_form_field_only_date.dart';
 import 'package:workbuddy/config/wb_text_form_field_text_only.dart';
 import 'package:workbuddy/features/home/screens/main_selection_screen.dart';
 import 'package:workbuddy/shared/providers/current_user_provider.dart';
+import 'package:workbuddy/shared/repositories/database_helper.dart';
 import 'package:workbuddy/shared/widgets/wb_dialog_alert_update_coming_soon.dart';
 import 'package:workbuddy/shared/widgets/wb_divider_with_text_in_center.dart';
 import 'package:workbuddy/shared/widgets/wb_drop_downmenu_with_1_icon.dart';
@@ -39,49 +35,16 @@ class ContactScreen extends StatefulWidget {
 /*--------------------------------- Controller ---*/
 final scrollController = ScrollController();
 final compPersonAge = TextEditingController();
-final controllerCS001 = TextEditingController(); // Anrede
-final controllerCS002 = TextEditingController(); // Vorname
-final controllerCS003 = TextEditingController(); // Nachname
-// final controllerCS004 = TimePickerSpinnerController(); // Geburtstag
-final controllerCS004 = TextEditingController(); // Geburtstag
-final controllerCS005 = TextEditingController(); // Straße
-final controllerCS006 = TextEditingController(); // PLZ
-final controllerCS007 = TextEditingController(); // Stadt
-final controllerCS008 = TextEditingController(); // Telefon_1
-final controllerCS009 = TextEditingController(); // E-Mail_1
-final controllerCS010 = TextEditingController(); // Telefon_2
-final controllerCS011 = TextEditingController(); // E-Mail_2
-final controllerCS012 = TextEditingController(); // Webseite
-final controllerCS013 = TextEditingController(); //
-final controllerCS014 = TextEditingController(); // Firma
-final controllerCS015 = TextEditingController(); // Logo
-final controllerCS016 = TextEditingController(); // Notizen
-final controllerCS017 = TextEditingController(); // Branche
-final controllerCS018 = TextEditingController(); // KontaktQuelle
-final controllerCS019 = TextEditingController(); // Status
-final controllerCS020 = TextEditingController(); // 'Position
-final controllerCS021 = TextEditingController(); // '77765
-final controllerCS022 = TextEditingController(); // 'noch NICHT versandt
-final controllerCS023 = TextEditingController(); // 'noch NICHT versandt
-final controllerCS024 = TextEditingController(); // '99 - Gebietskennung
-final controllerCS025 = TextEditingController(); //
-final controllerCS026 = TextEditingController(); //
-final controllerCS027 = TextEditingController(); // letzte_Aenderung_am_um
-final controllerCS028 = TextEditingController(); // Betreuer
-final controllerCS029 = TextEditingController(); // Betreuer_Job
-final controllerCS030 = TextEditingController(); // KontaktID
-
-// @override
-// void initState() {
-//   super.initState();
-//   controllerCS030.text = widget.contact['TKD_Feld_030'] ?? '';
-// }
+final Map<String, TextEditingController> controllers = {
+  for (var i = 1; i <= 50; i++)
+    'controllerCS${i.toString().padLeft(3, '0')}': TextEditingController(),
+};
 
 /*--------------------------------- Daten speichern 0082 ---*/
 Future<void> saveData(BuildContext context) async {
-  if (controllerCS002.text.isEmpty &&
-      controllerCS003.text.isEmpty &&
-      controllerCS014.text.isEmpty) {
+  if (controllers['controllerCS003']!.text.isEmpty &&
+      controllers['controllerCS004']!.text.isEmpty &&
+      controllers['controllerCS015']!.text.isEmpty) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -100,22 +63,22 @@ Future<void> saveData(BuildContext context) async {
     return;
   }
 
-  var db = await DatabaseHelper().database;
+  var db = await DatabaseHelper.instance.database;
 
-  // Überprüfen, ob ein Datensatz mit der gleichen KundenID bereits existiert
+  /*--- Überprüfen, ob ein Datensatz mit der gleichen KontaktID bereits existiert ---*/
   final List<Map<String, dynamic>> result = await db.query(
-    'KundenDaten',
-    where: 'TKD_Feld_030 = ?',
-    whereArgs: [controllerCS030.text],
+    'Tabelle01',
+    where: 'Tabelle01_001 = ?',
+    whereArgs: [controllers['controllerCS001']!.text],
   );
 
   if (result.isNotEmpty) {
-    log('0113 - ContactScreen - Daten mit der KundenID ${controllerCS030.text} existieren bereits.');
+    log('0113 - ContactScreen - Daten mit der KontaktID ${controllers['controllerCS001']!.text} existieren bereits!');
     /*--- Zeige eine SnackBar an, wenn die Daten bereits existieren ---*/
     // ignore: use_build_context_synchronously
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
-        'Ein Datensatz mit der KundenID ${controllerCS030.text} existiert bereits!',
+        'Ein Datensatz mit der KontaktID ${controllers['controllerCS001']!.text} existiert bereits!',
         style: TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.bold,
@@ -128,40 +91,12 @@ Future<void> saveData(BuildContext context) async {
     return;
   }
 
-  await db.insert('KundenDaten', {
-    'TKD_Feld_000': 'KontaktID: ${controllerCS030.text}',
-    'TKD_Feld_001': controllerCS001.text,
-    'TKD_Feld_002': controllerCS002.text,
-    'TKD_Feld_003': controllerCS003.text,
-    'TKD_Feld_004': controllerCS004.text,
-    'TKD_Feld_005': controllerCS005.text,
-    'TKD_Feld_006': controllerCS006.text,
-    'TKD_Feld_007': controllerCS007.text,
-    'TKD_Feld_008': controllerCS008.text,
-    'TKD_Feld_009': controllerCS009.text,
-    'TKD_Feld_010': controllerCS010.text,
-    'TKD_Feld_011': controllerCS011.text,
-    'TKD_Feld_012': controllerCS012.text,
-    'TKD_Feld_013': controllerCS013.text,
-    'TKD_Feld_014': controllerCS014.text,
-    'TKD_Feld_015': controllerCS015.text,
-    'TKD_Feld_016': controllerCS016.text,
-    'TKD_Feld_017': controllerCS017.text,
-    'TKD_Feld_018': controllerCS018.text,
-    'TKD_Feld_019': controllerCS019.text,
-    'TKD_Feld_020': controllerCS020.text,
-    'TKD_Feld_021': controllerCS021.text,
-    'TKD_Feld_022': controllerCS022.text,
-    'TKD_Feld_023': controllerCS023.text,
-    'TKD_Feld_024': controllerCS024.text,
-    'TKD_Feld_025': controllerCS025.text,
-    'TKD_Feld_026': controllerCS026.text,
-    'TKD_Feld_027': controllerCS027.text,
-    'TKD_Feld_028': controllerCS028.text,
-    'TKD_Feld_029': controllerCS029.text,
-    'TKD_Feld_030': controllerCS030.text,
+  await db.insert('Tabelle01', {
+    for (var i = 1; i <= 30; i++)
+      'Tabelle01_${i.toString().padLeft(3, '0')}':
+          controllers['controllerCS${i.toString().padLeft(3, '0')}']!.text,
   });
-  log('0164 - ContactScreen - Daten gespeichert von ${controllerCS001.text} ${controllerCS002.text} ${controllerCS003.text} / KontaktID: ${controllerCS030.text}');
+  log('0164 - ContactScreen - Daten gespeichert von ${controllers['controllerCS001']!.text} ${controllers['controllerCS003']!.text} ${controllers['controllerCS004']!.text} / KontaktID: ${controllers['controllerCS001']!.text}');
 }
 
 /*--------------------------------- Button-Farbe beim Anklicken ändern ---*/
@@ -177,207 +112,95 @@ bool isButton09Clicked = false; // Daten speichern
 bool isButton10Clicked = false; // Daten löschen
 bool isButton11Clicked = false;
 
-// /*--------------------------------- SQL-Datenbank ---*/
-// class DatabaseHelper {
-//   static Database? _database;
-
-//   // Singleton-Muster
-//   Future<Database> get database async {
-//     if (_database != null) return _database!;
-//     _database = await _openDatabaseFromAssets();
-//     return _database!;
-//   }
-
-//   Future<Database> _openDatabaseFromAssets() async {
-//     log('0046 - ContactScreen - Öffnet die Datenbank');
-//     Directory documentsDir = await getApplicationDocumentsDirectory();
-//     String dbPath = join(documentsDir.path, "JOTHAsoft.FiveStars.db");
-//     bool dbExists = await databaseExists(dbPath);
-
-//     if (!dbExists) {
-//       ByteData data = await rootBundle.load("assets/JOTHAsoft.FiveStars.db");
-//       List<int> bytes = data.buffer.asUint8List();
-//       await File(dbPath).writeAsBytes(bytes, flush: true);
-//     }
-//     return openDatabase(dbPath);
-//   }
-// }
-
-Future<void> fetchData() async {
-  var db = await DatabaseHelper().database;
-
-  /*--- Zeige alle Kontakte aus Schwäbisch Gmünd ---*/
-  // var query = await db.rawQuery(
-  //     "SELECT * FROM KundenDaten WHERE TKD_Feld_007 = 'Schwäbisch Gmünd'");
-
-  /*--- Zeige den Kontakt mit der KundenID: 1683296820166' ---*/
-  var query = await db.rawQuery(
-      "SELECT * FROM KundenDaten WHERE TKD_Feld_030 = 'KundenID: 1683296820166'");
-
-  /*--- Zeige alle Kunden mit allen Daten ---*/
-  // var query = await db.rawQuery("SELECT * FROM KundenDaten");
-
-  log('0062 - ContactScreen - Abfrage Ergebnis: $query');
-}
-
-// Future<int> updateTest(Map<String, dynamic> row) async {
-//   Database db = await instance.database;
-//   int id = row[columnId];
-//   return await db.update(table, row, where: '$columnId = ?', whereArgs: [id]);
-// }
-
-// Future<void> updateDog() async {
-//   // Get a reference to the database.
-//   final db = await database;
-
-//   // Update the given Dog.
-//   await db.update(
-//     'dogs',
-//     dog.toMap(),
-//     // Ensure that the Dog has a matching id.
-//     where: "id = ?",
-//     // Pass the Dog's id as a whereArg to prevent SQL injection.
-//     whereArgs: [dog.id],
-//   );
-// }
-
-/*--------------------------------- Daten aktualisieren ---*/
+/*--------------------------------- Dynamische SQL-Update-Funktion ---*/
 Future<void> updateData(Map<String, dynamic> row) async {
-  // if (controllerCS002.text.isEmpty || controllerCS003.text.isEmpty) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //       title: Text("Fehler"),
-  //       content: Text("Vorname und Nachname dürfen nicht leer sein."),
-  //       actions: [
-  //         TextButton(
-  //           onPressed: () {
-  //             Navigator.of(context).pop();
-  //           },
-  //           child: Text("OK"),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  //   return;
-  // }
+  log('0117 - ContactScreen - Daten für Update: $row'); // Debugging hinzufügen
 
-  var db = await DatabaseHelper().database;
+  var db = await DatabaseHelper.instance.database;
 
-  /*--- Daten im Kontakt updaten ---*/
-  var query = await db.rawUpdate('''
-    UPDATE KundenDaten SET
-      TKD_Feld_001 = ?,
-      TKD_Feld_002 = ?,
-      TKD_Feld_003 = ?,
-      TKD_Feld_004 = ?,
-      TKD_Feld_005 = ?,
-      TKD_Feld_006 = ?,
-      TKD_Feld_007 = ?,
-      TKD_Feld_008 = ?,
-      TKD_Feld_009 = ?,
-      TKD_Feld_010 = ?,
-      TKD_Feld_011 = ?,
-      TKD_Feld_012 = ?,
-      TKD_Feld_013 = ?,
-      TKD_Feld_014 = ?,
-      TKD_Feld_015 = ?,
-      TKD_Feld_016 = ?,
-      TKD_Feld_017 = ?,
-      TKD_Feld_018 = ?,
-      TKD_Feld_019 = ?,
-      TKD_Feld_020 = ?,
-      TKD_Feld_021 = ?,
-      TKD_Feld_022 = ?,
-      TKD_Feld_023 = ?,
-      TKD_Feld_024 = ?,
-      TKD_Feld_025 = ?,
-      TKD_Feld_026 = ?,
-      TKD_Feld_027 = ?,
-      TKD_Feld_028 = ?,
-      TKD_Feld_029 = ?
-    WHERE TKD_Feld_030 = ?
-  ''', [
-    controllerCS001.text,
-    controllerCS002.text,
-    controllerCS003.text,
-    controllerCS004.text,
-    controllerCS005.text,
-    controllerCS006.text,
-    controllerCS007.text,
-    controllerCS008.text,
-    controllerCS009.text,
-    controllerCS010.text,
-    controllerCS011.text,
-    controllerCS012.text,
-    controllerCS013.text,
-    controllerCS014.text,
-    controllerCS015.text,
-    controllerCS016.text,
-    controllerCS017.text,
-    controllerCS018.text,
-    controllerCS019.text,
-    controllerCS020.text,
-    controllerCS021.text,
-    controllerCS022.text,
-    controllerCS023.text,
-    controllerCS024.text,
-    controllerCS025.text,
-    controllerCS026.text,
-    controllerCS027.text,
-    controllerCS028.text,
-    controllerCS029.text,
-    controllerCS030.text,
+  final filteredRow = row..removeWhere((key, value) => value == null);
+  final fields = filteredRow.keys.map((key) => '$key = ?').join(', ');
+  final values = filteredRow.values.toList();
+
+  if (fields.isEmpty || !row.containsKey('Tabelle01_001')) {
+    log('0126 - ContactScreen - Keine Felder zum Aktualisieren oder Primärschlüssel fehlt.');
+    return;
+  }
+
+  await db.rawUpdate('UPDATE Tabelle01 SET $fields WHERE Tabelle01_001 = ?', [
+    ...values,
+    row['Tabelle01_001'],
   ]);
 
-  log('0202 - ContactScreen - Abfrage Ergebnis: $query'); // Ergebnis: 1
-  log('0203 - ContactScreen - Abfrage Ergebnis: $controllerCS004'); // Geburtstag als Instance
-  log('0204 - ContactScreen - Abfrage Ergebnis: ${controllerCS004.text}'); // Geburtstag als Datum (oder leer)
+  log('0135 - ContactScreen - Daten aktualisiert: $row');
 }
 
-/*--------------------------------- Datensatz löschen ---*/
+void saveChanges() async {
+  final updatedRow = {
+    for (var i = 1; i <= 50; i++)
+      'Tabelle01_${i.toString().padLeft(3, '0')}':
+          controllers['controllerCS${i.toString().padLeft(3, '0')}']!.text,
+  };
+  updatedRow['Tabelle01_001'] = controllers['controllerCS001']!.text;
+
+  await updateData(updatedRow);
+}
+
+/*--------------------------------- Datensatz löschen - CS-0138 ---*/
 Future<void> deleteData(Map<String, dynamic> row) async {
-  // Die Datenbank öffnen, indem auf die Instanz von DatabaseHelper zugegriffen wird
-  var db = await DatabaseHelper().database;
+  /*--- Die Datenbank öffnen, indem auf die Instanz von DatabaseHelper zugegriffen wird ---*/
+  var db = await DatabaseHelper.instance.database;
+  log('0140 - ContactScreen - Datenbank geöffnet');
 
-  // Der Name der Tabelle, aus der der Datensatz gelöscht werden soll
-  final String tableName = 'KundenDaten';
+  /*--- Der Name der Tabelle, aus der der Datensatz gelöscht werden soll ---*/
+  final String tableName = 'Tabelle01';
+  log('0143 - ContactScreen - Datensatz löschen aus Tabelle: $tableName');
 
-  // Die Spalte, welche KundenID enthält
-  final String columnKundenID = 'TKD_Feld_030';
+  /*--- Die Spalte, welche KontaktID enthält ---*/
+  final String columnKontaktID = 'Tabelle01_001';
+  log('0146 - ContactScreen - Datensatz löschen aus Spalte mit KontaktID: $columnKontaktID');
 
-  // Die KundenID, die gelöscht werden soll
-  final String kundenIDToDelete = controllerCS030.text;
+  /*--- Die KontaktID, die gelöscht werden soll ---*/
+  final String kontaktIDToDelete = controllers['controllerCS001']!.text;
+  log('0151 - ContactScreen - KontaktID L-Ö-S-C-H-E-N: $kontaktIDToDelete');
 
-  // Den Löschvorgang durchführen
+  /*--- Den Löschvorgang durchführen ---*/
   await db.delete(
     tableName, // Name der Tabelle
     where:
-        '$columnKundenID = ?', // WHERE-Bedingung: Löschen, wo die KundenID gleich dem Wert ist
+        '$columnKontaktID = ?', // WHERE-Bedingung: Löschen, wo die KontaktID gleich dem Wert ist ---*/
     whereArgs: [
-      kundenIDToDelete
-    ], // Argument für die WHERE-Bedingung (hier: KundenID 1234)
+      kontaktIDToDelete
+    ], // Argument für die WHERE-Bedingung (z.B.: KontaktID 1234) ---*/
   );
 
-  // Optional: Gib eine Bestätigung aus, dass der Datensatz gelöscht wurde
-  log('0227 - ContactScreen - Der Datensatz mit KundenID $kundenIDToDelete wurde gelöscht.');
+  /*--- Bestätigung ausgeben, dass der Datensatz gelöscht wurde ---*/
+  log('0167 - ContactScreen - Der Datensatz mit KontaktID $kontaktIDToDelete wurde gelöscht.');
 }
 
 /*--------------------------------- State ---*/
 class _ContactScreenState extends State<ContactScreen> {
-  //final FocusNode focusNodeCS003 = FocusNode();
-  // final FocusNode focusNodeCS002 = FocusNode();
+  bool _hasDataChanged() {
+    for (var i = 1; i <= 50; i++) {
+      final key = 'controllerCS${i.toString().padLeft(3, '0')}';
+      final fieldKey = 'Tabelle01_${i.toString().padLeft(3, '0')}';
+      if (controllers[key]!.text != (widget.contact[fieldKey] ?? '')) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   void _checkAndScrollToEmptyField() {
-    if (controllerCS002.text.isEmpty) {
-      log('0373 - ContactScreen - Ist controllerCS002 leer? ${controllerCS002.text.isEmpty}');
+    if (controllers['controllerCS003']!.text.isEmpty) {
+      log('0373 - ContactScreen - Ist controllerCS003 leer? ${controllers['controllerCS003']!.text.isEmpty}');
       // Setze den Fokus auf das erste Feld
-      FocusScope.of(this.context).requestFocus(FocusNode());
+      FocusScope.of(context).requestFocus(FocusNode());
       Future.delayed(Duration.zero, () {
         log('0379 - ContactScreen - Fokus auf Feld 002 gesetzt');
         Scrollable.ensureVisible(
           // ignore: use_build_context_synchronously
-          this.context,
+          context,
           alignment: 0.5, // Scrollt zur Mitte des Bildschirms
           duration: Duration(milliseconds: 500),
         );
@@ -402,22 +225,12 @@ class _ContactScreenState extends State<ContactScreen> {
   void calculateAgeFromBirthday() {
     try {
       AgeCalculator();
-      // DateTime birthday = DateTime.parse('29.02.1964');
-      // DateTime birthday =
-      // DateTime.now().subtract(const Duration(days: 20505)); // funzt - nur zum Testen!
-      // String birthday = '29.02.1964'; // funzt - nur zum Testen!
+      String birthday = controllers['controllerCS005']!.text;
 
-      //  String birthday = controllerCS004.text; // leer? warum?
-      log('Geburtstag: ${controllerCS004.text}'); // leer? warum?
-      log('Geburtstag: $controllerCS004'); // leer? warum?
-
-      // DateTime birthday = DateTime.parse(controllerCS004.text); // leer? warum?
-      String birthday = controllerCS004.text;
-
-      log('Geburtstag: $birthday / ${controllerCS004.text}');
+      log('0223 - ContactScreen - Geburtstag: $birthday / ${controllers['controllerCS005']!.text}');
 
       /*--- Den String in Tag, Monat und Jahr aufteilen ---*/
-      List<String> dateParts = controllerCS004.text.split('.');
+      List<String> dateParts = controllers['controllerCS005']!.text.split('.');
       String day = dateParts[0];
       String month = dateParts[1];
       String year = dateParts[2];
@@ -431,12 +244,10 @@ class _ContactScreenState extends State<ContactScreen> {
       log('0267 - ContactScreen - $birthday');
       log('0268 - ContactScreen - $dateTime');
 
-      // DateTime birthday = DateTime.parse(controllerCS004.text);
       var age = AgeCalculator.age(dateTime);
       log('0297 - ContactScreen - Berechnetes Alter = ${age.years} Jahre + ${age.months} Monate + ${age.days} Tage');
 
       /*--- Automatisch die Zeit bis zum nächsten Geburtstag berechnen mit "age_calculator" ---*/
-      // DateTime nextBirthday = DateTime.parse(controllerCS004.text);
       DateTime nextBirthday = dateTime;
 
       var timeToNextBirthday = AgeCalculator.timeToNextBirthday(
@@ -462,47 +273,16 @@ class _ContactScreenState extends State<ContactScreen> {
       });
     } catch (e) {
       log('0309 - ContactScreen - Fehlermeldung: $e');
-      // /*--------------------------------- showAlertDialog ---*/ // funzt nicht!
-      // showDialog(
-
-      //   context: context,
-      //   builder: (context) => const WbDialogAlertUpdateComingSoon(
-      //     headlineText:
-      //         "Das Geburtsdatum ist nicht korrekt!\n\nBitte überprüfe das Datum.",
-      //     contentText: "Bitte überprüfe das Datum.\n\nUpdate CS-0317",
-      //     actionsText: "OK 👍",
-      //   ),
-      // );
-      // /*--------------------------------- showAlertDialog ENDE ---*/
-
-      // /*--------------------------------- showAlertDialog ---*/
-      // showDialog(
-      //   context: context,
-      //   builder: (context) => AlertDialog(
-      //     title: Text("Fehler"),
-      //     content: Text(
-      //         "Das Geburtsdatum ist nicht korrekt!\n\nBitte überprüfe das Datum."),
-      //     actions: [
-      //       TextButton(
-      //         onPressed: () {
-      //           Navigator.of(context).pop();
-      //         },
-      //         child: Text("OK 👍"),
-      //       ),
-      //     ],
-      //   ),
-      // );
-      // /*--------------------------------- showAlertDialog ENDE ---*/
     }
   }
 
   /*--------------------------------- getNextBirthdayText ---*/
   String getNextBirthdayText() {
-    log('0500 - ContactScreen - Geburtstag - Abfrage Ergebnis: ${controllerCS004.text}'); // Geburtstag als Datum (oder leer)
+    log('0500 - ContactScreen - Geburtstag - Abfrage Ergebnis: ${controllers['controllerCS005']!.text}'); // Geburtstag als Datum (oder leer)
 
     /*--- Wenn das Geburtsdatum leer ist, dann ist das Alter und die Zeit bis zum nächsten Geburtstag unbekannt ---*/
-    if (controllerCS004.text.isEmpty) {
-      log('0504 - ContactScreen ---> Geburtstag - controllerCS004.text.isEmpty: ${controllerCS004.text.isEmpty} <---');
+    if (controllers['controllerCS005']!.text.isEmpty) {
+      log('0504 - ContactScreen ---> Geburtstag - controllers["controllerCS005"]!.text.isEmpty: ${controllers["controllerCS005"]!.text.isEmpty} <---');
       return '---> ist UNBEKANNT!';
     }
     if (nextD == 0 && nextM == 0) {
@@ -539,15 +319,7 @@ class _ContactScreenState extends State<ContactScreen> {
     log('0352 - ContactScreen ---> parts: $parts <--- müssten hier gefüllt sein!');
 
     return parts.join(' + ');
-
-    //return '---> ist UNBEKANNT!';
   }
-
-  /*--------------------------------- onChanged-Funktion ---*/
-  String inputCompanyName = "Firmenlogo"; // nur für die "onChanged-Funktion"
-  String inputCompanyVNContactPerson =
-      "Ansprechpartner"; // nur für die "onChanged-Funktion"
-  String inputCompanyNNContactPerson = ""; // nur für die "onChanged-Funktion"
 
   /*--------------------------------- Telefon-Anruf-Funktionen ---*/
   bool _hasCallSupport = false;
@@ -556,76 +328,18 @@ class _ContactScreenState extends State<ContactScreen> {
 
   bool isDataChanged = false;
 
-  void _onDataChanged() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        setState(() {
-          // if (controllerCS001.text.isNotEmpty ||
-          //     controllerCS002.text.isNotEmpty ||
-          //     controllerCS003.text.isNotEmpty ||
-          //     controllerCS004.text.isNotEmpty ||
-          //     controllerCS005.text.isNotEmpty ||
-          //     controllerCS006.text.isNotEmpty ||
-          //     controllerCS007.text.isNotEmpty ||
-          //     controllerCS008.text.isNotEmpty ||
-          //     controllerCS009.text.isNotEmpty ||
-          //     controllerCS010.text.isNotEmpty ||
-          //     controllerCS011.text.isNotEmpty ||
-          //     controllerCS012.text.isNotEmpty ||
-          //     controllerCS013.text.isNotEmpty ||
-          //     controllerCS014.text.isNotEmpty ||
-          //     controllerCS015.text.isNotEmpty ||
-          //     controllerCS016.text.isNotEmpty ||
-          //     controllerCS017.text.isNotEmpty ||
-          //     controllerCS018.text.isNotEmpty ||
-          //     controllerCS019.text.isNotEmpty ||
-          //     controllerCS020.text.isNotEmpty ||
-          //     controllerCS021.text.isNotEmpty ||
-          //     controllerCS022.text.isNotEmpty ||
-          //     controllerCS023.text.isNotEmpty ||
-          //     controllerCS024.text.isNotEmpty ||
-          //     controllerCS025.text.isNotEmpty ||
-          //     controllerCS026.text.isNotEmpty ||
-          //     controllerCS027.text.isNotEmpty ||
-          //     controllerCS028.text.isNotEmpty ||
-          //     controllerCS029.text.isNotEmpty ||
-          //     controllerCS030.text.isNotEmpty) {
+  void _addListeners() { // evtl. hinter "WidgetsBinding.instance.addPostFrameCallback" verschieben?
+    controllers.forEach((key, controller) {
+      controller.addListener(() {
+        _onDataChanged(key, controller.text);
+      });
+    });
+  }
 
-          if (controllerCS001.text != widget.contact['TKD_Feld_001'] ||
-              controllerCS002.text != widget.contact['TKD_Feld_002'] ||
-              controllerCS003.text != widget.contact['TKD_Feld_003'] ||
-              controllerCS004.text != widget.contact['TKD_Feld_004'] ||
-              controllerCS005.text != widget.contact['TKD_Feld_005'] ||
-              controllerCS006.text != widget.contact['TKD_Feld_006'] ||
-              controllerCS007.text != widget.contact['TKD_Feld_007'] ||
-              controllerCS008.text != widget.contact['TKD_Feld_008'] ||
-              controllerCS009.text != widget.contact['TKD_Feld_009'] ||
-              controllerCS010.text != widget.contact['TKD_Feld_010'] ||
-              controllerCS011.text != widget.contact['TKD_Feld_011'] ||
-              controllerCS012.text != widget.contact['TKD_Feld_012'] ||
-              controllerCS013.text != widget.contact['TKD_Feld_013'] ||
-              controllerCS014.text != widget.contact['TKD_Feld_014'] ||
-              controllerCS015.text != widget.contact['TKD_Feld_015'] ||
-              controllerCS016.text != widget.contact['TKD_Feld_016'] ||
-              controllerCS017.text != widget.contact['TKD_Feld_017'] ||
-              controllerCS018.text != widget.contact['TKD_Feld_018'] ||
-              controllerCS019.text != widget.contact['TKD_Feld_019'] ||
-              controllerCS020.text != widget.contact['TKD_Feld_020'] ||
-              controllerCS021.text != widget.contact['TKD_Feld_021'] ||
-              controllerCS022.text != widget.contact['TKD_Feld_022'] ||
-              controllerCS023.text != widget.contact['TKD_Feld_023'] ||
-              controllerCS024.text != widget.contact['TKD_Feld_024'] ||
-              controllerCS025.text != widget.contact['TKD_Feld_025'] ||
-              controllerCS026.text != widget.contact['TKD_Feld_026'] ||
-              controllerCS027.text != widget.contact['TKD_Feld_027'] ||
-              controllerCS028.text != widget.contact['TKD_Feld_028'] ||
-              controllerCS029.text != widget.contact['TKD_Feld_029'] ||
-              controllerCS030.text != widget.contact['TKD_Feld_030']) {
-            isDataChanged = true;
-          }
-          log('0558 - ContactScreen - Daten wurden geändert - isDataChanged: $isDataChanged');
-        });
-      }
+  void _onDataChanged(String key, String value) {
+    log('0332 - ContactScreen - $key geändert: $value');
+    setState(() {
+      isDataChanged = _hasDataChanged();
     });
   }
 
@@ -634,69 +348,29 @@ class _ContactScreenState extends State<ContactScreen> {
     super.initState();
     log("0344 - ContactScreen - initState - aktiviert");
 
-    /*--- Controller hier initialisieren ---*/
-    controllerCS030.text = widget.contact['TKD_Feld_030'] ?? '';
-    // Fehlermeldung: disposed() called on null - 0466 - ContactScreen
+    // /*--- Controller hier initialisieren ---*/
+    // controllers['controllerCS001']!.text =
+    //     widget.contact['Tabelle01_001'] ?? '';
 
     /*--- Den Zustand (State) erst nach dem Build ändern.
           Diese Methode wird verwendet, um eine Aktion auszuführen, nachdem das Widget vollständig aufgebaut wurde. 
           Die Daten werden direkt nach dem Rendern gespeichert. ---*/
     WidgetsBinding.instance.addPostFrameCallback((_) {
       log('0350 - ContactScreen - WidgetsBinding.instance.addPostFrameCallback - aktiviert');
+
+      /*--- Controller hier initialisieren ---*/
+      controllers['controllerCS001']!.text =
+          widget.contact['Tabelle01_001'] ?? '';
+      /*--------------------------------- *** ---*/
+
       setState(() {
         try {
           /*--------------------------------- Daten aus der SQFlite ---*/
-          controllerCS001.text = widget.contact['TKD_Feld_001'] ?? ''; // Anrede
-          controllerCS002.text =
-              widget.contact['TKD_Feld_002'] ?? ''; // Vorname
-          controllerCS003.text =
-              widget.contact['TKD_Feld_003'] ?? ''; // Nachname
-
-          // Geburtstag ist ein Datum und kein String - wie kann ich das mit einem Controller verarbeiten? - 0146 - ContactScreen
-          // controllerCS004.menuIsShowing = widget.contact['TKD_Feld_004'] ?? ''; // Geburtstag
-
-          controllerCS004.text =
-              widget.contact['TKD_Feld_004'] ?? ''; // Geburtstag
-          controllerCS005.text = widget.contact['TKD_Feld_005'] ?? ''; // Straße
-          controllerCS006.text = widget.contact['TKD_Feld_006'] ?? ''; // PLZ
-          controllerCS007.text = widget.contact['TKD_Feld_007'] ?? ''; // Ort
-          controllerCS008.text =
-              widget.contact['TKD_Feld_008'] ?? ''; // Telefon 1
-          controllerCS009.text =
-              widget.contact['TKD_Feld_009'] ?? ''; // E-Mail 1
-          controllerCS010.text =
-              widget.contact['TKD_Feld_010'] ?? ''; // Telefon 2
-          controllerCS011.text =
-              widget.contact['TKD_Feld_011'] ?? ''; // E-Mail 2
-          controllerCS012.text =
-              widget.contact['TKD_Feld_012'] ?? ''; // Webseite
-          controllerCS013.text = widget.contact['TKD_Feld_013'] ?? ''; //
-          controllerCS014.text = widget.contact['TKD_Feld_014'] ?? ''; // Firma
-          controllerCS015.text = widget.contact['TKD_Feld_015'] ?? ''; // Logo
-          controllerCS016.text =
-              widget.contact['TKD_Feld_016'] ?? ''; // Notizen
-          controllerCS017.text = widget.contact['TKD_Feld_017'] ?? ''; //
-          controllerCS018.text = widget.contact['TKD_Feld_018'] ?? ''; //
-          controllerCS019.text = widget.contact['TKD_Feld_019'] ?? ''; // Status
-          controllerCS020.text =
-              widget.contact['TKD_Feld_020'] ?? ''; // 'Position
-          controllerCS021.text = widget.contact['TKD_Feld_021'] ?? ''; // '77765
-          controllerCS022.text =
-              widget.contact['TKD_Feld_022'] ?? ''; // 'noch NICHT versandt
-          controllerCS023.text =
-              widget.contact['TKD_Feld_023'] ?? ''; // 'noch NICHT versandt
-          controllerCS024.text =
-              widget.contact['TKD_Feld_024'] ?? ''; // '99 - Gebietskennung
-          controllerCS025.text = widget.contact['TKD_Feld_025'] ?? ''; //
-          controllerCS026.text = widget.contact['TKD_Feld_026'] ?? ''; //
-          controllerCS027.text =
-              widget.contact['TKD_Feld_027'] ?? ''; // letzte_Aenderung_am_um
-          updateData({});
-          widget.contact['TKD_Feld_028'] ?? ''; // Betreuer
-          controllerCS029.text =
-              widget.contact['TKD_Feld_029'] ?? ''; // Betreuer_Job
-          controllerCS030.text =
-              widget.contact['TKD_Feld_030'] ?? ''; // KontaktID
+          for (var i = 1; i <= 50; i++) {
+            controllers['controllerCS${i.toString().padLeft(3, '0')}']!.text =
+                widget.contact['Tabelle01_${i.toString().padLeft(3, '0')}'] ??
+                    '';
+          }
         } catch (e) {
           log('0271 - ContactScreen - Fehler: $e');
         }
@@ -704,45 +378,16 @@ class _ContactScreenState extends State<ContactScreen> {
 
       /*--- Daten direkt nach dem Rendern speichern ---*/
       updateData({});
+      saveChanges();
 
       /*--- Hier nochmal das Alter aus dem Geburtstag berechnen ---*/
       calculateAgeFromBirthday();
+
+      /*--- Überprüfe, ob sich die Daten geändert haben ---*/
+      setState(() {
+        isDataChanged = _hasDataChanged();
+      });
     });
-
-    /*--- Zeitstempel in ein lesbares Datum umwandeln ---*/
-    void timestampToDateTime(int timestamp) {
-      DateTime dateTime =
-          DateTime.fromMillisecondsSinceEpoch(timestamp, isUtc: true);
-      DateTime localDateTime = dateTime.toLocal();
-      String formattedDate =
-          DateFormat('dd.MM.yyyy HH:mm').format(localDateTime);
-      log('0192 - ContactScreen - formattedDate: $formattedDate');
-    }
-    // // Zeitstempel als String aus dem Controller
-    // String timestampString = controllerCS027.text;
-
-    // // Umwandlung des Strings in einen Integer
-    // int timestamp = int.parse(timestampString);
-
-    // // Umwandlung des Zeitstempels in ein DateTime-Objekt
-    // DateTime dateTime =
-    //     DateTime.fromMillisecondsSinceEpoch(timestamp, isUtc: true);
-
-    // // Umwandlung in die lokale Zeit (MESZ)
-    // DateTime localDateTime = dateTime.toLocal();
-
-    // // Formatierung des Datums im europäischen Format
-    // String formattedDate = DateFormat('dd.MM.yyyy HH:mm').format(localDateTime);
-    // log('0192 - ContactScreen - formattedDate: $formattedDate');
-
-    // String formatEuropeanTimeLocal(String timestamp) {
-    //   final dateTime =
-    //       DateTime.fromMillisecondsSinceEpoch(int.parse(timestamp));
-    //   final localTime = dateTime.toLocal();
-    //   final formatter = DateFormat('dd.MM.yyyy HH:mm:ss');
-    //   final isDst = localTime.timeZoneOffset.inHours == 2;
-    //   return '${formatter.format(localTime)} ${isDst ? 'MESZ' : 'MEZ'}';
-    // }
 
     /*--- Überprüfe den Telefon-Anruf-Support ---*/
     canLaunchUrl(Uri(scheme: 'tel', path: '123')).then((bool result) {
@@ -751,63 +396,7 @@ class _ContactScreenState extends State<ContactScreen> {
       });
     });
 
-    fetchData();
-    calculateAgeFromBirthday();
-    //dispose();
-    //updateData();
     _addListeners();
-  }
-
-  void _addListeners() {
-    controllerCS001.addListener(_onDataChanged);
-    controllerCS002.addListener(_onDataChanged);
-    controllerCS003.addListener(_onDataChanged);
-    controllerCS004.addListener(_onDataChanged);
-    controllerCS005.addListener(_onDataChanged);
-    controllerCS006.addListener(_onDataChanged);
-    controllerCS007.addListener(_onDataChanged);
-    controllerCS008.addListener(_onDataChanged);
-    controllerCS009.addListener(_onDataChanged);
-    controllerCS010.addListener(_onDataChanged);
-    controllerCS011.addListener(_onDataChanged);
-    controllerCS012.addListener(_onDataChanged);
-    controllerCS013.addListener(_onDataChanged);
-    controllerCS014.addListener(_onDataChanged);
-    controllerCS015.addListener(_onDataChanged);
-    controllerCS016.addListener(_onDataChanged);
-    controllerCS017.addListener(_onDataChanged);
-    controllerCS018.addListener(_onDataChanged);
-    controllerCS019.addListener(_onDataChanged);
-    controllerCS020.addListener(_onDataChanged);
-    controllerCS021.addListener(_onDataChanged);
-    controllerCS022.addListener(_onDataChanged);
-    controllerCS023.addListener(_onDataChanged);
-    controllerCS024.addListener(_onDataChanged);
-    controllerCS025.addListener(_onDataChanged);
-    controllerCS026.addListener(_onDataChanged);
-    controllerCS027.addListener(_onDataChanged);
-    controllerCS028.addListener(_onDataChanged);
-    controllerCS029.addListener(_onDataChanged);
-    controllerCS030.addListener(_onDataChanged);
-  }
-
-  /*--------------------------------- Telefon-Anruf-Funktionen ---*/
-  Widget _launchStatus(BuildContext context, AsyncSnapshot<void> snapshot) {
-    if (snapshot.hasError) {
-      log('0072 - ContactScreen - _launchStatus:     $_launchStatus');
-      log('0073 - ContactScreen - context:           $context');
-      log('0074 - ContactScreen - snapshot:          $snapshot');
-      log('0075 - ContactScreen - snapshot.hasError: ${snapshot.hasError}');
-      log('0076 - ContactScreen - snapshot.error:    ${snapshot.error}');
-      return Text('Error: ${snapshot.error}');
-    } else {
-      log('0080 - ContactScreen - _launchStatus:     $_launchStatus');
-      log('0081 - ContactScreen - context:           $context');
-      log('0082 - ContactScreen - snapshot:          $snapshot');
-      log('0083 - ContactScreen - snapshot.hasError: ${snapshot.hasError}');
-      log('0084 - ContactScreen - snapshot.error:    ${snapshot.error}');
-      return const Text('');
-    }
   }
 
   /*--------------------------------- Telefon-Anruf-Funktionen ---*/
@@ -827,8 +416,6 @@ class _ContactScreenState extends State<ContactScreen> {
     return Scaffold(
       backgroundColor: wbColorBackgroundBlue,
       appBar: AppBar(
-          /*--- "toolbarHeight" wird hier nicht mehr benötigt, weil jetzt "WbInfoContainer" die Daten anzeigt ---*/
-          // toolbarHeight: 100,
           title: Text(
             'Kontakt zeigen   |   bearbeiten', // oder NEU anlegen
             style: TextStyle(
@@ -841,13 +428,11 @@ class _ContactScreenState extends State<ContactScreen> {
           backgroundColor: wbColorLogoBlue, // Hintergrundfarbe
           foregroundColor: Colors.white, // Icon-/Button-/Chevron-Farbe
           shadowColor: Colors.black,
-          //elevation: 10,
-          //scrolledUnderElevation: 10,
           leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
                 if (isDataChanged) {
-                  //0715 - ContactScreen - nur wenn Daten geändert wurden
+                  log('0435 - ContactScreen - Daten wurden geändert!');
                   /*--------------------------------- Sound ---*/
                   player.play(AssetSource("sound/sound05xylophon.wav"));
                   /*--------------------------------- AlertDialog ---*/
@@ -856,7 +441,7 @@ class _ContactScreenState extends State<ContactScreen> {
                     builder: (BuildContext context) {
                       return AlertDialog(
                         title: Text(
-                            'Deine Datenänderungen bei ${controllerCS002.text} ${controllerCS003.text} wurden NICHT aktualisiert!',
+                            'Deine Datenänderungen bei ${controllers['controllerCS003']!.text} ${controllers['controllerCS004']!.text} wurden NICHT aktualisiert!',
                             style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -893,7 +478,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                   .showSnackBar(SnackBar(
                                 backgroundColor: wbColorOrangeDarker,
                                 content: Text(
-                                  "Die Daten von\n${controllerCS014.text} • ${controllerCS002.text} ${controllerCS003.text} • wurden erfolgreich aktualisiert! 😃👍",
+                                  "Die Daten von\n${controllers['controllerCS015']!.text} • ${controllers['controllerCS003']!.text} ${controllers['controllerCS004']!.text} • wurden erfolgreich aktualisiert! 😃👍",
                                   style: TextStyle(
                                     fontSize: 28,
                                     fontWeight: FontWeight.bold,
@@ -902,10 +487,12 @@ class _ContactScreenState extends State<ContactScreen> {
                                 ),
                               ));
                               /*--------------------------------- Snackbar ENDE ---*/
-
+                              /*--------------------------------- Daten updaten ---*/
                               Navigator.of(context).pop();
-                              // await saveData(context);
                               await updateData({});
+                              log('0493 - ContactScreen - Daten "updateData": ${controllers['controllerCS001']!.text} ${controllers['controllerCS003']!.text} ${controllers['controllerCS004']!.text} / KontaktID: ${controllers['controllerCS001']!.text}');
+                              saveChanges();
+                              log('0495 - ContactScreen - Daten "saveChanges": ${controllers['controllerCS001']!.text} ${controllers['controllerCS003']!.text} ${controllers['controllerCS004']!.text} / KontaktID: ${controllers['controllerCS001']!.text}');
                               Navigator.push(
                                 // ignore: use_build_context_synchronously
                                 context,
@@ -914,6 +501,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                       const MainSelectionScreen(),
                                 ),
                               );
+                              /*--------------------------------- Daten updaten - ENDE ---*/
                             },
                             child: Text(
                                 'Die geänderten Daten jetzt AKTUALISIEREN! 😃👍',
@@ -941,7 +529,6 @@ class _ContactScreenState extends State<ContactScreen> {
         child: Center(
           child: Column(
             children: [
-              //const Divider(thickness: 3, color: wbColorLogoBlue),
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 24, 16, 8),
                 child: Row(
@@ -963,31 +550,15 @@ class _ContactScreenState extends State<ContactScreen> {
                             ],
                             shape: BoxShape.circle,
                             color: Colors.white,
-                            /*--------------------------------- *** ---*/
-                            // Außenlinie mit Farbverlauf:
-                            // gradient: LinearGradient(
-                            //   colors: [
-                            //     Colors.red,
-                            //     Colors.yellow,
-                            //   ],
-                            //   begin: Alignment.topLeft,
-                            //   end: Alignment.bottomRight,
-                            // ),
-                            /*--------------------------------- *** ---*/
                           ),
                           child: CircleAvatar(
                             backgroundColor: wbColorButtonBlue,
                             backgroundImage: AssetImage(
                               "assets/company_logos/enpower_expert_logo_4_x_4.png",
                             ),
-                            /*--------------------------------- *** ---*/
-                            // Alternativ-Bild aus dem Internet:
-                            // NetworkImage('https://picsum.photos/200'),
-                            /*--------------------------------- *** ---*/
                             radius: 68,
                           ),
                         ),
-                        /*--- Das ist der Abstand zwischen dem Logo und der Firmenbezeichnung ---*/
                         const SizedBox(height: 20),
                         /*--------------------------------- Name der Firma unter dem Logo ---*/
                         SizedBox(
@@ -999,14 +570,13 @@ class _ContactScreenState extends State<ContactScreen> {
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
-                            controllerCS014.text.isEmpty
+                            controllers['controllerCS015']!.text.isEmpty
                                 ? "KEINE Firma"
-                                : controllerCS014.text,
+                                : controllers['controllerCS015']!.text,
                           ),
                         ),
                       ],
                     ),
-                    /*--- Das ist der Zwischenabstand bei Expanded --- */
                     const SizedBox(width: 14),
                     /*--------------------------------- Bild des Ansprechpartners --- */
                     Column(
@@ -1014,7 +584,6 @@ class _ContactScreenState extends State<ContactScreen> {
                         Container(
                           height: 136,
                           width: 136,
-                          // Quadrat mit blauem Hintergrund und Schatten
                           decoration: ShapeDecoration(
                             shadows: const [
                               BoxShadow(
@@ -1052,7 +621,7 @@ class _ContactScreenState extends State<ContactScreen> {
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
-                            ('${controllerCS002.text} ${controllerCS003.text}'),
+                            ('${controllers['controllerCS003']!.text} ${controllers['controllerCS004']!.text}'),
                           ),
                         ),
                       ],
@@ -1060,7 +629,6 @@ class _ContactScreenState extends State<ContactScreen> {
                   ],
                 ),
               ),
-              /*--------------------------------- Divider ---*/
               const Divider(thickness: 3, color: wbColorLogoBlue),
               /*--------------------------------- *** ---*/
               Padding(
@@ -1068,14 +636,13 @@ class _ContactScreenState extends State<ContactScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight16,
                     /*--------------------------------- Kontakt-Status auswählen ---*/
                     WbDropDownMenu(
-                      controller: controllerCS019,
+                      controller: controllers['controllerCS019']!,
                       label: "Kontakt-Staus",
                       dropdownItems: [
-                        controllerCS019.text,
+                        controllers['controllerCS019']!.text,
                         "Kontakt",
                         "Interessent",
                         "Kunde",
@@ -1083,29 +650,17 @@ class _ContactScreenState extends State<ContactScreen> {
                         "Lieferant und Kunde",
                         "möglicher Lieferant",
                       ],
-                      // leadingIconsInMenu: [
-                      //   // hat hier keine Auswikung // todo 0233 + 0406
-                      //   Icons.access_time,
-                      //   Icons.airline_seat_legroom_normal,
-                      //   Icons.access_time,
-                      //   Icons.dangerous,
-                      //   Icons.access_time,
-                      //   Icons.face,
-                      // ],
                       leadingIconInTextField: Icons.create_new_folder_outlined,
                     ),
-                    /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight8,
-                    /*--------------------------------- Divider ---*/
                     const Divider(thickness: 3, color: wbColorLogoBlue),
-                    /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight16,
+
                     /*--------------------------------- Anrede ---*/
                     WbDropDownMenu(
-                      controller: controllerCS001,
+                      controller: controllers['controllerCS002']!,
                       label: "Anrede",
                       dropdownItems: [
-                        // controllerCS001.text,
                         "Herr",
                         "Frau",
                         "Divers",
@@ -1117,7 +672,6 @@ class _ContactScreenState extends State<ContactScreen> {
                         "Prof.",
                       ],
                       leadingIconsInMenu: [
-                        // als Map oder besser noch aus der Datenbank auslesen - todo 0233 + 0406
                         Icons.person_2_outlined,
                         Icons.person_2_outlined,
                         Icons.person_2_outlined,
@@ -1130,7 +684,6 @@ class _ContactScreenState extends State<ContactScreen> {
                       ],
                       leadingIconInTextField: Icons.person_2_outlined,
                     ),
-                    /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight16,
                     /*--------------------------------- Vorname ---*/
                     WbTextFormField(
@@ -1144,18 +697,8 @@ class _ContactScreenState extends State<ContactScreen> {
                       inputFontWeightW900: FontWeight.w900,
                       inputFontColor: wbColorLogoBlue,
                       fillColor: wbColorLightYellowGreen,
-                      /*--------------------------------- onChanged ---*/
-                      controller: controllerCS002,
-                      onChanged: (String controllerCS002) {
-                        log("0478 - company_screen - Eingabe: $controllerCS002");
-
-                        inputCompanyVNContactPerson = controllerCS002;
-
-                        setState(() =>
-                            inputCompanyVNContactPerson = controllerCS002);
-                      },
+                      controller: controllers['controllerCS003']!,
                     ),
-                    /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight16,
                     /*--------------------------------- Nachname ---*/
                     WbTextFormField(
@@ -1169,18 +712,8 @@ class _ContactScreenState extends State<ContactScreen> {
                       inputFontWeightW900: FontWeight.w900,
                       inputFontColor: wbColorLogoBlue,
                       fillColor: wbColorLightYellowGreen,
-                      /*--------------------------------- onChanged ---*/
-                      controller: controllerCS003,
-                      onChanged: (String controllerCS003) {
-                        log("0504 - ContactScreen - Eingabe: $controllerCS003");
-
-                        inputCompanyNNContactPerson = controllerCS003;
-
-                        setState(() =>
-                            inputCompanyNNContactPerson = controllerCS003);
-                      },
+                      controller: controllers['controllerCS004']!,
                     ),
-                    /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight16,
                     /*--------------------------------- Container um den Geburtstag herum ---*/
                     Container(
@@ -1203,7 +736,7 @@ class _ContactScreenState extends State<ContactScreen> {
                               children: [
                                 GestureDetector(
                                   onTap: () {
-                                    log('0752 - ContactScreen - das Alter mit "${controllerCS004.text}" berechnen');
+                                    log('0752 - ContactScreen - das Alter mit "${controllers['controllerCS005']!.text}" berechnen');
                                     calculateAgeFromBirthday();
                                   },
                                   child: Text(
@@ -1214,14 +747,12 @@ class _ContactScreenState extends State<ContactScreen> {
                                     ),
                                   ),
                                 ),
-                                /*--------------------------------- Abstand zum Geburtstag-Feld ---*/
                                 wbSizedBoxWidth16,
                                 /*--------------------------------- Geburtstag-Feld ---*/
                                 Expanded(
                                   child: WbTextFormFieldOnlyDATE(
-                                      // width: 210, // ist hier ohne Auswirkung wegen Expanded
-                                      controller: controllerCS004,
-                                      // validator?
+                                      controller:
+                                          controllers['controllerCS005']!,
                                       prefixIcon: Icons.cake_outlined,
                                       labelText: 'Geburtstag',
                                       labelFontSize20: 20,
@@ -1230,101 +761,11 @@ class _ContactScreenState extends State<ContactScreen> {
                                       inputFontWeightW900: FontWeight.w900,
                                       inputFontColor: wbColorButtonDarkRed,
                                       fillColor: Colors.yellow,
-
-                                      // textInputAction: TextInputAction
-                                      //     .go, // auf der Tastatur erscheint der Button "go"
-
                                       onEditingComplete: () {
-                                        log('0890 - ContactScreen - das Alter mit "${controllerCS004.text}" berechnen');
+                                        log('0890 - ContactScreen - das Alter mit "${controllers['controllerCS005']!.text}" berechnen');
                                         calculateAgeFromBirthday();
-                                      }
-
-                                      // /*--- Automatisch das Alter berechnen mit "age_calculator" 0785 - ContactScreen ---*/
-                                      // AgeCalculator();
-                                      // DateTime birthday = DateTime.parse(
-                                      //     '${controllerCS004.text}');
-                                      // var age = AgeCalculator.age(birthday);
-                                      // log('1069 - ContactScreen - Berechnetes Alter = ${age.years} Jahre + ${age.months} Monate + ${age.days} Tage');
-
-                                      // /*--- Automatisch die Zeit bis zum nächsten Geburtstag berechnen mit "age_calculator" ---*/
-                                      // DateTime nextBirthday = DateTime.parse(
-                                      //     '${controllerCS004.text}');
-                                      // var timeToNextBirthday =
-                                      //     AgeCalculator.timeToNextBirthday(
-                                      //   DateTime(
-                                      //     nextBirthday.year,
-                                      //     nextBirthday.month,
-                                      //     nextBirthday.day,
-                                      //   ),
-                                      //   fromDate: DateTime.now(),
-                                      // );
-
-                                      // /*--- die Daten aktualisieren ---*/
-                                      // setState(() {
-                                      //   /*--- das Alter berechnen aktualisieren ---*/
-                                      //   ageY = age.years;
-                                      //   ageM = age.months;
-                                      //   ageD = age.days;
-
-                                      //   /*--- die Zeit bis zum nächsten Geburtstag aktualisieren ---*/
-                                      //   nextY = timeToNextBirthday.years;
-                                      //   nextM = timeToNextBirthday.months;
-                                      //   nextD = timeToNextBirthday.days;
-                                      // });
-
-                                      // },
-
-                                      // onChanged: (controllerCS004) {
-
-                                      //   log('0887 - ContactScreen - onChanged $controllerCS004 - Geburtsdatum berechnen');
-
-                                      // }
-                                      ),
+                                      }),
                                 ),
-
-                                /*--------------------------------- *** ---*/
-                                /*--- vorübergehend deaktiviert: TimePickerSpinnerPopUp ---*/
-                                // TimePickerSpinnerPopUp(
-                                //     // controller: controllerCS004,
-                                //     locale: Locale('de', 'DE'),
-                                //     iconSize: 20,
-                                //     textStyle: TextStyle(
-                                //         backgroundColor:
-                                //             wbColorLightYellowGreen,
-                                //         fontSize: 22,
-                                //         fontWeight: FontWeight.bold),
-                                //     isCancelTextLeft: true,
-                                //     paddingHorizontalOverlay: 80,
-                                //     mode: CupertinoDatePickerMode.date,
-                                //     radius: 16,
-                                //     initTime: selectedTime,
-                                //     minTime: DateTime.now()
-                                //         .subtract(const Duration(days: 36500)),
-                                //     /*--------------------------------- *** ---*/
-                                //     /* das Geburtsdatum kann nicht in der Zukunft liegen */
-                                //     maxTime: DateTime.now()
-                                //         .add(const Duration(days: 0)),
-                                //     /*--------------------------------- *** ---*/
-                                //     use24hFormat: true,
-                                //     barrierColor: Colors.black12,
-                                //     minuteInterval: 1,
-                                //     padding:
-                                //         const EdgeInsets.fromLTRB(12, 8, 8, 8),
-                                //     cancelText: 'Abbruch',
-                                //     confirmText: 'OK',
-                                //     pressType: PressType.singlePress,
-                                //     timeFormat: 'dd.MM.yyyy',
-
-                                /*--------------------------------- *** ---*/
-                                // onChanged: (dateTime) {
-                                //   log('0539 - ContactScreen - Geburtsdatum eingegeben: $dateTime');
-                                /*--------------------------------- *** ---*/
-
-                                //     /*--- Das angeklickte Geburtsdatum im "TimePickerSpinnerPopUp" soll behalten werden ---*/
-                                //     selectedTime = birthday;
-                                //     log('0573 - ContactScreen - selectedTime: $selectedTime = birthday: $birthday');
-                                //   });
-                                // }),
                               ],
                             ),
                           ),
@@ -1344,86 +785,9 @@ class _ContactScreenState extends State<ContactScreen> {
                                   child: Text(
                                     (ageY != 0 && ageM == 0 && ageD == 0)
                                         ? 'Heute genau $ageY Jahre alt 😃'
-                                        // : (ageD != 0 && ageM != 0 && ageY == 0)
-                                        //     ? '$ageM Monate + $ageD Tage'
-                                        //     : (ageD != 0 && ageM == 0 && ageY == 0)
-                                        //         ? '$ageD Tage'
-                                        //         : '---> ist UNBEKANNT!',
-                                        // ? '$ageY Jahre + $ageM Monate + $ageD Tage'
-                                        // : '$ageY Jahre + $ageM Monate + $ageD Tage',
-                                        /*--------------------------------- mehrfach verschachtelter ternärer Operator ---*/
-                                        : (ageY == 1 && ageM == 1 && ageD == 1)
-                                            ? '$ageY Jahr + $ageM Monat + $ageD Tag'
-                                            : (ageY == 0 &&
-                                                    ageM == 0 &&
-                                                    ageD == 1)
-                                                ? '$ageD Tag'
-                                                : (ageY == 1 &&
-                                                        ageM == 0 &&
-                                                        ageD == 1)
-                                                    ? '$ageY Jahr + $ageD Tag'
-                                                    : (ageY == 1 &&
-                                                            ageM == 1 &&
-                                                            ageD == 0)
-                                                        ? '$ageY Jahr + $ageM Monat'
-                                                        /*--------------------------------- *** ---*/
-                                                        : (controllerCS004
-                                                                    .text ==
-                                                                today)
-                                                            ? '---> ist HEUTE 😃'
-                                                            : (ageY == 0 &&
-                                                                    ageM == 0 &&
-                                                                    ageD == 0)
-                                                                ? '---> ist UNBEKANNT!'
-                                                                : (ageM == 1)
-                                                                    ? '$ageM Monat'
-                                                                    : (ageD ==
-                                                                            1)
-                                                                        ? '+ $ageD Tag'
-                                                                        : (ageM ==
-                                                                                0)
-                                                                            ? '+ $ageM Monat'
-                                                                            /*--------------------------------- *** ---*/
-                                                                            : (ageY == 0 && ageM == 0 && ageD == 0)
-                                                                                ? '---> ist UNBEKANNT!'
-                                                                                : (ageY == 1)
-                                                                                    ? '$ageY Jahr'
-                                                                                    : (ageM == 1)
-                                                                                        ? '$ageM Monat'
-                                                                                        : '$ageY Jahre + $ageM Monate + $ageD Tage',
-                                    // /*--------------------------------- mehrfach verschachtelter ternärer Operator ---*/
-                                    // (nextY == 0 && nextM == 0 && nextD == 0)
-                                    //     ? '---> ist UNBEKANNT!'
-                                    //     // : (nextY == 1 &&
-                                    //     //         nextM == 1 &&
-                                    //     //         nextD == 1)
-                                    //     //     ? '$ageY Jahr + $nextM Monate + $nextD Tage'
-                                    //     //     : (nextY == 0 &&
-                                    //     //             nextM == 0 &&
-                                    //     //             nextD == 1)
-                                    //     //         ? '$ageD Tag'
-                                    //     //         : (nextY == 1 &&
-                                    //     //                 nextM == 0 &&
-                                    //     //                 nextD == 1)
-                                    //     //             ? '$ageY Jahr + $ageD Tag'
-                                    //     //             : (nextY == 1 &&
-                                    //     //                     nextM == 1 &&
-                                    //     //                     nextD == 0)
-                                    //     //                 ? '$ageY Jahr + $ageM Monat'
-                                    //                     : '$ageY Jahre + $nextM Monate + $nextD Tage',
-
-                                    // (nextY == 0 && nextM == 0 && nextD == 0)
-                                    //     ? '---> ist UNBEKANNT!'
-                                    //     : (nextM ==
-                                    //             1) // verschachtelter ternärer Operator
-                                    //         ? '$nextM Monat'
-                                    //         : (nextD == 1)
-                                    //             ? '+ $nextD Tag'
-                                    //             : (nextM == 0)
-                                    //                 ? '+ $nextM Monat'
-                                    //                 : '$ageY Jahre + $nextM Monate + $nextD Tage',
-
-                                    /*--------------------------------- *** ---*/
+                                        : (ageY == 0 && ageM == 0 && ageD == 0)
+                                            ? '---> ist UNBEKANNT!'
+                                            : '$ageY Jahre + $ageM Monate + $ageD Tage',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -1447,20 +811,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                 ),
                                 Expanded(
                                   child: Text(
-                                    getNextBirthdayText(), // 1075 - ContactScreen
-
-                                    // /*--------------------------------- mehrfach verschachtelter ternärer Operator ---*/
-                                    // child: Text(
-                                    //   (nextY == 0 && nextM == 0 && nextD == 0)
-                                    //       ? '---> ist UNBEKANNT!'
-                                    //       : (nextD == 1)
-                                    //           ? '---> ist schon MORGEN!'
-                                    //           : (nextD == 0)
-                                    //               ? '---> ist HEUTE!'
-                                    //               : (nextM == 0)
-                                    //                   ? '---> in $nextD Tagen'
-                                    //                   : 'noch $nextM Monate + $nextD Tage',
-                                    //   /*--------------------------------- *** ---*/
+                                    getNextBirthdayText(),
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -1473,41 +824,6 @@ class _ContactScreenState extends State<ContactScreen> {
                         ],
                       ),
                     ),
-                    // /*--------------------------------- Abstand ---*/
-                    // wbSizedBoxWidth8,
-                    /*--------------------------------- Alter (berechnet) ---*/
-                    /* Alter anhand vom Geburtstag automatisch berechnen und im Feld eintragen - 0491 - ContactScreen */
-                    //     Expanded(
-                    //       // child: Text('${AgeCalculator.dateDifference(
-                    //       //   fromDate: DateTime(1964, 2, 29),
-                    //       //   toDate: DateTime.now(),
-                    //       // )}'),
-
-                    //       // child: Text('${AgeCalculator.timeToNextBirthday(
-                    //       //   DateTime(1964, 2, 29),
-                    //       //   fromDate: DateTime.now(),
-                    //       // )}'),
-
-                    //       child: WbTextFormField(
-                    //         labelText: "Alter",
-                    //         labelFontSize20: 20,
-                    //         hintText: "Alter",
-                    //         hintTextFontSize16: 15,
-                    //         inputTextFontSize22: 22,
-                    //         initialValue: '60 Jahre',
-                    //         // textInputAction:'60',
-                    //         prefixIcon: Icons.calendar_today_outlined,
-                    //         prefixIconSize28: 24,
-                    //         inputFontWeightW900: FontWeight.w900,
-                    //         inputFontColor: wbColorLogoBlue,
-                    //         fillColor: wbColorLightYellowGreen,
-                    //         textInputTypeOnKeyboard: TextInputType.number,
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
-
-                    /*--------------------------------- Daten der Firma ---*/
                     wbSizedBoxHeight8,
                     WbDividerWithTextInCenter(
                       wbColor: wbColorLogoBlue,
@@ -1517,7 +833,6 @@ class _ContactScreenState extends State<ContactScreen> {
                       wbHeight3: 3,
                     ),
                     wbSizedBoxHeight8,
-
                     /*--------------------------------- Firmenbezeichnung ---*/
                     WbTextFormField(
                       labelText: "Firmenbezeichnung",
@@ -1530,21 +845,12 @@ class _ContactScreenState extends State<ContactScreen> {
                       inputFontWeightW900: FontWeight.w900,
                       inputFontColor: wbColorLogoBlue,
                       fillColor: wbColorLightYellowGreen,
-                      // textInputTypeOnKeyboard: TextInputType.multiline,
-                      // suffixIcon: Icons.help_outline_outlined,
-                      // suffixIconSize48: 28,
-                      //textInputAction: textInputAction,
-                      /*--------------------------------- onChanged ---*/
-                      controller: controllerCS014,
-                      onChanged: (String controllerCS014) {
-                        log("0189 - company_screen - Eingabe: $controllerCS014");
-                        inputCompanyName = controllerCS014;
-                        setState(() => inputCompanyName = controllerCS014);
-                      },
+                      controller: controllers['controllerCS015']!,
                     ),
-                    /*--------------------------------- Branchenzuordnung ---*/
                     wbSizedBoxHeight16,
+                    /*--------------------------------- Branchenzuordnung ---*/
                     WbTextFormField(
+                      controller: controllers['controllerCS016']!,
                       labelText: "Branchenzuordnung",
                       labelFontSize20: 20,
                       hintText: "Welcher Branche zugeordnet?",
@@ -1556,9 +862,10 @@ class _ContactScreenState extends State<ContactScreen> {
                       inputFontColor: wbColorLogoBlue,
                       fillColor: wbColorLightYellowGreen,
                     ),
-                    /*--------------------------------- Notizen zu Warengruppen ---*/
                     wbSizedBoxHeight16,
+                    /*--------------------------------- Notizen zu Warengruppen ---*/
                     WbTextFormField(
+                      controller: controllers['controllerCS017']!,
                       labelText: "Notizen zu Warengruppen",
                       labelFontSize20: 20,
                       hintText:
@@ -1573,7 +880,6 @@ class _ContactScreenState extends State<ContactScreen> {
                       fillColor: wbColorLightYellowGreen,
                       textInputTypeOnKeyboard: TextInputType.multiline,
                     ),
-                    /*--------------------------------- WbDividerWithTextInCenter ---*/
                     wbSizedBoxHeight8,
                     WbDividerWithTextInCenter(
                       wbColor: wbColorLogoBlue,
@@ -1585,7 +891,7 @@ class _ContactScreenState extends State<ContactScreen> {
                     wbSizedBoxHeight8,
                     /*--------------------------------- Straße + Nummer ---*/
                     WbTextFormField(
-                      controller: controllerCS005,
+                      controller: controllers['controllerCS006']!,
                       labelText: "Straße und Hausnummer",
                       labelFontSize20: 20,
                       hintText: "Bitte Straße + Hausnr. eintragen",
@@ -1598,9 +904,10 @@ class _ContactScreenState extends State<ContactScreen> {
                       fillColor: wbColorLightYellowGreen,
                       textInputTypeOnKeyboard: TextInputType.streetAddress,
                     ),
-                    /*--------------------------------- Zusatzinformation ---*/
                     wbSizedBoxHeight16,
+                    /*--------------------------------- Zusatzinformation ---*/
                     WbTextFormField(
+                      controller: controllers['controllerCS007']!,
                       labelText: "Zusatzinfo zur Adresse",
                       labelFontSize20: 20,
                       hintText: "c/o-Adresse? | Hinterhaus? | EG?",
@@ -1612,14 +919,14 @@ class _ContactScreenState extends State<ContactScreen> {
                       inputFontColor: wbColorLogoBlue,
                       fillColor: wbColorLightYellowGreen,
                     ),
-                    /*--------------------------------- PLZ ---*/
                     wbSizedBoxHeight16,
+                    /*--------------------------------- PLZ ---*/
                     Row(
                       children: [
                         SizedBox(
                           width: 120,
                           child: WbTextFormFieldTEXTOnly(
-                            controller: controllerCS006,
+                            controller: controllers['controllerCS008']!,
                             labelText: "PLZ",
                             labelFontSize20: 20,
                             hintText: "PLZ",
@@ -1634,11 +941,11 @@ class _ContactScreenState extends State<ContactScreen> {
                             ),
                           ),
                         ),
-                        /*--------------------------------- Abstand ---*/
                         wbSizedBoxWidth8,
                         /*--------------------------------- Firmensitz | Ort ---*/
                         Expanded(
                           child: WbTextFormField(
+                            controller: controllers['controllerCS009']!,
                             labelText: "Firmensitz | Ort",
                             labelFontSize20: 20,
                             hintText: "Bitte den Ort eintragen",
@@ -1649,14 +956,11 @@ class _ContactScreenState extends State<ContactScreen> {
                             inputFontWeightW900: FontWeight.w900,
                             inputFontColor: wbColorLogoBlue,
                             fillColor: wbColorLightYellowGreen,
-                            controller: controllerCS007,
                           ),
                         ),
                       ],
                     ),
-                    /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight8,
-                    /*--------------------------------- Divider ---*/
                     WbDividerWithTextInCenter(
                       wbColor: wbColorLogoBlue,
                       wbText: 'Notizen zum Ansprechpartner',
@@ -1664,11 +968,10 @@ class _ContactScreenState extends State<ContactScreen> {
                       wbFontSize12: 18,
                       wbHeight3: 3,
                     ),
-                    /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight8,
                     /*--------------------------------- Notizen zum Ansprechpartner ---*/
                     WbTextFormField(
-                      controller: controllerCS016, // Notizen
+                      controller: controllers['controllerCS018']!,
                       labelText: "Notizen zum Ansprechpartner",
                       labelFontSize20: 20,
                       hintText:
@@ -1681,11 +984,8 @@ class _ContactScreenState extends State<ContactScreen> {
                       inputFontWeightW900: FontWeight.w900,
                       inputFontColor: wbColorLogoBlue,
                       fillColor: wbColorLightYellowGreen,
-                      // suffixIcon: Icons.menu_outlined,
-                      // suffixIconSize48: 28,
                       textInputTypeOnKeyboard: TextInputType.multiline,
                     ),
-                    /*--------------------------------- WbDividerWithTextInCenter ---*/
                     wbSizedBoxHeight8,
                     WbDividerWithTextInCenter(
                       wbColor: wbColorLogoBlue,
@@ -1695,17 +995,14 @@ class _ContactScreenState extends State<ContactScreen> {
                       wbHeight3: 3,
                     ),
                     wbSizedBoxHeight8,
-                    // const WBTextfieldNotice(
-                    //     headlineText: "Notizen zum Ansprechpartner:",
-                    //     hintText: "Beispiele: Hobbys, Lieblingswein, usw."),
-                    /*--------------------------------- Telefon 1 - TKD_Feld_008 ---*/
+                    /*--------------------------------- Telefon 1 - Tabelle01_008 ---*/
                     Row(
                       children: [
                         Expanded(
                           child: SizedBox(
                             width: 400,
                             child: WbTextFormField(
-                              controller: controllerCS008,
+                              controller: controllers['controllerCS011']!,
                               labelText: "Telefon 1 - Mobil",
                               labelFontSize20: 20,
                               hintText: "Bitte die Mobilnummer eintragen",
@@ -1721,177 +1018,41 @@ class _ContactScreenState extends State<ContactScreen> {
                             ),
                           ),
                         ),
-                        /*--------------------------------- Telefon Icon ---*/
                         wbSizedBoxWidth8,
                         SizedBox(
                           width: 48,
                           height: 48,
                           child: GestureDetector(
-                            /*--------------------------------- Telefon-Anruf starten ---*/
                             onTap: () async {
                               log("0767 - ContactScreen - Anruf starten");
-                              /*--------------------------------- Telefon-Anruf - Variante 1 ---*/
-                              /*--- Überprüfe den Telefon-Anruf-Support ---*/
                               _hasCallSupport
                                   ? () => setState(() {
                                         _launched = _makePhoneCall(_phone);
                                       })
                                   : null;
                               log('0785 - ContactScreen - Anruf wird supportet, $_hasCallSupport wenn result = "$_launched" | Telefonnummer: $_phone');
-                              log('0786 - ContactScreen - Anruf wird supportet');
-                              log('0787 - ContactScreen - _launched:       $_launched');
-                              //log('0788 - ContactScreen - call:            $call');
-                              log('0789 - ContactScreen - _phone:          $_phone');
-                              log('0790 - ContactScreen - _hasCallSupport: $_hasCallSupport');
-
                               final call = Uri.parse(_phone);
                               if (await canLaunchUrl(call)) {
                                 launchUrl(call);
                                 log('0793 - ContactScreen - Anruf wird supportet - Telefonnummer anrufen: $_phone / Freigabe: $call');
                               } else {
                                 log('0795 - ContactScreen - Anruf wird NICHT supportet');
-                                log('0796 - ContactScreen - _launched:       $_launched');
-                                log('0797 - ContactScreen - call:            $call');
-                                log('0798 - ContactScreen - _phone:          $_phone');
-                                log('0799 - ContactScreen - _hasCallSupport: $_hasCallSupport');
                               }
 
                               FutureBuilder<void>(
                                 future: _launched,
-                                builder: _launchStatus,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasError) {
+                                    return Text('Error: ${snapshot.error}');
+                                  } else {
+                                    return const Text('');
+                                  }
+                                },
                               );
-                              log('0785 - ContactScreen - future: $_launched');
-                              log('0787 - ContactScreen - builder: $_launchStatus');
-
-                              /*--------------------------------- Telefon-Anruf - Variante 2 ---*/
-                              // Uri.parse(_phone); // funzt
-                              // log('0782 - ContactScreen - $_phone');
-                              // launchUrl(Uri.parse(_phone)); // funzt
-                              // log('0787 - ContactScreen - $_phone');
-                              // launchUrl(Uri.parse('${_phone.toString()} ')); // funzt
-                              // log('0790 - ContactScreen - $_phone');
-
-                              // final call = Uri.parse(_phone);
-                              // if (await canLaunchUrl(call)) {
-                              //   launchUrl(call);
-                              //   log('0793 - ContactScreen - Anruf wird supportet - Telefonnummer anrufen: $_phone / Freigabe: $call');
-                              // } else {
-                              //   log('0795 - ContactScreen - Anruf wird NICHT supportet');
-                              //   log('0796 - ContactScreen - _launched:       $_launched');
-                              //   log('0797 - ContactScreen - call:            $call');
-                              //   log('0798 - ContactScreen - _phone:          $_phone');
-                              //   log('0799 - ContactScreen - _hasCallSupport: $_hasCallSupport');
-                              // }
-                              /*--------------------------------- Telefon-Anruf erledigt ---*/
-
-                              /*--------------------------------- Icon onTap ---*/
-                              // onTap: () {
-
-                              //                                   /*--------------------------------- Telefon-Anruf starten  ---*/
-                              //     child: TextField(
-                              //         onChanged: (String text) => _phone = text,
-                              //         decoration: const InputDecoration(
-                              //             hintText: 'Hier die Telefonnummer eingeben')),
-                              //   ),
-                              //   ElevatedButton(
-                              //     onPressed:
-                              // _hasCallSupport
-                              //         ? () => setState(() {
-                              //               _launched = _makePhoneCall(_phone);
-                              //             })
-                              //         : null,
-                              //     child: _hasCallSupport
-                              //         ? const Text('Rufe diese Nummer an')
-                              //         : const Text('Anrufe sind zur Zeit nicht möglich'),
-                              //   ),
-
-                              // log("0744 - ContactScreen - Einen Anruf starten");
-                              // showDialog(
-                              //   context: context,
-                              //   builder: (context) =>
-                              //       const WbDialogAlertUpdateComingSoon(
-                              //     headlineText: "Einen Anruf starten",
-                              //     contentText:
-                              //         "Willst Du jetzt die Nummer\n+49-XXX-XXXX-XXXX\nvon Klaus Müller\nin der Firma XXXXXXXXXXXX GmbH & Co. KG\nanrufen?\n\nDiese Funktion kommt bald in einem KOSTENLOSEN Update!\n\nHinweis: CS-0510",
-                              //     actionsText: "OK 👍",
-                              //   ),
-                              // );
                             },
-
-                            /*--------------------------------- Icon onTap ENDE---*/
-
                             child: Image(
                               image: AssetImage(
                                   "assets/iconbuttons/icon_button_telefon_blau.png"),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    /*--------------------------------- WhatsApp ---*/
-                    wbSizedBoxHeight16,
-                    Row(
-                      children: [
-                        Expanded(
-                          child: SizedBox(
-                            width: 185,
-                            child: WbTextFormField(
-                              controller: controllerCS008,
-                              labelText: "WhatsApp",
-                              labelFontSize20: 20,
-                              hintText: "Bitte die WhatsApp-Nr. eintragen",
-                              hintTextFontSize16: 13,
-                              inputTextFontSize22: 22,
-                              prefixIcon: Icons.phone_android_outlined,
-                              prefixIconSize28: 24,
-                              inputFontWeightW900: FontWeight.w900,
-                              inputFontColor: wbColorLogoBlue,
-                              fillColor: wbColorLightYellowGreen,
-                              textInputTypeOnKeyboard: TextInputType.phone,
-                            ),
-                          ),
-                        ),
-                        /*--------------------------------- WhatsApp Icon ---*/
-                        wbSizedBoxWidth8,
-                        SizedBox(
-                          width: 48,
-                          height: 48,
-                          child: GestureDetector(
-                            //   /*--------------------------------- WhatsApp-Nachricht starten ---*/
-                            //   // benötigt package = recherchieren"
-                            //   onTap: () async {
-                            //   log("00513 - company_screen - Anruf starten");
-                            //   Uri.parse("+491789697193"); // funzt das?
-                            //   launchUrl("tel:+491789697193");
-                            //   UrlLauncher.launch('tel:+${p.phone.toString()}');
-                            //   final call = Uri.parse('tel:+491789697193');
-                            //   if (await canLaunchUrl(call)) {
-                            //     launchUrl(call);
-                            //   } else {
-                            //     throw 'Could not launch $call';
-                            //   }
-                            // },
-                            // /*--------------------------------- WhatsApp erledigt ---*/
-
-                            /*--------------------------------- Icon onTap ---*/
-                            onTap: () {
-                              log("0594 - company_screen - Eine WhatsApp senden");
-                              showDialog(
-                                context: context,
-                                builder: (context) =>
-                                    WbDialogAlertUpdateComingSoon(
-                                  headlineText: "Eine WhatsApp versenden",
-                                  contentText:
-                                      "Willst Du jetzt an die Nummer\n${controllerCS008.text}\nvon ${controllerCS002.text} ${controllerCS003.text}\neine WhatsApp senden?\n\nDiese Funktion kommt bald in einem KOSTENLOSEN Update!\n\nHinweis: CS-0594",
-                                  actionsText: "OK 👍",
-                                ),
-                              );
-                            },
-                            /*--------------------------------- Icon onTap ENDE---*/
-                            child: Image(
-                              image: AssetImage(
-                                "assets/iconbuttons/icon_button_whatsapp.png",
-                              ),
                             ),
                           ),
                         ),
@@ -1905,7 +1066,7 @@ class _ContactScreenState extends State<ContactScreen> {
                           child: SizedBox(
                             width: 185,
                             child: WbTextFormField(
-                              controller: controllerCS010,
+                              controller: controllers['controllerCS012']!,
                               labelText: "Telefon 2",
                               labelFontSize20: 20,
                               hintText: "Bitte ggf. die 2. Nummer eintragen",
@@ -1920,29 +1081,11 @@ class _ContactScreenState extends State<ContactScreen> {
                             ),
                           ),
                         ),
-                        /*--------------------------------- Telefon Icon ---*/
                         wbSizedBoxWidth8,
                         SizedBox(
                           width: 48,
                           height: 48,
                           child: GestureDetector(
-                            //   /*--------------------------------- Telefon-Anruf starten ---*/
-                            //   // benötigt package = recherchieren"
-                            //   onTap: () async {
-                            //   log("00513 - company_screen - Anruf starten");
-                            //   Uri.parse("+491789697193"); // funzt das?
-                            //   launchUrl("tel:+491789697193");
-                            //   UrlLauncher.launch('tel:+${p.phone.toString()}');
-                            //   final call = Uri.parse('tel:+491789697193');
-                            //   if (await canLaunchUrl(call)) {
-                            //     launchUrl(call);
-                            //   } else {
-                            //     throw 'Could not launch $call';
-                            //   }
-                            // },
-                            // /*--------------------------------- Telefon-Anruf erledigt ---*/
-
-                            /*--------------------------------- Icon onTap ---*/
                             onTap: () {
                               log("0661 - company_screen - Einen Anruf starten");
                               showDialog(
@@ -1956,7 +1099,6 @@ class _ContactScreenState extends State<ContactScreen> {
                                 ),
                               );
                             },
-                            /*--------------------------------- Icon onTap ENDE---*/
                             child: Image(
                               image: AssetImage(
                                   "assets/iconbuttons/icon_button_telefon_blau.png"),
@@ -1973,7 +1115,7 @@ class _ContactScreenState extends State<ContactScreen> {
                           child: SizedBox(
                             width: 185,
                             child: WbTextFormField(
-                              controller: controllerCS009,
+                              controller: controllers['controllerCS013']!,
                               labelText: "E-Mail 1",
                               labelFontSize20: 20,
                               hintText: "Bitte E-Mail-Adresse eintragen",
@@ -1989,29 +1131,11 @@ class _ContactScreenState extends State<ContactScreen> {
                             ),
                           ),
                         ),
-                        /*--------------------------------- E-Mail 1 Icon ---*/
                         wbSizedBoxWidth8,
                         SizedBox(
                           width: 48,
                           height: 48,
                           child: GestureDetector(
-                            //   /*--------------------------------- E-Mail versenden ---*/
-                            //   // benötigt package = recherchieren"
-                            //   onTap: () async {
-                            //   log("00513 - company_screen - Anruf starten");
-                            //   Uri.parse("+491789697193"); // funzt das?
-                            //   launchUrl("tel:+491789697193");
-                            //   UrlLauncher.launch('tel:+${p.phone.toString()}');
-                            //   final call = Uri.parse('tel:+491789697193');
-                            //   if (await canLaunchUrl(call)) {
-                            //     launchUrl(call);
-                            //   } else {
-                            //     throw 'Could not launch $call';
-                            //   }
-                            // },
-                            // /*--------------------------------- E-Mail-Versand erledigt ---*/
-
-                            /*--------------------------------- Icon onTap ---*/
                             onTap: () {
                               log("0727 - company_screen - Eine E-Mail versenden");
                               showDialog(
@@ -2025,7 +1149,6 @@ class _ContactScreenState extends State<ContactScreen> {
                                 ),
                               );
                             },
-                            /*--------------------------------- Icon onTap ENDE---*/
                             child: Image(
                               image: AssetImage(
                                 "assets/iconbuttons/icon_button_email.png",
@@ -2035,77 +1158,6 @@ class _ContactScreenState extends State<ContactScreen> {
                         ),
                       ],
                     ),
-                    wbSizedBoxHeight16,
-                    /*--------------------------------- E-Mail 2 ---*/
-                    Row(
-                      children: [
-                        Expanded(
-                          child: SizedBox(
-                            width: 185,
-                            child: WbTextFormField(
-                              controller: controllerCS011,
-                              labelText: "E-Mail 2",
-                              labelFontSize20: 20,
-                              hintText: "Bitte ggf. die 2. E-Mail eintragen",
-                              hintTextFontSize16: 13,
-                              inputTextFontSize22: 22,
-                              prefixIcon: Icons.mail_outline_outlined,
-                              prefixIconSize28: 24,
-                              inputFontWeightW900: FontWeight.w900,
-                              inputFontColor: wbColorLogoBlue,
-                              fillColor: wbColorLightYellowGreen,
-                              textInputTypeOnKeyboard:
-                                  TextInputType.emailAddress,
-                            ),
-                          ),
-                        ),
-                        /*--------------------------------- E-Mail 2 Icon ---*/
-                        wbSizedBoxWidth8,
-                        SizedBox(
-                          width: 48,
-                          height: 48,
-                          child: GestureDetector(
-                            //   /*--------------------------------- E-Mail versenden ---*/
-                            //   // benötigt package = recherchieren"
-                            //   onTap: () async {
-                            //   log("00513 - company_screen - Anruf starten");
-                            //   Uri.parse("+491789697193"); // funzt das?
-                            //   launchUrl("tel:+491789697193");
-                            //   UrlLauncher.launch('tel:+${p.phone.toString()}');
-                            //   final call = Uri.parse('tel:+491789697193');
-                            //   if (await canLaunchUrl(call)) {
-                            //     launchUrl(call);
-                            //   } else {
-                            //     throw 'Could not launch $call';
-                            //   }
-                            // },
-                            // /*--------------------------------- E-Mail-Versand erledigt ---*/
-
-                            /*--------------------------------- Icon onTap ---*/
-                            onTap: () {
-                              log("0794 - company_screen - Eine E-Mail versenden");
-                              showDialog(
-                                context: context,
-                                builder: (context) =>
-                                    const WbDialogAlertUpdateComingSoon(
-                                  headlineText: "Eine E-Mail versenden",
-                                  contentText:
-                                      "Willst Du jetzt eine E-Mail an\nKlausMueller@mueller.de\nversenden?\n\nDiese Funktion kommt bald in einem KOSTENLOSEN Update!\n\nHinweis: CS-0794",
-                                  actionsText: "OK 👍",
-                                ),
-                              );
-                            },
-                            /*--------------------------------- Icon onTap ENDE ---*/
-                            child: Image(
-                              image: AssetImage(
-                                "assets/iconbuttons/icon_button_email.png",
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    /*--------------------------------- *** ---*/
                     wbSizedBoxHeight16,
                     /*--------------------------------- Webseite ---*/
                     Row(
@@ -2114,7 +1166,7 @@ class _ContactScreenState extends State<ContactScreen> {
                           child: SizedBox(
                             width: 185,
                             child: WbTextFormField(
-                              controller: controllerCS012,
+                              controller: controllers['controllerCS014']!,
                               labelText: "Webseite der Firma",
                               labelFontSize20: 20,
                               hintText: "Bitte Webseite der Firma eintragen",
@@ -2130,29 +1182,11 @@ class _ContactScreenState extends State<ContactScreen> {
                             ),
                           ),
                         ),
-                        /*--------------------------------- Webseite Icon ---*/
                         wbSizedBoxWidth8,
                         SizedBox(
                           width: 48,
                           height: 48,
                           child: GestureDetector(
-                            //   /*--------------------------------- Webseite verlinken ---*/
-                            //   // benötigt package = recherchieren"
-                            //   onTap: () async {
-                            //   log("00513 - company_screen - Anruf starten");
-                            //   Uri.parse("+491789697193"); // funzt das?
-                            //   launchUrl("tel:+491789697193");
-                            //   UrlLauncher.launch('tel:+${p.phone.toString()}');
-                            //   final call = Uri.parse('tel:+491789697193');
-                            //   if (await canLaunchUrl(call)) {
-                            //     launchUrl(call);
-                            //   } else {
-                            //     throw 'Could not launch $call';
-                            //   }
-                            // },
-                            // /*--------------------------------- Webseite verlinken erledigt ---*/
-
-                            /*--------------------------------- Icon onTap ---*/
                             onTap: () {
                               log("0872 - company_screen - Webseite verlinken");
                               showDialog(
@@ -2166,10 +1200,8 @@ class _ContactScreenState extends State<ContactScreen> {
                                 ),
                               );
                             },
-                            /*--------------------------------- Icon ---*/
                             child: Image(
                               image: AssetImage(
-                                //"assets/iconbuttons/icon_button_quadrat_blau_leer.png",
                                 "assets/iconbuttons/icon_button_quadrat_blau_leer.png",
                               ),
                             ),
@@ -2177,38 +1209,20 @@ class _ContactScreenState extends State<ContactScreen> {
                         ),
                       ],
                     ),
-                    /*--------------------------------- *** ---*/
                     wbSizedBoxHeight16,
                     const Divider(thickness: 3, color: wbColorLogoBlue),
                     wbSizedBoxHeight8,
-
-                    // /*--- Zeitstempel in ein lesbares Datum umwandeln ---*/
-                    // // Zeitstempel als String aus dem Controller
-                    // String timestampString = '${controllerCS027.text}';
-
-                    // // Umwandlung des Strings in einen Integer
-                    // int timestamp = int.parse(timestampString);
-
-                    // // Umwandlung des Zeitstempels in ein DateTime-Objekt
-                    // DateTime dateTime =
-                    //     DateTime.fromMillisecondsSinceEpoch(timestamp, isUtc: true);
-
-                    // // Umwandlung in die lokale Zeit (MESZ)
-                    // DateTime localDateTime = dateTime.toLocal();
-
-                    // // Formatierung des Datums im europäischen Format
-                    // String formattedDate = DateFormat('dd.MM.yyyy HH:mm').format(localDateTime);
-                    // log('0192 - ContactScreen - formattedDate: $formattedDate');
-
                     /*--------------------------------- Zeitstempel ---*/
                     Text(
-                        'Zuletzt aktualisiert am ${controllerCS027.text}'), // Zeitstempel formatieren - 01441 - ContactScreen
-                    Text('Kontakt-Quelle: ${controllerCS018.text}'),
-                    Text('Betreut durch: ${controllerCS028.text}'),
-                    Text('Betreuer-Stufe: ${controllerCS029.text}'),
-                    Text('Gebietskennung: ${controllerCS024.text}'),
-                    // Text('${controllerCS030.text} '), // KontaktID
-                    /*--------------------------------- Abstand ---*/
+                        'Zuletzt aktualisiert am ${controllers['controllerCS050']!.text}'),
+                    Text(
+                        'Kontakt-Quelle: ${controllers['controllerCS046']!.text}'),
+                    Text(
+                        'Betreut durch: ${controllers['controllerCS048']!.text}'),
+                    Text(
+                        'Betreuer-Stufe: ${controllers['controllerCS049']!.text}'),
+                    Text(
+                        'Gebietskennung: ${controllers['controllerCS047']!.text}'),
                     wbSizedBoxHeight8,
                     const Divider(thickness: 3, color: wbColorLogoBlue),
                     wbSizedBoxHeight8,
@@ -2241,10 +1255,9 @@ class _ContactScreenState extends State<ContactScreen> {
                           wbHeight60: 60,
                           wbOnTap: () async {
                             log("2240 - ContactScreen - Daten speichern - geklickt");
-                            // _checkAndScrollToEmptyField();
-                            if (controllerCS002.text.isEmpty &&
-                                controllerCS003.text.isEmpty &&
-                                controllerCS014.text.isEmpty) {
+                            if (controllers['controllerCS003']!.text.isEmpty &&
+                                controllers['controllerCS004']!.text.isEmpty &&
+                                controllers['controllerCS015']!.text.isEmpty) {
                               /*--------------------------------- Sound ---*/
                               player.play(
                                   AssetSource("sound/sound05xylophon.wav"));
@@ -2273,7 +1286,7 @@ class _ContactScreenState extends State<ContactScreen> {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               backgroundColor: wbColorButtonGreen,
                               content: Text(
-                                "Die Daten von\n${controllerCS014.text} • ${controllerCS002.text} ${controllerCS003.text} • wurden unter der ID ${controllerCS030.text} erfolgreich gespeichert! 😃👍",
+                                "Die Daten von\n${controllers['controllerCS015']!.text} • ${controllers['controllerCS003']!.text} ${controllers['controllerCS004']!.text} • wurden unter der KontaktID ${controllers['controllerCS001']!.text} erfolgreich gespeichert! 😃👍",
                                 style: TextStyle(
                                   fontSize: 28,
                                   fontWeight: FontWeight.bold,
@@ -2284,9 +1297,6 @@ class _ContactScreenState extends State<ContactScreen> {
                             /*--------------------------------- Speicherung in die SQL ---*/
                             await saveData(context); // Datensatz speichern
                             log('2280 - ContactScreen - Daten gespeichert (save)!');
-                            // await updateData({}); // Datensatz aktualisieren
-                            // log('1646 - ContactScreen - Daten aktualisiert (update)!');
-                            /*--------------------------------- Navigator.push ---*/
                             Navigator.push(
                               // ignore: use_build_context_synchronously
                               context,
@@ -2328,7 +1338,7 @@ class _ContactScreenState extends State<ContactScreen> {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               backgroundColor: wbColorOrangeDarker,
                               content: Text(
-                                "Die Daten von\n${controllerCS014.text} • ${controllerCS002.text} ${controllerCS003.text} • wurden erfolgreich aktualisiert! 😃👍",
+                                "Die Daten von\n${controllers['controllerCS015']!.text} • ${controllers['controllerCS003']!.text} ${controllers['controllerCS004']!.text} • mit der KontaktID ${controllers['controllerCS001']!.text} wurden erfolgreich aktualisiert! 😃👍",
                                 style: TextStyle(
                                   fontSize: 28,
                                   fontWeight: FontWeight.bold,
@@ -2337,9 +1347,12 @@ class _ContactScreenState extends State<ContactScreen> {
                               ),
                             ));
                             /*--------------------------------- Speicherung in die SQL ---*/
-                            await updateData({}); // Datensatz aktualisieren
-                            log('2335 - ContactScreen - Daten aktualisiert (update)!');
-                            /*--------------------------------- Navigator.push ---*/
+                            /*--------------------------------- Daten updaten ---*/
+                            Navigator.of(context).pop();
+                            await updateData({});
+                            log('1353 - ContactScreen - Daten "updateData": ${controllers['controllerCS001']!.text} ${controllers['controllerCS003']!.text} ${controllers['controllerCS004']!.text} / KontaktID: ${controllers['controllerCS001']!.text}');
+                            saveChanges();
+                            log('1355 - ContactScreen - Daten "saveChanges": ${controllers['controllerCS001']!.text} ${controllers['controllerCS003']!.text} ${controllers['controllerCS004']!.text} / KontaktID: ${controllers['controllerCS001']!.text}');
                             Navigator.push(
                               // ignore: use_build_context_synchronously
                               context,
@@ -2348,12 +1361,12 @@ class _ContactScreenState extends State<ContactScreen> {
                                     const MainSelectionScreen(),
                               ),
                             );
+                            /*--------------------------------- Daten updaten - ENDE ---*/
                           }),
-                    /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight16,
                     const Divider(thickness: 3, color: wbColorLogoBlue),
                     wbSizedBoxHeight8,
-                    /*--------------------------------- Button Daten LÖSCHEN ---*/
+                    /*--------------------------------- Button Daten LÖSCHEN - CS-1323 ---*/
                     WbButtonUniversal2(
                       wbColor: isButton10Clicked
                           ? Colors.yellow
@@ -2384,17 +1397,13 @@ class _ContactScreenState extends State<ContactScreen> {
                         /*--------------------------------- Sound abspielen ---*/
                         player.play(AssetSource("sound/sound03enterprise.wav"));
                         /*--------------------------------- AlertDialog - START ---*/
-                        /* Abfrage ob die App geschlossen werden soll */
                         showDialog(
                           context: context,
                           builder: (BuildContext context) => WBDialog2Buttons(
                             headLineText:
                                 'ACHTUNG:\nDie Daten werden gelöscht!',
                             descriptionText:
-                                'Möchtest Du jetzt die Daten von ${controllerCS014.text} • ${controllerCS002.text} ${controllerCS003.text} • ${controllerCS005.text} ${controllerCS006.text} ${controllerCS007.text} ${controllerCS030.text} wirklich ENDGÜLTIG löschen?\n\nDiese Aktion kann NICHT rückgängig gemacht werden!',
-
-                            /*--------------------------------- Button 1 ---*/
-                            // wbText1: "Nein",
+                                'Möchtest Du jetzt die Daten von ${controllers['controllerCS015']!.text} • ${controllers['controllerCS003']!.text} ${controllers['controllerCS004']!.text} • ${controllers['controllerCS006']!.text} ${controllers['controllerCS008']!.text} ${controllers['controllerCS009']!.text} mit der KontaktID ${controllers['controllerCS001']!.text} wirklich ENDGÜLTIG löschen?\n\nDiese Aktion kann NICHT rückgängig gemacht werden!',
                             wbOnTap1: () {
                               log('2095 - ContactScreen - "Nein" wurde angeklickt');
                               /*--------------------------------- Sound abspielen ---*/
@@ -2402,26 +1411,17 @@ class _ContactScreenState extends State<ContactScreen> {
                                   .play(AssetSource("sound/sound06pling.wav"));
                               /*--------------------------------- Dialog ausblenden ---*/
                               Navigator.of(context).pop();
-
-                              // /*--- Noch 2 Sekunden warten, bevor die Snackbar eingeblendet wird ---*/
-                              // Future.delayed(
-                              //   const Duration(seconds: 1),
-                              //   () {},
-                              // );
-
-                              /*--------------------------------- Snackbar einblenden funzt hier nicht! 2101 - ContactScreen ---*/
+                              /*--------------------------------- Snackbar einblenden ---*/
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   backgroundColor: wbColorOrangeDarker,
                                   duration: Duration(milliseconds: 2000),
                                   content: Text(
-                                    'Die Daten von ${controllerCS014.text} • ${controllerCS002.text} ${controllerCS003.text} • wurden NICHT gelöscht!',
+                                    'Die Daten von ${controllers['controllerCS015']!.text} • ${controllers['controllerCS003']!.text} ${controllers['controllerCS004']!.text} • wurden NICHT gelöscht!',
                                   ),
                                 ),
                               );
                             },
-
-                            /*--------------------------------- Button 2 ---*/
                             wbText2: "Ja • Löschen",
                             wbOnTap2: () async {
                               log('2117 - ContactScreen - "Ja • Löschen" wurde angeklickt');
@@ -2429,13 +1429,12 @@ class _ContactScreenState extends State<ContactScreen> {
                               player
                                   .play(AssetSource("sound/sound06pling.wav"));
                               /*--------------------------------- Dialog ausblenden ---*/
-                              //Navigator.of(context).pop();
                               /*--------------------------------- Snackbar einblenden ---*/
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
                                 backgroundColor: wbColorButtonDarkRed,
                                 content: Text(
-                                  'Die Daten von ${controllerCS014.text} • ${controllerCS002.text} ${controllerCS003.text} • ${controllerCS005.text} ${controllerCS006.text} ${controllerCS007.text} ${controllerCS030.text} wurden erfolgreich GELÖSCHT!',
+                                  'Die Daten von ${controllers['controllerCS015']!.text} • ${controllers['controllerCS003']!.text} ${controllers['controllerCS004']!.text} • ${controllers['controllerCS006']!.text} ${controllers['controllerCS008']!.text} ${controllers['controllerCS009']!.text} mit der KontaktID ${controllers['controllerCS001']!.text} wurden erfolgreich GELÖSCHT!',
                                   style: TextStyle(
                                     fontSize: 28,
                                     fontWeight: FontWeight.bold,
@@ -2461,139 +1460,40 @@ class _ContactScreenState extends State<ContactScreen> {
                         );
                       },
                     ),
-                    /*--------------------------------- AlertDialog - ENDE---*/
-
-                    /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight16,
                     const Divider(thickness: 3, color: wbColorLogoBlue),
-                    /*--------------------------------- KontaktID ---*/
+
+                    /*--------------------------------- KontaktID anzeigen - CS-1420 ---*/
                     Center(
-                      child: Text(controllerCS030.text),
+                      child: Text(controllers['controllerCS001']!.text),
                     ),
-                    /*--------------------------------- Abstand ---*/
+                    /*--------------------------------- *** ---*/
+
                     wbSizedBoxHeight8,
-                    /*--------------------------------- Abstand nach unten wegen anderer Devices ---*/
                     wbSizedBoxHeight32,
                     wbSizedBoxHeight16,
-                    /* das sorgt für die automatische Anpassung der Höhe, wenn mehr Text hineingeschrieben wird */
-                    SizedBox(
-                        height:
-                            double.tryParse('.')) // hat hier keine Auswirkung!
-                    /*--------------------------------- ENDE ---*/
+                    SizedBox(height: double.tryParse('.')),
                   ],
                 ),
               ),
-              /*--------------------------------- Abstand ---*/
               wbSizedBoxHeight16,
-              /*--------------------------------- *** ---*/
             ],
           ),
         ),
       ),
-      /*--------------------------------- WbInfoContainer ---*/
       bottomSheet: WbInfoContainer(
         infoText:
-            '${controllerCS014.text} • ${controllerCS002.text} ${controllerCS003.text} •\nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}',
+            '${controllers['controllerCS015']!.text} • ${controllers['controllerCS003']!.text} ${controllers['controllerCS004']!.text} •\nAngemeldet zur Bearbeitung: ${context.watch<CurrentUserProvider>().currentUser}',
         wbColors: Colors.yellow,
       ),
-      /*--------------------------------- ENDE ---*/
     );
   }
 
   @override
   void dispose() {
-    /* Nicht vergessen: Alle Controller freigeben = Speicher freigeben! */
-    controllerCS001.dispose();
-    controllerCS002.dispose();
-    controllerCS003.dispose();
-    controllerCS004.dispose();
-    controllerCS005.dispose();
-    controllerCS006.dispose();
-    controllerCS007.dispose();
-    controllerCS008.dispose();
-    controllerCS009.dispose();
-    controllerCS010.dispose();
-    controllerCS011.dispose();
-    controllerCS012.dispose();
-    controllerCS013.dispose();
-    controllerCS014.dispose();
-    controllerCS015.dispose();
-    controllerCS016.dispose();
-    controllerCS017.dispose();
-    controllerCS018.dispose();
-    controllerCS019.dispose();
-    controllerCS020.dispose();
-    controllerCS021.dispose();
-    controllerCS022.dispose();
-    controllerCS023.dispose();
-    controllerCS024.dispose();
-    controllerCS025.dispose();
-    controllerCS026.dispose();
-    controllerCS027.dispose();
-    controllerCS028.dispose();
-    controllerCS029.dispose();
-    controllerCS030.dispose();
-    super.dispose();
-  }
-}
-
-/*--------------------------------- SQL-Datenbank ---*/
-class DatabaseHelper {
-  static Database? _database;
-
-  // Singleton-Muster
-  Future<Database> get database async {
-    if (_database != null) return _database!;
-    _database = await _openDatabaseFromAssets();
-    return _database!;
-  }
-
-  Future<Database> _openDatabaseFromAssets() async {
-    log('0046 - ContactScreen - Öffnet die Datenbank');
-    Directory documentsDir = await getApplicationDocumentsDirectory();
-    String dbPath = join(documentsDir.path, "JOTHAsoft.FiveStars.db");
-    bool dbExists = await databaseExists(dbPath);
-
-    if (!dbExists) {
-      ByteData data = await rootBundle.load("assets/JOTHAsoft.FiveStars.db");
-      List<int> bytes = data.buffer.asUint8List();
-      await File(dbPath).writeAsBytes(bytes, flush: true);
+    for (var controller in controllers.values) {
+      controller.dispose();
     }
-    return openDatabase(dbPath, version: 1, onCreate: (db, version) async {
-      await db.execute('''
-        CREATE TABLE IF NOT EXISTS KundenDaten (
-          TKD_Feld_001 TEXT,
-          TKD_Feld_002 TEXT,
-          TKD_Feld_003 TEXT,
-          TKD_Feld_004 TEXT,
-          TKD_Feld_005 TEXT,
-          TKD_Feld_006 TEXT,
-          TKD_Feld_007 TEXT,
-          TKD_Feld_008 TEXT,
-          TKD_Feld_009 TEXT,
-          TKD_Feld_010 TEXT,
-          TKD_Feld_011 TEXT,
-          TKD_Feld_012 TEXT,
-          TKD_Feld_013 TEXT,
-          TKD_Feld_014 TEXT,
-          TKD_Feld_015 TEXT,
-          TKD_Feld_016 TEXT,
-          TKD_Feld_017 TEXT,
-          TKD_Feld_018 TEXT,
-          TKD_Feld_019 TEXT,
-          TKD_Feld_020 TEXT,
-          TKD_Feld_021 TEXT,
-          TKD_Feld_022 TEXT,
-          TKD_Feld_023 TEXT,
-          TKD_Feld_024 TEXT,
-          TKD_Feld_025 TEXT,
-          TKD_Feld_026 TEXT,
-          TKD_Feld_027 TEXT,
-          TKD_Feld_028 TEXT,
-          TKD_Feld_029 TEXT,
-          TKD_Feld_030 TEXT PRIMARY KEY
-        )
-      ''');
-    });
+    super.dispose();
   }
 }

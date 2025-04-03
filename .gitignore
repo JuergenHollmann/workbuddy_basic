@@ -21,7 +21,7 @@ migrate_working_dir/
 # Ignoriere meine SQFLite-Datenbanken:
 *.db
 assets/databases/
-assets/JOTHAsoft.FiveStars.db/
+#assets/JOTHAsoft.FiveStars.db/
 
 # IntelliJ related
 *.iml

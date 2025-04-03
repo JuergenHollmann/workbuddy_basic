@@ -164,7 +164,7 @@
 
 //                       /*--------------------------------- Datenbankabfrage ---*/
 //                       final results = await database.rawQuery(
-//                           'SELECT TKD_Feld_014, TKD_Feld_006, TKD_Feld_007, TKD_Feld_005 FROM KundenDaten WHERE TKD_Feld_014 IS NOT NULL AND TRIM(TKD_Feld_014) != ""');
+//                           'SELECT TKD_Feld_014, TKD_Feld_006, TKD_Feld_007, TKD_Feld_005 FROM Tabelle01 WHERE TKD_Feld_014 IS NOT NULL AND TRIM(TKD_Feld_014) != ""');
 
 //                       /*--------------------------------- Ergebnisse übermitteln ---*/
 //                       return results
@@ -302,7 +302,7 @@
 //                                               String newContactID =
 //                                                   await generateContactID();
 //                                               await database.insert(
-//                                                 'KundenDaten',
+//                                                 'Tabelle01',
 //                                                 {
 //                                                   /*--- Vorname ---*/
 //                                                   'TKD_Feld_002':
@@ -607,7 +607,7 @@
 
 
         //   if (controllerCS001.text != widget.contact['TKD_Feld_001'] ||
-        //       controllerCS002.text != widget.contact['TKD_Feld_002'] ||
+        //       controllerCS003.text != widget.contact['TKD_Feld_002'] ||
         //       controllerCS003.text != widget.contact['TKD_Feld_003'] ||
         //       controllerCS004.text != widget.contact['TKD_Feld_004'] ||
         //       controllerCS005.text != widget.contact['TKD_Feld_005'] ||
@@ -619,7 +619,7 @@
         //       controllerCS011.text != widget.contact['TKD_Feld_011'] ||
         //       controllerCS012.text != widget.contact['TKD_Feld_012'] ||
         //       controllerCS013.text != widget.contact['TKD_Feld_013'] ||
-        //       controllerCS014.text != widget.contact['TKD_Feld_014'] ||
+        //       controllerCS015.text != widget.contact['TKD_Feld_014'] ||
         //       controllerCS015.text != widget.contact['TKD_Feld_015'] ||
         //       controllerCS016.text != widget.contact['TKD_Feld_016'] ||
         //       controllerCS017.text != widget.contact['TKD_Feld_017'] ||
@@ -641,7 +641,7 @@
 // 0242
 // /*--------------------------------- Daten aktualisieren ---*/
 // Future<void> updateData(Map<String, dynamic> row) async {
-//   if (controllerCS002.text.isEmpty || controllerCS003.text.isEmpty) {
+//   if (controllerCS003.text.isEmpty || controllerCS003.text.isEmpty) {
 //     showDialog(
 //       context: context,
 //       builder: (context) => AlertDialog(
@@ -664,7 +664,7 @@
 // //0082
 // /*--------------------------------- Daten speichern ---*/
 // Future<void> saveData(BuildContext context) async {
-//   if (controllerCS002.text.isEmpty || controllerCS003.text.isEmpty) {
+//   if (controllerCS003.text.isEmpty || controllerCS003.text.isEmpty) {
 //     showDialog(
 //       context: context,
 //       builder: (context) => AlertDialog(
@@ -684,7 +684,7 @@
 //   }
 
 //                             // log("1584 - ContactScreen - Daten speichern - geklickt");
-//                             // if (controllerCS002.text.isEmpty || controllerCS003.text.isEmpty) {
+//                             // if (controllerCS003.text.isEmpty || controllerCS003.text.isEmpty) {
 //                             //   showDialog(
 //                             //     context: context,
 //                             //     builder: (context) => AlertDialog(
@@ -704,8 +704,8 @@
 //                             // }
 
 //     // Setze den Fokus auf das leere Feld und scrolle zu dieser Position
-//     if (controllerCS002.text.isEmpty) {
-//       FocusScope.of(context).requestFocus(controllerCS002);
+//     if (controllerCS003.text.isEmpty) {
+//       FocusScope.of(context).requestFocus(controllerCS003);
 //       Scrollable.ensureVisible(
 //         context,
 //         duration: Duration(milliseconds: 300),

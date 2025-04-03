@@ -1,6 +1,6 @@
 # WorkBuddy
 
-Mit dieser “Handwerker-App” können Firmen vom Kleinunternehmer bis zum Konzern ihre Buchhaltung und Kundendaten effektiv verwalten, ihre Prozesse optimieren und ihren Kundenservice verbessern. Dadurch ist eine enorme Zeit- und Geld-Ersparnis möglich.
+Mit dieser “Handwerker-App” können Firmen vom Kleinunternehmer bis zum Konzern ihre Buchhaltung und Tabelle01 effektiv verwalten, ihre Prozesse optimieren und ihren Kundenservice verbessern. Dadurch ist eine enorme Zeit- und Geld-Ersparnis möglich.
 
 Im ersten Schritt richtet sich die App in erster Linie an Kleinunternehmer, die ihre Buchhaltung mit wenigen einfachen Schritten zumindest  besser organisieren wollen.
 

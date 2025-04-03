@@ -1,14 +1,11 @@
 /*--- Erstellen einer APK-Datei (im Terminal eingeben): "flutter build apk --split-per-abi" ---*/
 
-import 'dart:developer';
-import 'dart:io';
+import 'dart:developer' as dev;
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:workbuddy/config/wb_colors.dart';
@@ -21,35 +18,57 @@ import 'package:workbuddy/shared/providers/current_day_short_provider.dart';
 import 'package:workbuddy/shared/providers/current_time_provider.dart';
 import 'package:workbuddy/shared/providers/current_user_provider.dart';
 import 'package:workbuddy/shared/repositories/auth_repository.dart';
-// import 'package:workbuddy/shared/repositories/database_helper.dart';
+import 'package:workbuddy/shared/repositories/database_helper.dart';
 import 'package:workbuddy/shared/repositories/database_repository.dart';
-import 'package:workbuddy/shared/repositories/database_setup.dart';
-// import 'package:workbuddy/shared/repositories/database_setup.dart';
 import 'package:workbuddy/shared/repositories/firebase_auth_repository.dart';
 import 'package:workbuddy/shared/repositories/mock_database.dart';
 import 'package:workbuddy/shared/repositories/shared_preferences_repository.dart';
 import 'package:workbuddy/wb_terms_of_service.dart'; // Import der Nutzungsbedingungen-Seite
 
 void main() async {
+  /*--- Notwendig für asynchrone Operationen ---*/
   WidgetsFlutterBinding.ensureInitialized();
-  await DatabaseHelper().database;
+  /*--- Überprüfe, ob die Datenbank vorhanden ist ---*/
+  bool dbExists = await DatabaseHelper.instance.databaseExists();
+  if (dbExists) {
+    /*--- Datenbank ist vorhanden + Pfad zur Datenbank ---*/
+    dev.log(
+      '0036 - main - Datenbank ist vorhanden: ${await getDatabasesPath()}',
+    );
+  } else {
+    /*--- Datenbank ist nicht vorhanden ---*/
+    dev.log('0015 - main - Datenbank ist NICHT vorhanden.');
+    /*--- Erstelle die Datenbank ---*/
+    await DatabaseHelper.instance.initializeDatabase();
+    dev.log('0043 - main - Datenbank wurde erstellt.');
+  }
+  /*--- Initialisiere die Datenbank ---*/
+  await DatabaseHelper.instance.initializeDatabase();
+  // runApp(const MainApp()); // deaktiviert am 02.04.2025
 
-  // Überprüfen, ob die Datenbank vorhanden ist
-  Directory documentsDir = await getApplicationDocumentsDirectory();
-  String dbPath = join(documentsDir.path, "JOTHAsoft.FiveStars.db");
-  bool dbExists = await File(dbPath).exists();
+  /*--------------------------------- *** ---*/
+  // deaktiviert am 02.04.2025
+  // await DatabaseHelper().database;
 
-  log('0028 - MainApp - DatabaseHelper() wird gestartet');
+  // deaktiviert am 02.04.2025
+  /*--- Überprüfen, ob die Datenbank vorhanden ist ---*/
+  // Directory documentsDir = await getApplicationDocumentsDirectory();
+  // String dbPath = join(documentsDir.path, "JOTHAsoft.FiveStars.db");
+  // bool dbExists = await File(dbPath).exists();
+  // dev.log('0028 - MainApp - DatabaseHelper() wird gestartet');
+
+  /*--- Firebase initialisieren ---*/
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // await DatabaseHelper().database; // Initialisiere die Datenbank
+
   /*--------------------------------- Repositories ---*/
   final DatabaseRepository databaseRepository = MockDatabase();
   final AuthRepository authRepository = FirebaseAuthRepository();
 
-  DatabaseSetup();
-  log('0074 - MainApp - DatabaseSetup wird gestartet');
+  // deaktiviert am 02.04.2025
+  // DatabaseSetup();
+  // dev.log('0074 - MainApp - DatabaseSetup wird gestartet');
 
   /*--- Alle Providers sind vorläufig im Ordner "lib/shared/providers" oder werden später dahin kopiert ---*/
   runApp(MultiProvider(
@@ -90,7 +109,16 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log("0071 - MainApp - wird gestartet");
+    dev.log("0071 - MainApp - wird gestartet");
+
+    // /*--------------------------------- Controller ---*/
+    // final newNameController = TextEditingController();
+    // /*--- Dieser Code ersetzt eine Auflistung, die 50 Zeilen bedeuten würde:
+    //       final controllerTabelle01_002 = TextEditingController(); usw. ... ---*/
+    // final List<TextEditingController> controllerTabelle01_0 = List.generate(
+    //   50,
+    //   (index) => TextEditingController(),
+    // );
 
     /*--- Datum formatieren auf DE = Deutschland ---*/
     initializeDateFormatting('de', null);
@@ -140,210 +168,214 @@ class MainApp extends StatelessWidget {
   }
 }
 
-class DatabaseHelper {
-  static Database? _database;
+// deactiviert am 02.04.2025
+// class DatabaseHelper {
+//   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
+//   static Database? _database;
 
-  // Singleton-Muster
-  Future<Database> get database async {
-    if (_database != null) return _database!;
-    _database = await _initDatabase();
-    return _database!;
-  }
+//   DatabaseHelper._privateConstructor();
 
-  Future<Database> _initDatabase() async {
-    Directory documentsDir = await getApplicationDocumentsDirectory();
-    String dbPath = join(documentsDir.path, "JOTHAsoft.FiveStars.db");
+//   // Singleton-Muster
+//   Future<Database> get database async {
+//     if (_database != null) return _database!;
+//     _database = await _initDatabase();
+//     return _database!;
+//   }
 
-    return await openDatabase(
-      dbPath,
-      version: 1,
-      onCreate: _onCreate,
-    );
-  }
+//   Future<Database> _initDatabase() async {
+//     Directory documentsDir = await getApplicationDocumentsDirectory();
+//     String dbPath = join(documentsDir.path, "JOTHAsoft.FiveStars.db");
 
-  Future<void> _onCreate(Database db, int version) async {
-    await db.execute('''
-      CREATE TABLE KontaktDaten (
-        TKD_000 INTEGER PRIMARY KEY AUTOINCREMENT,
-        TKD_001 TEXT,
-        TKD_002 TEXT,
-        TKD_003 TEXT,
-        TKD_004 TEXT,
-        TKD_005 TEXT,
-        TKD_006 TEXT,
-        TKD_007 TEXT,
-        TKD_008 TEXT,
-        TKD_009 TEXT,
-        TKD_010 TEXT,
-        TKD_011 TEXT,
-        TKD_012 TEXT,
-        TKD_013 TEXT,
-        TKD_014 TEXT,
-        TKD_015 TEXT,
-        TKD_016 TEXT,
-        TKD_017 TEXT,
-        TKD_018 TEXT,
-        TKD_019 TEXT,
-        TKD_020 TEXT,
-        TKD_021 TEXT,
-        TKD_022 TEXT,
-        TKD_023 TEXT,
-        TKD_024 TEXT,
-        TKD_025 TEXT,
-        TKD_026 TEXT,
-        TKD_027 TEXT,
-        TKD_028 TEXT,
-        TKD_029 TEXT,
-        TKD_030 TEXT
-      )
-    ''');
+//     return await openDatabase(
+//       dbPath,
+//       version: 1,
+//       onCreate: _onCreate,
+//     );
+//   }
 
-    await db.execute('''
-      CREATE TABLE BenutzerDaten (
-        TBD_000 INTEGER PRIMARY KEY AUTOINCREMENT,
-        TBD_001 TEXT,
-        TBD_002 TEXT,
-        TBD_003 TEXT,
-        TBD_004 TEXT,
-        TBD_005 TEXT,
-        TBD_006 TEXT,
-        TBD_007 TEXT,
-        TBD_008 TEXT,
-        TBD_009 TEXT,
-        TBD_010 TEXT,
-        TBD_011 TEXT,
-        TBD_012 TEXT,
-        TBD_013 TEXT,
-        TBD_014 TEXT,
-        TBD_015 TEXT,
-        TBD_016 TEXT,
-        TBD_017 TEXT,
-        TBD_018 TEXT,
-        TBD_019 TEXT,
-        TBD_020 TEXT,
-        TBD_021 TEXT,
-        TBD_022 TEXT,
-        TBD_023 TEXT,
-        TBD_024 TEXT,
-        TBD_025 TEXT,
-        TBD_026 TEXT,
-        TBD_027 TEXT,
-        TBD_028 TEXT,
-        TBD_029 TEXT,
-        TBD_030 TEXT
-      )
-    ''');
+//   Future<void> _onCreate(Database db, int version) async {
+//     await db.execute('''
+//       CREATE TABLE KontaktDaten (
+//         TKD_000 INTEGER PRIMARY KEY AUTOINCREMENT,
+//         TKD_001 TEXT,
+//         TKD_002 TEXT,
+//         TKD_003 TEXT,
+//         TKD_004 TEXT,
+//         TKD_005 TEXT,
+//         TKD_006 TEXT,
+//         TKD_007 TEXT,
+//         TKD_008 TEXT,
+//         TKD_009 TEXT,
+//         TKD_010 TEXT,
+//         TKD_011 TEXT,
+//         TKD_012 TEXT,
+//         TKD_013 TEXT,
+//         TKD_014 TEXT,
+//         TKD_015 TEXT,
+//         TKD_016 TEXT,
+//         TKD_017 TEXT,
+//         TKD_018 TEXT,
+//         TKD_019 TEXT,
+//         TKD_020 TEXT,
+//         TKD_021 TEXT,
+//         TKD_022 TEXT,
+//         TKD_023 TEXT,
+//         TKD_024 TEXT,
+//         TKD_025 TEXT,
+//         TKD_026 TEXT,
+//         TKD_027 TEXT,
+//         TKD_028 TEXT,
+//         TKD_029 TEXT,
+//         TKD_030 TEXT
+//       )
+//     ''');
 
-    await db.execute('''
-      CREATE TABLE EinstellungenKontakte (
-        TEK_000 INTEGER PRIMARY KEY AUTOINCREMENT,
-        TEK_001 TEXT,
-        TEK_002 TEXT,
-        TEK_003 TEXT,
-        TEK_004 TEXT,
-        TEK_005 TEXT,
-        TEK_006 TEXT,
-        TEK_007 TEXT,
-        TEK_008 TEXT,
-        TEK_009 TEXT,
-        TEK_010 TEXT,
-        TEK_011 TEXT,
-        TEK_012 TEXT,
-        TEK_013 TEXT,
-        TEK_014 TEXT,
-        TEK_015 TEXT,
-        TEK_016 TEXT,
-        TEK_017 TEXT,
-        TEK_018 TEXT,
-        TEK_019 TEXT,
-        TEK_020 TEXT,
-        TEK_021 TEXT,
-        TEK_022 TEXT,
-        TEK_023 TEXT,
-        TEK_024 TEXT,
-        TEK_025 TEXT,
-        TEK_026 TEXT,
-        TEK_027 TEXT,
-        TEK_028 TEXT,
-        TEK_029 TEXT,
-        TEK_030 TEXT
-      )
-    ''');
+//     await db.execute('''
+//       CREATE TABLE BenutzerDaten (
+//         TBD_000 INTEGER PRIMARY KEY AUTOINCREMENT,
+//         TBD_001 TEXT,
+//         TBD_002 TEXT,
+//         TBD_003 TEXT,
+//         TBD_004 TEXT,
+//         TBD_005 TEXT,
+//         TBD_006 TEXT,
+//         TBD_007 TEXT,
+//         TBD_008 TEXT,
+//         TBD_009 TEXT,
+//         TBD_010 TEXT,
+//         TBD_011 TEXT,
+//         TBD_012 TEXT,
+//         TBD_013 TEXT,
+//         TBD_014 TEXT,
+//         TBD_015 TEXT,
+//         TBD_016 TEXT,
+//         TBD_017 TEXT,
+//         TBD_018 TEXT,
+//         TBD_019 TEXT,
+//         TBD_020 TEXT,
+//         TBD_021 TEXT,
+//         TBD_022 TEXT,
+//         TBD_023 TEXT,
+//         TBD_024 TEXT,
+//         TBD_025 TEXT,
+//         TBD_026 TEXT,
+//         TBD_027 TEXT,
+//         TBD_028 TEXT,
+//         TBD_029 TEXT,
+//         TBD_030 TEXT
+//       )
+//     ''');
 
-    await db.execute('''
-      CREATE TABLE EinstellungenBenutzer (
-        TEB_000 INTEGER PRIMARY KEY AUTOINCREMENT,
-        TEB_001 TEXT,
-        TEB_002 TEXT,
-        TEB_003 TEXT,
-        TEB_004 TEXT,
-        TEB_005 TEXT,
-        TEB_006 TEXT,
-        TEB_007 TEXT,
-        TEB_008 TEXT,
-        TEB_009 TEXT,
-        TEB_010 TEXT,
-        TEB_011 TEXT,
-        TEB_012 TEXT,
-        TEB_013 TEXT,
-        TEB_014 TEXT,
-        TEB_015 TEXT,
-        TEB_016 TEXT,
-        TEB_017 TEXT,
-        TEB_018 TEXT,
-        TEB_019 TEXT,
-        TEB_020 TEXT,
-        TEB_021 TEXT,
-        TEB_022 TEXT,
-        TEB_023 TEXT,
-        TEB_024 TEXT,
-        TEB_025 TEXT,
-        TEB_026 TEXT,
-        TEB_027 TEXT,
-        TEB_028 TEXT,
-        TEB_029 TEXT,
-        TEB_030 TEXT
-      )
-    ''');
+//     await db.execute('''
+//       CREATE TABLE EinstellungenKontakte (
+//         TEK_000 INTEGER PRIMARY KEY AUTOINCREMENT,
+//         TEK_001 TEXT,
+//         TEK_002 TEXT,
+//         TEK_003 TEXT,
+//         TEK_004 TEXT,
+//         TEK_005 TEXT,
+//         TEK_006 TEXT,
+//         TEK_007 TEXT,
+//         TEK_008 TEXT,
+//         TEK_009 TEXT,
+//         TEK_010 TEXT,
+//         TEK_011 TEXT,
+//         TEK_012 TEXT,
+//         TEK_013 TEXT,
+//         TEK_014 TEXT,
+//         TEK_015 TEXT,
+//         TEK_016 TEXT,
+//         TEK_017 TEXT,
+//         TEK_018 TEXT,
+//         TEK_019 TEXT,
+//         TEK_020 TEXT,
+//         TEK_021 TEXT,
+//         TEK_022 TEXT,
+//         TEK_023 TEXT,
+//         TEK_024 TEXT,
+//         TEK_025 TEXT,
+//         TEK_026 TEXT,
+//         TEK_027 TEXT,
+//         TEK_028 TEXT,
+//         TEK_029 TEXT,
+//         TEK_030 TEXT
+//       )
+//     ''');
 
-    // Tabelle "EinkaufVerkauf"
-    await db.execute('''
-      CREATE TABLE IF NOT EXISTS EinkaufVerkauf (
-        TEV_000 INTEGER PRIMARY KEY AUTOINCREMENT,
-        TEV_001 TEXT,
-        TEV_002 TEXT,
-        TEV_003 TEXT,
-        TEV_004 TEXT,
-        TEV_005 TEXT,
-        TEV_006 TEXT,
-        TEV_007 TEXT,
-        TEV_008 TEXT,
-        TEV_009 TEXT,
-        TEV_010 TEXT,
-        TEV_011 TEXT,
-        TEV_012 TEXT,
-        TEV_013 TEXT,
-        TEV_014 TEXT,
-        TEV_015 TEXT,
-        TEV_016 TEXT,
-        TEV_017 TEXT,
-        TEV_018 TEXT,
-        TEV_019 TEXT,
-        TEV_020 TEXT,
-        TEV_021 TEXT,
-        TEV_022 TEXT,
-        TEV_023 TEXT,
-        TEV_024 TEXT,
-        TEV_025 TEXT,
-        TEV_026 TEXT,
-        TEV_027 TEXT,
-        TEV_028 TEXT,
-        TEV_029 TEXT,
-        TEV_030 TEXT
-      )
-    ''');
-  }
-}
+//     await db.execute('''
+//       CREATE TABLE EinstellungenBenutzer (
+//         TEB_000 INTEGER PRIMARY KEY AUTOINCREMENT,
+//         TEB_001 TEXT,
+//         TEB_002 TEXT,
+//         TEB_003 TEXT,
+//         TEB_004 TEXT,
+//         TEB_005 TEXT,
+//         TEB_006 TEXT,
+//         TEB_007 TEXT,
+//         TEB_008 TEXT,
+//         TEB_009 TEXT,
+//         TEB_010 TEXT,
+//         TEB_011 TEXT,
+//         TEB_012 TEXT,
+//         TEB_013 TEXT,
+//         TEB_014 TEXT,
+//         TEB_015 TEXT,
+//         TEB_016 TEXT,
+//         TEB_017 TEXT,
+//         TEB_018 TEXT,
+//         TEB_019 TEXT,
+//         TEB_020 TEXT,
+//         TEB_021 TEXT,
+//         TEB_022 TEXT,
+//         TEB_023 TEXT,
+//         TEB_024 TEXT,
+//         TEB_025 TEXT,
+//         TEB_026 TEXT,
+//         TEB_027 TEXT,
+//         TEB_028 TEXT,
+//         TEB_029 TEXT,
+//         TEB_030 TEXT
+//       )
+//     ''');
+
+//     // Tabelle "EinkaufVerkauf"
+//     await db.execute('''
+//       CREATE TABLE IF NOT EXISTS EinkaufVerkauf (
+//         TEV_000 INTEGER PRIMARY KEY AUTOINCREMENT,
+//         TEV_001 TEXT,
+//         TEV_002 TEXT,
+//         TEV_003 TEXT,
+//         TEV_004 TEXT,
+//         TEV_005 TEXT,
+//         TEV_006 TEXT,
+//         TEV_007 TEXT,
+//         TEV_008 TEXT,
+//         TEV_009 TEXT,
+//         TEV_010 TEXT,
+//         TEV_011 TEXT,
+//         TEV_012 TEXT,
+//         TEV_013 TEXT,
+//         TEV_014 TEXT,
+//         TEV_015 TEXT,
+//         TEV_016 TEXT,
+//         TEV_017 TEXT,
+//         TEV_018 TEXT,
+//         TEV_019 TEXT,
+//         TEV_020 TEXT,
+//         TEV_021 TEXT,
+//         TEV_022 TEXT,
+//         TEV_023 TEXT,
+//         TEV_024 TEXT,
+//         TEV_025 TEXT,
+//         TEV_026 TEXT,
+//         TEV_027 TEXT,
+//         TEV_028 TEXT,
+//         TEV_029 TEXT,
+//         TEV_030 TEXT
+//       )
+//     ''');
+//   }
+// }
 
 /*--------------------------------- TODO's ---
 * Firebase:

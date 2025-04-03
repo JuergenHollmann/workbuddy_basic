@@ -138,18 +138,24 @@ class _ContactMenuState extends State<ContactMenu> {
                         developer.log(
                             "0144 - ContactMenu - Einen Kontakt NEU anlegen - angeklickt");
 
+                        // Generiere eine neue Kontakt-ID und setze den Status auf "isNewContact",
+                        // damit die Kontakt-Details-Seite weiß, dass es sich um einen neuen Kontakt handelt
+                        // und nicht um einen bereits vorhandenen Kontakt
+                        // (hier wird die ID generiert, um sie an die Kontakt-Details-Seite zu übergeben)
+
                         String newContactID = generateContactID();
                         setState(() {
                           isNewContact = true;
-                                       });
+                        });
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => ContactScreen(
-                              contact: {'TKD_Feld_030': newContactID},
+                              contact: {'Tabelle01_001': newContactID},
                               isNewContact: isNewContact,
                             ),
                           ),
+                          /*--------------------------------- *** ---*/
                         );
                       },
                     ),
@@ -217,7 +223,6 @@ class _ContactMenuState extends State<ContactMenu> {
         rng.nextInt(1000).toString();
   }
 }
-
 
 // import 'dart:developer' as developer;
 // import 'dart:math';
@@ -287,7 +292,7 @@ class _ContactMenuState extends State<ContactMenu> {
 //                     //   color: wbColorButtonGreen,
 //                     //   child: InkWell(
 //                     //     onTap: () {
-//                     //       log("0092 - ContactMenu - Einen Kontakt suchen - angeklickt");
+//                     //       log("0093 - ContactMenu - Einen Kontakt suchen - angeklickt");
 //                     //       Navigator.push(
 //                     //         context,
 //                     //         MaterialPageRoute(
@@ -335,7 +340,7 @@ class _ContactMenuState extends State<ContactMenu> {
 //                       wbHeight60: 80,
 //                       wbOnTap: () {
 //                         developer.log(
-//                             '0092 - ContactMenu - "In allen Kontakten SUCHEN und FINDEN" - angeklickt');
+//                             '0094 - ContactMenu - "In allen Kontakten SUCHEN und FINDEN" - angeklickt');
 //                         /*--------------------------------- Navigator.push ---*/
 //                         Navigator.push(
 //                           context,
@@ -402,7 +407,7 @@ class _ContactMenuState extends State<ContactMenu> {
 //                           context,
 //                           MaterialPageRoute(
 //                             builder: (context) => ContactScreen(
-//                               contact: {'TKD_Feld_030': newContactID},
+//                               contact: {'Tabelle01_001': newContactID},
 //                             ),
 //                           ),
 //                         );

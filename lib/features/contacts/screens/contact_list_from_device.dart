@@ -23,7 +23,8 @@ class ContactListFromDevice extends StatefulWidget {
 class _ContactListFromDeviceState extends State<ContactListFromDevice> {
   List<Contact> filteredContacts = [];
   List<Contact> allContacts = [];
-  int currentMax = 10; // Initiale Anzahl der am Anfang geladenen Kontakte wegen schnellerem Laden des Screens
+  int currentMax =
+      10; // Initiale Anzahl der am Anfang geladenen Kontakte wegen schnellerem Laden des Screens
   final TextEditingController _searchController = TextEditingController();
   List<Contact> displayedContacts = [];
   final AudioPlayer player = AudioPlayer();
@@ -102,51 +103,141 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
   }
 
   Future<bool> isContactInDatabase(Contact contact) async {
-    final Database db = await openDatabase('JOTHAsoft.FiveStars.db', version: 1,
-        onCreate: (db, version) async {
-      await db.execute('''
-        CREATE TABLE IF NOT EXISTS KundenDaten (
-          TKD_Feld_001 TEXT,
-          TKD_Feld_002 TEXT,
-          TKD_Feld_003 TEXT,
-          TKD_Feld_004 TEXT,
-          TKD_Feld_005 TEXT,
-          TKD_Feld_006 TEXT,
-          TKD_Feld_007 TEXT,
-          TKD_Feld_008 TEXT,
-          TKD_Feld_009 TEXT,
-          TKD_Feld_010 TEXT,
-          TKD_Feld_011 TEXT,
-          TKD_Feld_012 TEXT,
-          TKD_Feld_013 TEXT,
-          TKD_Feld_014 TEXT,
-          TKD_Feld_015 TEXT,
-          TKD_Feld_016 TEXT,
-          TKD_Feld_017 TEXT,
-          TKD_Feld_018 TEXT,
-          TKD_Feld_019 TEXT,
-          TKD_Feld_020 TEXT,
-          TKD_Feld_021 TEXT,
-          TKD_Feld_022 TEXT,
-          TKD_Feld_023 TEXT,
-          TKD_Feld_024 TEXT,
-          TKD_Feld_025 TEXT,
-          TKD_Feld_026 TEXT,
-          TKD_Feld_027 TEXT,
-          TKD_Feld_028 TEXT,
-          TKD_Feld_029 TEXT,
-          TKD_Feld_030 TEXT PRIMARY KEY
-        )
-      ''');
-    });
-    final List<Map<String, dynamic>> result = await db.query(
-      'KundenDaten',
-      where: 'TKD_Feld_002 = ? AND TKD_Feld_003 = ?',
-      whereArgs: [
-        contact.name.first.isNotEmpty ? contact.name.first : '',
-        contact.name.last.isNotEmpty ? contact.name.last : '',
-      ],
+    final Database db = await openDatabase(
+      'JOTHAsoft.FiveStars.db',
+      version: 1,
+      onCreate: (db, version) async {
+        log('Datenbank wird erstellt...');
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS Tabelle01 (
+            Tabelle01_001 TEXT PRIMARY KEY,
+            Tabelle01_002 TEXT,
+            Tabelle01_003 TEXT,
+            Tabelle01_004 TEXT,
+            Tabelle01_005 TEXT,
+            Tabelle01_006 TEXT,
+            Tabelle01_007 TEXT,
+            Tabelle01_008 TEXT,
+            Tabelle01_009 TEXT,
+            Tabelle01_010 TEXT,
+            Tabelle01_011 TEXT,
+            Tabelle01_012 TEXT,
+            Tabelle01_013 TEXT,
+            Tabelle01_014 TEXT,
+            Tabelle01_015 TEXT,
+            Tabelle01_016 TEXT,
+            Tabelle01_017 TEXT,
+            Tabelle01_018 TEXT,
+            Tabelle01_019 TEXT,
+            Tabelle01_020 TEXT,
+            Tabelle01_021 TEXT,
+            Tabelle01_022 TEXT,
+            Tabelle01_023 TEXT,
+            Tabelle01_024 TEXT,
+            Tabelle01_025 TEXT,
+            Tabelle01_026 TEXT,
+            Tabelle01_027 TEXT,
+            Tabelle01_028 TEXT,
+            Tabelle01_029 TEXT,
+            Tabelle01_030 TEXT,
+            Tabelle01_031 TEXT,
+            Tabelle01_032 TEXT,
+            Tabelle01_033 TEXT,
+            Tabelle01_034 TEXT,
+            Tabelle01_035 TEXT,
+            Tabelle01_036 TEXT,
+            Tabelle01_037 TEXT,
+            Tabelle01_038 TEXT,
+            Tabelle01_039 TEXT,
+            Tabelle01_040 TEXT,
+            Tabelle01_041 TEXT,
+            Tabelle01_042 TEXT,
+            Tabelle01_043 TEXT,
+            Tabelle01_044 TEXT,
+            Tabelle01_045 TEXT,
+            Tabelle01_046 TEXT,
+            Tabelle01_047 TEXT,
+            Tabelle01_048 TEXT,
+            Tabelle01_049 TEXT,
+            Tabelle01_050 TEXT
+          )
+        ''');
+        log('Tabelle01 wurde erfolgreich erstellt.');
+      },
     );
+
+    // Sicherstellen, dass die Tabelle existiert
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS Tabelle01 (
+        Tabelle01_001 TEXT PRIMARY KEY,
+        Tabelle01_002 TEXT,
+        Tabelle01_003 TEXT,
+        Tabelle01_004 TEXT,
+        Tabelle01_005 TEXT,
+        Tabelle01_006 TEXT,
+        Tabelle01_007 TEXT,
+        Tabelle01_008 TEXT,
+        Tabelle01_009 TEXT,
+        Tabelle01_010 TEXT,
+        Tabelle01_011 TEXT,
+        Tabelle01_012 TEXT,
+        Tabelle01_013 TEXT,
+        Tabelle01_014 TEXT,
+        Tabelle01_015 TEXT,
+        Tabelle01_016 TEXT,
+        Tabelle01_017 TEXT,
+        Tabelle01_018 TEXT,
+        Tabelle01_019 TEXT,
+        Tabelle01_020 TEXT,
+        Tabelle01_021 TEXT,
+        Tabelle01_022 TEXT,
+        Tabelle01_023 TEXT,
+        Tabelle01_024 TEXT,
+        Tabelle01_025 TEXT,
+        Tabelle01_026 TEXT,
+        Tabelle01_027 TEXT,
+        Tabelle01_028 TEXT,
+        Tabelle01_029 TEXT,
+        Tabelle01_030 TEXT,
+        Tabelle01_031 TEXT,
+        Tabelle01_032 TEXT,
+        Tabelle01_033 TEXT,
+        Tabelle01_034 TEXT,
+        Tabelle01_035 TEXT,
+        Tabelle01_036 TEXT,
+        Tabelle01_037 TEXT,
+        Tabelle01_038 TEXT,
+        Tabelle01_039 TEXT,
+        Tabelle01_040 TEXT,
+        Tabelle01_041 TEXT,
+        Tabelle01_042 TEXT,
+        Tabelle01_043 TEXT,
+        Tabelle01_044 TEXT,
+        Tabelle01_045 TEXT,
+        Tabelle01_046 TEXT,
+        Tabelle01_047 TEXT,
+        Tabelle01_048 TEXT,
+        Tabelle01_049 TEXT,
+        Tabelle01_050 TEXT
+      )
+    ''');
+
+    final String? firstName =
+        contact.name.first.isNotEmpty ? contact.name.first : null;
+    final String? lastName =
+        contact.name.last.isNotEmpty ? contact.name.last : null;
+
+    final List<Map<String, dynamic>> result = await db.query(
+      'Tabelle01',
+      where: '''
+        (Tabelle01_003 = ? OR (Tabelle01_003 IS NULL AND ? IS NULL)) AND 
+        (Tabelle01_004 = ? OR (Tabelle01_004 IS NULL AND ? IS NULL))
+      ''',
+      whereArgs: [firstName, firstName, lastName, lastName],
+    );
+
+    log('0172 - ContactListFromDevice - Abfrage der Datenbank: ${contact.name.first} ${contact.name.last}');
+    log('0173 - ContactListFromDevice - Ergebnis der Abfrage: $result');
     return result.isNotEmpty;
   }
 
@@ -606,34 +697,34 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                                                   ContactScreen(
                                                 contact: {
                                                   /*---------------------------------- Kontakt-Status ---*/
-                                                  'TKD_Feld_019':
+                                                  'Tabelle01_019':
                                                       contact.groups.isNotEmpty
                                                           ? contact
                                                               .groups.first.name
                                                           : '',
                                                   /*---------------------------------- Anrede ---*/
-                                                  'TKD_Feld_001': contact.name
+                                                  'Tabelle01_002': contact.name
                                                           .prefix.isNotEmpty
                                                       ? contact.name.prefix
                                                       : '',
                                                   /*---------------------------------- Vorname ---*/
-                                                  'TKD_Feld_002': contact
+                                                  'Tabelle01_003': contact
                                                           .name.first.isNotEmpty
                                                       ? contact.name.first
                                                       : '',
                                                   /*---------------------------------- Nachname ---*/
-                                                  'TKD_Feld_003': contact
+                                                  'Tabelle01_004': contact
                                                           .name.last.isNotEmpty
                                                       ? contact.name.last
                                                       : '',
                                                   /*---------------------------------- Geburtstag ---*/
-                                                  'TKD_Feld_004': contact
+                                                  'Tabelle01_005': contact
                                                           .events.isNotEmpty
                                                       ? '${contact.events.first.day.toString().padLeft(2, '0')}.${contact.events.first.month.toString().padLeft(2, '0')}.${contact.events.first.year}'
                                                       : '',
 
                                                   /*---------------------------------- Adresse 1 komplett ---*/
-                                                  'TKD_Feld_018': // stimmt noch nicht
+                                                  'Tabelle01_025': // stimmt noch nicht
                                                       contact.addresses
                                                               .isNotEmpty
                                                           ? contact.addresses
@@ -641,7 +732,7 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                                                           : '',
 
                                                   /*---------------------------------- Adresse 2 komplett ---*/
-                                                  'TKD_Feld_027': // stimmt noch nicht
+                                                  'Tabelle01_026': // stimmt noch nicht
                                                       contact.addresses
                                                               .isNotEmpty
                                                           ? contact.addresses
@@ -649,47 +740,47 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                                                           : '',
 
                                                   /*---------------------------------- Straße ---*/
-                                                  'TKD_Feld_005': contact
+                                                  'Tabelle01_006': contact
                                                           .addresses.isNotEmpty
                                                       ? contact.addresses.first
                                                           .street
                                                       : '',
                                                   /*---------------------------------- PLZ ---*/
-                                                  'TKD_Feld_006': contact
+                                                  'Tabelle01_008': contact
                                                           .addresses.isNotEmpty
                                                       ? contact.addresses.first
                                                           .postalCode
                                                       : '',
 
                                                   /*---------------------------------- Stadt ---*/
-                                                  'TKD_Feld_007': contact
+                                                  'Tabelle01_009': contact
                                                           .addresses.isNotEmpty
                                                       ? contact
                                                           .addresses.first.city
                                                       : '',
 
                                                   /*---------------------------------- Webseite ---*/
-                                                  'TKD_Feld_012': contact
+                                                  'Tabelle01_014': contact
                                                           .websites.isNotEmpty
                                                       ? contact
                                                           .websites.first.url
                                                       : '',
 
                                                   /*---------------------------------- Telefon ---*/
-                                                  'TKD_Feld_008':
+                                                  'Tabelle01_011':
                                                       contact.phones.isNotEmpty
                                                           ? contact.phones.first
                                                               .number
                                                           : '',
                                                   /*---------------------------------- E-Mail ---*/
-                                                  'TKD_Feld_009':
+                                                  'Tabelle01_013':
                                                       contact.emails.isNotEmpty
                                                           ? contact.emails.first
                                                               .address
                                                           : '',
 
                                                   /*---------------------------------- Firma ---*/
-                                                  'TKD_Feld_014': contact
+                                                  'Tabelle01_015': contact
                                                           .organizations
                                                           .isNotEmpty
                                                       ? contact.organizations
@@ -697,7 +788,7 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                                                       : '',
 
                                                   /*---------------------------------- Notiz ---*/
-                                                  'TKD_Feld_016':
+                                                  'Tabelle01_018':
                                                       contact.notes.isNotEmpty
                                                           ? contact.notes.first
                                                           : '',
@@ -708,7 +799,7 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                                                   //       //     : '',
 
                                                   /*---------------------------------- ContactID ---*/
-                                                  'TKD_Feld_030':
+                                                  'Tabelle01_001':
                                                       contact.id.isNotEmpty
                                                           ? contact.id
                                                           : '',

@@ -1,88 +1,12 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_textformfield_shadow_with_2_icons.dart';
 import 'package:workbuddy/features/contacts/screens/contact_screen.dart';
+import 'package:workbuddy/shared/repositories/database_helper.dart';
 import 'package:workbuddy/shared/widgets/wb_navigationbar.dart';
-
-class DatabaseHelper {
-  static Database? _database;
-
-  // Singleton-Muster
-  Future<Database> get database async {
-    if (_database != null) return _database!;
-    _database = await _openDatabaseFromAssets();
-    return _database!;
-  }
-
-  Future<Database> _openDatabaseFromAssets() async {
-    log('0046 - ContactScreen - Öffnet die Datenbank');
-    Directory documentsDir = await getApplicationDocumentsDirectory();
-    String dbPath = join(documentsDir.path, "JOTHAsoft.FiveStars.db");
-    bool dbExists = await databaseExists(dbPath);
-    if (!dbExists) {
-      ByteData data = await rootBundle.load("assets/JOTHAsoft.FiveStars.db");
-      List<int> bytes = data.buffer.asUint8List();
-      await File(dbPath).writeAsBytes(bytes, flush: true);
-    }
-    Database db = await openDatabase(dbPath);
-    log('0035 - ContactList - Die Datenbank wurde geöffnet: $dbPath');
-
-    /*--- Überprüfe, ob die Tabelle existiert ---*/
-    var result = await db.rawQuery(
-        "SELECT name FROM sqlite_master WHERE type='table' AND name='KundenDaten'");
-    if (result.isEmpty) {
-      log('0041 - ContactList - Die Tabelle KundenDaten existiert NICHT in der Datenbank!');
-      /*--- Erstelle die Tabelle ---*/
-      await db.execute('''
-        CREATE TABLE IF NOT EXISTS KundenDaten (
-          TKD_Feld_000 TEXT,
-          TKD_Feld_001 TEXT,
-          TKD_Feld_002 TEXT,
-          TKD_Feld_003 TEXT,
-          TKD_Feld_004 TEXT,
-          TKD_Feld_005 TEXT,
-          TKD_Feld_006 TEXT,
-          TKD_Feld_007 TEXT,
-          TKD_Feld_008 TEXT,
-          TKD_Feld_009 TEXT,
-          TKD_Feld_010 TEXT,
-          TKD_Feld_011 TEXT,
-          TKD_Feld_012 TEXT,
-          TKD_Feld_013 TEXT,
-          TKD_Feld_014 TEXT,
-          TKD_Feld_015 TEXT,
-          TKD_Feld_016 TEXT,
-          TKD_Feld_017 TEXT,
-          TKD_Feld_018 TEXT,
-          TKD_Feld_019 TEXT,
-          TKD_Feld_020 TEXT,
-          TKD_Feld_021 TEXT,
-          TKD_Feld_022 TEXT,
-          TKD_Feld_023 TEXT,
-          TKD_Feld_024 TEXT,
-          TKD_Feld_025 TEXT,
-          TKD_Feld_026 TEXT,
-          TKD_Feld_027 TEXT,
-          TKD_Feld_028 TEXT,
-          TKD_Feld_029 TEXT,
-          TKD_Feld_030 TEXT PRIMARY KEY
-        )
-      ''');
-      log('0077 - ContactList - Die Tabelle KundenDaten wurde erstellt!');
-    } else {
-      log('0079 - ContactList - Die Tabelle KundenDaten wurde gefunden!');
-    }
-
-    return db;
-  }
-}
 
 class ContactList extends StatefulWidget {
   const ContactList({super.key});
@@ -107,25 +31,27 @@ class _ContactListState extends State<ContactList> {
   }
 
   Future<void> initDatabase() async {
-    db = await DatabaseHelper().database;
+    db = await DatabaseHelper.instance.database;
     fetchData();
+    log('0112 - ContactList - initDatabase() - Datenbank initialisiert und mit "fetchData" Daten abgerufen');
   }
 
   Future<void> fetchData() async {
     // var db = await DatabaseHelper().database;
 
-    /*--- Zeige den Kontakt mit der KundenID: 1683296820166' ---*/
+    /*--- Zeige den Kontakt mit der KontaktID: 1683296820166' ---*/
     // var query = await db.rawQuery(
-    //     "SELECT * FROM KundenDaten WHERE TKD_Feld_030 = 'KundenID: 1683296820166'");
+    //     "SELECT * FROM Tabelle01 WHERE Tabelle01_030 = 'KontaktID: 1683296820166'");
 
     /*--- Zeige alle Kunden aus Schwäbisch Gmünd ---*/
     // var query = await db.rawQuery(
-    // "SELECT * FROM KundenDaten WHERE TKD_Feld_007 = 'Schwäbisch Gmünd'");
+    // "SELECT * FROM Tabelle01 WHERE Tabelle01_007 = 'Schwäbisch Gmünd'");
 
     /*--- Zeige alle Kunden mit allen Daten ---*/
     var query = await db.rawQuery(
-        "SELECT * FROM KundenDaten ORDER BY TKD_Feld_003 ASC, TKD_Feld_002 ASC");
-    log('0062 - ContactList - Abfrage '); //Ergebnis: $query');
+        // "SELECT * FROM Tabelle01 ORDER BY Tabelle01_003 ASC, Tabelle01_002 ASC"); // alte Tabelle "Tabelle01"
+        "SELECT * FROM Tabelle01 ORDER BY Tabelle01_003 ASC, Tabelle01_002 ASC");
+    log('0128 - ContactList - Abfrage '); //Ergebnis: $query');
 
     setState(() {
       data = query;
@@ -138,7 +64,7 @@ class _ContactListState extends State<ContactList> {
       home: Scaffold(
         backgroundColor: wbColorButtonBlue,
         appBar: AppBar(
-          title: const Text('Kontaktliste',
+          title: const Text('WorkBuddy-Kontaktliste',
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.w900,
@@ -166,11 +92,11 @@ class _ContactListState extends State<ContactList> {
                   labelBackgroundColor: Colors.yellow,
                   onChanged: (value) async {
                     var query = await db.rawQuery('''
-                      SELECT * FROM KundenDaten WHERE
-                      TKD_Feld_002 LIKE '%$value%' OR
-                      TKD_Feld_003 LIKE '%$value%' OR
-                      TKD_Feld_007 LIKE '%$value%' OR
-                      TKD_Feld_014 LIKE '%$value%' ''');
+                      SELECT * FROM Tabelle01 WHERE
+                      Tabelle01_003 LIKE '%$value%' OR
+                      Tabelle01_004 LIKE '%$value%' OR
+                      Tabelle01_009 LIKE '%$value%' OR
+                      Tabelle01_015 LIKE '%$value%' ''');
                     setState(() {
                       data = query;
                     });
@@ -210,7 +136,7 @@ class _ContactListState extends State<ContactList> {
                             builder: (context) => ContactScreen(
                               contact: contact,
                               isNewContact: false,
-                            ), // später umbenennen in ContactScreen?
+                            ),
                           ),
                         );
                       },
@@ -253,10 +179,10 @@ class _ContactListState extends State<ContactList> {
                                         right: 72,
                                       ),
                                       /*--------------------------------- Name oder Firmenname? ---*/
-                                      child: contact['TKD_Feld_014'] !=
+                                      child: contact['Tabelle01_015'] !=
                                               '' // 014 = Firmenname mit ternärem Operator abfragen!
                                           ? Text(
-                                              '--------------------\n${contact['TKD_Feld_014']}\n${contact['TKD_Feld_002']} ${contact['TKD_Feld_003']}\n--------------------',
+                                              '--------------------\n${contact['Tabelle01_015']}\n${contact['Tabelle01_003']} ${contact['Tabelle01_004']}\n--------------------',
                                               style: const TextStyle(
                                                 height: 1.2,
                                                 fontWeight: FontWeight.bold,
@@ -265,7 +191,7 @@ class _ContactListState extends State<ContactList> {
                                               ),
                                             )
                                           : Text(
-                                              '--------------------\n${contact['TKD_Feld_002']} ${contact['TKD_Feld_003']}\n--------------------',
+                                              '--------------------\n${contact['Tabelle01_003']} ${contact['Tabelle01_004']}\n--------------------',
                                               style: const TextStyle(
                                                 height: 1.2,
                                                 fontWeight: FontWeight.bold,
@@ -279,12 +205,12 @@ class _ContactListState extends State<ContactList> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       /*--------------------------------- Straße + Nr. ---*/
-                                      if (contact['TKD_Feld_005'] != '')
+                                      if (contact['Tabelle01_006'] != '')
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(top: 8),
                                           child: Text(
-                                            '${contact['TKD_Feld_005']}',
+                                            '${contact['Tabelle01_006']}',
                                             style: const TextStyle(
                                               height: 0.8,
                                               fontWeight: FontWeight.bold,
@@ -294,19 +220,19 @@ class _ContactListState extends State<ContactList> {
                                           ),
                                         ),
                                       /*--------------------------------- PLZ + Ort ---*/
-                                      if (contact['TKD_Feld_006'] != '')
-                                        if (contact['TKD_Feld_007'] != '')
+                                      if (contact['Tabelle01_008'] != '')
+                                        if (contact['Tabelle01_009'] != '')
                                           Text(
-                                            '${contact['TKD_Feld_006']} ${contact['TKD_Feld_007']}',
+                                            '${contact['Tabelle01_008']} ${contact['Tabelle01_009']}',
                                             style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 18,
                                               color: Colors.black45,
                                             ),
                                           ),
-                                      /*--------------------------------- Telefon ---*/
-                                      if (contact['TKD_Feld_008'] != null &&
-                                          contact['TKD_Feld_008'].isNotEmpty)
+                                      /*--------------------------------- Telefon 1 ---*/
+                                      if (contact['Tabelle01_011'] != null &&
+                                          contact['Tabelle01_011'].isNotEmpty)
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(top: 8),
@@ -315,12 +241,12 @@ class _ContactListState extends State<ContactList> {
                                               const Icon(Icons.phone, size: 24),
                                               const SizedBox(width: 8),
                                               Text(
-                                                contact['TKD_Feld_008'],
+                                                contact['Tabelle01_011'],
                                                 style: const TextStyle(
                                                   fontSize: 18,
                                                 ),
                                               ),
-                                              //Text(data[index]['TKD_Feld_001']),
+                                              //Text(data[index]['Tabelle01_011']),
                                             ],
                                           ),
                                         ),
@@ -330,14 +256,14 @@ class _ContactListState extends State<ContactList> {
                               ),
                             ),
                             /*--------------------------------- KontaktID ---*/
-                            if (contact['TKD_Feld_030'] != null &&
-                                contact['TKD_Feld_030'].isNotEmpty)
+                            if (contact['Tabelle01_001'] != null &&
+                                contact['Tabelle01_001'].isNotEmpty)
                               Positioned(
                                 top: 14,
                                 left: 20,
                                 child: Text(
                                   textAlign: TextAlign.center,
-                                  contact['TKD_Feld_030'],
+                                  contact['Tabelle01_001'],
                                   style: TextStyle(
                                     color: Colors.blue,
                                     fontWeight: FontWeight.w900,
@@ -362,16 +288,16 @@ class _ContactListState extends State<ContactList> {
                                         offset: Offset(2, 2),
                                         spreadRadius: 0),
                                   ],
-                                  color: contact['TKD_Feld_014'] != null &&
-                                          contact['TKD_Feld_014'].isNotEmpty
+                                  color: contact['Tabelle01_015'] != null &&
+                                          contact['Tabelle01_015'].isNotEmpty
                                       ? Colors.green
                                       : Colors.blue,
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Text(
                                   textAlign: TextAlign.center,
-                                  contact['TKD_Feld_014'] != null &&
-                                          contact['TKD_Feld_014'].isNotEmpty
+                                  contact['Tabelle01_015'] != null &&
+                                          contact['Tabelle01_015'].isNotEmpty
                                       ? 'Firma'
                                       : 'Privat',
                                   style: TextStyle(
