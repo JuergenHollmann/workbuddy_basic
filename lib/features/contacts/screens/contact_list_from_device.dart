@@ -8,6 +8,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/config/wb_dialog_2buttons.dart';
 import 'package:workbuddy/features/contacts/screens/contact_screen.dart';
+import 'package:workbuddy/shared/repositories/database_helper.dart';
 
 /*--- FlutterContacts ---*/
 /*--- https://pub.dev/packages/flutter_contacts ---*/
@@ -240,8 +241,6 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
     log('0173 - ContactListFromDevice - Ergebnis der Abfrage: $result');
     return result.isNotEmpty;
   }
-
-  // ? '${contact.events.first.year}-${contact.events.first.month.toString().padLeft(2, '0')}-${contact.events.first.day.toString().padLeft(2, '0')}'
 
   @override
   void dispose() {
@@ -688,6 +687,11 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                                             ),
                                           );
 
+                                          /*--------------------------------- Verwende "generateContactID" aus DatabaseHelper ---*/
+                                          String newContactID = DatabaseHelper
+                                              .instance
+                                              .generateContactID();
+
                                           /*--- Öffne den ContactScreen wie mit dem Button "Einen Kontakt NEU anlegen" und übergebe die Kontaktdaten an den ContactScreen ---*/
                                           Navigator.push(
                                             // ignore: use_build_context_synchronously
@@ -696,12 +700,8 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                                               builder: (context) =>
                                                   ContactScreen(
                                                 contact: {
-                                                  /*---------------------------------- Kontakt-Status ---*/
-                                                  'Tabelle01_019':
-                                                      contact.groups.isNotEmpty
-                                                          ? contact
-                                                              .groups.first.name
-                                                          : '',
+                                                  /*---------------------------------- Kontakt-ID ---*/
+                                                  'Tabelle01_001': newContactID,
                                                   /*---------------------------------- Anrede ---*/
                                                   'Tabelle01_002': contact.name
                                                           .prefix.isNotEmpty
@@ -722,23 +722,6 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                                                           .events.isNotEmpty
                                                       ? '${contact.events.first.day.toString().padLeft(2, '0')}.${contact.events.first.month.toString().padLeft(2, '0')}.${contact.events.first.year}'
                                                       : '',
-
-                                                  /*---------------------------------- Adresse 1 komplett ---*/
-                                                  'Tabelle01_025': // stimmt noch nicht
-                                                      contact.addresses
-                                                              .isNotEmpty
-                                                          ? contact.addresses
-                                                              .first.address
-                                                          : '',
-
-                                                  /*---------------------------------- Adresse 2 komplett ---*/
-                                                  'Tabelle01_026': // stimmt noch nicht
-                                                      contact.addresses
-                                                              .isNotEmpty
-                                                          ? contact.addresses
-                                                              .last.address
-                                                          : '',
-
                                                   /*---------------------------------- Straße ---*/
                                                   'Tabelle01_006': contact
                                                           .addresses.isNotEmpty
@@ -751,21 +734,18 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                                                       ? contact.addresses.first
                                                           .postalCode
                                                       : '',
-
                                                   /*---------------------------------- Stadt ---*/
                                                   'Tabelle01_009': contact
                                                           .addresses.isNotEmpty
                                                       ? contact
                                                           .addresses.first.city
                                                       : '',
-
                                                   /*---------------------------------- Webseite ---*/
                                                   'Tabelle01_014': contact
                                                           .websites.isNotEmpty
                                                       ? contact
                                                           .websites.first.url
                                                       : '',
-
                                                   /*---------------------------------- Telefon ---*/
                                                   'Tabelle01_011':
                                                       contact.phones.isNotEmpty
@@ -778,7 +758,6 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                                                           ? contact.emails.first
                                                               .address
                                                           : '',
-
                                                   /*---------------------------------- Firma ---*/
                                                   'Tabelle01_015': contact
                                                           .organizations
@@ -786,35 +765,45 @@ class _ContactListFromDeviceState extends State<ContactListFromDevice> {
                                                       ? contact.organizations
                                                           .first.company
                                                       : '',
-
                                                   /*---------------------------------- Notiz ---*/
                                                   'Tabelle01_018':
                                                       contact.notes.isNotEmpty
                                                           ? contact.notes.first
                                                           : '',
-
-                                                  //       /*---------------------------------- Kategorien ---*/
-                                                  //       // group: contact.groups.isNotEmpty
-                                                  //       //     ? contact.groups.first.name
-                                                  //       //     : '',
-
-                                                  /*---------------------------------- ContactID ---*/
-                                                  'Tabelle01_001':
+                                                  /*---------------------------------- Kontakt-Status ---*/
+                                                  'Tabelle01_019':
+                                                      'Smartphone-Kontakt',
+                                                  /*---------------------------------- Phone-Gruppen (Kategorien) ---*/
+                                                  'Tabelle01_020':
+                                                      contact.groups.isNotEmpty
+                                                          ? contact
+                                                              .groups.first.name
+                                                          : '',
+                                                  /*---------------------------------- Adresse 1 komplett (aus Phone) ---*/
+                                                  'Tabelle01_025': contact
+                                                          .addresses.isNotEmpty
+                                                      ? contact.addresses.first
+                                                          .address
+                                                      : '',
+                                                  /*---------------------------------- Adresse 2 komplett (aus Phone) ---*/
+                                                  'Tabelle01_026': // stimmt noch nicht
+                                                      contact.addresses
+                                                              .isNotEmpty
+                                                          ? contact.addresses
+                                                              .last.address
+                                                          : '',
+                                                  /*---------------------------------- SmartKontaktID (SK-ID aus Phone) ---*/
+                                                  'Tabelle01_027':
                                                       contact.id.isNotEmpty
                                                           ? contact.id
                                                           : '',
                                                 },
+                                                /*--------------------------------- *** ---*/
                                                 isNewContact: true,
                                               ),
                                             ),
                                           );
-
-                                          //       /*--------------------------------- Kontakt-Status ---*/
-
-                                          //       /*--------------------------------- Einträge in die ContactScreen - ENDE ---*/
-                                          //     ),
-                                          //   ),
-                                          // );
+                                          /*--------------------------------- Einträge in die ContactScreen - ENDE ---*/
                                         }
                                       },
                                       /*--------------------------------- Button 2 - ENDE ---*/

@@ -1,7 +1,7 @@
 /*====================================================================
-Tabellen-Name: Tabelle01    = Kontakte
+Tabellen-Name: -> Tabelle01 - Kontakte 01
 ----------------------------------------------------------------------
-Spalten-Name: Tabelle01_001 = KontaktID - Primärschlüssel PRIMARY KEY
+Spalten-Name: Tabelle01_001 = KID-01 - Primärschlüssel PRIMARY KEY
 Spalten-Name: Tabelle01_002 = Anrede
 Spalten-Name: Tabelle01_003 = Vorname
 Spalten-Name: Tabelle01_004 = Nachname
@@ -10,7 +10,7 @@ Spalten-Name: Tabelle01_006 = Straße
 Spalten-Name: Tabelle01_007 = Zusatzinfo
 Spalten-Name: Tabelle01_008 = PLZ
 Spalten-Name: Tabelle01_009 = Ort
-Spalten-Name: Tabelle01_010 = Land
+Spalten-Name: Tabelle01_010 = x - Land
 Spalten-Name: Tabelle01_011 = Telefon1 - Mobil
 Spalten-Name: Tabelle01_012 = Telefon2 - WhatsApp
 Spalten-Name: Tabelle01_013 = E-Mail1
@@ -20,51 +20,51 @@ Spalten-Name: Tabelle01_016 = Branche
 Spalten-Name: Tabelle01_017 = Warengruppen
 Spalten-Name: Tabelle01_018 = Kontakt-Notizen
 Spalten-Name: Tabelle01_019 = Kontakt-Satus
-Spalten-Name: Tabelle01_020 = Gruppe / Kategorie
-Spalten-Name: Tabelle01_021 = Firmen-Straße
-Spalten-Name: Tabelle01_022 = Firmen-PLZ
-Spalten-Name: Tabelle01_023 = Firmen-Ort
-Spalten-Name: Tabelle01_024 = Firmen-Land
+Spalten-Name: Tabelle01_020 = x - Gruppe / Kategorie
+Spalten-Name: Tabelle01_021 = x - Firmen-Straße
+Spalten-Name: Tabelle01_022 = x - Firmen-PLZ
+Spalten-Name: Tabelle01_023 = x - Firmen-Ort
+Spalten-Name: Tabelle01_024 = x - Firmen-Land
 Spalten-Name: Tabelle01_025 = Komplett-Adresse Privat (Phone)
 Spalten-Name: Tabelle01_026 = Komplett-Adresse Geschäft (Phone)
-Spalten-Name: Tabelle01_027 = 
+Spalten-Name: Tabelle01_027 = x - SK-ID: SmartKontakt-ID (Phone)
 Spalten-Name: Tabelle01_028 =
-Spalten-Name: Tabelle01_029 =
-Spalten-Name: Tabelle01_030 =
-Spalten-Name: Tabelle01_031 =
-Spalten-Name: Tabelle01_032 =
-Spalten-Name: Tabelle01_033 =
-Spalten-Name: Tabelle01_034 =
-Spalten-Name: Tabelle01_035 =
-Spalten-Name: Tabelle01_036 =
-Spalten-Name: Tabelle01_037 =
-Spalten-Name: Tabelle01_038 =
-Spalten-Name: Tabelle01_039 =
-Spalten-Name: Tabelle01_040 = 
-Spalten-Name: Tabelle01_041 = 
-Spalten-Name: Tabelle01_042 =
-Spalten-Name: Tabelle01_043 = Kontakt-Quelle
-Spalten-Name: Tabelle01_044 = Gebietskennung
-Spalten-Name: Tabelle01_045 = Betreuungsstatus
-Spalten-Name: Tabelle01_046 = Betreuer MA-NR
-Spalten-Name: Tabelle01_047 = Stufe des Betreuers
-Spalten-Name: Tabelle01_048 = Angelegt am xx um xx:xx Uhr
-Spalten-Name: Tabelle01_049 = Angelegt von MA-NR
-Spalten-Name: Tabelle01_050 = Zuletzt aktualisiert am xx um xx:xx Uhr
+Spalten-Name: Tabelle01_029 = x - Dokumente (in DID-05): Dokumente, Bilder, Videos, Audio, PDF, Zeichnungen, ...
+Spalten-Name: Tabelle01_030 = x - Bild des Ansprechpartners
+Spalten-Name: Tabelle01_031 = x - Logo der Firma
+Spalten-Name: Tabelle01_032 = x - LinkedIn: LinkedIn-Profil
+Spalten-Name: Tabelle01_033 = x - XING: XING-Profil
+Spalten-Name: Tabelle01_034 = x - Facebook: Facebook-Profil
+Spalten-Name: Tabelle01_035 = x - Instagram: Instagram-Profil
+Spalten-Name: Tabelle01_036 = x - Twitter: Twitter-Profil
+Spalten-Name: Tabelle01_037 = x - Marketing-Einwilligung: Ja, Nein
+Spalten-Name: Tabelle01_038 = x - Bewertung abgegeben: App 1-5 Sterne
+Spalten-Name: Tabelle01_039 = x - Bewertung abgegeben: Google 1-5 Sterne
+Spalten-Name: Tabelle01_040 = x - Kontakt-Quelle: Empfehlung von, Werbung, Internet, Social Media, Fahrzeugwerbung, ...
+Spalten-Name: Tabelle01_041 = x - Gebietskennung: 01 - 99
+Spalten-Name: Tabelle01_042 = x - Betreuer MA-NR
+Spalten-Name: Tabelle01_043 = x - Stufe des Betreuers
+Spalten-Name: Tabelle01_044 = x - Betreuungsstatus: A, B, C, D
+Spalten-Name: Tabelle01_045 = 
+Spalten-Name: Tabelle01_046 = 
+Spalten-Name: Tabelle01_047 = x - Angelegt von MA-NR
+Spalten-Name: Tabelle01_048 = x - Angelegt am xx um xx:xx Uhr
+Spalten-Name: Tabelle01_049 = x - Zuletzt aktualisiert von MA-NR
+Spalten-Name: Tabelle01_050 = x - Zuletzt aktualisiert am xx um xx:xx Uhr
 ======================================================================
-Tabellen-Name: Tabelle02    = Finanzen
+Tabellen-Name: -> Tabelle02 - Finanzen 02
 ----------------------------------------------------------------------
-Spalten-Name: Tabelle02_001 = FinanzID - Primärschlüssel PRIMARY KEY
+Spalten-Name: Tabelle02_001 = FID-02 - Primärschlüssel PRIMARY KEY
 Spalten-Name: Tabelle02_002 = Belegnummer: AUS = Ausgabe, EIN = Einnahme
 Spalten-Name: Tabelle02_003 = Beleg-Art: AUS = Ausgabe, EIN = Einnahme, REG = Rechnung, GUT = Gutschrift, GAR = Garantie 
 Spalten-Name: Tabelle02_004 = Beleg-Datum
-Spalten-Name: Tabelle02_005 = Wo gekauft
+Spalten-Name: Tabelle02_005 = Wo gekauft / Wem verkauft
 Spalten-Name: Tabelle02_006 = Was gekauft: Artikelbezeichnung
 Spalten-Name: Tabelle02_007 = Menge: Anzahl
 Spalten-Name: Tabelle02_008 = Einheit: Stück, m², l, kg, t, m³
 Spalten-Name: Tabelle02_009 = Netto-EinzelPreis pro Einheit
 Spalten-Name: Tabelle02_010 = Netto-Gesamtpreis
-Spalten-Name: Tabelle02_011 = MwSt-Satz
+Spalten-Name: Tabelle02_011 = MwSt-Satz (USt-Schlüssel 19% oder 7%)
 Spalten-Name: Tabelle02_012 = Brutto-Einzelpreis pro Einheit
 Spalten-Name: Tabelle02_013 = MwSt-Brutto-Gesamt
 Spalten-Name: Tabelle02_014 = Brutto-Gesamtpreis
@@ -75,25 +75,25 @@ Spalten-Name: Tabelle02_018 = Finanz-Notizen
 Spalten-Name: Tabelle02_019 = Einkäufer
 Spalten-Name: Tabelle02_020 = Warengruppe
 Spalten-Name: Tabelle02_021 = Artikelnummer
-Spalten-Name: Tabelle02_022 = 
-Spalten-Name: Tabelle02_023 = 
-Spalten-Name: Tabelle02_024 = 
-Spalten-Name: Tabelle02_025 = 
-Spalten-Name: Tabelle02_026 = 
-Spalten-Name: Tabelle02_027 =
-Spalten-Name: Tabelle02_028 =
+Spalten-Name: Tabelle02_022 = Foto des Beleges (Ablage oder Link)
+Spalten-Name: Tabelle02_023 = Projekt-ID oder Projekt-Nummer
+Spalten-Name: Tabelle02_024 = Steuernummer des Kontakts
+Spalten-Name: Tabelle02_025 = DATEV-Nummer des Kontakts
+Spalten-Name: Tabelle02_026 = Datev-Gegenkonto: 1200 (Bank), 1000 (Kasse), 2000 (Forderungen), 3000 (Verbindlichkeiten), 4000 (Umsatz), 5000 (Aufwendungen)
+Spalten-Name: Tabelle02_027 = Datev-Hauptkonto: 8400 (Wareneingang), 8401 (Wareneingang - Rücksendung), 8402 (Wareneingang - Skonto), 8403 (Wareneingang - Rabatt), 8404 (Wareneingang - Fracht)
+Spalten-Name: Tabelle02_028 = Datev-KID01: Kunden-ID
 Spalten-Name: Tabelle02_029 =
-Spalten-Name: Tabelle02_030 =
-Spalten-Name: Tabelle02_031 =
-Spalten-Name: Tabelle02_032 =
-Spalten-Name: Tabelle02_033 =
-Spalten-Name: Tabelle02_034 =
-Spalten-Name: Tabelle02_035 =
+Spalten-Name: Tabelle02_030 = Zahlungsstatus: Bezahlt, Teilweise bezahlt, Unbezahlt, Überfällig
+Spalten-Name: Tabelle02_031 = Fälligkeitsdatum
+Spalten-Name: Tabelle02_032 = Skonto: Prozentsatz, Frist 
+Spalten-Name: Tabelle02_033 = Rabatt: Prozentsatz, Frist  
+Spalten-Name: Tabelle02_034 = Zahlungsziel: 1-99 Tage  
+Spalten-Name: Tabelle02_035 = Mahnstufe: 1-3
 Spalten-Name: Tabelle02_036 =
 Spalten-Name: Tabelle02_037 =
 Spalten-Name: Tabelle02_038 =
 Spalten-Name: Tabelle02_039 =
-Spalten-Name: Tabelle02_040 =
+Spalten-Name: Tabelle02_040 = Garantie-Ende: Datum
 Spalten-Name: Tabelle02_041 =
 Spalten-Name: Tabelle02_042 =
 Spalten-Name: Tabelle02_043 =
@@ -104,49 +104,309 @@ Spalten-Name: Tabelle02_047 =
 Spalten-Name: Tabelle02_048 = Angelegt am xx um xx:xx Uhr
 Spalten-Name: Tabelle02_049 = Angelegt von MA-NR
 Spalten-Name: Tabelle02_050 = Zuletzt aktualisiert am xx um xx:xx Uhr
+
+Technische DATEV-Exportvoraussetzungen
+Datenformat: CSV oder XML (DATEV-Format *.DTE)
+Kodierung: UTF-8 oder ISO-8859-1
+Zeitliche Zuordnung: Tabelle02_004 (Beleg-Datum) muss im Format TT.MM.JJJJ vorliegen.
+Steuerschlüssel: DATEV-Vorgaben entsprechend (z.B. "1" für 19% MwSt auf Einnahmen)
+Belegnummer: DATEV-Vorgaben entsprechend (z.B. "AUS-2023-0001" für Ausgabe)
+---> Offizielle DATEV-Kontenliste (z.B. SKR 03/04)
 ======================================================================
-Tabellen-Name: Tabelle03    =
+Tabellen-Name: -> Tabelle03 - Termine 03    
 ----------------------------------------------------------------------
-Spalten-Name: Tabelle03_001 =
-Spalten-Name: Tabelle03_002 =
+Spalten-Name: Tabelle03_001 = TID-03 - Primärschlüssel PRIMARY KEY
+Spalten-Name: Tabelle03_002 = Termin-Nummer: YYYY-MM-DD-HH-MM-0000
+Spalten-Name: Tabelle03_003 = Termin-Status: Offen, Findet statt, Erledigt, Abgesagt, Verschoben
+Spalten-Name: Tabelle03_004 = Termin-Priorität: 1-5
+Spalten-Name: Tabelle03_005 = Termin-Beschreibung
+Spalten-Name: Tabelle03_006 = Termin-Start-Datum
+Spalten-Name: Tabelle03_007 = Termin-Start-Uhreit
+Spalten-Name: Tabelle03_008 = Termin-Ende-Datum
+Spalten-Name: Tabelle03_009 = Termin-Ende-Uhrzeit
+Spalten-Name: Tabelle03_010 = Termin-Notizen
+Spalten-Name: Tabelle03_011 = Termin-Typ: Privat, Geschäftlich
+Spalten-Name: Tabelle03_012 = Termin-Kategorie
+Spalten-Name: Tabelle03_013 = Termin-Ort
+Spalten-Name: Tabelle03_014 = Termin-Teilnehmer
+Spalten-Name: Tabelle03_015 = Termin-Teilnehmer-Status
+Spalten-Name: Tabelle03_016 = Termin-Teilnehmer-Notizen
+Spalten-Name: Tabelle03_017 = 
+Spalten-Name: Tabelle03_018 = 
+Spalten-Name: Tabelle03_019 =
+Spalten-Name: Tabelle03_020 =
+Spalten-Name: Tabelle03_021 =
+Spalten-Name: Tabelle03_022 =
+Spalten-Name: Tabelle03_023 =
+Spalten-Name: Tabelle03_024 =
+Spalten-Name: Tabelle03_025 =
+Spalten-Name: Tabelle03_026 =
+Spalten-Name: Tabelle03_027 =
+Spalten-Name: Tabelle03_028 =
+Spalten-Name: Tabelle03_029 =
+Spalten-Name: Tabelle03_030 =
+Spalten-Name: Tabelle03_031 =
+Spalten-Name: Tabelle03_032 =
+Spalten-Name: Tabelle03_033 =
+Spalten-Name: Tabelle03_034 =
+Spalten-Name: Tabelle03_035 =
+Spalten-Name: Tabelle03_036 =
+Spalten-Name: Tabelle03_037 =
+Spalten-Name: Tabelle03_038 =
+Spalten-Name: Tabelle03_039 =
+Spalten-Name: Tabelle03_040 =
+Spalten-Name: Tabelle03_041 =
+Spalten-Name: Tabelle03_042 =
+Spalten-Name: Tabelle03_043 =
+Spalten-Name: Tabelle03_044 =
+Spalten-Name: Tabelle03_045 =
+Spalten-Name: Tabelle03_046 =
+Spalten-Name: Tabelle03_047 =
+Spalten-Name: Tabelle03_048 = Angelegt am xx um xx:xx Uhr
+Spalten-Name: Tabelle03_049 = Angelegt von MA-NR
+Spalten-Name: Tabelle03_050 = Zuletzt aktualisiert am xx um xx:xx Uhr
 ======================================================================
-Tabellen-Name: Tabelle04    =
+Tabellen-Name: -> Tabelle04 - Aufgaben 04    
 ----------------------------------------------------------------------
-Spalten-Name: Tabelle04_001 =
-Spalten-Name: Tabelle04_002 =
+Spalten-Name: Tabelle04_001 = AID-04 - Primärschlüssel PRIMARY KEY
+Spalten-Name: Tabelle04_002 = Ticketnummer
+Spalten-Name: Tabelle04_003 = Aufgaben-Status: Offen, In Bearbeitung, Erledigt
+Spalten-Name: Tabelle04_004 = Aufgaben-Priorität: 1-5
+Spalten-Name: Tabelle04_005 = Aufgaben-Beschreibung
+Spalten-Name: Tabelle04_006 = Aufgaben-Start-Datum
+Spalten-Name: Tabelle04_007 = Aufgaben-Start-Uhreit
+Spalten-Name: Tabelle04_008 = Aufgaben-Ende-Datum
+Spalten-Name: Tabelle04_009 = Aufgaben-Ende-Uhrzeit
+Spalten-Name: Tabelle04_010 = Aufgaben-Notizen
+Spalten-Name: Tabelle04_011 = Aufgaben-Typ: Privat, Geschäftlich
+Spalten-Name: Tabelle04_012 = Aufgaben-Kategorie
+Spalten-Name: Tabelle04_013 = Aufgaben-Ort
+Spalten-Name: Tabelle04_014 = Aufgaben-Teilnehmer
+Spalten-Name: Tabelle04_015 = Aufgaben-Teilnehmer-Status
+Spalten-Name: Tabelle04_016 = Aufgaben-Teilnehmer-Notizen
+Spalten-Name: Tabelle04_017 = 
+Spalten-Name: Tabelle04_018 =
+Spalten-Name: Tabelle04_019 =
+Spalten-Name: Tabelle04_020 =
+Spalten-Name: Tabelle04_021 =
+Spalten-Name: Tabelle04_022 =
+Spalten-Name: Tabelle04_023 =
+Spalten-Name: Tabelle04_024 =
+Spalten-Name: Tabelle04_025 =
+Spalten-Name: Tabelle04_026 =
+Spalten-Name: Tabelle04_027 =
+Spalten-Name: Tabelle04_028 =
+Spalten-Name: Tabelle04_029 =
+Spalten-Name: Tabelle04_030 =
+Spalten-Name: Tabelle04_031 =
+Spalten-Name: Tabelle04_032 =
+Spalten-Name: Tabelle04_033 =
+Spalten-Name: Tabelle04_034 =
+Spalten-Name: Tabelle04_035 =
+Spalten-Name: Tabelle04_036 =
+Spalten-Name: Tabelle04_037 =
+Spalten-Name: Tabelle04_038 =
+Spalten-Name: Tabelle04_039 =
+Spalten-Name: Tabelle04_040 =
+Spalten-Name: Tabelle04_041 =
+Spalten-Name: Tabelle04_042 =
+Spalten-Name: Tabelle04_043 =
+Spalten-Name: Tabelle04_044 =
+Spalten-Name: Tabelle04_045 =
+Spalten-Name: Tabelle04_046 =
+Spalten-Name: Tabelle04_047 =
+Spalten-Name: Tabelle04_048 = Angelegt am xx um xx:xx Uhr
+Spalten-Name: Tabelle04_049 = Angelegt von MA-NR
+Spalten-Name: Tabelle04_050 = Zuletzt aktualisiert am xx um xx:xx Uhr
 ======================================================================
-Tabellen-Name: Tabelle05    =
+Tabellen-Name: -> Tabelle05 - Dokumente 05
 ----------------------------------------------------------------------
-Spalten-Name: Tabelle05_001 =
-Spalten-Name: Tabelle05_002 =
+Spalten-Name: Tabelle05_001 = DID-05 - Primärschlüssel PRIMARY KEY
+Spalten-Name: Tabelle05_002 = Dokumenten-Nummer
+Spalten-Name: Tabelle05_003 = Dokumenten-Status: Offen, In Bearbeitung, Erledigt, Archivieren, Löschen, Entsorgen, ...
+Spalten-Name: Tabelle05_004 = Dokumenten-Priorität: 1-5
+Spalten-Name: Tabelle05_005 = Dokumenten-Beschreibung
+Spalten-Name: Tabelle05_006 = Dokumenten-Notizen
+Spalten-Name: Tabelle05_007 = Dokumenten-Typ: Privat, Geschäftlich
+Spalten-Name: Tabelle05_008 = Dokumenten-Link: URL
+Spalten-Name: Tabelle05_009 = Dokumenten-Kategorie
+Spalten-Name: Tabelle05_010 = 
+Spalten-Name: Tabelle05_011 = 
+Spalten-Name: Tabelle05_012 =
+Spalten-Name: Tabelle05_013 =
+Spalten-Name: Tabelle05_014 =
+Spalten-Name: Tabelle05_015 =
+Spalten-Name: Tabelle05_016 =
+Spalten-Name: Tabelle05_017 =
+Spalten-Name: Tabelle05_018 =
+Spalten-Name: Tabelle05_019 =
+Spalten-Name: Tabelle05_020 =
+Spalten-Name: Tabelle05_021 =
+Spalten-Name: Tabelle05_022 =
+Spalten-Name: Tabelle05_023 =
+Spalten-Name: Tabelle05_024 =
+Spalten-Name: Tabelle05_025 =
+Spalten-Name: Tabelle05_026 =
+Spalten-Name: Tabelle05_027 =
+Spalten-Name: Tabelle05_028 =
+Spalten-Name: Tabelle05_029 =
+Spalten-Name: Tabelle05_030 =
+Spalten-Name: Tabelle05_031 =
+Spalten-Name: Tabelle05_032 =
+Spalten-Name: Tabelle05_033 =
+Spalten-Name: Tabelle05_034 =
+Spalten-Name: Tabelle05_035 =
+Spalten-Name: Tabelle05_036 =
+Spalten-Name: Tabelle05_037 =
+Spalten-Name: Tabelle05_038 =
+Spalten-Name: Tabelle05_039 =
+Spalten-Name: Tabelle05_040 =
+Spalten-Name: Tabelle05_041 =
+Spalten-Name: Tabelle05_042 =
+Spalten-Name: Tabelle05_043 =
+Spalten-Name: Tabelle05_044 =
+Spalten-Name: Tabelle05_045 =
+Spalten-Name: Tabelle05_046 =
+Spalten-Name: Tabelle05_047 =
+Spalten-Name: Tabelle05_048 = Angelegt am xx um xx:xx Uhr
+Spalten-Name: Tabelle05_049 = Angelegt von MA-NR
+Spalten-Name: Tabelle05_050 = Zuletzt aktualisiert am xx um xx:xx Uhr
 ======================================================================
-Tabellen-Name: Tabelle06    =
+Tabellen-Name: -> Tabelle06 - XXX 06
 ----------------------------------------------------------------------
 Spalten-Name: Tabelle06_001 =
 Spalten-Name: Tabelle06_002 =
+Spalten-Name: Tabelle06_003 =
+
+Spalten-Name: Tabelle06_048 = Angelegt am xx um xx:xx Uhr
+Spalten-Name: Tabelle06_049 = Angelegt von MA-NR
+Spalten-Name: Tabelle06_050 = Zuletzt aktualisiert am xx um xx:xx Uhr
 ======================================================================
-Tabellen-Name: Tabelle07    =
+Tabellen-Name: -> Tabelle07 - XXX 07
 ----------------------------------------------------------------------
-Spalten-Name: Tabelle07_001 =
+Spalten-Name: Tabelle07_001 = 
 Spalten-Name: Tabelle07_002 =
+Spalten-Name: Tabelle07_003 =
+
+Spalten-Name: Tabelle07_048 = Angelegt am xx um xx:xx Uhr
+Spalten-Name: Tabelle07_049 = Angelegt von MA-NR
+Spalten-Name: Tabelle07_050 = Zuletzt aktualisiert am xx um xx:xx Uhr
 ======================================================================
-Tabellen-Name: Tabelle08    =
+Tabellen-Name: -> Tabelle08 - Vertrieb 08
 ----------------------------------------------------------------------
-Spalten-Name: Tabelle08_001 =
+Spalten-Name: Tabelle08_001 = VID-08 - Primärschlüssel PRIMARY KEY
 Spalten-Name: Tabelle08_002 =
+Spalten-Name: Tabelle08_003 =
+Spalten-Name: Tabelle08_004 =
+Spalten-Name: Tabelle08_005 =
+Spalten-Name: Tabelle08_006 =
+Spalten-Name: Tabelle08_007 =
+Spalten-Name: Tabelle08_008 =
+Spalten-Name: Tabelle08_009 =
+Spalten-Name: Tabelle08_010 =
+Spalten-Name: Tabelle08_011 =
+Spalten-Name: Tabelle08_012 =
+Spalten-Name: Tabelle08_013 =
+Spalten-Name: Tabelle08_014 =
+Spalten-Name: Tabelle08_015 =
+Spalten-Name: Tabelle08_016 =
+Spalten-Name: Tabelle08_017 =
+Spalten-Name: Tabelle08_018 =
+Spalten-Name: Tabelle08_019 =
+Spalten-Name: Tabelle08_020 =
+Spalten-Name: Tabelle08_021 =
+Spalten-Name: Tabelle08_022 =
+Spalten-Name: Tabelle08_023 =
+Spalten-Name: Tabelle08_024 =
+Spalten-Name: Tabelle08_025 =
+Spalten-Name: Tabelle08_026 =
+Spalten-Name: Tabelle08_027 =
+Spalten-Name: Tabelle08_028 =
+Spalten-Name: Tabelle08_029 =
+Spalten-Name: Tabelle08_030 =
+Spalten-Name: Tabelle08_031 =
+Spalten-Name: Tabelle08_032 =
+Spalten-Name: Tabelle08_033 =
+Spalten-Name: Tabelle08_034 =
+Spalten-Name: Tabelle08_035 =
+Spalten-Name: Tabelle08_036 =
+Spalten-Name: Tabelle08_037 =
+Spalten-Name: Tabelle08_038 =
+Spalten-Name: Tabelle08_039 =
+Spalten-Name: Tabelle08_040 =
+Spalten-Name: Tabelle08_041 =
+Spalten-Name: Tabelle08_042 =
+Spalten-Name: Tabelle08_043 =
+Spalten-Name: Tabelle08_044 =
+Spalten-Name: Tabelle08_045 =
+Spalten-Name: Tabelle08_046 =
+Spalten-Name: Tabelle08_047 = 
+Spalten-Name: Tabelle08_048 = Angelegt am xx um xx:xx Uhr
+Spalten-Name: Tabelle08_049 = Angelegt von MA-NR
+Spalten-Name: Tabelle08_050 = Zuletzt aktualisiert am xx um xx:xx Uhr
 ======================================================================
-Tabellen-Name: Tabelle09    =
+Tabellen-Name: -> Tabelle09 - XXX 09   
 ----------------------------------------------------------------------
-Spalten-Name: Tabelle09_001 =
+Spalten-Name: Tabelle09_001 = 
 Spalten-Name: Tabelle09_002 =
+Spalten-Name: Tabelle09_003 =
+
+Spalten-Name: Tabelle09_048 = Angelegt am xx um xx:xx Uhr
+Spalten-Name: Tabelle09_049 = Angelegt von MA-NR
+Spalten-Name: Tabelle09_050 = Zuletzt aktualisiert am xx um xx:xx Uhr
 ======================================================================
-Tabellen-Name: Tabelle10    = Einstellung-App-System
+Tabellen-Name: -> Tabelle10 - Einstellungen - App-System 10
 ----------------------------------------------------------------------
-Spalten-Name: Tabelle10_001 = EASID - Primärschlüssel PRIMARY KEY
+Spalten-Name: Tabelle10_001 = EID-10 - Primärschlüssel PRIMARY KEY
 Spalten-Name: Tabelle10_002 = App-Version
 Spalten-Name: Tabelle10_003 = App-Name
 Spalten-Name: Tabelle10_004 = App-Icon
 Spalten-Name: Tabelle10_005 = JOTHAsoft-Logo
+Spalten-Name: Tabelle10_006 = Töne: Warnung beim Löschen
+Spalten-Name: Tabelle10_007 = Töne: Buttons anklicken
+Spalten-Name: Tabelle10_008 = Töne: Wechsel zu Seiten
+Spalten-Name: Tabelle10_009 = Töne: Textfelder anklicken
+Spalten-Name: Tabelle10_010 = Töne: Text-zu-Sprache
+Spalten-Name: Tabelle10_011 = 
+Spalten-Name: Tabelle10_012 =
+Spalten-Name: Tabelle10_013 =
+Spalten-Name: Tabelle10_014 =
+Spalten-Name: Tabelle10_015 =
+Spalten-Name: Tabelle10_016 = 
+Spalten-Name: Tabelle10_017 =
+Spalten-Name: Tabelle10_018 = Design: Hell, Dunkel, System
+Spalten-Name: Tabelle10_019 = Sprache: Deutsch, Englisch, Französisch, Spanisch
+Spalten-Name: Tabelle10_020 = Belegnummer startet mit: XXX-Jahr-0000
+Spalten-Name: Tabelle10_021 = KID-01-Prefix - z.B.: MA-NR
+Spalten-Name: Tabelle10_022 = FID-02-Prefix - z.B.: AUS, EIN, REG, GUT
+Spalten-Name: Tabelle10_023 = TID-03-Prefix -
+Spalten-Name: Tabelle10_024 = AID-04-Prefix -
+Spalten-Name: Tabelle10_025 = XX5-05-Prefix -
+Spalten-Name: Tabelle10_026 = XX6-06-Prefix -
+Spalten-Name: Tabelle10_027 = XX7-07-Prefix -
+Spalten-Name: Tabelle10_028 = VID-08-Prefix -
+Spalten-Name: Tabelle10_029 = XX9-09-Prefix -
+Spalten-Name: Tabelle10_030 = Termine: KalenderNummer 
+Spalten-Name: Tabelle10_031 =
+Spalten-Name: Tabelle10_032 =
+Spalten-Name: Tabelle10_033 =
+Spalten-Name: Tabelle10_034 =
+Spalten-Name: Tabelle10_035 =
+Spalten-Name: Tabelle10_036 =
+Spalten-Name: Tabelle10_037 =
+Spalten-Name: Tabelle10_038 =
+Spalten-Name: Tabelle10_039 =
+Spalten-Name: Tabelle10_040 =
+Spalten-Name: Tabelle10_041 =
+Spalten-Name: Tabelle10_042 =
+Spalten-Name: Tabelle10_043 =
+Spalten-Name: Tabelle10_044 =
+Spalten-Name: Tabelle10_045 =
+Spalten-Name: Tabelle10_046 =
+Spalten-Name: Tabelle10_047 =
+Spalten-Name: Tabelle10_048 = Angelegt am xx um xx:xx Uhr
+Spalten-Name: Tabelle10_049 = Angelegt von MA-NR
+Spalten-Name: Tabelle10_050 = Zuletzt aktualisiert am xx um xx:xx Uhr
 =====================================================================*/
 
 import 'dart:developer' as dev;
@@ -173,7 +433,8 @@ class DatabaseHelper {
     dev.log('0095 - DatabaseHelper - Die Datenbank ist vorhanden.');
     /*--- Wenn die Datenbank noch nicht erstellt wurde, wird sie erstellt ---*/
     _database = await _initDB('JOTHAsoft.FiveStars.db');
-    dev.log('0099 - DatabaseHelper - Die Datenbank muss erstellt erstellt werden.');
+    dev.log(
+        '0099 - DatabaseHelper - Die Datenbank muss erstellt erstellt werden.');
     /*--- Die Datenbank wird zurückgegeben ---*/
     return _database!;
   }
@@ -262,11 +523,15 @@ class DatabaseHelper {
       3) + 2 zufällige Ziffern
       4) + 1 Bindestrich
       5) + Zeitstempel ---*/
+  /*--- Diese Funktion erstellt eine Kontakt-ID ---*/
+  
   String generateContactID() {
     /*--- Für die zufällige Großbuchstaben-Liste ---*/
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
     /*--- Random-Objekt erstellen ---*/
     final random = Random();
+
     /*--- Kontakt-ID erstellen ---*/
     final letterPart = String.fromCharCodes(
       Iterable.generate(
@@ -274,31 +539,37 @@ class DatabaseHelper {
         (_) => letters.codeUnitAt(random.nextInt(letters.length)),
       ),
     );
+
     /*--- Zufällige Ziffern erstellen ---*/
     final numberPart = random.nextInt(100).toString().padLeft(2, '0');
+
     /*--- Zeitstempel erstellen ---*/
     final timestamp = DateTime.now().millisecondsSinceEpoch;
     dev.log(
       '0100 - DatabaseHelper - Kontakt-ID wurde erstellt: $letterPart-$numberPart-$timestamp',
     );
+
     /*--- Kontakt-ID zurückgeben ---*/
-    return '$letterPart-$numberPart-$timestamp';
+    // return '$letterPart-$numberPart-$timestamp'; // mit zufallsgenerierter MA-Nr.
+    return 'JH-01-$timestamp'; // mit fester MA-Nr.
   }
 
-  /*--------------------------------- Speichern von Daten in der Datenbank-Tabelle01 ---*/
-  Future<void> saveData(Map<String, dynamic> dataToSave) async {
-    /*--- Datenbank öffnen ---*/
-    final db = await database;
-    /*--- Kontakt-ID erstellen ---*/
-    final contactID = generateContactID();
-    /*--- Kontakt-ID in welche Spalte speichern? ---*/
-    dataToSave['Tabelle01_001'] = contactID;
-    dev.log(
-      '0110 - DatabaseHelper - Kontakt-ID $contactID wird in "Tabelle01_001" gespeichert: $dataToSave',
-    );
-    /*--- INSERT = Speichern in der Datenbank ---*/
-    await db.insert('Tabelle01', dataToSave);
-  }
+  // /*--------------------------------- Speichern von Daten in der Datenbank-Tabelle01 ---*/
+  // Future<void> saveData(Map<String, dynamic> dataToSave) async {
+  //   /*--- Datenbank öffnen ---*/
+  //   dev.log('0559 - DatabaseHelper - Datenbank wird geöffnet.');
+  //   final db = await database;
+  //   /*--- Kontakt-ID erstellen ---*/
+  //   dev.log('0562 - DatabaseHelper - Kontakt-ID wird erstellt.');
+  //   final contactID = generateContactID();
+  //   /*--- Hier wird die Kontakt-ID in die Spalte "Tabelle01_001" gespeichert ---*/
+  //   dataToSave['Tabelle01_001'] = contactID;
+  //   dev.log(
+  //       '0567 - DatabaseHelper - Kontakt-ID $contactID wird in "Tabelle01_001" gespeichert: $dataToSave');
+  //   /*--- INSERT = Speichern in der Datenbank ---*/
+  //   dev.log('0569 - DatabaseHelper - Daten gespeichert: $dataToSave');
+  //   await db.insert('Tabelle01', dataToSave);
+  // }
 
   /*--------------------------------- INSERT = Speichern von Name in der Datenbank ---*/
   Future<void> saveName(String name) async {

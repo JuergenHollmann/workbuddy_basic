@@ -91,12 +91,33 @@ Future<void> saveData(BuildContext context) async {
     return;
   }
 
+  /*--- Das aktuelle Datum und die Uhrzeit im gewünschten Format vorbereiten ...
+  ----> anstatt "DateFormat('dd.MM.yyyy HH:mm').format(DateTime.now())" als Original-Datumsformat ---*/
+  final now = DateTime.now();
+  final formattedDateTime =
+      '${now.day.toString().padLeft(2, '0')}.${now.month.toString().padLeft(2, '0')}.${now.year} um ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')} Uhr';
+
+  /*--- Angelegt von angemeldetem User (mit MA-NR) ---*/
+  // ignore: use_build_context_synchronously
+  final currentUser = Provider.of<CurrentUserProvider>(context, listen: false);
+  log('0148 - ContactScreen - Angelegt von MA-NR: ${currentUser.currentUser}');
+  // employeeID = 'JH-01'; // Hier die MA-NR aus den Einstellungen eintragen - CS-0147 currentUser ist die MA-NR
+
+  /*--------------------------------- Hier werden alle Daten der "ContactScreen" gespeichert (INSERT) ---*/
+  log('0094 - ContactScreen - Daten werden in die "Tabelle01" gespeichert');
   await db.insert('Tabelle01', {
-    for (var i = 1; i <= 30; i++)
+    for (var i = 1; i <= 50; i++)
       'Tabelle01_${i.toString().padLeft(3, '0')}':
           controllers['controllerCS${i.toString().padLeft(3, '0')}']!.text,
+
+    /*--- Hier werden die Daten gespeichert, die nicht in der "ContactScreen" einzugeben sind ---*/
+    'Tabelle01_047': currentUser.currentUser,
+    'Tabelle01_048': formattedDateTime,
+    'Tabelle01_049': currentUser.currentUser,
+    'Tabelle01_050': formattedDateTime,
   });
-  log('0164 - ContactScreen - Daten gespeichert von ${controllers['controllerCS001']!.text} ${controllers['controllerCS003']!.text} ${controllers['controllerCS004']!.text} / KontaktID: ${controllers['controllerCS001']!.text}');
+
+  log('0099 - ContactScreen - Daten gespeichert von ${controllers['controllerCS003']!.text} ${controllers['controllerCS004']!.text} / KontaktID: ${controllers['controllerCS001']!.text}');
 }
 
 /*--------------------------------- Button-Farbe beim Anklicken ändern ---*/
@@ -135,7 +156,7 @@ Future<void> updateData(Map<String, dynamic> row) async {
   log('0135 - ContactScreen - Daten aktualisiert: $row');
 }
 
-void saveChanges() async {
+void saveChanges(BuildContext context) async {
   final updatedRow = {
     for (var i = 1; i <= 50; i++)
       'Tabelle01_${i.toString().padLeft(3, '0')}':
@@ -143,7 +164,26 @@ void saveChanges() async {
   };
   updatedRow['Tabelle01_001'] = controllers['controllerCS001']!.text;
 
+  /*--------------------------------- Angelegt von angemeldetem User (mit MA-NR) ---*/
+  final currentUser = Provider.of<CurrentUserProvider>(context, listen: false);
+  updatedRow['Tabelle01_047'] = currentUser.currentUser;
+  log('0148 - ContactScreen - Angelegt von MA-NR: ${currentUser.currentUser}');
+  // employeeID = 'JH-01'; // Hier die MA-NR aus den Einstellungen eintragen - CS-0147 currentUser ist die MA-NR
+
+  /*--------------------------------- Aktualisiert von angemeldetem User (mit MA-NR) ---*/
+  updatedRow['Tabelle01_049'] = currentUser.currentUser;
+  log('0151 - ContactScreen - Aktualisiert von MA-NR: ${currentUser.currentUser}');
+
+  /*--------------------------------- Update-Datum = aktuelles Datum und Uhrzeit ---*/
+  final now = DateTime.now();
+  final formattedDateTime =
+      '${now.day.toString().padLeft(2, '0')}.${now.month.toString().padLeft(2, '0')}.${now.year} um ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')} Uhr';
+  updatedRow['Tabelle01_050'] = formattedDateTime;
+
+  /*--------------------------------- Update alle Daten von oben nach unten ---*/
   await updateData(updatedRow);
+  log('0137 - ContactScreen - All Daten gespeichert bei ${controllers['controllerCS003']!.text} ${controllers['controllerCS004']!.text} / KontaktID: ${controllers['controllerCS001']!.text}');
+  /*--------------------------------- *** ---*/
 }
 
 /*--------------------------------- Datensatz löschen - CS-0138 ---*/
@@ -328,14 +368,7 @@ class _ContactScreenState extends State<ContactScreen> {
 
   bool isDataChanged = false;
 
-  void _addListeners() { // evtl. hinter "WidgetsBinding.instance.addPostFrameCallback" verschieben?
-    controllers.forEach((key, controller) {
-      controller.addListener(() {
-        _onDataChanged(key, controller.text);
-      });
-    });
-  }
-
+  /*--------------------------------- Überprüfen, ob sich die Daten geändert haben ---*/
   void _onDataChanged(String key, String value) {
     log('0332 - ContactScreen - $key geändert: $value');
     setState(() {
@@ -343,6 +376,53 @@ class _ContactScreenState extends State<ContactScreen> {
     });
   }
 
+  // /*--------------------------------- Listener für die Textfelder ---*/
+  // void _addListeners() {
+  //   try {
+  //     controllers.forEach((key, controller) {
+  //       // Entferne vorherige Listener, falls vorhanden
+  //       controller.removeListener(() {
+  //         _onDataChanged(key, controller.text);
+  //       });
+
+  //       // Füge neuen Listener hinzu
+  //       controller.addListener(() {
+  //         _onDataChanged(key, controller.text);
+  //       });
+  //     });
+  //   } catch (e) {
+  //     log('0370 - ContactScreen - Fehler bei _addListeners: $e');
+  //   }
+  // }
+
+  /*--------------------------------- *** ---*/
+// 1. Speichere Listener-Referenzen in einer Map
+  final Map<String, VoidCallback> _listeners = {};
+
+  void _addListeners() {
+    try {
+      controllers.forEach((key, controller) {
+        // Entferne vorherigen Listener, falls vorhanden
+        if (_listeners.containsKey(key)) {
+          controller.removeListener(_listeners[key]!);
+          _listeners.remove(key);
+        }
+
+        // Erstelle neuen Listener
+        // ignore: prefer_function_declarations_over_variables
+        final listener = () => _onDataChanged(key, controller.text);
+
+        // Füge Listener hinzu und speichere Referenz
+        controller.addListener(listener);
+        _listeners[key] = listener;
+      });
+    } catch (e) {
+      log('0370 - ContactScreen - Fehler bei _addListeners: $e');
+    }
+  }
+  /*--------------------------------- *** ---*/
+
+  /*--------------------------------- initState ---*/
   @override
   void initState() {
     super.initState();
@@ -357,6 +437,15 @@ class _ContactScreenState extends State<ContactScreen> {
           Die Daten werden direkt nach dem Rendern gespeichert. ---*/
     WidgetsBinding.instance.addPostFrameCallback((_) {
       log('0350 - ContactScreen - WidgetsBinding.instance.addPostFrameCallback - aktiviert');
+
+      /*--------------------------------- Listener für die Textfelder ---*/
+      void addListeners() {
+        controllers.forEach((key, controller) {
+          controller.addListener(() {
+            _onDataChanged(key, controller.text);
+          });
+        });
+      }
 
       /*--- Controller hier initialisieren ---*/
       controllers['controllerCS001']!.text =
@@ -378,7 +467,7 @@ class _ContactScreenState extends State<ContactScreen> {
 
       /*--- Daten direkt nach dem Rendern speichern ---*/
       updateData({});
-      saveChanges();
+      saveChanges(context);
 
       /*--- Hier nochmal das Alter aus dem Geburtstag berechnen ---*/
       calculateAgeFromBirthday();
@@ -388,6 +477,8 @@ class _ContactScreenState extends State<ContactScreen> {
         isDataChanged = _hasDataChanged();
       });
     });
+
+    // _addListeners();
 
     /*--- Überprüfe den Telefon-Anruf-Support ---*/
     canLaunchUrl(Uri(scheme: 'tel', path: '123')).then((bool result) {
@@ -491,7 +582,8 @@ class _ContactScreenState extends State<ContactScreen> {
                               Navigator.of(context).pop();
                               await updateData({});
                               log('0493 - ContactScreen - Daten "updateData": ${controllers['controllerCS001']!.text} ${controllers['controllerCS003']!.text} ${controllers['controllerCS004']!.text} / KontaktID: ${controllers['controllerCS001']!.text}');
-                              saveChanges();
+                              // ignore: use_build_context_synchronously
+                              saveChanges(context);
                               log('0495 - ContactScreen - Daten "saveChanges": ${controllers['controllerCS001']!.text} ${controllers['controllerCS003']!.text} ${controllers['controllerCS004']!.text} / KontaktID: ${controllers['controllerCS001']!.text}');
                               Navigator.push(
                                 // ignore: use_build_context_synchronously
@@ -960,7 +1052,26 @@ class _ContactScreenState extends State<ContactScreen> {
                         ),
                       ],
                     ),
-                    wbSizedBoxHeight8,
+                    /*--------------------------------- Abstand ---*/
+                    wbSizedBoxHeight16,
+                    /*--------------------------------- Land ---*/
+                    WbTextFormField(
+                      controller: controllers['controllerCS010']!,
+                      labelText: "Land",
+                      labelFontSize20: 20,
+                      hintText: "Bitte das Land eintragen",
+                      hintTextFontSize16: 15,
+                      inputTextFontSize22: 22,
+                      prefixIcon: Icons.location_on_outlined,
+                      prefixIconSize28: 24,
+                      inputFontWeightW900: FontWeight.w900,
+                      inputFontColor: wbColorLogoBlue,
+                      fillColor: wbColorLightYellowGreen,
+                      textInputTypeOnKeyboard: TextInputType.streetAddress,
+                    ),
+                    /*--------------------------------- Abstand ---*/
+                    wbSizedBoxHeight16,
+                    /*--------------------------------- Divider mit Text ---*/
                     WbDividerWithTextInCenter(
                       wbColor: wbColorLogoBlue,
                       wbText: 'Notizen zum Ansprechpartner',
@@ -1209,20 +1320,112 @@ class _ContactScreenState extends State<ContactScreen> {
                         ),
                       ],
                     ),
+
+                    /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight16,
+                    /*--------------------------------- Divider ---*/
                     const Divider(thickness: 3, color: wbColorLogoBlue),
+                    /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight8,
-                    /*--------------------------------- Zeitstempel ---*/
+                    /*--------------------------------- Restliche Felder im ContactScreen ---*/
                     Text(
-                        'Zuletzt aktualisiert am ${controllers['controllerCS050']!.text}'),
+                        '001 Kontakt-ID: ${controllers['controllerCS001']!.text}'),
+                    Text('002 Anrede: ${controllers['controllerCS002']!.text}'),
                     Text(
-                        'Kontakt-Quelle: ${controllers['controllerCS046']!.text}'),
+                        '003 Vorname: ${controllers['controllerCS003']!.text}'),
                     Text(
-                        'Betreut durch: ${controllers['controllerCS048']!.text}'),
+                        '004 Nachname: ${controllers['controllerCS004']!.text}'),
                     Text(
-                        'Betreuer-Stufe: ${controllers['controllerCS049']!.text}'),
+                        '005 Geburtstag: ${controllers['controllerCS005']!.text}'),
                     Text(
-                        'Gebietskennung: ${controllers['controllerCS047']!.text}'),
+                        '006 Straße + Nr: ${controllers['controllerCS006']!.text}'),
+                    Text(
+                        '007 Zusatzinfo: ${controllers['controllerCS007']!.text}'),
+                    Text('008 PLZ: ${controllers['controllerCS008']!.text}'),
+                    Text('009 Ort: ${controllers['controllerCS009']!.text}'),
+                    Text('010 Land: ${controllers['controllerCS010']!.text}'),
+                    Text(
+                        '011 Telefon 1: ${controllers['controllerCS011']!.text}'),
+                    Text(
+                        '012 Telefon 2: ${controllers['controllerCS012']!.text}'),
+                    Text(
+                        '013 E-Mail 1: ${controllers['controllerCS013']!.text}'),
+                    Text(
+                        '014 Webseite: ${controllers['controllerCS014']!.text}'),
+                    Text(
+                        '015 Firmenname: ${controllers['controllerCS015']!.text}'),
+                    Text(
+                        '016 Branche: ${controllers['controllerCS016']!.text}'),
+                    Text(
+                        '017 Warengruppen: ${controllers['controllerCS017']!.text}'),
+                    Text(
+                        '018 Kontakt-Notizen: ${controllers['controllerCS018']!.text}'),
+                    Text(
+                        '019 Kontakt-Status: ${controllers['controllerCS019']!.text}'),
+                    Text(
+                        '020 Phone-Gruppe(n): ${controllers['controllerCS020']!.text}'),
+                    Text(
+                        '021 = x - Firmen-Straße: ${controllers['controllerCS021']!.text}'),
+                    Text(
+                        '022 = x - Firmen-PLZ: ${controllers['controllerCS022']!.text}'),
+                    Text(
+                        '023 = x - Firmen-Ort: ${controllers['controllerCS023']!.text}'),
+                    Text(
+                        '024 = x - Firmen-Land: ${controllers['controllerCS024']!.text}'),
+                    Text(
+                        '025 = Komplett-Adresse Privat (aus Phone): ${controllers['controllerCS025']!.text}'),
+                    Text(
+                        '026 = Komplett-Adresse Geschäft (aus Phone): ${controllers['controllerCS026']!.text}'),
+                    Text(
+                        '027 SK-ID: SmartKontakt-ID (aus Phone): ${controllers['controllerCS027']!.text}'),
+                    Text(
+                        '028 = Reserve ${controllers['controllerCS028']!.text}'),
+                    Text(
+                        '029 = x - Dokumente (in DID-05): ${controllers['controllerCS029']!.text}'),
+                    Text(
+                        '030 = x - Bild des Ansprechpartners: ${controllers['controllerCS030']!.text}'),
+                    Text(
+                        '031 = x - Logo der Firma: ${controllers['controllerCS031']!.text}'),
+                    Text(
+                        '032 = x - LinkedIn-Profil: ${controllers['controllerCS032']!.text}'),
+                    Text(
+                        '033 = x - XING-Profil: ${controllers['controllerCS033']!.text}'),
+                    Text(
+                        '034 = x - Facebook-Profil: ${controllers['controllerCS034']!.text}'),
+                    Text(
+                        '035 = x - Instagram-Profil: ${controllers['controllerCS035']!.text}'),
+                    Text(
+                        '036 = x - Twitter-Profil: ${controllers['controllerCS036']!.text}'),
+                    Text(
+                        '037 = x - Marketing-Einwilligung: ${controllers['controllerCS037']!.text}'),
+                    Text(
+                        '038 = x - Bewertung abgegeben: App ${controllers['controllerCS038']!.text}'),
+                    Text(
+                        '039 = x - Bewertung abgegeben: Google ${controllers['controllerCS039']!.text}'),
+                    Text(
+                        '040 = x - Kontakt-Quelle: ${controllers['controllerCS040']!.text}'),
+                    Text(
+                        '041 = x - Gebietskennung: ${controllers['controllerCS041']!.text}'),
+                    Text(
+                        '042 = x - Betreuer MA-NR: ${controllers['controllerCS042']!.text}'),
+                    Text(
+                        '043 = x - Stufe des Betreuers: ${controllers['controllerCS043']!.text}'),
+                    Text(
+                        '044 = x - Betreuungsstatus: ${controllers['controllerCS044']!.text}'),
+                    Text(
+                        '045 = Reserve ${controllers['controllerCS045']!.text}'),
+                    Text(
+                        '046 = Reserve ${controllers['controllerCS046']!.text}'),
+                    Text(
+                        '047 Zuerst angelegt von ${controllers['controllerCS047']!.text}'),
+                    Text(
+                        '048 Zuerst angelegt am ${controllers['controllerCS048']!.text}'),
+                    Text(
+                        '049 Zuletzt aktualisiert von ${controllers['controllerCS049']!.text}'),
+                    Text(
+                        '050 Zuletzt aktualisiert am ${controllers['controllerCS050']!.text}'),
+                    /*--------------------------------- *** ---*/
+
                     wbSizedBoxHeight8,
                     const Divider(thickness: 3, color: wbColorLogoBlue),
                     wbSizedBoxHeight8,
@@ -1351,7 +1554,8 @@ class _ContactScreenState extends State<ContactScreen> {
                             Navigator.of(context).pop();
                             await updateData({});
                             log('1353 - ContactScreen - Daten "updateData": ${controllers['controllerCS001']!.text} ${controllers['controllerCS003']!.text} ${controllers['controllerCS004']!.text} / KontaktID: ${controllers['controllerCS001']!.text}');
-                            saveChanges();
+                            // ignore: use_build_context_synchronously
+                            saveChanges(context);
                             log('1355 - ContactScreen - Daten "saveChanges": ${controllers['controllerCS001']!.text} ${controllers['controllerCS003']!.text} ${controllers['controllerCS004']!.text} / KontaktID: ${controllers['controllerCS001']!.text}');
                             Navigator.push(
                               // ignore: use_build_context_synchronously
@@ -1465,15 +1669,14 @@ class _ContactScreenState extends State<ContactScreen> {
 
                     /*--------------------------------- KontaktID anzeigen - CS-1420 ---*/
                     Center(
-                      child: Text(controllers['controllerCS001']!.text),
+                      child: Text('Kontakt-ID: ${controllers['controllerCS001']!.text}'),
                     ),
                     /*--------------------------------- *** ---*/
-
                     wbSizedBoxHeight8,
                     wbSizedBoxHeight32,
                     wbSizedBoxHeight16,
                     SizedBox(height: double.tryParse('.')),
-                  ],
+                    /*--------------------------------- *** ---*/                  ],
                 ),
               ),
               wbSizedBoxHeight16,
@@ -1491,9 +1694,28 @@ class _ContactScreenState extends State<ContactScreen> {
 
   @override
   void dispose() {
-    for (var controller in controllers.values) {
-      controller.dispose();
-    }
+    // // Entferne alle Listener und dispose die Controller
+    // controllers.forEach((key, controller) {
+    //   controller.removeListener(() {
+    //     _onDataChanged(key, controller.text);
+    //   });
+    //   controller.dispose(); // Dispose den Controller
+    // });
+
+    controllers.forEach((key, controller) {
+      if (_listeners.containsKey(key)) {
+        controller.removeListener(_listeners[key]!);
+      }
+    });
+    _listeners.clear();
+    //super.dispose();
+
+    // Dispose des ScrollControllers
+    scrollController.dispose();
+
+    // Dispose des AudioPlayers
+    player.dispose();
+
     super.dispose();
   }
 }
