@@ -220,6 +220,18 @@ Future<void> deleteData(Map<String, dynamic> row) async {
 
 /*--------------------------------- State ---*/
 class _ContactScreenState extends State<ContactScreen> {
+//
+  /*--------------------------------- Controller ---*/
+  final TextEditingController _controller = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
+  List<String> _filteredItems = [];
+  final List<String> _allItems = [
+    'Furz',
+    'Murks',
+    'Dreck',
+    'Shit'
+  ]; // Wird aus SQL geladen
+
   bool _hasDataChanged() {
     for (var i = 1; i <= 50; i++) {
       final key = 'controllerCS${i.toString().padLeft(3, '0')}';
@@ -423,14 +435,13 @@ class _ContactScreenState extends State<ContactScreen> {
   /*--------------------------------- *** ---*/
 
   /*--------------------------------- initState ---*/
+  // Removed misplaced @override annotation
   @override
   void initState() {
     super.initState();
     log("0344 - ContactScreen - initState - aktiviert");
-
-    // /*--- Controller hier initialisieren ---*/
-    // controllers['controllerCS001']!.text =
-    //     widget.contact['Tabelle01_001'] ?? '';
+    _filteredItems = _allItems; // Initial alle Items anzeigenm 0476
+    // _loadItemsFromDB(); // Für echte DB-Verbindung einkommentieren
 
     /*--- Den Zustand (State) erst nach dem Build ändern.
           Diese Methode wird verwendet, um eine Aktion auszuführen, nachdem das Widget vollständig aufgebaut wurde. 
@@ -438,23 +449,13 @@ class _ContactScreenState extends State<ContactScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       log('0350 - ContactScreen - WidgetsBinding.instance.addPostFrameCallback - aktiviert');
 
-      /*--------------------------------- Listener für die Textfelder ---*/
-      void addListeners() {
-        controllers.forEach((key, controller) {
-          controller.addListener(() {
-            _onDataChanged(key, controller.text);
-          });
-        });
-      }
-
       /*--- Controller hier initialisieren ---*/
       controllers['controllerCS001']!.text =
           widget.contact['Tabelle01_001'] ?? '';
-      /*--------------------------------- *** ---*/
 
       setState(() {
         try {
-          /*--------------------------------- Daten aus der SQFlite ---*/
+          /*--- Daten aus der SQFlite ---*/
           for (var i = 1; i <= 50; i++) {
             controllers['controllerCS${i.toString().padLeft(3, '0')}']!.text =
                 widget.contact['Tabelle01_${i.toString().padLeft(3, '0')}'] ??
@@ -477,8 +478,6 @@ class _ContactScreenState extends State<ContactScreen> {
         isDataChanged = _hasDataChanged();
       });
     });
-
-    // _addListeners();
 
     /*--- Überprüfe den Telefon-Anruf-Support ---*/
     canLaunchUrl(Uri(scheme: 'tel', path: '123')).then((bool result) {
@@ -508,7 +507,7 @@ class _ContactScreenState extends State<ContactScreen> {
       backgroundColor: wbColorBackgroundBlue,
       appBar: AppBar(
           title: Text(
-            'Kontakt zeigen   |   bearbeiten', // oder NEU anlegen
+            widget.isNewContact ? 'Neuer Kontakt' : 'Kontakt bearbeiten',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w900,
@@ -753,6 +752,7 @@ class _ContactScreenState extends State<ContactScreen> {
                       controller: controllers['controllerCS002']!,
                       label: "Anrede",
                       dropdownItems: [
+                        "Firma",
                         "Herr",
                         "Frau",
                         "Divers",
@@ -764,6 +764,7 @@ class _ContactScreenState extends State<ContactScreen> {
                         "Prof.",
                       ],
                       leadingIconsInMenu: [
+                        Icons.person_2_outlined,
                         Icons.person_2_outlined,
                         Icons.person_2_outlined,
                         Icons.person_2_outlined,
@@ -1326,145 +1327,326 @@ class _ContactScreenState extends State<ContactScreen> {
                     /*--------------------------------- Divider ---*/
                     const Divider(thickness: 3, color: wbColorLogoBlue),
                     /*--------------------------------- Abstand ---*/
-                    wbSizedBoxHeight8,
-                    /*--------------------------------- Restliche Felder im ContactScreen ---*/
-                    Text(
-                        '001 Kontakt-ID: ${controllers['controllerCS001']!.text}'),
-                    Text('002 Anrede: ${controllers['controllerCS002']!.text}'),
-                    Text(
-                        '003 Vorname: ${controllers['controllerCS003']!.text}'),
-                    Text(
-                        '004 Nachname: ${controllers['controllerCS004']!.text}'),
-                    Text(
-                        '005 Geburtstag: ${controllers['controllerCS005']!.text}'),
-                    Text(
-                        '006 Straße + Nr: ${controllers['controllerCS006']!.text}'),
-                    Text(
-                        '007 Zusatzinfo: ${controllers['controllerCS007']!.text}'),
-                    Text('008 PLZ: ${controllers['controllerCS008']!.text}'),
-                    Text('009 Ort: ${controllers['controllerCS009']!.text}'),
-                    Text('010 Land: ${controllers['controllerCS010']!.text}'),
-                    Text(
-                        '011 Telefon 1: ${controllers['controllerCS011']!.text}'),
-                    Text(
-                        '012 Telefon 2: ${controllers['controllerCS012']!.text}'),
-                    Text(
-                        '013 E-Mail 1: ${controllers['controllerCS013']!.text}'),
-                    Text(
-                        '014 Webseite: ${controllers['controllerCS014']!.text}'),
-                    Text(
-                        '015 Firmenname: ${controllers['controllerCS015']!.text}'),
-                    Text(
-                        '016 Branche: ${controllers['controllerCS016']!.text}'),
-                    Text(
-                        '017 Warengruppen: ${controllers['controllerCS017']!.text}'),
-                    Text(
-                        '018 Kontakt-Notizen: ${controllers['controllerCS018']!.text}'),
-                    Text(
-                        '019 Kontakt-Status: ${controllers['controllerCS019']!.text}'),
-                    Text(
-                        '020 Phone-Gruppe(n): ${controllers['controllerCS020']!.text}'),
-                    Text(
-                        '021 = x - Firmen-Straße: ${controllers['controllerCS021']!.text}'),
-                    Text(
-                        '022 = x - Firmen-PLZ: ${controllers['controllerCS022']!.text}'),
-                    Text(
-                        '023 = x - Firmen-Ort: ${controllers['controllerCS023']!.text}'),
-                    Text(
-                        '024 = x - Firmen-Land: ${controllers['controllerCS024']!.text}'),
-                    Text(
-                        '025 = Komplett-Adresse Privat (aus Phone): ${controllers['controllerCS025']!.text}'),
-                    Text(
-                        '026 = Komplett-Adresse Geschäft (aus Phone): ${controllers['controllerCS026']!.text}'),
-                    Text(
-                        '027 SK-ID: SmartKontakt-ID (aus Phone): ${controllers['controllerCS027']!.text}'),
-                    Text(
-                        '028 = Reserve ${controllers['controllerCS028']!.text}'),
-                    Text(
-                        '029 = x - Dokumente (in DID-05): ${controllers['controllerCS029']!.text}'),
-                    Text(
-                        '030 = x - Bild des Ansprechpartners: ${controllers['controllerCS030']!.text}'),
-                    Text(
-                        '031 = x - Logo der Firma: ${controllers['controllerCS031']!.text}'),
-                    Text(
-                        '032 = x - LinkedIn-Profil: ${controllers['controllerCS032']!.text}'),
-                    Text(
-                        '033 = x - XING-Profil: ${controllers['controllerCS033']!.text}'),
-                    Text(
-                        '034 = x - Facebook-Profil: ${controllers['controllerCS034']!.text}'),
-                    Text(
-                        '035 = x - Instagram-Profil: ${controllers['controllerCS035']!.text}'),
-                    Text(
-                        '036 = x - Twitter-Profil: ${controllers['controllerCS036']!.text}'),
-                    Text(
-                        '037 = x - Marketing-Einwilligung: ${controllers['controllerCS037']!.text}'),
-                    Text(
-                        '038 = x - Bewertung abgegeben: App ${controllers['controllerCS038']!.text}'),
-                    Text(
-                        '039 = x - Bewertung abgegeben: Google ${controllers['controllerCS039']!.text}'),
-                    Text(
-                        '040 = x - Kontakt-Quelle: ${controllers['controllerCS040']!.text}'),
-                    Text(
-                        '041 = x - Gebietskennung: ${controllers['controllerCS041']!.text}'),
-                    Text(
-                        '042 = x - Betreuer MA-NR: ${controllers['controllerCS042']!.text}'),
-                    Text(
-                        '043 = x - Stufe des Betreuers: ${controllers['controllerCS043']!.text}'),
-                    Text(
-                        '044 = x - Betreuungsstatus: ${controllers['controllerCS044']!.text}'),
-                    Text(
-                        '045 = Reserve ${controllers['controllerCS045']!.text}'),
-                    Text(
-                        '046 = Reserve ${controllers['controllerCS046']!.text}'),
-                    Text(
-                        '047 Zuerst angelegt von ${controllers['controllerCS047']!.text}'),
-                    Text(
-                        '048 Zuerst angelegt am ${controllers['controllerCS048']!.text}'),
-                    Text(
-                        '049 Zuletzt aktualisiert von ${controllers['controllerCS049']!.text}'),
-                    Text(
-                        '050 Zuletzt aktualisiert am ${controllers['controllerCS050']!.text}'),
-                    /*--------------------------------- *** ---*/
+                    // wbSizedBoxHeight8,
+                    /*--------------------------------- ExpansionPanelList mit Text ---*/
+                    /*--------------------------------- Alle Informationen auf einen Blick ---*/
+                    ExpansionTile(
+                      title: Text(
+                        "Alle Informationen auf einen Blick",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            height: 1.1),
+                      ),
+                      expandedCrossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        /*--------------------------------- Inhalt ---*/
+                        WbTextFormField(
+                            labelText: 'Firma: Straße + Nr.',
+                            labelFontSize20: 20,
+                            hintText: 'hintText',
+                            inputTextFontSize22: 22,
+                            inputFontWeightW900: FontWeight.bold,
+                            inputFontColor: wbColorAppBarBlue,
+                            fillColor: wbColorLightYellowGreen,
+                            controller: controllers['controllerCS021']!),
+                        /*--------------------------------- Abstand ---*/
+                        wbSizedBoxHeight16,
+                        /*--------------------------------- *** ---*/
 
-                    wbSizedBoxHeight8,
+// // 2. Init-Methode (im StatefulWidget)
+// @override
+// void initState() {
+//   super.initState();
+//   _loadItemsFromDB(); // Begriffe aus DB laden
+// }
+
+// Future<void> _loadItemsFromDB() async {
+//   _allItems = await DatabaseHelper.instance.getAllTexts();
+//   _filteredItems = _allItems;
+//   if (mounted) setState(() {});
+// }
+
+// Future<void> _loadItemsFromDB() async {
+//     final items = await DatabaseHelper.instance.getAllTexts();
+//     setState(() {
+//       _allItems = items;
+//       _filteredItems = items;
+//     });
+//   }
+
+                        // // 3. Das Widget (ersetzt Ihr vorhandenes TextFormField/Dropdown)
+                        // Autocomplete<String>(
+                        //   fieldViewBuilder: (context, controller, focusNode,
+                        //       onFieldSubmitted) {
+                        //     return TextFormField(
+                        //       controller: _searchController,
+                        //       focusNode: _searchFocusNode,
+                        //       decoration: InputDecoration(
+                        //         labelText: 'Suche & Auswahl',
+                        //         hintText: 'Tippen oder ▽ anklicken',
+                        //         suffixIcon: IconButton(
+                        //           icon: Icon(Icons.arrow_drop_down),
+                        //           onPressed: () => _searchFocusNode
+                        //               .requestFocus(), // Dropdown öffnen
+                        //         ),
+                        //         border: OutlineInputBorder(),
+                        //         filled: true,
+                        //         fillColor: Colors.grey[50],
+                        //       ),
+                        //       onChanged: (query) {
+                        //         setState(() {
+                        //           _filteredItems = _allItems
+                        //               .where((item) => item
+                        //                   .toLowerCase()
+                        //                   .contains(query.toLowerCase()))
+                        //               .toList();
+                        //         });
+                        //       },
+                        //     );
+                        //   },
+                        //   optionsBuilder: (textEditingValue) => _filteredItems,
+                        //   onSelected: (selectedItem) {
+                        //     _searchController.text = selectedItem;
+                        //     DatabaseHelper.instance
+                        //         .insertText(selectedItem); // In SQL speichern
+                        //   },
+                        // ),
+
+                        RawAutocomplete<String>(
+                          focusNode: _focusNode,
+                          textEditingController: _controller,
+                          optionsBuilder: (TextEditingValue textEditingValue) {
+                            return _filteredItems.where((String option) {
+                              return option.toLowerCase().contains(
+                                  textEditingValue.text.toLowerCase());
+                            });
+                          },
+                          optionsViewBuilder: (BuildContext context,
+                              AutocompleteOnSelected<String> onSelected,
+                              Iterable<String> options) {
+                            return Material(
+                              elevation: 4.0,
+                              child: ListView.builder(
+                                padding: EdgeInsets.zero,
+                                itemCount: options.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  final String option =
+                                      options.elementAt(index);
+                                  return InkWell(
+                                    onTap: () {
+                                      onSelected(option);
+                                      _controller.text = option;
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsets.all(16.0),
+                                      child: Text(option),
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                          fieldViewBuilder: (BuildContext context,
+                              TextEditingController textEditingController,
+                              FocusNode focusNode,
+                              VoidCallback onFieldSubmitted) {
+                            return TextFormField(
+                              controller: textEditingController,
+                              focusNode: focusNode,
+                              decoration: InputDecoration(
+                                labelText: 'Suche',
+                                hintText: 'Eingabe starten...',
+                                suffixIcon: IconButton(
+                                  icon: Icon(Icons.arrow_drop_down),
+                                  onPressed: () => focusNode.requestFocus(),
+                                ),
+                                border: OutlineInputBorder(),
+                              ),
+                              onChanged: (value) {
+                                setState(() {
+                                  _filteredItems = _allItems
+                                      .where((item) => item
+                                          .toLowerCase()
+                                          .contains(value.toLowerCase()))
+                                      .toList();
+                                });
+                              },
+                            );
+                          },
+                        ),
+
+                        /*-----------------------------------------------------------------------------------------*/
+                        Text(
+                            '001 Kontakt-ID: ${controllers['controllerCS001']!.text}'),
+                        Divider(
+                          thickness: 1,
+                          color: Colors.grey,
+                        ),
+                        Text(
+                            '002 Anrede: ${controllers['controllerCS002']!.text}'),
+                        Text(
+                            '003 Vorname: ${controllers['controllerCS003']!.text}'),
+                        Text(
+                            '004 Nachname: ${controllers['controllerCS004']!.text}'),
+                        Text(
+                            '005 Geburtstag: ${controllers['controllerCS005']!.text}'),
+                        Divider(thickness: 1, color: Colors.grey),
+                        Text(
+                            '006 Straße + Nr: ${controllers['controllerCS006']!.text}'),
+                        Text(
+                            '007 Zusatzinfo: ${controllers['controllerCS007']!.text}'),
+                        Text(
+                            '008 PLZ: ${controllers['controllerCS008']!.text}'),
+                        Text(
+                            '009 Ort: ${controllers['controllerCS009']!.text}'),
+                        Text(
+                            '010 Land: ${controllers['controllerCS010']!.text}'),
+                        Divider(thickness: 1, color: Colors.grey),
+                        Text(
+                            '011 Telefon 1: ${controllers['controllerCS011']!.text}'),
+                        Text(
+                            '012 Telefon 2: ${controllers['controllerCS012']!.text}'),
+                        Text(
+                            '013 E-Mail 1: ${controllers['controllerCS013']!.text}'),
+                        Text(
+                            '014 Webseite: ${controllers['controllerCS014']!.text}'),
+                        Divider(thickness: 1, color: Colors.grey),
+                        Text(
+                            '015 Firmenname: ${controllers['controllerCS015']!.text}'),
+                        Text(
+                            '016 Branche: ${controllers['controllerCS016']!.text}'),
+                        Text(
+                            '017 Warengruppen: ${controllers['controllerCS017']!.text}'),
+                        Divider(thickness: 1, color: Colors.grey),
+                        Text(
+                            '018 Kontakt-Notizen: ${controllers['controllerCS018']!.text}'),
+                        Text(
+                            '019 Kontakt-Status: ${controllers['controllerCS019']!.text}'),
+                        Text(
+                            '020 Phone-Gruppe(n): ${controllers['controllerCS020']!.text}'),
+                        Divider(thickness: 1, color: Colors.grey),
+                        Text(
+                            '021 = x - Firmen-Straße: ${controllers['controllerCS021']!.text}'),
+                        Text(
+                            '022 = x - Firmen-PLZ: ${controllers['controllerCS022']!.text}'),
+                        Text(
+                            '023 = x - Firmen-Ort: ${controllers['controllerCS023']!.text}'),
+                        Text(
+                            '024 = x - Firmen-Land: ${controllers['controllerCS024']!.text}'),
+                        Divider(thickness: 1, color: Colors.grey),
+                        Text(
+                            '025 = Komplett-Adresse Privat (aus dem Phone):\n${controllers['controllerCS025']!.text}'),
+                        Divider(thickness: 1, color: Colors.grey),
+                        Text(
+                            '026 = Komplett-Adresse Geschäft (aus dem Phone):\n${controllers['controllerCS026']!.text}'),
+                        Divider(thickness: 1, color: Colors.grey),
+                        Text(
+                            '027 SmartKontakt-ID = SK-ID (aus dem Phone):\n${controllers['controllerCS027']!.text}'),
+                        Divider(thickness: 1, color: Colors.grey),
+                        Text(
+                            '028 = Reserve ${controllers['controllerCS028']!.text}'),
+                        Text(
+                            '029 = x - Dokumente (in DID-05): ${controllers['controllerCS029']!.text}'),
+                        Text(
+                            '030 = x - Bild des Ansprechpartners: ${controllers['controllerCS030']!.text}'),
+                        Text(
+                            '031 = x - Logo der Firma: ${controllers['controllerCS031']!.text}'),
+                        Text(
+                            '032 = x - LinkedIn-Profil: ${controllers['controllerCS032']!.text}'),
+                        Text(
+                            '033 = x - XING-Profil: ${controllers['controllerCS033']!.text}'),
+                        Text(
+                            '034 = x - Facebook-Profil: ${controllers['controllerCS034']!.text}'),
+                        Text(
+                            '035 = x - Instagram-Profil: ${controllers['controllerCS035']!.text}'),
+                        Text(
+                            '036 = x - Twitter-Profil: ${controllers['controllerCS036']!.text}'),
+                        Text(
+                            '037 = x - Marketing-Einwilligung: ${controllers['controllerCS037']!.text}'),
+                        Text(
+                            '038 = x - Bewertung abgegeben: App ${controllers['controllerCS038']!.text}'),
+                        Text(
+                            '039 = x - Bewertung abgegeben: Google ${controllers['controllerCS039']!.text}'),
+                        Text(
+                            '040 = x - Kontakt-Quelle: ${controllers['controllerCS040']!.text}'),
+                        Text(
+                            '041 = x - Gebietskennung: ${controllers['controllerCS041']!.text}'),
+                        Text(
+                            '042 = x - Betreuer MA-NR: ${controllers['controllerCS042']!.text}'),
+                        Text(
+                            '043 = x - Stufe des Betreuers: ${controllers['controllerCS043']!.text}'),
+                        Text(
+                            '044 = x - Betreuungsstatus: ${controllers['controllerCS044']!.text}'),
+                        Text(
+                            '045 = Reserve ${controllers['controllerCS045']!.text}'),
+                        Text(
+                            '046 = Reserve ${controllers['controllerCS046']!.text}'),
+                        Divider(thickness: 1, color: Colors.grey),
+                        Text(
+                            '047 Zuerst angelegt von ${controllers['controllerCS047']!.text}'),
+                        Text(
+                            '048 Zuerst angelegt am ${controllers['controllerCS048']!.text}'),
+                        Text(
+                            '049 Aktualisiert von ${controllers['controllerCS049']!.text}'),
+                        Text(
+                            '050 Aktualisiert am ${controllers['controllerCS050']!.text}'),
+                      ],
+                    ),
+
+                    /*--------------------------------- Abstand ---*/
+                    //wbSizedBoxHeight8,
+                    /*--------------------------------- Divider ---*/
                     const Divider(thickness: 3, color: wbColorLogoBlue),
+                    /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight8,
-                    /*--------------------------------- if-else Button ---*/
-                    if (!isDataChanged || widget.isNewContact)
-                      WbButtonUniversal2(
-                          wbColor: isButton09Clicked
-                              ? wbColorButtonDarkRed
-                              : wbColorButtonGreen,
-                          wbOnTapDown: (details) {
-                            setState(() {
-                              isButton09Clicked = true;
-                            });
-                          },
-                          wbOnTapUp: (details) {
-                            setState(() {
-                              isButton09Clicked = false;
-                            });
-                          },
-                          wbOnTapCancel: () {
-                            setState(() {
-                              isButton09Clicked = false;
-                            });
-                          },
-                          wbIcon: Icons.save_rounded,
-                          wbIconSize40: 40,
-                          wbText: "Daten SPEICHERN",
-                          wbFontSize24: 24,
-                          wbWidth155: 398,
-                          wbHeight60: 60,
-                          wbOnTap: () async {
-                            log("2240 - ContactScreen - Daten speichern - geklickt");
+
+                    /*--------------------------------- Daten SPEICHERN oder UPDATE (if-else Button) ---*/
+                    WbButtonUniversal2(
+                        /*--- Hier wird die Schrift basierend auf den Bedingungen festgelegt (MUSTER) ---*/
+                        wbText: widget.isNewContact
+                            ? 'Daten SPEICHERN' // wenn es ein NEUER Kontakt ist
+                            : 'Daten UPDATE', // wenn es ein UPDATE ist
+                        /*--- Hier wird die Farbe basierend auf den Bedingungen festgelegt ---*/
+                        wbColor: isButton09Clicked
+                            ? Colors
+                                .black // immer wenn der Button GEKLICKT wird
+                            : widget.isNewContact
+                                ? wbColorButtonGreen // für NEUEN Kontakt (Button nicht geklickt)
+                                : wbColorOrangeDarker, // für bestehenden Kontakt (Button nicht geklickt)
+                        /*--- wenn der Button GEKLICKT wird ---*/
+                        wbOnTapDown: (details) {
+                          setState(() {
+                            isButton09Clicked = true;
+                          });
+                        },
+                        /*--- wenn der Button LOSGELASSEN wird ---*/
+                        wbOnTapUp: (details) {
+                          setState(() {
+                            isButton09Clicked = false;
+                          });
+                        },
+                        /*--- wenn der Button während dem Klick "BEWEGT" wird (ohne den Button loszulassen) ---*/
+                        wbOnTapCancel: () {
+                          setState(() {
+                            isButton09Clicked = false;
+                          });
+                        },
+                        /*--------------------------------- *** ---*/
+                        wbFontSize24: 24,
+                        wbWidth155: double.infinity,
+                        wbHeight60: 60,
+                        wbIcon: Icons.save_outlined,
+                        wbIconSize40: 40,
+                        wbOnTap: () {
+                          if (widget.isNewContact) {
+                            log("1449 - ContactScreen - Der Kontakt NEU ---> Daten SPEICHERN <-- geklickt");
                             if (controllers['controllerCS003']!.text.isEmpty &&
                                 controllers['controllerCS004']!.text.isEmpty &&
                                 controllers['controllerCS015']!.text.isEmpty) {
                               /*--------------------------------- Sound ---*/
                               player.play(
                                   AssetSource("sound/sound05xylophon.wav"));
-
                               /*--------------------------------- AlertDialog ---*/
                               showDialog(
                                 context: context,
@@ -1476,15 +1658,11 @@ class _ContactScreenState extends State<ContactScreen> {
                                   actionsText: 'OK 👍',
                                 ),
                               );
-
                               _checkAndScrollToEmptyField();
-
                               return;
                             }
-
                             /*--------------------------------- Sound ---*/
                             player.play(AssetSource("sound/sound06pling.wav"));
-
                             /*--------------------------------- Snackbar ---*/
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               backgroundColor: wbColorButtonGreen,
@@ -1498,7 +1676,7 @@ class _ContactScreenState extends State<ContactScreen> {
                               ),
                             ));
                             /*--------------------------------- Speicherung in die SQL ---*/
-                            await saveData(context); // Datensatz speichern
+                            saveData(context); // Datensatz speichern
                             log('2280 - ContactScreen - Daten gespeichert (save)!');
                             Navigator.push(
                               // ignore: use_build_context_synchronously
@@ -1508,33 +1686,8 @@ class _ContactScreenState extends State<ContactScreen> {
                                     const MainSelectionScreen(),
                               ),
                             );
-                          })
-                    else
-                      WbButtonUniversal2(
-                          wbColor: wbColorOrangeDarker,
-                          wbOnTapDown: (details) {
-                            setState(() {
-                              isButton09Clicked = true;
-                            });
-                          },
-                          wbOnTapUp: (details) {
-                            setState(() {
-                              isButton09Clicked = false;
-                            });
-                          },
-                          wbOnTapCancel: () {
-                            setState(() {
-                              isButton09Clicked = false;
-                            });
-                          },
-                          wbIcon: Icons.update,
-                          wbIconSize40: 40,
-                          wbText: "Daten UPDATE",
-                          wbFontSize24: 24,
-                          wbWidth155: 398,
-                          wbHeight60: 60,
-                          wbOnTap: () async {
-                            log("2318 - ContactScreen - Daten UPDATE - geklickt");
+                          } else {
+                            log("1500 - ContactScreen - Der Kontakt ist schon VORHANDEN ---> Daten UPDATE <-- geklickt");
                             /*--------------------------------- Sound ---*/
                             player.play(AssetSource("sound/sound06pling.wav"));
                             /*--------------------------------- Snackbar ---*/
@@ -1549,12 +1702,9 @@ class _ContactScreenState extends State<ContactScreen> {
                                 ),
                               ),
                             ));
-                            /*--------------------------------- Speicherung in die SQL ---*/
-                            /*--------------------------------- Daten updaten ---*/
-                            Navigator.of(context).pop();
-                            await updateData({});
+                            /*--------------------------------- Daten updaten - Speicherung in die SQL---*/
+                            updateData({});
                             log('1353 - ContactScreen - Daten "updateData": ${controllers['controllerCS001']!.text} ${controllers['controllerCS003']!.text} ${controllers['controllerCS004']!.text} / KontaktID: ${controllers['controllerCS001']!.text}');
-                            // ignore: use_build_context_synchronously
                             saveChanges(context);
                             log('1355 - ContactScreen - Daten "saveChanges": ${controllers['controllerCS001']!.text} ${controllers['controllerCS003']!.text} ${controllers['controllerCS004']!.text} / KontaktID: ${controllers['controllerCS001']!.text}');
                             Navigator.push(
@@ -1566,15 +1716,27 @@ class _ContactScreenState extends State<ContactScreen> {
                               ),
                             );
                             /*--------------------------------- Daten updaten - ENDE ---*/
-                          }),
+                          }
+                        }),
+
+                    /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight16,
+                    /*--------------------------------- Divider ---*/
                     const Divider(thickness: 3, color: wbColorLogoBlue),
+                    /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight8,
-                    /*--------------------------------- Button Daten LÖSCHEN - CS-1323 ---*/
+                    /*--------------------------------- Button Daten ABBRECHEN oder LÖSCHEN - CS-1323 ---*/
                     WbButtonUniversal2(
+                      /*--- Hier wird die Schrift basierend auf den Bedingungen festgelegt ---*/
+                      wbText: widget.isNewContact
+                          ? 'Vorgang ABBRECHEN' // wenn es ein NEUER Kontakt ist
+                          : 'Daten LÖSCHEN', // wenn es ein UPDATE ist
+                      /*--- Hier wird die Farbe basierend auf den Bedingungen festgelegt ---*/
                       wbColor: isButton10Clicked
-                          ? Colors.yellow
-                          : wbColorButtonDarkRed,
+                          ? Colors.black // Immer Gelb, wenn Button geklickt
+                          : widget.isNewContact
+                              ? wbColorAppBarBlue // Blau für neuen Kontakt (wenn Button nicht geklickt)
+                              : wbColorButtonDarkRed, // Rot für bestehenden Kontakt (wenn Button nicht geklickt)
                       wbOnTapDown: (details) {
                         setState(() {
                           isButton10Clicked = true;
@@ -1590,11 +1752,11 @@ class _ContactScreenState extends State<ContactScreen> {
                           isButton10Clicked = false;
                         });
                       },
+                      /*--------------------------------- *** ---*/
                       wbIcon: Icons.delete_forever,
                       wbIconSize40: 40,
-                      wbText: "Daten LÖSCHEN",
                       wbFontSize24: 24,
-                      wbWidth155: 398,
+                      wbWidth155: double.infinity,
                       wbHeight60: 60,
                       wbOnTap: () {
                         log("1981 - ContactScreen - Daten LÖSCHEN - geklickt");
@@ -1666,17 +1828,18 @@ class _ContactScreenState extends State<ContactScreen> {
                     ),
                     wbSizedBoxHeight16,
                     const Divider(thickness: 3, color: wbColorLogoBlue),
-
                     /*--------------------------------- KontaktID anzeigen - CS-1420 ---*/
                     Center(
-                      child: Text('Kontakt-ID: ${controllers['controllerCS001']!.text}'),
+                      child: Text(
+                          'Kontakt-ID: ${controllers['controllerCS001']!.text}'),
                     ),
                     /*--------------------------------- *** ---*/
                     wbSizedBoxHeight8,
                     wbSizedBoxHeight32,
                     wbSizedBoxHeight16,
                     SizedBox(height: double.tryParse('.')),
-                    /*--------------------------------- *** ---*/                  ],
+                    /*--------------------------------- *** ---*/
+                  ],
                 ),
               ),
               wbSizedBoxHeight16,
@@ -1692,30 +1855,17 @@ class _ContactScreenState extends State<ContactScreen> {
     );
   }
 
+  /*--- Entferne alle Listener und dispose die Controller ---*/
   @override
   void dispose() {
-    // // Entferne alle Listener und dispose die Controller
-    // controllers.forEach((key, controller) {
-    //   controller.removeListener(() {
-    //     _onDataChanged(key, controller.text);
-    //   });
-    //   controller.dispose(); // Dispose den Controller
-    // });
-
     controllers.forEach((key, controller) {
       if (_listeners.containsKey(key)) {
         controller.removeListener(_listeners[key]!);
       }
     });
     _listeners.clear();
-    //super.dispose();
-
-    // Dispose des ScrollControllers
     scrollController.dispose();
-
-    // Dispose des AudioPlayers
     player.dispose();
-
     super.dispose();
   }
 }

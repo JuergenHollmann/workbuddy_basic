@@ -517,6 +517,97 @@ class DatabaseHelper {
     }
   }
 
+  Future<List<String>> search(String query) async {
+    final db = await database;
+    final List<Map<String, dynamic>> results = await db.query(
+      'Tabelle01',
+      where: 'Tabelle01_015 LIKE ?',
+      whereArgs: ['%$query%'],
+    );
+
+    /*--- Hier wird die Spalte "Tabelle01_015" aus den Ergebnissen extrahiert und in eine Liste umgewandelt ---*/
+    return results.map((row) => row['Tabelle01_015'] as String).toList();
+  }
+
+
+
+  /*--------------------------------- SELECT = Abfragen von Text in der Datenbank ---*/
+  /*--- Diese Funktion gibt alle Texte in der Datenbank zurück ---*/
+  Future<List<String>> getAllTexts() async {
+    final db = await database;
+    final List<Map<String, dynamic>> result =
+        await db.query('Tabelle01', columns: ['Tabelle01_015']);
+    return result.map((row) => row['Tabelle01_015'] as String).toList();
+  }
+  /*--------------------------------- DELETE = Löschen von Text in der Datenbank ---*/
+  Future<void> deleteText(String text) async {
+    final db = await database;
+    await db.delete(
+      'Tabelle01',
+      where: 'Tabelle01_015 = ?',
+      whereArgs: [text],
+    );
+  }
+  /*--------------------------------- UPDATE = Bearbeiten von Text in der Datenbank ---*/
+  Future<void> updateText(String oldText, String newText) async {
+    final db = await database;
+    await db.update(
+      'Tabelle01',
+      {'Tabelle01_015': newText},
+      where: 'Tabelle01_015 = ?',
+      whereArgs: [oldText],
+    );
+  }
+  /*--------------------------------- SELECT = Abfragen von Text in der Datenbank ---*/
+  Future<List<String>> getText(String text) async {
+    final db = await database;
+    final List<Map<String, dynamic>> result = await db.query(
+      'Tabelle01',
+      where: 'Tabelle01_015 = ?',
+      whereArgs: [text],
+    );
+    return result.map((row) => row['Tabelle01_015'] as String).toList();
+  }
+  /*--------------------------------- SELECT = Abfragen von Text in der Datenbank ---*/
+  Future<List<String>> getTextById(String id) async {
+    final db = await database;
+    final List<Map<String, dynamic>> result = await db.query(
+      'Tabelle01',
+      where: 'Tabelle01_001 = ?',
+      whereArgs: [id],
+    );
+    return result.map((row) => row['Tabelle01_015'] as String).toList();
+  }
+  /*--------------------------------- SELECT = Abfragen von Text in der Datenbank ---*/
+  Future<List<String>> getTextByName(String name) async {
+    final db = await database;
+    final List<Map<String, dynamic>> result = await db.query(
+      'Tabelle01',
+      where: 'Tabelle01_002 = ?',
+      whereArgs: [name],
+    );
+    return result.map((row) => row['Tabelle01_015'] as String).toList();
+  }
+  /*--------------------------------- SELECT = Abfragen von Text in der Datenbank ---*/
+  Future<List<String>> getTextByDate(String date) async {
+    final db = await database;
+    final List<Map<String, dynamic>> result = await db.query(
+      'Tabelle01',
+      where: 'Tabelle01_003 = ?',
+      whereArgs: [date],
+    );
+    return result.map((row) => row['Tabelle01_015'] as String).toList();
+  }
+  /*--------------------------------- INSERT = Speichern von Text in der Datenbank ---*/
+  Future<void> insertText(String text) async {
+    final db = await database;
+    await db.insert(
+      'Tabelle01',
+      {'Tabelle01_016': text},
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
   /*--------------------------------- Erstelle eine KontaktID aus 5 Teilen: 
       1) Random: 2 zufällige Großuchstaben
       2) + 1 Bindestrich
@@ -524,7 +615,7 @@ class DatabaseHelper {
       4) + 1 Bindestrich
       5) + Zeitstempel ---*/
   /*--- Diese Funktion erstellt eine Kontakt-ID ---*/
-  
+
   String generateContactID() {
     /*--- Für die zufällige Großbuchstaben-Liste ---*/
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';

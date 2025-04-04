@@ -49,7 +49,6 @@ class _ContactListState extends State<ContactList> {
 
     /*--- Zeige alle Kunden mit allen Daten ---*/
     var query = await db.rawQuery(
-        // "SELECT * FROM Tabelle01 ORDER BY Tabelle01_003 ASC, Tabelle01_002 ASC"); // alte Tabelle "Tabelle01"
         "SELECT * FROM Tabelle01 ORDER BY Tabelle01_003 ASC, Tabelle01_002 ASC");
     log('0128 - ContactList - Abfrage '); //Ergebnis: $query');
 
@@ -170,7 +169,6 @@ class _ContactListState extends State<ContactList> {
                                 elevation: 10,
                                 margin: EdgeInsets.all(2),
                                 child: ListTile(
-                                  // leading: const Icon(Icons.person),
                                   /*--------------------------------- Überschrift ---*/
                                   title: Padding(
                                       padding: const EdgeInsets.only(
@@ -179,8 +177,8 @@ class _ContactListState extends State<ContactList> {
                                         right: 72,
                                       ),
                                       /*--------------------------------- Name oder Firmenname? ---*/
-                                      child: contact['Tabelle01_015'] !=
-                                              '' // 014 = Firmenname mit ternärem Operator abfragen!
+                                      /*--- mit ternärem Operator abfragen ---*/
+                                      child: contact['Tabelle01_015'] != ''
                                           ? Text(
                                               '--------------------\n${contact['Tabelle01_015']}\n${contact['Tabelle01_003']} ${contact['Tabelle01_004']}\n--------------------',
                                               style: const TextStyle(
@@ -246,7 +244,6 @@ class _ContactListState extends State<ContactList> {
                                                   fontSize: 18,
                                                 ),
                                               ),
-                                              //Text(data[index]['Tabelle01_011']),
                                             ],
                                           ),
                                         ),

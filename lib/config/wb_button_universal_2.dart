@@ -10,10 +10,10 @@ import 'package:flutter/material.dart';
 class WbButtonUniversal2 extends StatelessWidget {
   const WbButtonUniversal2({
     super.key,
+    required this.wbText,
     required this.wbColor,
     required this.wbIcon,
     required this.wbIconSize40,
-    required this.wbText,
     required this.wbFontSize24,
     required this.wbWidth155,
     required this.wbHeight60,
@@ -44,6 +44,7 @@ class WbButtonUniversal2 extends StatelessWidget {
       onTapDown: wbOnTapDown,
       onTapUp: wbOnTapUp,
       onTapCancel: wbOnTapCancel,
+
       /*--------------------------------- Container ---*/
       child: Container(
         width: wbWidth155,
