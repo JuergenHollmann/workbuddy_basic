@@ -220,17 +220,22 @@ Future<void> deleteData(Map<String, dynamic> row) async {
 
 /*--------------------------------- State ---*/
 class _ContactScreenState extends State<ContactScreen> {
+  // @override
+  // Widget buildPlaceholder(BuildContext context) {
+  //   // Add your widget tree here
+  //   return Scaffold(
+  //     body: Center(
+  //       child: Text('Contact Screen'),
+  //     ),
+  //   );
+  // }
+
 //
   /*--------------------------------- Controller ---*/
   final TextEditingController _controller = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
+  //final FocusNode _focusNode = FocusNode();
   List<String> _filteredItems = [];
-  final List<String> _allItems = [
-    'Furz',
-    'Murks',
-    'Dreck',
-    'Shit'
-  ]; // Wird aus SQL geladen
+  List<String> _allItems = []; // ist hier noch leer und wird aus SQL geladen
 
   bool _hasDataChanged() {
     for (var i = 1; i <= 50; i++) {
@@ -388,25 +393,6 @@ class _ContactScreenState extends State<ContactScreen> {
     });
   }
 
-  // /*--------------------------------- Listener für die Textfelder ---*/
-  // void _addListeners() {
-  //   try {
-  //     controllers.forEach((key, controller) {
-  //       // Entferne vorherige Listener, falls vorhanden
-  //       controller.removeListener(() {
-  //         _onDataChanged(key, controller.text);
-  //       });
-
-  //       // Füge neuen Listener hinzu
-  //       controller.addListener(() {
-  //         _onDataChanged(key, controller.text);
-  //       });
-  //     });
-  //   } catch (e) {
-  //     log('0370 - ContactScreen - Fehler bei _addListeners: $e');
-  //   }
-  // }
-
   /*--------------------------------- *** ---*/
 // 1. Speichere Listener-Referenzen in einer Map
   final Map<String, VoidCallback> _listeners = {};
@@ -441,7 +427,24 @@ class _ContactScreenState extends State<ContactScreen> {
     super.initState();
     log("0344 - ContactScreen - initState - aktiviert");
     _filteredItems = _allItems; // Initial alle Items anzeigenm 0476
-    // _loadItemsFromDB(); // Für echte DB-Verbindung einkommentieren
+
+    Future<void> loadItemsFromDatabase() async {
+      final db = await DatabaseHelper.instance.database;
+      final results = await db.query(
+        'Tabelle01',
+        columns: ['Tabelle01_015'],
+        distinct: true,
+      );
+
+      setState(() {
+        _allItems = results
+            .map((row) => (row['Tabelle01_015'] as String?) ?? '')
+            .toList();
+        _filteredItems = _allItems;
+      });
+    }
+
+    loadItemsFromDatabase();
 
     /*--- Den Zustand (State) erst nach dem Build ändern.
           Diese Methode wird verwendet, um eine Aktion auszuführen, nachdem das Widget vollständig aufgebaut wurde. 
@@ -1413,50 +1416,87 @@ class _ContactScreenState extends State<ContactScreen> {
                         //   },
                         // ),
 
-                        RawAutocomplete<String>(
-                          focusNode: _focusNode,
-                          textEditingController: _controller,
+//
+                        // RawAutocomplete<String>(
+                        //   focusNode: _focusNode,
+                        //   textEditingController: _controller,
+                        //   optionsBuilder: (TextEditingValue textEditingValue) {
+                        //     return _filteredItems.where((String option) {
+                        //       return option.toLowerCase().contains(
+                        //           textEditingValue.text.toLowerCase());
+                        //     });
+                        //   },
+                        //   optionsViewBuilder: (BuildContext context,
+                        //       AutocompleteOnSelected<String> onSelected,
+                        //       Iterable<String> options) {
+                        //     return Material(
+                        //       elevation: 4.0,
+                        //       child: ListView.builder(
+                        //         padding: EdgeInsets.zero,
+                        //         itemCount: options.length,
+                        //         itemBuilder: (BuildContext context, int index) {
+                        //           final String option =
+                        //               options.elementAt(index);
+                        //           return InkWell(
+                        //             onTap: () {
+                        //               onSelected(option);
+                        //               _controller.text = option;
+                        //             },
+                        //             child: Padding(
+                        //               padding: EdgeInsets.all(16.0),
+                        //               child: Text(option),
+                        //             ),
+                        //           );
+                        //         },
+                        //       ),
+                        //     );
+                        //   },
+                        //   fieldViewBuilder: (BuildContext context,
+                        //       TextEditingController textEditingController,
+                        //       FocusNode focusNode,
+                        //       VoidCallback onFieldSubmitted) {
+                        //     return TextFormField(
+                        //       controller: textEditingController,
+                        //       focusNode: focusNode,
+                        //       decoration: InputDecoration(
+                        //         labelText: 'Suche',
+                        //         hintText: 'Eingabe starten...',
+                        //         suffixIcon: IconButton(
+                        //           icon: Icon(Icons.arrow_drop_down),
+                        //           onPressed: () => focusNode.requestFocus(),
+                        //         ),
+                        //         border: OutlineInputBorder(),
+                        //       ),
+                        //       onChanged: (value) {
+                        //         setState(() {
+                        //           _filteredItems = _allItems
+                        //               .where((item) => item
+                        //                   .toLowerCase()
+                        //                   .contains(value.toLowerCase()))
+                        //               .toList();
+                        //         });
+                        //       },
+                        //     );
+                        //   },
+                        // ),
+
+                        Autocomplete<String>(
                           optionsBuilder: (TextEditingValue textEditingValue) {
-                            return _filteredItems.where((String option) {
-                              return option.toLowerCase().contains(
-                                  textEditingValue.text.toLowerCase());
-                            });
+                            return _filteredItems.where((item) => item
+                                .toLowerCase()
+                                .contains(textEditingValue.text.toLowerCase()));
                           },
-                          optionsViewBuilder: (BuildContext context,
-                              AutocompleteOnSelected<String> onSelected,
-                              Iterable<String> options) {
-                            return Material(
-                              elevation: 4.0,
-                              child: ListView.builder(
-                                padding: EdgeInsets.zero,
-                                itemCount: options.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  final String option =
-                                      options.elementAt(index);
-                                  return InkWell(
-                                    onTap: () {
-                                      onSelected(option);
-                                      _controller.text = option;
-                                    },
-                                    child: Padding(
-                                      padding: EdgeInsets.all(16.0),
-                                      child: Text(option),
-                                    ),
-                                  );
-                                },
-                              ),
-                            );
+                          onSelected: (String selection) {
+                            _controller.text = selection;
                           },
-                          fieldViewBuilder: (BuildContext context,
-                              TextEditingController textEditingController,
-                              FocusNode focusNode,
-                              VoidCallback onFieldSubmitted) {
+                          fieldViewBuilder: (context, controller, focusNode,
+                              onFieldSubmitted) {
                             return TextFormField(
-                              controller: textEditingController,
+                              controller: controller,
                               focusNode: focusNode,
                               decoration: InputDecoration(
                                 labelText: 'Suche',
-                                hintText: 'Eingabe starten...',
+                                hintText: 'Tippen für Vorschläge...',
                                 suffixIcon: IconButton(
                                   icon: Icon(Icons.arrow_drop_down),
                                   onPressed: () => focusNode.requestFocus(),
@@ -1475,6 +1515,8 @@ class _ContactScreenState extends State<ContactScreen> {
                             );
                           },
                         ),
+
+                        //
 
                         /*-----------------------------------------------------------------------------------------*/
                         Text(

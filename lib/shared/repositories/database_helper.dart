@@ -425,7 +425,23 @@ class DatabaseHelper {
   /*--- Konstruktor ---*/
   DatabaseHelper._privateConstructor();
 
-  /*--------------------------------- Die Datenbank erstellen ---*/
+  //
+
+  /*--- Factory-Methode ---*/
+  //static final DatabaseHelper _instance = DatabaseHelper._internal();
+  factory DatabaseHelper() => instance;
+  //DatabaseHelper._internal();
+
+  //static Database? _database;
+  
+  // vorläufig deaktiviert am 04.04.2025 um 19:41 Uhr
+  // Future<Database> get database async {
+  //   if (_database != null) return _database!;
+  //   _database = await _initDatabase();
+  //   return _database!;
+  // }
+
+    /*--------------------------------- Die Datenbank erstellen ---*/
   Future<Database> get database async {
     dev.log('0093 - DatabaseHelper - Die Datenbank wird aktiviert.');
     /*--- Wenn die Datenbank bereits erstellt wurde, wird sie zurückgegeben ---*/
@@ -438,6 +454,39 @@ class DatabaseHelper {
     /*--- Die Datenbank wird zurückgegeben ---*/
     return _database!;
   }
+
+
+  Future<Database> _initDatabase() async {
+    final path = join(await getDatabasesPath(), 'JOTHAsoft.FiveStars.db');
+    return await openDatabase(
+      path,
+      version: 1,
+      onCreate: (db, version) async {
+        await db.execute('''
+          CREATE TABLE Tabelle01 (
+            id INTEGER PRIMARY KEY,
+            Tabelle01_015 TEXT
+          )
+        ''');
+      },
+    );
+  }
+      // }
+
+
+  // /*--------------------------------- Die Datenbank erstellen ---*/
+  // Future<Database> get database async {
+  //   dev.log('0093 - DatabaseHelper - Die Datenbank wird aktiviert.');
+  //   /*--- Wenn die Datenbank bereits erstellt wurde, wird sie zurückgegeben ---*/
+  //   if (_database != null) return _database!;
+  //   dev.log('0095 - DatabaseHelper - Die Datenbank ist vorhanden.');
+  //   /*--- Wenn die Datenbank noch nicht erstellt wurde, wird sie erstellt ---*/
+  //   _database = await _initDB('JOTHAsoft.FiveStars.db');
+  //   dev.log(
+  //       '0099 - DatabaseHelper - Die Datenbank muss erstellt erstellt werden.');
+  //   /*--- Die Datenbank wird zurückgegeben ---*/
+  //   return _database!;
+  // }
 
   /*--------------------------------- Die Datenbank wird in einem Ordner "WorkBuddy" gespeichert ---*/
   Future<Database> _initDB(String filePath) async {
