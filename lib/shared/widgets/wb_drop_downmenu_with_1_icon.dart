@@ -36,7 +36,7 @@ class WbDropDownMenu extends StatelessWidget {
       // },
       width: width,
       textStyle: TextStyle(
-        fontSize: 22,
+        fontSize: 20,
         fontWeight: FontWeight.w900,
         color: wbColorLogoBlue,
         height: 0.1,

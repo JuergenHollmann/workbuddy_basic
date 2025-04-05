@@ -189,6 +189,8 @@ class WbTextFormFieldShadowWith2Icons extends StatelessWidget {
                     controller!.clear();
                     log('0188 - WbTextFormFieldShadowWith2Icons - SuffixIcon "onPressed" - Text wurde gelöscht!');
                   }
+                } else if (suffixIcon == Icons.arrow_drop_down) {
+                  focusNode?.requestFocus();
                 } else if (suffixIcon == Icons.visibility_outlined) {
                   // Das Passwort ist sichtbar!
                   visibilityPassword = false;
