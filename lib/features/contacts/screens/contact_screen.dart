@@ -1872,9 +1872,79 @@ class _ContactScreenState extends State<ContactScreen> {
                     const Divider(thickness: 3, color: wbColorLogoBlue),
                     /*--------------------------------- KontaktID anzeigen - CS-1420 ---*/
                     Center(
-                      child: Text(
-                          'Kontakt-ID: ${controllers['controllerCS001']!.text}'),
+                      child: GestureDetector(
+                        onTap: () async {
+                          // Sound immer abspielen (Feedback für Tap)
+                          player.play(AssetSource("sound/sound06pling.wav"));
+
+                          // Logging
+                          final contactId =
+                              controllers['controllerCS001']!.text;
+                          log('1876 - ContactScreen - KontaktID $contactId wurde angeklickt');
+
+                          // Prüfung auf leere/ungültige ID
+                          if (contactId.isEmpty || contactId == '0') {
+                            log('1877 - ContactScreen - KontaktID ist leer/ungültig');
+                                                              /*--------------------------------- Sound abspielen ---*/
+                            player.play(AssetSource("sound/sound03enterprise.wav"));
+                            /*--- AlertDialog anzeigen ---*/
+                            final shouldDelete = await showDialog<bool>(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+
+                                  /*--------------------------------- AlertDialog - START ---*/
+                                  title: const Text(
+                                      'Alle Datensätze mit ungültiger Kontakt-ID löschen?'),
+                                  content: const Text(
+                                    'Dieser Kontakt hat keine gültige Kontakt-ID.\n\nEs gibt möglicherweise noch andere Datensätze, die ebenfalls ungültige Kontakt-IDs haben.\n\nSollen jetzt ALLE diese Datensätze bereinigt, d.h. dauerhaft GELÖSCHT werden?\n\nACHTUNG:\nDiese Aktion kann NICHT rückgängig gemacht werden!',
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text('Abbrechen'),
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(false),
+                                    ),
+                                    TextButton(
+                                      child: const Text('Löschen',
+                                          style: TextStyle(color: Colors.red)),
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(true),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                            /*--- wenn die Löschung bestätigt wird ---*/
+                            if (shouldDelete == true) {
+                              log('1878 - ContactScreen - Lösche Kontakt ohne ID');
+                              /*--------------------------------- Sound abspielen ---*/
+                              player
+                                  .play(AssetSource("sound/sound07woosh.wav"));
+                              /*--------------------------------- Snackbar einblenden ---*/
+                              // ignore: use_build_context_synchronously
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                backgroundColor: wbColorButtonDarkRed,
+                                content: Text(
+                                  'Der Kontakt ohne gültige ID wurde erfolgreich gelöscht!',
+                                  style: TextStyle(
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ));
+                              await deleteDSNWhen01IsNull();
+                              // if (mounted) Navigator.of(context).pop(); // Zurück zur vorherigen Seite
+                            }
+                          }
+                        },
+                        child: Text(
+                            'Kontakt-ID: ${controllers['controllerCS001']!.text}'),
+                      ),
                     ),
+
                     /*--------------------------------- *** ---*/
                     wbSizedBoxHeight8,
                     wbSizedBoxHeight32,
@@ -1895,6 +1965,21 @@ class _ContactScreenState extends State<ContactScreen> {
         wbColors: Colors.yellow,
       ),
     );
+  }
+
+  /*--- Eigene Methode für SQL-Löschung, wenn KontaktID leer ist ---*/
+  Future<void> deleteDSNWhen01IsNull() async {
+    try {
+      var db = await DatabaseHelper.instance.database;
+      await db.delete(
+        'Tabelle01',
+        where: 'Tabelle01_001 IS NULL OR TRIM(Tabelle01_001) = ?',
+        whereArgs: [''],
+      );
+      log('Kontakt ohne gültige ID wurde erfolgreich gelöscht.');
+    } catch (e) {
+      log('Fehler beim Löschen des Kontakts ohne gültige ID: $e');
+    }
   }
 
   /*--- Entferne alle Listener und dispose die Controller ---*/

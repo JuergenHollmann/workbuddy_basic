@@ -597,6 +597,15 @@ class DatabaseHelper {
       whereArgs: [text],
     );
   }
+  /*--------------------------------- DELETE = Löschen eines Datensatzes, wenn der Wert in Tabelle01_001 == "Null" ist ---*/
+  Future<void> deleteDSNWhen01IsNull(String id) async {
+    final db = await database;
+    await db.delete(
+      'Tabelle01',
+      where: 'Tabelle01_001 == Null',
+      whereArgs: [id],
+    );
+  }
   /*--------------------------------- UPDATE = Bearbeiten von Text in der Datenbank ---*/
   Future<void> updateText(String oldText, String newText) async {
     final db = await database;
