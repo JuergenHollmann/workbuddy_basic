@@ -435,6 +435,7 @@ class _ContactScreenState extends State<ContactScreen> {
       final results = await db.query(
         'Tabelle01',
         columns: ['Tabelle01_015'],
+        // where: 'Tabelle01_015 IS NOT NULL',
         distinct: true,
       );
 
@@ -1342,12 +1343,22 @@ class _ContactScreenState extends State<ContactScreen> {
               /*--------------------------------- ExpansionPanelList mit Text ---*/
               /*--------------------------------- Adressdaten der Firma ---*/
               ExpansionTile(
+                /*--------------------------------- Farben eingeklappt/ausgeklappt ---*/
+                textColor: Colors.white, // Textfarbe im ausgeklappten Zustand
+                backgroundColor:
+                    Colors.blue, // Hintergrundfarbe im ausgeklappten Zustand
+                iconColor: Colors.white, // Iconfarbe im ausgeklappten Zustand
+                collapsedTextColor:
+                    wbColorLogoBlue, // Textfarbe im eingeklappten Zustand
+                collapsedIconColor:
+                    wbColorLogoBlue, // Iconfarbe im eingeklappten Zustand
+                /*--------------------------------- Titel ---*/
                 title: Container(
                   width: double.infinity, // Volle Breite
                   height: 40, // Feste Höhe
                   padding: EdgeInsets.only(left: 12), // Linker Abstand für Icon
                   decoration: BoxDecoration(
-                    color: Colors.blueGrey[50], // Hintergrundfarbe
+                    color: wbColorButtonBlue, // Hintergrundfarbe
                     borderRadius:
                         BorderRadius.circular(0), // Optional: Abgerundete Ecken
                   ),
@@ -1387,6 +1398,11 @@ class _ContactScreenState extends State<ContactScreen> {
                                 .contains(textEditingValue.text.toLowerCase()));
                           },
                           onSelected: (String selection) {
+                            /*--------------------------------- Sound ---*/
+                            player
+                                .play(AssetSource("sound/sound05xylophon.wav"));
+                            /*--------------------------------- Log ---*/
+                            log('1403 - ContactScreen - angeklickt - K021 - Firma: Straße + Nr - "${controllers['controllerCS021']!.text}"');
                             _controller.text = selection;
                           },
                           fieldViewBuilder: (context, controller, focusNode,
@@ -1414,7 +1430,6 @@ class _ContactScreenState extends State<ContactScreen> {
                             );
                           },
                         ),
-
                         /*--------------------------------- Abstand ---*/
                         wbSizedBoxHeight16,
                         /*--------------------------------- K022 - Firma: PLZ ---*/
@@ -1494,17 +1509,30 @@ class _ContactScreenState extends State<ContactScreen> {
                         /*--------------------------------- K024 - Firma: Land ---*/
                         Autocomplete<String>(
                           optionsBuilder: (TextEditingValue textEditingValue) {
-                            return _filteredItems.where((item) => item
+                            if (textEditingValue.text.isEmpty) {
+                              // Wenn das Feld leer ist, zeige alle Optionen an
+                              log('1512 - ContactScreen - K024 - Firma: Land - optionsBuilder - Alle Items anzeigen');
+                              return _allItems;
+                            }
+                            // Filtere die Optionen basierend auf der Eingabe
+                            log('1513 - ContactScreen - K024 - Firma: Land - optionsBuilder - Gefilterte Items anzeigen');
+                            return _allItems.where((item) => item
                                 .toLowerCase()
                                 .contains(textEditingValue.text.toLowerCase()));
                           },
                           onSelected: (String selection) {
-                            _controller.text = selection;
+                            // Speichere die Auswahl im Controller
+                            controllers['controllerCS024']!.text = selection;
+                            log('1519 - ContactScreen - Ausgewählter Wert: $selection');
                           },
-                          fieldViewBuilder: (context, controller, focusNode,
-                              onFieldSubmitted) {
+                          fieldViewBuilder: (context, autocompleteController,
+                              focusNode, onFieldSubmitted) {
+                            // Synchronisiere den Autocomplete-Controller mit dem Hauptcontroller
+                            autocompleteController.text =
+                                controllers['controllerCS024']!.text;
+
                             return WbTextFormFieldShadowWith2Icons(
-                              controller: controller,
+                              controller: autocompleteController,
                               focusNode: focusNode,
                               labelText: 'Firma: Land',
                               labelFontSize22: 20,
@@ -1515,16 +1543,80 @@ class _ContactScreenState extends State<ContactScreen> {
                               prefixIconSize32: 24,
                               suffixIcon: Icons.arrow_drop_down,
                               onChanged: (value) {
+                                log('1539 - ContactScreen - K024 - Firma: Land - onChanged: $value');
+                                // Aktualisiere den Autocomplete-Controller
+                                autocompleteController.text = value;
+                                // Aktualisiere den Hauptcontroller bei jeder Änderung
+                                controllers['controllerCS024']!.text = value;
+
                                 setState(() {
-                                  _filteredItems = _allItems
-                                      .where((item) => item
-                                          .toLowerCase()
-                                          .contains(value.toLowerCase()))
-                                      .toList();
+                                  if (value.isEmpty) {
+                                    log('1543 - ContactScreen - K024 - Firma: Land - Das Feld ist leer: $value');
+                                    // Wenn das Feld leer ist, zeige alle Optionen an
+                                    _filteredItems = _allItems;
+                                  } else {
+                                    log('1547 - ContactScreen - K024 - Firma: Land - Das Feld ist NICHT leer: $value');
+                                    // Filtere die Optionen basierend auf der Eingabe
+                                    _filteredItems = _allItems
+                                        .where((item) => item
+                                            .toLowerCase()
+                                            .contains(value.toLowerCase()))
+                                        .toList();
+                                  }
                                 });
+                                // Logge den aktuellen Zustand
+                                log('1560 - ContactScreen - Aktueller Wert: $value');
+                                log('1561 - ContactScreen - Gefilterte Items: $_filteredItems');
                               },
                             );
                           },
+                          /*--------------------------------- Dropdown-Menü ---*/
+                          optionsViewBuilder: (context, onSelected, options) {
+                            return Align(
+                              alignment: Alignment.topLeft,
+                              child: Material(
+                                color: Colors.black, // Hintergrundfarbe
+                                elevation: 10,
+                                child: SizedBox(
+                                  height: 330,
+                                  width: MediaQuery.of(context).size.width - 24,
+                                  child: ListView.builder(
+                                    padding: EdgeInsets.zero,
+                                    itemCount: options.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      final option = options.elementAt(index);
+                                      return InkWell(
+                                        onTap: () => onSelected(option),
+                                        child: Container(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              16, 8, 16, 8),
+                                          alignment: Alignment.centerLeft,
+                                          decoration: BoxDecoration(
+                                            border: Border(
+                                              bottom: BorderSide(
+                                                color: Colors.grey,
+                                                width: 2,
+                                              ),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            option,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          //   /*--------------------------------- Dropdown-Menü - ENDE ---*/
                         ),
                         /*--------------------------------- *** ---*/
                       ],
