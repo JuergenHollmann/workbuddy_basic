@@ -726,6 +726,7 @@ class _ContactScreenState extends State<ContactScreen> {
                   ],
                 ),
               ),
+              /*--------------------------------- Divider ---*/
               const Divider(thickness: 3, color: wbColorLogoBlue),
               /*--------------------------------- *** ---*/
               Padding(
@@ -982,15 +983,311 @@ class _ContactScreenState extends State<ContactScreen> {
                     ),
                     /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight8,
-                    /*--------------------------------- Divider mit Text ---*/
-                    WbDividerWithTextInCenter(
-                      wbColor: wbColorLogoBlue,
-                      wbText: 'Private Adressdaten',
-                      wbTextColor: wbColorLogoBlue,
-                      wbFontSize12: 18,
-                      wbHeight3: 3,
-                    ),
+                    // /*--------------------------------- Divider mit Text ---*/
+                    // WbDividerWithTextInCenter(
+                    //   wbColor: wbColorLogoBlue,
+                    //   wbText: 'Private Adressdaten',
+                    //   wbTextColor: wbColorLogoBlue,
+                    //   wbFontSize12: 18,
+                    //   wbHeight3: 3,
+                    // ),
+                    /*--------------------------------- Abstand ---*/
                     wbSizedBoxHeight8,
+
+                    //
+                    /*--------------------------------- Divider ---*/
+                    const Divider(thickness: 3, color: wbColorLogoBlue),
+                    /*--------------------------------- *** ---*/
+
+                    /*--------------------------------- Private Adressdaten ---*/
+                    ExpansionTile(
+                      /*--------------------------------- Farben eingeklappt/ausgeklappt ---*/
+                      textColor:
+                          Colors.white, // Textfarbe im ausgeklappten Zustand
+                      backgroundColor: Colors
+                          .blue, // Hintergrundfarbe im ausgeklappten Zustand
+                      iconColor:
+                          Colors.white, // Iconfarbe im ausgeklappten Zustand
+                      collapsedTextColor:
+                          wbColorLogoBlue, // Textfarbe im eingeklappten Zustand
+                      collapsedIconColor:
+                          wbColorLogoBlue, // Iconfarbe im eingeklappten Zustand
+                      /*--------------------------------- Titel ---*/
+                      title: Container(
+                        width: double.infinity, // Volle Breite
+                        height: 40, // Feste Höhe
+                        padding: EdgeInsets.only(
+                            left: 12), // Linker Abstand für Icon
+                        decoration: BoxDecoration(
+                          color: wbColorButtonBlue, // Hintergrundfarbe
+                          borderRadius: BorderRadius.circular(
+                              0), // Optional: Abgerundete Ecken
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            // Icon links
+                            Padding(
+                              padding: EdgeInsets.only(right: 12),
+                              child: Icon(Icons.home_work_outlined, size: 28),
+                            ),
+                            // Linksbündiger Text
+                            Expanded(
+                              child: Text(
+                                'Private Adressdaten',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                                textAlign:
+                                    TextAlign.left, // Explizit linksbündig
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      /*--------------------------------- Inhalt ---*/
+                      children: [
+                        /*--------------------------------- K006 - Privat: Straße + Nr ---*/
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 0, 8, 0),
+                          child: Column(
+                            children: [
+                              Autocomplete<String>(
+                                optionsBuilder:
+                                    (TextEditingValue textEditingValue) {
+                                  return _filteredItems.where((item) => item
+                                      .toLowerCase()
+                                      .contains(
+                                          textEditingValue.text.toLowerCase()));
+                                },
+                                onSelected: (String selection) {
+                                  /*--------------------------------- Sound ---*/
+                                  player.play(
+                                      AssetSource("sound/sound05xylophon.wav"));
+                                  /*--------------------------------- Log ---*/
+                                  log('1096 - ContactScreen - angeklickt - K006 - Privat Straße + Nr - "${controllers['controllerCS006']!.text}"');
+                                  _controller.text = selection;
+                                },
+                                fieldViewBuilder: (context, controller,
+                                    focusNode, onFieldSubmitted) {
+                                  return WbTextFormFieldShadowWith2Icons(
+                                    controller: controllers['controllerCS006']!,
+                                    focusNode: focusNode,
+                                    labelText: 'Privat: Straße + Nr.',
+                                    labelFontSize22: 20,
+                                    hintText: 'Straße mit Nr. eingeben',
+                                    hintTextFontSize16: 16,
+                                    inputTextFontSize24: 22,
+                                    prefixIcon: Icons.location_on_outlined,
+                                    prefixIconSize32: 24,
+                                    suffixIcon: Icons.arrow_drop_down,
+                                    /*--------------------------------- *** ---*/
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _filteredItems = _allItems
+                                            .where((item) => item
+                                                .toLowerCase()
+                                                .contains(value.toLowerCase()))
+                                            .toList();
+                                      });
+                                    },
+                                    /*--------------------------------- *** ---*/
+                                  );
+                                },
+                              ),
+                              /*--------------------------------- Abstand ---*/
+                              wbSizedBoxHeight16,
+                              /*--------------------------------- K007 - Privat: Zusatzinfo zur Adresse ---*/
+                              Autocomplete<String>(
+                                optionsBuilder:
+                                    (TextEditingValue textEditingValue) {
+                                  return _filteredItems.where((item) => item
+                                      .toLowerCase()
+                                      .contains(
+                                          textEditingValue.text.toLowerCase()));
+                                },
+                                onSelected: (String selection) {
+                                  /*--------------------------------- Sound ---*/
+                                  player.play(
+                                      AssetSource("sound/sound05xylophon.wav"));
+                                  /*--------------------------------- Log ---*/
+                                  log('1119 - ContactScreen - angeklickt - K007 - Zusatzinfo zur Adresse - "${controllers['controllerCS007']!.text}"');
+                                  _controller.text = selection;
+                                },
+                                fieldViewBuilder: (context, controller,
+                                    focusNode, onFieldSubmitted) {
+                                  return WbTextFormFieldShadowWith2Icons(
+                                    controller: controllers['controllerCS007']!,
+                                    focusNode: focusNode,
+                                    labelText: 'Zusatzinfo',
+                                    labelFontSize22: 20,
+                                    hintText: 'Zusatzinfo eingeben',
+                                    hintTextFontSize16: 16,
+                                    inputTextFontSize24: 22,
+                                    prefixIcon: Icons.location_on_outlined,
+                                    prefixIconSize32: 24,
+                                    suffixIcon: Icons.arrow_drop_down,
+                                    /*--------------------------------- *** ---*/
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _filteredItems = _allItems
+                                            .where((item) => item
+                                                .toLowerCase()
+                                                .contains(value.toLowerCase()))
+                                            .toList();
+                                      });
+                                    },
+                                    /*--------------------------------- *** ---*/
+                                  );
+                                },
+                              ),
+                              /*--------------------------------- Abstand ---*/
+                              wbSizedBoxHeight16,
+                              /*--------------------------------- K008 - Privat: PLZ ---*/
+                              Autocomplete<String>(
+                                optionsBuilder:
+                                    (TextEditingValue textEditingValue) {
+                                  return _filteredItems.where((item) => item
+                                      .toLowerCase()
+                                      .contains(
+                                          textEditingValue.text.toLowerCase()));
+                                },
+                                onSelected: (String selection) {
+                                  _controller.text = selection;
+                                  /*--------------------------------- Sound ---*/
+                                  player.play(
+                                      AssetSource("sound/sound05xylophon.wav"));
+                                  /*--------------------------------- Log ---*/
+                                  log('1162 - ContactScreen - angeklickt - K008 - Privat PLZ - "${controllers['controllerCS008']!.text}"');
+                                },
+                                fieldViewBuilder: (context, controller,
+                                    focusNode, onFieldSubmitted) {
+                                  return WbTextFormFieldShadowWith2Icons(
+                                    controller: controllers['controllerCS008']!,
+                                    focusNode: focusNode,
+                                    labelText: 'Privat: PLZ',
+                                    labelFontSize22: 20,
+                                    hintText: 'PLZ eingeben',
+                                    hintTextFontSize16: 16,
+                                    inputTextFontSize24: 22,
+                                    prefixIcon: Icons.looks_5_outlined,
+                                    prefixIconSize32: 24,
+                                    suffixIcon: Icons.arrow_drop_down,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _filteredItems = _allItems
+                                            .where((item) => item
+                                                .toLowerCase()
+                                                .contains(value.toLowerCase()))
+                                            .toList();
+                                      });
+                                    },
+                                  );
+                                },
+                              ),
+                              /*--------------------------------- Abstand ---*/
+                              wbSizedBoxHeight16,
+                              /*---------------------------------- K009 - Privat: Ort ---*/
+                              Autocomplete<String>(
+                                optionsBuilder:
+                                    (TextEditingValue textEditingValue) {
+                                  return _filteredItems.where((item) => item
+                                      .toLowerCase()
+                                      .contains(
+                                          textEditingValue.text.toLowerCase()));
+                                },
+                                onSelected: (String selection) {
+                                  /*--------------------------------- Sound ---*/
+                                  player.play(
+                                      AssetSource("sound/sound05xylophon.wav"));
+                                  /*--------------------------------- Log ---*/
+                                  log('1205 - ContactScreen - angeklickt - K009 - Privat Ort - "${controllers['controllerCS009']!.text}"');
+                                  _controller.text = selection;
+                                },
+                                fieldViewBuilder: (context, controller,
+                                    focusNode, onFieldSubmitted) {
+                                  return WbTextFormFieldShadowWith2Icons(
+                                    controller: controllers['controllerCS009']!,
+                                    focusNode: focusNode,
+                                    labelText: 'Privat: Ort',
+                                    labelFontSize22: 20,
+                                    hintText: 'Ort eingeben',
+                                    hintTextFontSize16: 16,
+                                    inputTextFontSize24: 22,
+                                    prefixIcon: Icons.home_work_outlined,
+                                    prefixIconSize32: 24,
+                                    suffixIcon: Icons.arrow_drop_down,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _filteredItems = _allItems
+                                            .where((item) => item
+                                                .toLowerCase()
+                                                .contains(value.toLowerCase()))
+                                            .toList();
+                                      });
+                                    },
+                                  );
+                                },
+                              ),
+                              /*--------------------------------- Abstand ---*/
+                              wbSizedBoxHeight16,
+                              /*--------------------------------- K010 - Privat: Land ---*/
+                              Autocomplete<String>(
+                                optionsBuilder:
+                                    (TextEditingValue textEditingValue) {
+                                  return _filteredItems.where((item) => item
+                                      .toLowerCase()
+                                      .contains(
+                                          textEditingValue.text.toLowerCase()));
+                                },
+                                onSelected: (String selection) {
+                                  /*--------------------------------- Sound ---*/
+                                  player.play(
+                                      AssetSource("sound/sound05xylophon.wav"));
+                                  /*--------------------------------- Log ---*/
+                                  log('1249 - ContactScreen - angeklickt - K010 - Privat Land - "${controllers['controllerCS010']!.text}"');
+                                  _controller.text = selection;
+                                },
+                                fieldViewBuilder: (context, controller,
+                                    focusNode, onFieldSubmitted) {
+                                  return WbTextFormFieldShadowWith2Icons(
+                                    controller: controllers['controllerCS010']!,
+                                    focusNode: focusNode,
+                                    labelText: 'Privat: Land',
+                                    labelFontSize22: 20,
+                                    hintText: 'Land eingeben',
+                                    hintTextFontSize16: 16,
+                                    inputTextFontSize24: 22,
+                                    prefixIcon: Icons.flag_outlined,
+                                    prefixIconSize32: 24,
+                                    suffixIcon: Icons.arrow_drop_down,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _filteredItems = _allItems
+                                            .where((item) => item
+                                                .toLowerCase()
+                                                .contains(value.toLowerCase()))
+                                            .toList();
+                                      });
+                                    },
+                                  );
+                                },
+                              ),
+                              /*--------------------------------- Abstand ---*/
+                              wbSizedBoxHeight16,
+                              /*--------------------------------- *** ---*/
+                            ],
+                          ),
+                        ),
+                        /*--------------------------------- Abstand ---*/
+                        wbSizedBoxHeight16,
+                      ],
+                    ),
+                    /*--------------------------------- Abstand ---*/
+
+                    //
+
                     /*--------------------------------- Straße + Nummer ---*/
                     WbTextFormField(
                       controller: controllers['controllerCS006']!,
@@ -1262,10 +1559,10 @@ class _ContactScreenState extends State<ContactScreen> {
                               showDialog(
                                 context: context,
                                 builder: (context) =>
-                                    const WbDialogAlertUpdateComingSoon(
+                                    WbDialogAlertUpdateComingSoon(
                                   headlineText: "Eine E-Mail versenden",
                                   contentText:
-                                      "Willst Du jetzt eine E-Mail an\nKlausMueller@mueller.de\nversenden?\n\nDiese Funktion kommt bald in einem KOSTENLOSEN Update!\n\nHinweis: CS-0727",
+                                      "Willst Du jetzt eine E-Mail an\n${controllers['controllerCS013']!.text}\nversenden?\n\nDiese Funktion kommt bald in einem KOSTENLOSEN Update!\n\nHinweis: CS-0727",
                                   actionsText: "OK 👍",
                                 ),
                               );
@@ -1313,10 +1610,10 @@ class _ContactScreenState extends State<ContactScreen> {
                               showDialog(
                                 context: context,
                                 builder: (context) =>
-                                    const WbDialogAlertUpdateComingSoon(
-                                  headlineText: "Eine E-Mail versenden",
+                                    WbDialogAlertUpdateComingSoon(
+                                  headlineText: "Direkt zur Webseite gehen",
                                   contentText:
-                                      "Willst Du jetzt eine E-Mail an\nKlausMueller@mueller.de\nversenden?\n\nDiese Funktion kommt bald in einem KOSTENLOSEN Update!\n\nHinweis: CS-0872",
+                                      'Willst Du jetzt direkt auf die Webseite "${controllers['controllerCS014']!.text}" gehen?\n\nDiese Funktion kommt bald in einem KOSTENLOSEN Update!\n\nHinweis: CS-0872',
                                   actionsText: "OK 👍",
                                 ),
                               );
@@ -1418,6 +1715,23 @@ class _ContactScreenState extends State<ContactScreen> {
                               prefixIcon: Icons.location_on_outlined,
                               prefixIconSize32: 24,
                               suffixIcon: Icons.arrow_drop_down,
+                              /*--------------------------------- Scrollen um das Textfeld unter die AppBar zu bringen ---*/
+                              onTap: () {
+                                log('1422 - ContactScreen - Widget OBEN positionieren nach onTap auf das Textfeld');
+                                final renderBox =
+                                    context.findRenderObject() as RenderBox;
+                                final position =
+                                    renderBox.localToGlobal(Offset.zero);
+                                /*--- Abstand von 116 Punkten unter der AppBar ---*/
+                                final offset =
+                                    position.dy - kToolbarHeight - 116;
+                                scrollController.animateTo(
+                                  scrollController.offset + offset,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                );
+                              },
+                              /*--------------------------------- *** ---*/
                               onChanged: (value) {
                                 setState(() {
                                   _filteredItems = _allItems
@@ -1445,6 +1759,23 @@ class _ContactScreenState extends State<ContactScreen> {
                           fieldViewBuilder: (context, controller, focusNode,
                               onFieldSubmitted) {
                             return WbTextFormFieldShadowWith2Icons(
+                              // /*--------------------------------- Scrollen um das Textfeld unter die AppBar zu bringen ---*/
+                              // onTap: () {
+                              //   log('1467 - ContactScreen - Widget OBEN positionieren nach onTap auf das Textfeld');
+                              //   final renderBox =
+                              //       context.findRenderObject() as RenderBox;
+                              //   final position =
+                              //       renderBox.localToGlobal(Offset.zero);
+                              //   /*--- Abstand von 136 Punkte = 1 Feld oben sichtbar oder 68 Punkte  = direkt unter der AppBar ---*/
+                              //   final offset =
+                              //       position.dy - kToolbarHeight - 136;
+                              //   scrollController.animateTo(
+                              //     scrollController.offset + offset,
+                              //     duration: const Duration(milliseconds: 300),
+                              //     curve: Curves.easeInOut,
+                              //   );
+                              // },
+                              // /*--------------------------------- *** ---*/
                               controller: controllers['controllerCS022']!,
                               focusNode: focusNode,
                               labelText: 'Firma: PLZ',
@@ -1481,26 +1812,83 @@ class _ContactScreenState extends State<ContactScreen> {
                           },
                           fieldViewBuilder: (context, controller, focusNode,
                               onFieldSubmitted) {
-                            return WbTextFormFieldShadowWith2Icons(
-                              controller: controllers['controllerCS023']!,
-                              focusNode: focusNode,
-                              labelText: 'Firma: Ort',
-                              labelFontSize22: 20,
-                              hintText: 'Ort eingeben',
-                              hintTextFontSize16: 16,
-                              inputTextFontSize24: 22,
-                              prefixIcon: Icons.home_work_outlined,
-                              prefixIconSize32: 24,
-                              suffixIcon: Icons.arrow_drop_down,
-                              onChanged: (value) {
-                                setState(() {
-                                  _filteredItems = _allItems
-                                      .where((item) => item
-                                          .toLowerCase()
-                                          .contains(value.toLowerCase()))
-                                      .toList();
+                            /*--- Scrollen mit "ensureVisible" um das Textfeld unter die AppBar zu bringen ---*/
+                            return InkWell(
+                              onTap: () {
+                                // Setze den Fokus auf das erste Feld
+                                FocusScope.of(context)
+                                    .requestFocus(FocusNode());
+                                Future.delayed(Duration.zero, () {
+                                  log('1491 - ContactScreen - Fokus auf Feld 002 gesetzt');
+                                  Scrollable.ensureVisible(
+                                    // ignore: use_build_context_synchronously
+                                    context,
+                                    alignment:
+                                        0.5, // Scrollt zur Mitte des Bildschirms
+                                    duration: Duration(milliseconds: 500),
+                                  );
+                                  log('1499 - ContactScreen - Scrollt zur Mitte des Bildschirms');
+                                  scrollController.animateTo(0,
+                                      duration: Duration(milliseconds: 500),
+                                      curve: Curves.easeIn);
+                                  log('0384 - ContactScreen - Scrollt nach oben');
                                 });
                               },
+
+                              // onTap: () {
+                              //   log('1487 - ContactScreen - K023 - Firma: Ort - onTap ausgelöst');
+                              //   FocusScope.of(context).requestFocus(focusNode);
+
+                              //   final renderBox =
+                              //       context.findRenderObject() as RenderBox;
+                              //   final position =
+                              //       renderBox.localToGlobal(Offset.zero);
+                              //   final offset = position.dy - kToolbarHeight - 8;
+
+                              //   scrollController.animateTo(
+                              //     scrollController.offset + offset,
+                              //     duration: const Duration(milliseconds: 300),
+                              //     curve: Curves.easeInOut,
+                              //   );
+                              // },
+
+                              // onTap: () {
+                              //   log('1487 - ContactScreen - K024 - Firma: Land - InkWell onTap ausgelöst');
+                              //   // Scrollen, um das Feld unter die AppBar zu bringen
+                              //   final renderBox =
+                              //       context.findRenderObject() as RenderBox;
+                              //   final position =
+                              //       renderBox.localToGlobal(Offset.zero);
+                              //   final offset = position.dy - kToolbarHeight - 8;
+
+                              //   scrollController.animateTo(
+                              //     scrollController.offset + offset,
+                              //     duration: const Duration(milliseconds: 300),
+                              //     curve: Curves.easeInOut,
+                              //   );
+                              // },
+
+                              child: WbTextFormFieldShadowWith2Icons(
+                                controller: controllers['controllerCS023']!,
+                                focusNode: focusNode,
+                                labelText: 'Firma: Ort',
+                                labelFontSize22: 20,
+                                hintText: 'Ort eingeben',
+                                hintTextFontSize16: 16,
+                                inputTextFontSize24: 22,
+                                prefixIcon: Icons.home_work_outlined,
+                                prefixIconSize32: 24,
+                                suffixIcon: Icons.arrow_drop_down,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _filteredItems = _allItems
+                                        .where((item) => item
+                                            .toLowerCase()
+                                            .contains(value.toLowerCase()))
+                                        .toList();
+                                  });
+                                },
+                              ),
                             );
                           },
                         ),
@@ -1531,43 +1919,119 @@ class _ContactScreenState extends State<ContactScreen> {
                             autocompleteController.text =
                                 controllers['controllerCS024']!.text;
 
-                            return WbTextFormFieldShadowWith2Icons(
-                              controller: autocompleteController,
-                              focusNode: focusNode,
-                              labelText: 'Firma: Land',
-                              labelFontSize22: 20,
-                              hintText: 'Land eingeben',
-                              hintTextFontSize16: 16,
-                              inputTextFontSize24: 22,
-                              prefixIcon: Icons.flag_outlined,
-                              prefixIconSize32: 24,
-                              suffixIcon: Icons.arrow_drop_down,
-                              onChanged: (value) {
-                                log('1539 - ContactScreen - K024 - Firma: Land - onChanged: $value');
-                                // Aktualisiere den Autocomplete-Controller
-                                autocompleteController.text = value;
-                                // Aktualisiere den Hauptcontroller bei jeder Änderung
-                                controllers['controllerCS024']!.text = value;
+                            return InkWell(
+                              // onTap: () {
+                              //   log('1593 - ContactScreen - K024 - Firma: Land - InkWell onTap ausgelöst');
+                              //   // Scrollen, um das Feld unter die AppBar zu bringen
+                              //   final renderBox =
+                              //       context.findRenderObject() as RenderBox;
+                              //   final position =
+                              //       renderBox.localToGlobal(Offset.zero);
+                              //   final offset = position.dy - kToolbarHeight - 8;
 
-                                setState(() {
-                                  if (value.isEmpty) {
-                                    log('1543 - ContactScreen - K024 - Firma: Land - Das Feld ist leer: $value');
-                                    // Wenn das Feld leer ist, zeige alle Optionen an
-                                    _filteredItems = _allItems;
-                                  } else {
-                                    log('1547 - ContactScreen - K024 - Firma: Land - Das Feld ist NICHT leer: $value');
-                                    // Filtere die Optionen basierend auf der Eingabe
-                                    _filteredItems = _allItems
-                                        .where((item) => item
-                                            .toLowerCase()
-                                            .contains(value.toLowerCase()))
-                                        .toList();
-                                  }
-                                });
-                                // Logge den aktuellen Zustand
-                                log('1560 - ContactScreen - Aktueller Wert: $value');
-                                log('1561 - ContactScreen - Gefilterte Items: $_filteredItems');
-                              },
+                              //   scrollController.animateTo(
+                              //     scrollController.offset + offset,
+                              //     duration: const Duration(milliseconds: 300),
+                              //     curve: Curves.easeInOut,
+                              //   );
+                              // },
+
+                              // GestureDetector(
+                              // /*--- Scrollen mit "ensureVisible" um das Textfeld unter die AppBar zu bringen ---*/
+                              // onTap: () {
+                              //   log('1537 - ContactScreen - K024 - Firma: Land - Tap auf das Textfeld');
+                              //   Scrollable.ensureVisible(
+                              //     context,
+                              //     alignment:
+                              //         0.1, // Positioniere das Widget etwas unterhalb der AppBar
+                              //     duration: const Duration(milliseconds: 300),
+                              //     curve: Curves.easeInOut,
+                              //   );
+                              // },
+
+                              // /*--- Optional: Scrollen mit "animateTo" um das Textfeld unter die AppBar zu bringen ---*/
+                              // onTap: () {
+                              //   // Scrollen, um das Feld unter die AppBar zu bringen
+                              //   final renderBox =
+                              //       context.findRenderObject() as RenderBox;
+                              //       log('1535 - ContactScreen - K024 - Firma: Land - renderBox: $renderBox');
+                              //   final position =
+                              //       renderBox.localToGlobal(Offset.zero);
+                              //       log('1541 - ContactScreen - K024 - Die Position zeigen: $position');
+                              //       // Abstand von 8 Punkten unter der AppBar
+                              //   final offset = position.dy -
+                              //       kToolbarHeight -
+                              //       8;
+
+                              //   scrollController.animateTo(
+                              //     scrollController.offset + offset,
+                              //     duration: const Duration(milliseconds: 300),
+                              //     curve: Curves.easeInOut,
+                              //   );
+                              // },
+                              /*--- Textfeld ---*/
+                              child: WbTextFormFieldShadowWith2Icons(
+                                controller: autocompleteController,
+                                focusNode: focusNode,
+                                labelText: 'Firma: Land',
+                                labelFontSize22: 20,
+                                hintText: 'Land eingeben',
+                                hintTextFontSize16: 16,
+                                inputTextFontSize24: 22,
+                                prefixIcon: Icons.flag_outlined,
+                                prefixIconSize32: 24,
+                                suffixIcon: Icons.arrow_drop_down,
+                                onTap: () {
+                                  log('1654 - ContactScreen - Widget OBEN positionieren nach onTap auf das Textfeld');
+                                  // Scrollen, um das Feld unter die AppBar zu bringen
+                                  final renderBox =
+                                      context.findRenderObject() as RenderBox;
+                                  final position =
+                                      renderBox.localToGlobal(Offset.zero);
+                                  final offset =
+                                      position.dy - kToolbarHeight - 50;
+                                  scrollController.animateTo(
+                                    scrollController.offset + offset,
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.easeInOut,
+                                  );
+
+                                  // Scrollable.ensureVisible(
+                                  //   context,
+                                  //   alignment:
+                                  //       0.1, // Positioniere das Widget etwas unterhalb der AppBar
+                                  //   duration: const Duration(milliseconds: 300),
+                                  //   curve: Curves.easeInOut,
+
+                                  // );
+                                },
+                                onChanged: (value) {
+                                  log('1664 - ContactScreen - K024 - Firma: Land - onChanged: $value');
+                                  // Aktualisiere den Autocomplete-Controller
+                                  autocompleteController.text = value;
+                                  // Aktualisiere den Hauptcontroller bei jeder Änderung
+                                  controllers['controllerCS024']!.text = value;
+
+                                  setState(() {
+                                    if (value.isEmpty) {
+                                      log('1543 - ContactScreen - K024 - Firma: Land - Das Feld ist leer: $value');
+                                      // Wenn das Feld leer ist, zeige alle Optionen an
+                                      _filteredItems = _allItems;
+                                    } else {
+                                      log('1547 - ContactScreen - K024 - Firma: Land - Das Feld ist NICHT leer: $value');
+                                      // Filtere die Optionen basierend auf der Eingabe
+                                      _filteredItems = _allItems
+                                          .where((item) => item
+                                              .toLowerCase()
+                                              .contains(value.toLowerCase()))
+                                          .toList();
+                                    }
+                                  });
+                                  // Logge den aktuellen Zustand
+                                  log('1560 - ContactScreen - Aktueller Wert: $value');
+                                  log('1561 - ContactScreen - Gefilterte Items: $_filteredItems');
+                                },
+                              ),
                             );
                           },
                           /*--------------------------------- Dropdown-Menü ---*/
@@ -1639,6 +2103,19 @@ class _ContactScreenState extends State<ContactScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                 child: ExpansionTile(
+                  //                   /*--------------------------------- Scrollen um das Textfeld unter die AppBar zu bringen ---*/
+                  // log('1810 - ContactScreen - Widget OBEN positionieren nach onTap auf ExpansionTile');
+                  // final renderBox = context.findRenderObject() as RenderBox;
+                  // final position = renderBox.localToGlobal(Offset.zero);
+                  // /*--- Abstand von 136 Punkte = 1 Feld oben sichtbar oder 68 Punkte  = direkt unter der AppBar ---*/
+                  // final offset = position.dy - kToolbarHeight - 136;
+                  // scrollController.animateTo(
+                  //   scrollController.offset + offset,
+                  //   duration: const Duration(milliseconds: 300),
+                  //   curve: Curves.easeInOut,
+                  // );
+                  // /*--------------------------------- *** ---*/
+
                   title: Text('Alle Kontaktdaten im Überblick'),
                   subtitle: Text(
                       'Hier siehst Du alle Daten, die im Kontaktbereich gespeichert wurden.'),
@@ -1648,6 +2125,25 @@ class _ContactScreenState extends State<ContactScreen> {
                   textColor: wbColorLogoBlue,
                   backgroundColor: Colors.blueGrey[50],
                   collapsedBackgroundColor: Colors.blueGrey[50],
+
+                  // /*--------------------------------- Scrollen um das Textfeld unter die AppBar zu bringen ---*/
+                  // onExpansionChanged: (isExpanded) {
+                  //   if (isExpanded) {
+                  //     // log('1810 - ContactScreen - Widget OBEN positionieren nach onTap auf ExpansionTile');
+                  //     Future.delayed(Duration(milliseconds: 100), () {
+                  //       final renderBox =
+                  //           // ignore: use_build_context_synchronously
+                  //           context.findRenderObject() as RenderBox;
+                  //       final position = renderBox.localToGlobal(Offset.zero);
+                  //       final offset = position.dy - kToolbarHeight - 68;
+                  //       scrollController.animateTo(
+                  //         scrollController.offset + offset,
+                  //         duration: const Duration(milliseconds: 300),
+                  //         curve: Curves.easeInOut,
+                  //       );
+                  //     });
+                  //   }
+                  // },
                   /*--------------------------------- Inhalt ---*/
                   children: [
                     Padding(
@@ -1703,13 +2199,13 @@ class _ContactScreenState extends State<ContactScreen> {
                               'K020 - Phone-Gruppe(n): ${controllers['controllerCS020']!.text}'),
                           Divider(thickness: 1, color: Colors.grey),
                           Text(
-                              'K021 - x - Firmen-Straße: ${controllers['controllerCS021']!.text}'),
+                              'K021 - Firmen-Straße: ${controllers['controllerCS021']!.text}'),
                           Text(
-                              'K022 - x - Firmen-PLZ: ${controllers['controllerCS022']!.text}'),
+                              'K022 - Firmen-PLZ: ${controllers['controllerCS022']!.text}'),
                           Text(
-                              'K023 - x - Firmen-Ort: ${controllers['controllerCS023']!.text}'),
+                              'K023 - Firmen-Ort: ${controllers['controllerCS023']!.text}'),
                           Text(
-                              'K024 - x - Firmen-Land: ${controllers['controllerCS024']!.text}'),
+                              'K024 - Firmen-Land: ${controllers['controllerCS024']!.text}'),
                           Divider(thickness: 1, color: Colors.grey),
                           Text(
                               'K025 - Komplett-Adresse Privat (aus dem Phone):\n${controllers['controllerCS025']!.text}'),

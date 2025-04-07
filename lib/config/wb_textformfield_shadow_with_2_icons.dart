@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:workbuddy/config/wb_colors.dart';
 import 'package:workbuddy/features/authentication/screens/p01_login_screen.dart';
+import 'package:workbuddy/features/contacts/screens/contact_screen.dart';
 
 class WbTextFormFieldShadowWith2Icons extends StatelessWidget {
   const WbTextFormFieldShadowWith2Icons({
@@ -35,7 +36,6 @@ class WbTextFormFieldShadowWith2Icons extends StatelessWidget {
     this.suffixIconSize32,
     this.onPressed,
     this.contentPadding,
-
   });
 
   final String labelText;
@@ -111,7 +111,20 @@ class WbTextFormFieldShadowWith2Icons extends StatelessWidget {
             color: inputFontColor ?? wbColorButtonGreen,
             height: 1, // Zeilenhöhe
           ),
-
+          onTap: () {
+            /*--------------------------------- Scrollen um das Textfeld unter die AppBar zu bringen ---*/
+            log('0116 - WbTextFormFieldShadowWith2Icons - Widget OBEN positionieren nach onTap auf das Textfeld');
+            final renderBox = context.findRenderObject() as RenderBox;
+            final position = renderBox.localToGlobal(Offset.zero);
+            /*--- Abstand von 136 Punkte = 1 Feld oben sichtbar oder 68 Punkte  = direkt unter der AppBar ---*/
+            final offset = position.dy - kToolbarHeight - 136;
+            scrollController.animateTo(
+              scrollController.offset + offset,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+            /*--------------------------------- *** ---*/
+          },
           //obscureText: visibilityPassword, // Passwort sichtbar?
           /*--------------------------------- InputDecoration ---*/
           decoration: InputDecoration(
@@ -167,6 +180,27 @@ class WbTextFormFieldShadowWith2Icons extends StatelessWidget {
                 size: suffixIconSize32 ?? 32,
               ),
               onPressed: () {
+                // log('0169 - WbTextFormFieldShadowWith2Icons - Widget OBEN positionieren nachdem "suffixIcon" - onPressed');
+                // Scrollable.ensureVisible(
+                //   context,
+                //   alignment:
+                //       0, // Positioniere das Widget etwas unterhalb der AppBar
+                //   duration: const Duration(milliseconds: 300),
+                //   curve: Curves.easeInOut,
+                // );
+                /*--------------------------------- Scrollen um das Textfeld unter die AppBar zu bringen ---*/
+                log('0179 - WbTextFormFieldShadowWith2Icons - Widget OBEN positionieren nachdem "suffixIcon" - onPressed');
+                controller!.clear();
+                final renderBox = context.findRenderObject() as RenderBox;
+                final position = renderBox.localToGlobal(Offset.zero);
+                /*--- Abstand von 136 Punkte = 1 Feld oben sichtbar oder 68 Punkte  = direkt unter der AppBar ---*/
+                final offset = position.dy - kToolbarHeight - 136;
+                scrollController.animateTo(
+                  scrollController.offset + offset,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
+                /*--------------------------------- *** ---*/
                 log('0168 - WbTextFormFieldShadowWith2Icons - SuffixIcon "onPressed" ist je nachdem welches Icon angezeigt wird, unterschiedlich!');
                 if (suffixIcon == Icons.replay) {
                   if (controller != null) {
@@ -190,7 +224,35 @@ class WbTextFormFieldShadowWith2Icons extends StatelessWidget {
                     log('0188 - WbTextFormFieldShadowWith2Icons - SuffixIcon "onPressed" - Text wurde gelöscht!');
                   }
                 } else if (suffixIcon == Icons.arrow_drop_down) {
+                  controller!.clear();
+                  log('0193 - WbTextFormFieldShadowWith2Icons - SuffixIcon "onPressed" mit "Icons.arrow_drop_down" - Text wurde gelöscht!');
+                  // Hier könnte eine Dropdown-Liste angezeigt werden.
                   focusNode?.requestFocus();
+
+                  // funzt nicht:
+                  // log('1593 - WbTextFormFieldShadowWith2Icons - Scrolle unter die AppBar');
+                  // // Scrollen, um das Feld unter die AppBar zu bringen
+                  // final renderBox =
+                  //     context.findRenderObject() as RenderBox;
+                  // final position =
+                  //     renderBox.localToGlobal(Offset.zero);
+                  // final offset = position.dy - kToolbarHeight - 8;
+                  // final scrollController = ScrollController();
+                  // scrollController.animateTo(
+                  //   scrollController.offset + offset,
+                  //   duration: const Duration(milliseconds: 300),
+                  //   curve: Curves.easeInOut,
+                  // );
+                  //
+
+                  // log('1537 - ContactScreen - K024 - Firma: Land - Tap auf das Textfeld');
+                  // Scrollable.ensureVisible(
+                  //   context,
+                  //   alignment:
+                  //       0, // Positioniere das Widget etwas unterhalb der AppBar
+                  //   duration: const Duration(milliseconds: 300),
+                  //   curve: Curves.easeInOut,
+                  // );
                 } else if (suffixIcon == Icons.visibility_outlined) {
                   // Das Passwort ist sichtbar!
                   visibilityPassword = false;
@@ -247,7 +309,7 @@ class WbTextFormFieldShadowWith2Icons extends StatelessWidget {
           /*--- Specials ---*/
           controller: controller,
           onChanged: onChanged,
-          onTap: onTap,
+          // onTap: onTap,
           //onPressed: context,
 
           /*--- onChanged ---*/
