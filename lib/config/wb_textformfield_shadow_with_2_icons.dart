@@ -112,17 +112,21 @@ class WbTextFormFieldShadowWith2Icons extends StatelessWidget {
             height: 1, // Zeilenhöhe
           ),
           onTap: () {
-            /*--------------------------------- Scrollen um das Textfeld unter die AppBar zu bringen ---*/
-            log('0116 - WbTextFormFieldShadowWith2Icons - Widget OBEN positionieren nach onTap auf das Textfeld');
-            final renderBox = context.findRenderObject() as RenderBox;
-            final position = renderBox.localToGlobal(Offset.zero);
-            /*--- Abstand von 136 Punkte = 1 Feld oben sichtbar oder 68 Punkte  = direkt unter der AppBar ---*/
-            final offset = position.dy - kToolbarHeight - 136;
-            scrollController.animateTo(
-              scrollController.offset + offset,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
+            try {
+              /*--------------------------------- Scrollen um das Textfeld unter die AppBar zu bringen ---*/
+              log('0116 - WbTextFormFieldShadowWith2Icons - Widget OBEN positionieren nach onTap auf das Textfeld');
+              final renderBox = context.findRenderObject() as RenderBox;
+              final position = renderBox.localToGlobal(Offset.zero);
+              /*--- Abstand von 136 Punkte = 1 Feld oben sichtbar oder 68 Punkte  = direkt unter der AppBar ---*/
+              final offset = position.dy - kToolbarHeight - 68;
+              scrollController.animateTo(
+                scrollController.offset + offset,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+            } catch (e) {
+              log('0128 - WbTextFormFieldShadowWith2Icons - Fehler beim Scrollen: $e');
+            }
             /*--------------------------------- *** ---*/
           },
           //obscureText: visibilityPassword, // Passwort sichtbar?
@@ -189,19 +193,23 @@ class WbTextFormFieldShadowWith2Icons extends StatelessWidget {
                 //   curve: Curves.easeInOut,
                 // );
                 /*--------------------------------- Scrollen um das Textfeld unter die AppBar zu bringen ---*/
-                log('0179 - WbTextFormFieldShadowWith2Icons - Widget OBEN positionieren nachdem "suffixIcon" - onPressed');
-                controller!.clear();
-                final renderBox = context.findRenderObject() as RenderBox;
-                final position = renderBox.localToGlobal(Offset.zero);
-                /*--- Abstand von 136 Punkte = 1 Feld oben sichtbar oder 68 Punkte  = direkt unter der AppBar ---*/
-                final offset = position.dy - kToolbarHeight - 136;
-                scrollController.animateTo(
-                  scrollController.offset + offset,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                );
+                try {
+                  log('0192 - WbTextFormFieldShadowWith2Icons - Widget OBEN positionieren nachdem "suffixIcon" - onPressed');
+                  controller!.clear();
+                  final renderBox = context.findRenderObject() as RenderBox;
+                  final position = renderBox.localToGlobal(Offset.zero);
+                  /*--- Abstand von 136 Punkte = 1 Feld oben sichtbar oder 68 Punkte  = direkt unter der AppBar ---*/
+                  final offset = position.dy - kToolbarHeight - 68;
+                  scrollController.animateTo(
+                    scrollController.offset + offset,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                } catch (e) {
+                  log('0205 - WbTextFormFieldShadowWith2Icons - Fehler beim Scrollen: $e');
+                }
                 /*--------------------------------- *** ---*/
-                log('0168 - WbTextFormFieldShadowWith2Icons - SuffixIcon "onPressed" ist je nachdem welches Icon angezeigt wird, unterschiedlich!');
+                log('0204 - WbTextFormFieldShadowWith2Icons - SuffixIcon "onPressed" ist je nachdem welches Icon angezeigt wird, unterschiedlich!');
                 if (suffixIcon == Icons.replay) {
                   if (controller != null) {
                     controller!.clear();
